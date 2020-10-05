@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { TextInput, Text, View } from 'react-native'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -10,7 +11,7 @@ interface JoinLeagueProps {
     currentUserId: string
 }
 
-const Container = styled.div`
+const Container = styled.View`
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -18,8 +19,7 @@ const Container = styled.div`
     margin-top: 50px;
 `
 
-const Input = styled.input`
-    box-sizing: border-box;
+const Input = styled.TextInput`
     font-size: 15px;
     margin-bottom: 20px;
     padding: 10px;
@@ -58,7 +58,6 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
 
     const joinLeague = async () => {
         const foundLeague: any = await attemptToJoinLeaugeIfItExists({ currentUserId, leaguePin })
-        console.log(foundLeague, 'fl')
 
         if (foundLeague) {
             const { league, name, surname } = foundLeague
@@ -68,10 +67,12 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
 
     return (
         <Container>
-            <div>
+            <View>
                 <Input onChange={(e) => setLeaguePin(e.target.value)} placeholder="Enter league pin" />
-                <Button onClick={joinLeague}>Join League</Button>
-            </div>
+                <Button onClick={joinLeague}>
+                    <Text>Join League</Text>
+                </Button>
+            </View>
         </Container>
     )
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Text, View } from 'react-native'
 import Select from 'react-select'
 import styled from 'styled-components'
 
@@ -7,20 +8,20 @@ import { Button } from '../button'
 
 import { updateUserGamweekChoice } from '../../firebase-helpers'
 
-const Container = styled.div`
+const Container = styled.View`
     align-items: center;
     display: flex;
     flex-direction: column;
     width: 100%;
 `
 
-const InnerContainer = styled.div`
+const InnerContainer = styled.View`
     display: flex;
     flex-direction: column;
     width: 250px;
 `
 
-const SectionDivider = styled.div`
+const SectionDivider = styled.View`
     margin: 15px 0 0 0;
 `
 
@@ -56,7 +57,7 @@ const customReactSelectStyles = {
     }),
 }
 
-const Option = styled.div`
+const Option = styled.View`
     align-items: center;
     display: flex;
     & > div {
@@ -69,7 +70,9 @@ const Option = styled.div`
 const formatOptionLabel = ({ label, value }: any) => (
     <Option>
         <img src={`/images/teams/${value.replace(/\s/g, '').toLowerCase()}.png`} alt="" height="30" width="30" />
-        <div>{label}</div>
+        <View>
+            <Text>{label}</Text>
+        </View>
     </Option>
 )
 
@@ -131,18 +134,19 @@ export const ChooseTeam = ({
     return (
         <Container>
             <InnerContainer>
-                <Select
+                {/* <Select
                     onChange={(team: any) => setSelectedTeam(team)}
                     formatOptionLabel={formatOptionLabel}
                     isSearchable={false}
-                    options={calculateTeamsAllowedToPickForCurrentRound()}
+                    // options={calculateTeamsAllowedToPickForCurrentRound()}
+                    options={[{ value: '', label: '' }]}
                     placeholder="Select a team for this week"
                     styles={customReactSelectStyles}
-                />
+                /> */}
 
                 <SectionDivider>
                     <Button disabled={selectedTeam.label === null} onClick={submitChoice}>
-                        Select team
+                        <Text>Select team</Text>
                     </Button>
                 </SectionDivider>
             </InnerContainer>

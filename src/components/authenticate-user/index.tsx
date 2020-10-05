@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { TextInput, Text, View } from 'react-native'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -6,29 +7,28 @@ import { Button } from '../button'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
 
-const Container = styled.div`
+const Container = styled.View`
     display: flex;
     justify-content: center;
 `
 
-const Inner = styled.div`
+const Inner = styled.View`
     display: flex;
     flex-direction: column;
     width: 300px;
 `
 
-const Input = styled.input`
-    box-sizing: border-box;
+const Input = styled.TextInput`
     font-size: 15px;
     padding: 10px;
     width: 100%;
 `
 
-const SectionDivider = styled.div`
+const SectionDivider = styled.View`
     margin: 15px 0 0 0;
 `
 
-const Error = styled.div`
+const Error = styled.View`
     background: #eb3455;
     border-radius: 3px;
     color: #fff;
@@ -40,7 +40,6 @@ const StyledLink = styled(Link)`
     background: #289960;
     color: #fff;
     border-radius: 3px;
-    cursor: pointer;
     padding: 10px;
     margin: 15px 0 0 0;
     text-align: center;
@@ -78,7 +77,7 @@ export const AuthenticateUserScreen = () => {
         <Container>
             <Inner>
                 <SectionDivider>
-                    <div>Last Punding Standing requires you to be logged in</div>
+                    <Text>Last Punding Standing requires you to be logged in</Text>
                     {error ? <Error>{error}</Error> : null}
                 </SectionDivider>
                 {isSignUpPage && (
@@ -104,15 +103,19 @@ export const AuthenticateUserScreen = () => {
                 </SectionDivider>
                 <SectionDivider>
                     <Button onClick={isSignUpPage ? signUserUp : logUserIn}>
-                        {isSignUpPage ? 'Sign Up' : 'Login'}
+                        {isSignUpPage ? <Text>Sign Up</Text> : <Text>Login</Text>}
                     </Button>
                 </SectionDivider>
                 {!isSignUpPage && (
                     <>
                         <SectionDivider>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>or</div>
+                            <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Text>or</Text>
+                            </View>
                         </SectionDivider>
-                        <StyledLink to={'/sign-up'}> {!isSignUpPage ? 'Sign up now' : 'Login'} </StyledLink>
+                        <StyledLink to={'/sign-up'}>
+                            {!isSignUpPage ? <Text>Sign up now</Text> : <Text>Login</Text>}{' '}
+                        </StyledLink>
                     </>
                 )}
             </Inner>

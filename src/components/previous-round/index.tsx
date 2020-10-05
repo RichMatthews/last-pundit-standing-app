@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Image, Text, View } from 'react-native'
 
 interface ImageStyled {
     lost: boolean
 }
 
-const Container = styled.div`
+const Container = styled.View`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -14,7 +15,7 @@ const Container = styled.div`
     margin: 15px auto;
 `
 
-const Image = styled.img<ImageStyled>`
+const TeamBadge = styled.Image<ImageStyled>`
     opacity: ${({ lost }) => (lost ? 0.2 : 1)};
     width: 30px;
 
@@ -26,19 +27,19 @@ const Image = styled.img<ImageStyled>`
 export const PreviousRound = ({ choice }: any) => {
     return choice.teamPlayingAtHome ? (
         <Container>
-            <Image src={`/images/teams/${choice.value.replace(/\s/g, '').toLowerCase()}.png`} lost={false} />
-            <div>{choice.goals}</div>
-            <div>-</div>
-            <div>{choice.opponent.goals}</div>
-            <Image src={`/images/teams/${choice.opponent.name.replace(/\s/g, '').toLowerCase()}.png`} lost={true} />
+            <TeamBadge src={`/images/teams/${choice.value.replace(/\s/g, '').toLowerCase()}.png`} lost={false} />
+            <Text>{choice.goals}</Text>
+            <Text>-</Text>
+            <Text>{choice.opponent.goals}</Text>
+            <TeamBadge src={`/images/teams/${choice.opponent.name.replace(/\s/g, '').toLowerCase()}.png`} lost={true} />
         </Container>
     ) : (
         <Container>
-            <Image src={`/images/teams/${choice.opponent.name.replace(/\s/g, '').toLowerCase()}.png`} lost={true} />
-            <div>{choice.opponent.goals}</div>
-            <div>-</div>
-            <div>{choice.goals}</div>
-            <Image src={`/images/teams/${choice.value.replace(/\s/g, '').toLowerCase()}.png`} lost={false} />
+            <TeamBadge src={`/images/teams/${choice.opponent.name.replace(/\s/g, '').toLowerCase()}.png`} lost={true} />
+            <Text>{choice.opponent.goals}</Text>
+            <Text>-</Text>
+            <Text>{choice.goals}</Text>
+            <TeamBadge src={`/images/teams/${choice.value.replace(/\s/g, '').toLowerCase()}.png`} lost={false} />
         </Container>
     )
 }

@@ -1,10 +1,10 @@
 import React from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-
+import { Image, View } from 'react-native'
 import { PreviousRound } from '../../previous-round'
 
-const Section = styled.div`
+const Section = styled.View`
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 1px 4px rgba(41, 51, 57, 0.3);
@@ -21,29 +21,23 @@ const CurrentRoundContainer = styled(Section)`
     @media (max-width: 900px) {
         background: transparent;
         border: none;
-        cursor: pointer;
         margin: 0 0 10px 0;
     }
 `
 
-const CurrentRound = styled.div`
+const CurrentRound = styled.View`
     align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 `
 
-const CurrentSelection = styled.div<any>`
+const CurrentSelection = styled.View<any>`
     background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#d8ede2' : '#fff')};
     border-radius: 3px;
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
     padding: 10px;
     margin: 10px;
-    width: 350px;
-    @media (max-width: 900px) {
-        width: inherit;
-    }
+    width: inherit;
 `
 
 const customReactSelectStyles = {
@@ -78,7 +72,7 @@ const customReactSelectStyles = {
     }),
 }
 
-const ExpandImage = styled.img<any>`
+const ExpandImage = styled.Image<any>`
     height: 10px;
     width: 10px;
     transform: ${({ expand }: any) => (expand ? 'rotate(180deg)' : 'rotate(0deg)')};
@@ -88,18 +82,18 @@ const ExpandImage = styled.img<any>`
     }
 `
 
-const HistoricalRounds = styled.div<any>`
+const HistoricalRounds = styled.View<any>`
     display: ${({ expand }) => (expand ? 'block' : 'none')};
     transition: 2.5s;
     margin: 15px;
 `
 
-const PlayerName = styled.div`
+const PlayerName = styled.View`
     font-size: 15px;
     margin-right: 10px;
 `
 
-const SelectContainer = styled.div`
+const SelectContainer = styled.View`
     display: flex;
     justify-content: flex-end;
 `
@@ -128,7 +122,7 @@ export const CurrentRoundView = ({
 
     return (
         <CurrentRoundContainer>
-            <SelectContainer>
+            {/* <SelectContainer>
                 <Select
                     options={calculateOptionsForGameSelection()}
                     isSearchable={false}
@@ -146,8 +140,8 @@ export const CurrentRoundView = ({
                                 : `Game ${currentViewedGame + 1}`,
                     }}
                 />
-            </SelectContainer>
-            <div>
+            </SelectContainer> */}
+            <View>
                 {Object.values(gamesInLeague[currentViewedGame].players).map((player: any, index: any) => (
                     <CurrentSelection
                         isCurrentLoggedInPlayer={player.id === currentUserId}
@@ -156,25 +150,25 @@ export const CurrentRoundView = ({
                     >
                         <CurrentRound>
                             <PlayerName>{player.name}</PlayerName>
-                            <div
+                            <View
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'flex-end',
                                 }}
                             >
-                                <div style={{ display: 'flex', marginRight: '10px' }}>
+                                <View style={{ display: 'flex', marginRight: '10px' }}>
                                     {showImageForPlayerChoice(
                                         player.id === currentUserId,
                                         player,
                                         selectionTimeEnded, // change this at some point
                                     )}
-                                </div>
+                                </View>
                                 <ExpandImage
                                     src={'/images/other/down-arrow.svg'}
                                     expand={listOfExpandedPrevious.includes(index)}
                                 />
-                            </div>
+                            </View>
                         </CurrentRound>
                         <HistoricalRounds expand={listOfExpandedPrevious.includes(index)}>
                             {player.rounds
@@ -185,7 +179,7 @@ export const CurrentRoundView = ({
                         </HistoricalRounds>
                     </CurrentSelection>
                 ))}
-            </div>
+            </View>
         </CurrentRoundContainer>
     )
 }

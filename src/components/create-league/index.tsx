@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import ReactToggle from 'react-toggle'
-import 'react-toggle/style.css'
-import styled from 'styled-components'
+import { TextInput, Text, View } from 'react-native'
 import Select from 'react-select'
+import styled from 'styled-components'
 import uid from 'uid'
 
 import { Button } from '../button'
@@ -19,31 +18,29 @@ interface HeadingStyled {
     amount: boolean
 }
 
-const Container = styled.div`
+const Container = styled.View`
     align-items: center;
     display: flex;
     flex-direction: column;
     width: 100%;
 `
 
-const Input = styled.input`
-    box-sizing: border-box;
+const Input = styled.TextInput`
     font-size: 15px;
     padding: 10px;
     width: 100%;
 `
 
-const InnerContainer = styled.div`
+const InnerContainer = styled.View`
     display: flex;
     flex-direction: column;
     width: 250px;
 `
 
-const LeagueAmountValue = styled('div')<HeadingStyled>`
+const LeagueAmountValue = styled.View<HeadingStyled>`
     align-items: center;
     background: ${({ amount }) => (amount ? '#ccc' : '#fff')};
     border: 1px solid #ccc;
-    cursor: pointer;
     display: flex;
     justify-content: center;
     height: 40px;
@@ -51,19 +48,19 @@ const LeagueAmountValue = styled('div')<HeadingStyled>`
     width: 40px;
 `
 
-const EntryFeeContainer = styled.div`
+const EntryFeeContainer = styled.View`
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 `
 
-const QuestionWithToggleOption = styled.div`
+const QuestionWithToggleOption = styled.View`
     align-items: center;
     display: flex;
     justify-content: space-between;
 `
 
-const SectionDivider = styled.div`
+const SectionDivider = styled.View`
     margin: 15px 0 0 0;
 `
 
@@ -157,18 +154,20 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                 </SectionDivider>
                 <SectionDivider>
                     <QuestionWithToggleOption>
-                        <div>Private League?</div>
-                        <ReactToggle onChange={() => setPrivateLeague(!privateLeague)} />
+                        <Text>Private League?</Text>
+                        {/* <ReactToggle onChange={() => setPrivateLeague(!privateLeague)} /> */}
                     </QuestionWithToggleOption>
                 </SectionDivider>
                 <SectionDivider>
                     <QuestionWithToggleOption>
-                        <div>2nd place money back?</div>
-                        <ReactToggle onChange={() => setSecondPlaceMoneyBack(!secondPlaceMoneyBack)} />
+                        <Text>2nd place money back?</Text>
+                        {/* <ReactToggle onChange={() => setSecondPlaceMoneyBack(!secondPlaceMoneyBack)} /> */}
                     </QuestionWithToggleOption>
                 </SectionDivider>
                 <SectionDivider>
-                    <div>Entry Fee</div>
+                    <View>
+                        <Text>Entry Fee</Text>
+                    </View>
                     <SectionDivider>
                         <EntryFeeContainer>
                             {entryFrees.map((fee: { key: number; amount: string }) => (
@@ -177,24 +176,24 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                                     key={fee.key}
                                     onClick={() => setSelectedFee(fee.key)}
                                 >
-                                    {fee.amount}
+                                    <Text>{fee.amount}</Text>
                                 </LeagueAmountValue>
                             ))}
                         </EntryFeeContainer>
                     </SectionDivider>
                 </SectionDivider>
                 <SectionDivider>
-                    <Select
+                    {/* <Select
                         options={[{ value: 'Premier League', label: 'Premier League' }]}
                         placeholder="Select a competition"
-                    />
+                    /> */}
                 </SectionDivider>
                 <SectionDivider>
                     <Button
                         onClick={leagueName.length === 0 ? null : getLeagueCreatorInformationThenCreateLeague}
                         disabled={leagueName.length === 0}
                     >
-                        Create and join league
+                        <Text>Create and join league</Text>
                     </Button>
                 </SectionDivider>
             </InnerContainer>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Text, View } from 'react-native'
 
 import { CURRENT_GAMEWEEK } from '../current-week'
 import { firebaseApp } from '../../config.js'
@@ -102,9 +103,13 @@ export const AdminView = () => {
     }
 
     return (
-        <div>
-            <div>Admin View</div>
-            <button onClick={calculateGameweekResults}>Calculate gameweek results</button>
-        </div>
+        <View>
+            <View>
+                <Text>Admin View</Text>
+            </View>
+            {/* <button onClick={calculateGameweekResults}>
+                <Text>Calculate gameweek results</Text>
+            </button> */}
+        </View>
     )
 }

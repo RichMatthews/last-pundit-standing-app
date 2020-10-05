@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { Image, Text, View } from 'react-native'
 import styled from 'styled-components'
 
 import { getCurrentGameweekFixtures } from '../../firebase-helpers'
 
-const Container = styled.div`
+const Container = styled.View`
     @media (max-width: 900px) {
         display: flex;
         flex-direction: column;
@@ -13,7 +14,7 @@ const Container = styled.div`
     }
 `
 
-const Center = styled.div`
+const Center = styled.View`
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -22,7 +23,7 @@ const Center = styled.div`
     width: 100px;
 `
 
-const Match = styled.div`
+const Match = styled.View`
     align-items: center;
     display: flex;
     flex-direction: row;
@@ -30,7 +31,7 @@ const Match = styled.div`
     margin: 5px;
 `
 
-const Team = styled.div<any>`
+const Team = styled.View<any>`
     display: flex;
     justify-content: ${({ homeTeam }) => (homeTeam ? 'flex-end' : 'flex-start')};
     width: 200px;
@@ -38,6 +39,11 @@ const Team = styled.div<any>`
     @media (max-width: 900px) {
         display: none;
     }
+`
+
+const TeamBadge = styled.Image`
+    height: 30px;
+    width: 30px;
 `
 
 export const Fixtures = () => {
@@ -58,17 +64,9 @@ export const Fixtures = () => {
                 <Match>
                     <Team homeTeam={true}>{match.home}</Team>
                     <Center>
-                        <img
-                            src={`/images/teams/${match.home.replace(/\s/g, '').toLowerCase()}.png`}
-                            height="30px"
-                            width="30px"
-                        />
-                        <div> vs </div>
-                        <img
-                            src={`/images/teams/${match.away.replace(/\s/g, '').toLowerCase()}.png`}
-                            height="30px"
-                            width="30px"
-                        />
+                        <TeamBadge src={`/images/teams/${match.home.replace(/\s/g, '').toLowerCase()}.png`} />
+                        <Text> vs </Text>
+                        <TeamBadge src={`/images/teams/${match.away.replace(/\s/g, '').toLowerCase()}.png`} />
                     </Center>
                     <Team homeTeam={false}>{match.away}</Team>
                 </Match>

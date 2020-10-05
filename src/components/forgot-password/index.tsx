@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Text, View } from 'react-native'
 import styled from 'styled-components'
 import firebase from 'firebase'
 
@@ -7,7 +8,7 @@ import { Button } from '../button'
 
 const auth = firebase.auth()
 
-const Container = styled.div`
+const Container = styled.View`
     display: flex;
     flex-direction: column;
     margin: auto;
@@ -37,7 +38,9 @@ export const ForgotPassword = () => {
     return (
         <Container>
             <input placeholder="Enter your email address" onChange={(e) => setEmail(e.target.value)} />
-            <Button onClick={resetPassword}>Send password reset email</Button>
+            <Button onClick={resetPassword}>
+                <Text>Send password reset email</Text>
+            </Button>
         </Container>
     )
 }

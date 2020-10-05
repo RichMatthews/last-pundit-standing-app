@@ -25,10 +25,10 @@ export const Routing = () => {
     const userExists = true
     const userId = 'L6WkWV0bSPN8a0NIQ0wdTAiGokj2'
     const ProtectedRoute = ({ component: Component, ...rest }: any) => {
-        return userExists ? <Component {...rest} /> : <Redirect from="" to="/login" />
+        return userExists ? <Component {...rest} /> : <Redirect to="/login" />
     }
     const PublicRoute = ({ component: Component, ...rest }: any) => {
-        return userExists ? <Redirect from="" to="/leagues" /> : <Component {...rest} />
+        return userExists ? <Redirect to="/leagues" /> : <Component {...rest} />
     }
     const [userLeagues, setUserLeagues] = useState([])
 
@@ -47,27 +47,25 @@ export const Routing = () => {
         <NativeRouter>
             <Navigation currentUserId={userId} />
             <Route exact={true} path="/" component={Home} />
+            <PublicRoute exact={true} path="/login" component={AuthenticateUserScreen} />
+            <PublicRoute exact={true} path="/sign-up" component={AuthenticateUserScreen} />
+            <PublicRoute exact={true} path="/forgot" component={ForgotPassword} />
+            <ProtectedRoute exact={true} path="/create" component={CreateLeague} currentUserId={userId} />
+            <ProtectedRoute exact={true} path="/join" component={JoinLeague} currentUserId={userId} />
+            <ProtectedRoute
+                exact={true}
+                path="/leagues"
+                component={MyLeagues}
+                currentUserId={userId}
+                userLeagues={userLeagues}
+            />
+            <ProtectedRoute exact={true} path="/leagues/:leagueId" component={League} currentUserId={userId} />
+            <ProtectedRoute exact={true} path="/leagues/:leagueId/current-round" component={Home} />
+            <ProtectedRoute exact={true} path="/leagues/:leagueId/:roundId" component={Home} />
+            <ProtectedRoute exact={true} path="/choose-team" component={ChooseTeam} />
+            <ProtectedRoute exact={true} path="/leagues/:leagueId/:roundId/choose-team" component={ChooseTeam} />
+            <ProtectedRoute exact={true} path="/admin" component={AdminView} />
+            <ProtectedRoute path="*" component={PageNotFound} />
         </NativeRouter>
     )
-}
-{
-    /* <PublicRoute exact={true} path="/login" component={AuthenticateUserScreen} />
-<PublicRoute exact={true} path="/sign-up" component={AuthenticateUserScreen} />
-<PublicRoute exact={true} path="/forgot" component={ForgotPassword} />
-<ProtectedRoute exact={true} path="/create" component={CreateLeague} currentUserId={userId} />
-<ProtectedRoute exact={true} path="/join" component={JoinLeague} currentUserId={userId} />
-<ProtectedRoute
-    exact={true}
-    path="/leagues"
-    component={MyLeagues}
-    currentUserId={userId}
-    userLeagues={userLeagues}
-/>
-<ProtectedRoute exact={true} path="/leagues/:leagueId" component={League} currentUserId={userId} />
-<ProtectedRoute exact={true} path="/leagues/:leagueId/current-round" component={Home} />
-<ProtectedRoute exact={true} path="/leagues/:leagueId/:roundId" component={Home} />
-<ProtectedRoute exact={true} path="/choose-team" component={ChooseTeam} />
-<ProtectedRoute exact={true} path="/leagues/:leagueId/:roundId/choose-team" component={ChooseTeam} />
-<ProtectedRoute exact={true} path="/admin" component={AdminView} />
-<ProtectedRoute path="*" component={PageNotFound} /> */
 }

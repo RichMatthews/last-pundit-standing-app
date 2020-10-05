@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { Image, Text, View } from 'react-native'
 import { useHistory } from 'react-router-dom'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 import { CurrentRoundView } from './current-round'
 import { ChooseTeam } from '../choose-team'
@@ -9,15 +10,6 @@ import { PREMIER_LEAGUE_TEAMS } from '../../teams'
 import { Fixtures } from '../fixtures'
 import { firebaseApp } from '../../config.js'
 
-export const fadeIn = keyframes`
-    from {
-       opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-`
-
 interface LeagueProps {
     currentUserId: string
 }
@@ -25,11 +17,11 @@ interface ImageStyled {
     lost?: boolean
 }
 
-const Container = styled.div`
+const Container = styled.View`
     margin: 10px;
 `
 
-const Section = styled.div`
+const Section = styled.View`
     background: #fff;
     border-radius: 5px;
     box-shadow: 0 1px 4px rgba(41, 51, 57, 0.3);
@@ -56,7 +48,7 @@ const LeagueInformationWrapper = styled(SelectionWrapper)`
     justify-content: space-between;
 `
 
-const BottomSection = styled.div`
+const BottomSection = styled.View`
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-start;
@@ -73,7 +65,7 @@ const FixturesWrapper = styled(Section)`
     }
 `
 
-const Image = styled.img<ImageStyled>`
+const TeamBadge = styled.Image<ImageStyled>`
     opacity: ${({ lost }) => (lost ? 0.2 : 1)};
     height: 30px;
     width: 30px;
@@ -83,7 +75,7 @@ const Image = styled.img<ImageStyled>`
     }
 `
 
-const H1 = styled.h1`
+const H1 = styled.Text`
     color: #2f2f2f;
     font-size: 30px;
     font-weight: 400;
@@ -93,7 +85,7 @@ const H1 = styled.h1`
     }
 `
 
-const H2 = styled.h2`
+const H2 = styled.Text`
     display: flex;
     font-weight: 400;
     margin: 0;
@@ -102,7 +94,7 @@ const H2 = styled.h2`
     }
 `
 
-const Eliminated = styled.div`
+const Eliminated = styled.View`
     border: 1px solid red;
     border-radius: 3px;
     color: red;
@@ -120,25 +112,25 @@ const PredictionSubmitted = styled(Eliminated)`
     color: green;
 `
 
-const RoundCloses = styled.div`
+const RoundCloses = styled.View`
     margin-top: 20px;
     @media (max-width: 900px) {
         text-align: center;
     }
 `
 
-const Wrapper = styled.div`
+const Wrapper = styled.View`
     display: flex;
     @media (max-width: 900px) {
         display: block;
     }
 `
 
-const PrizeMoney = styled.div`
+const PrizeMoney = styled.View`
     font-size: 22px;
 `
 
-const TextContainer = styled.div`
+const TextContainer = styled.View`
     margin: 10px;
     text-align: center;
     width: 150px;
@@ -158,7 +150,7 @@ export const League = ({ currentUserId }: LeagueProps) => {
     const [loaded, setLoaded] = useState<any>(false)
     const [selectionTimeEnded, setSelectionTimeEnded] = useState(false)
 
-    const leagueId = window.location.pathname.split('/')[2]
+    const leagueId = '9hk0btr26u7'
     const history = useHistory()
 
     useEffect(() => {
@@ -175,16 +167,17 @@ export const League = ({ currentUserId }: LeagueProps) => {
     }, [])
 
     const calculateTeamsAllowedToPickForCurrentRound = () => {
-        if (league.currentRound < 0) {
-            return PREMIER_LEAGUE_TEAMS
-        } else {
-            const allTeamsForThisLeague = PREMIER_LEAGUE_TEAMS
-            const teamsAlreadyChosen = currentGame[0].players[currentPlayer.id].rounds
+        // if (league.currentRound < 0) {
+        //     return PREMIER_LEAGUE_TEAMS
+        // } else {
+        //     const allTeamsForThisLeague = PREMIER_LEAGUE_TEAMS
+        //     const teamsAlreadyChosen = currentGame[0].players[currentPlayer.id].rounds
 
-            return allTeamsForThisLeague.filter((el) => {
-                return !teamsAlreadyChosen.find((team: any) => team.choice.value === el.value)
-            })
-        }
+        //     return allTeamsForThisLeague.filter((el) => {
+        //         return !teamsAlreadyChosen.find((team: any) => team.choice.value === el.value)
+        //     })
+        // }
+        return []
     }
 
     const pullLatestLeagueData = () => {
@@ -247,17 +240,25 @@ export const League = ({ currentUserId }: LeagueProps) => {
         )
 
         if (allOtherPlayersAreEliminated) {
-            return <Eliminated>Champion!</Eliminated>
+            return (
+                <Eliminated>
+                    <Text>Champion!</Text>
+                </Eliminated>
+            )
         }
 
         if (playerOutOfGame.length) {
-            return <Eliminated>Eliminated</Eliminated>
+            return (
+                <Eliminated>
+                    <Text>Eliminated</Text>
+                </Eliminated>
+            )
         }
 
         if (isCurrentLoggedInPlayer) {
             if (currentRound.choice.hasMadeChoice) {
                 return (
-                    <Image
+                    <TeamBadge
                         src={`/images/teams/${playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()}.png`}
                         lost={false}
                     />
@@ -268,28 +269,40 @@ export const League = ({ currentUserId }: LeagueProps) => {
         if (currentRound.choice.hasMadeChoice) {
             if (allRemainingPlayersHaveSelected) {
                 return (
-                    <Image
+                    <TeamBadge
                         src={`/images/teams/${playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()}.png`}
                         lost={false}
                     />
                 )
             } else if (!playersStillAbleToSelectTeams) {
                 return (
-                    <Image
+                    <TeamBadge
                         src={`/images/teams/${currentRound.choice.value.replace(/\s/g, '').toLowerCase()}.png`}
                         lost={false}
                     />
                 )
             } else {
-                return <PredictionSubmitted>Prediction Submitted</PredictionSubmitted>
+                return (
+                    <PredictionSubmitted>
+                        <Text>Prediction Submitted</Text>
+                    </PredictionSubmitted>
+                )
             }
         }
 
         if (playersStillAbleToSelectTeams) {
-            return <AwaitingPrediction>Awaiting Prediction</AwaitingPrediction>
+            return (
+                <AwaitingPrediction>
+                    <Text>Awaiting Prediction</Text>
+                </AwaitingPrediction>
+            )
         }
 
-        return <Eliminated>Eliminated</Eliminated>
+        return (
+            <Eliminated>
+                <Text>Eliminated</Text>
+            </Eliminated>
+        )
     }
 
     const showTeamSelectionPage = () => {
@@ -298,12 +311,16 @@ export const League = ({ currentUserId }: LeagueProps) => {
         const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
 
         if (playerOutOfGame.length) {
-            return <div>You are no longer in this game</div>
+            return (
+                <View>
+                    <Text>You are no longer in this game</Text>
+                </View>
+            )
         } else if (currentRound && currentRound.choice.hasMadeChoice === false) {
             return (
                 <ChooseTeam
-                    pullLatestLeagueData={pullLatestLeagueData}
                     calculateTeamsAllowedToPickForCurrentRound={calculateTeamsAllowedToPickForCurrentRound}
+                    pullLatestLeagueData={pullLatestLeagueData}
                     currentRound={gamesInLeague[currentViewedGame].currentGameRound}
                     currentUserId={currentUserId}
                     gameId={gamesInLeague[currentViewedGame].gameId}
@@ -312,9 +329,17 @@ export const League = ({ currentUserId }: LeagueProps) => {
                 />
             )
         } else if (currentRound && currentRound.choice.hasMadeChoice) {
-            return <div>You have made your choice for this week.</div>
+            return (
+                <View>
+                    <Text>You have made your choice for this week.</Text>
+                </View>
+            )
         } else {
-            return <div>You didn't select a team in time and are unfortunately now out of this game.</div>
+            return (
+                <View>
+                    <Text>You didn't select a team in time and are unfortunately now out of this game.</Text>
+                </View>
+            )
         }
     }
 
@@ -347,42 +372,48 @@ export const League = ({ currentUserId }: LeagueProps) => {
                             <Fixtures />
                         </FixturesWrapper>
 
-                        <div>
+                        <View>
                             <SelectionWrapper>
                                 <H2>Team Selection</H2>
-                                <div>{showTeamSelectionPage()}</div>
+                                <View>{showTeamSelectionPage()}</View>
                                 <RoundCloses>
-                                    Round closes on <b>{currentGameweek.endsReadable}</b>
+                                    Round closes on <Text>{currentGameweek.endsReadable}</Text>
                                 </RoundCloses>
                             </SelectionWrapper>
                             <LeagueInformationWrapper>
                                 <TextContainer>
-                                    <img src="/images/other/premier-league.png" width="100%" />
+                                    {/* <img src="/images/other/premier-league.png" width="100%" /> */}
                                 </TextContainer>
                                 <TextContainer>
-                                    <PrizeMoney>£20</PrizeMoney>
-                                    <span>prize money</span>
+                                    <PrizeMoney>
+                                        <Text>£20</Text>
+                                    </PrizeMoney>
+                                    <Text>prize money</Text>
                                 </TextContainer>
                                 <TextContainer>
-                                    <PrizeMoney>{league.admin.name}</PrizeMoney>
-                                    <span>(admin)</span>
+                                    <PrizeMoney>
+                                        <Text>{league.admin.name}</Text>
+                                    </PrizeMoney>
+                                    <Text>(admin)</Text>
                                 </TextContainer>
                                 <TextContainer>
-                                    <PrizeMoney>123</PrizeMoney>
-                                    <span>join pin</span>
+                                    <PrizeMoney>
+                                        <Text>123</Text>
+                                    </PrizeMoney>
+                                    <Text>join pin</Text>
                                 </TextContainer>
                             </LeagueInformationWrapper>
                             <SelectionWrapper>
                                 <H2>League Rules</H2>
-                                <div>
-                                    <li>Pick a different team every week</li>
-                                    <li>Home team must win</li>
-                                    <li>Away team must win or draw</li>
-                                    <li>Last Pundit Standing wins jackpot</li>
-                                    <li>Money rolls over if no winner</li>
-                                </div>
+                                <View>
+                                    <Text>Pick a different team every week</Text>
+                                    <Text>Home team must win</Text>
+                                    <Text>Away team must win or draw</Text>
+                                    <Text>Last Pundit Standing wins jackpot</Text>
+                                    <Text>Money rolls over if no winner</Text>
+                                </View>
                             </SelectionWrapper>
-                        </div>
+                        </View>
                     </BottomSection>
                 </Wrapper>
             </Container>
@@ -393,5 +424,9 @@ export const League = ({ currentUserId }: LeagueProps) => {
         return <PageNotFound />
     }
 
-    return <Container> Retrieving League information... </Container>
+    return (
+        <Container>
+            <Text>Retrieving League information...</Text>
+        </Container>
+    )
 }

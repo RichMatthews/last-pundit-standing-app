@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-native'
+import { Text, View } from 'react-native'
 
 interface LeagueState {
     name?: string
@@ -11,9 +12,9 @@ interface LeagueProps {
     userLeagues: []
 }
 
-const Container = styled.div``
+const Container = styled.View``
 
-const Inner = styled.div`
+const Inner = styled.View`
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -21,7 +22,7 @@ const Inner = styled.div`
     margin: auto;
 `
 
-const LeagueContainer = styled.div`
+const LeagueContainer = styled.View`
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -36,7 +37,6 @@ const StyledLinkButton = styled(Link)`
     background: #289960;
     border-radius: 3px;
     color: #fff;
-    cursor: pointer;
     margin-top: 55px;
     padding: 10px;
     text-align: center;
@@ -47,37 +47,47 @@ export const MyLeagues = ({ userLeagues }: LeagueProps) => {
     return (
         <Container>
             <Inner>
-                <h1>My Leagues</h1>
+                <Text>My Leagues</Text>
                 <LeagueContainer>
-                    <h3>Private Leagues</h3>
+                    <Text>Private Leagues</Text>
                     {userLeagues.filter((league: any) => league.isPrivate).length ? (
                         userLeagues
                             .filter((league: any) => league.isPrivate)
                             .map((league: LeagueState) => (
                                 <StyledLink to={`/leagues/${league.id}`}>
-                                    <div>{league.name}</div>
+                                    <View>
+                                        <Text>{league.name}</Text>
+                                    </View>
                                 </StyledLink>
                             ))
                     ) : (
-                        <div>You have not entered any private leagues yet</div>
+                        <View>
+                            <Text>You have not entered any private leagues yet</Text>
+                        </View>
                     )}
                 </LeagueContainer>
 
                 <LeagueContainer>
-                    <h3>Public Leagues</h3>
+                    <Text>Public Leagues</Text>
                     {userLeagues.filter((league: any) => !league.isPrivate).length ? (
                         userLeagues
                             .filter((league: any) => !league.isPrivate)
                             .map((league: LeagueState) => (
                                 <StyledLink to={`/leagues/${league.id}`}>
-                                    <div>{league.name}</div>
+                                    <View>
+                                        <Text>{league.name}</Text>
+                                    </View>
                                 </StyledLink>
                             ))
                     ) : (
-                        <div>You have not entered any public leagues yet</div>
+                        <View>
+                            <Text>You have not entered any public leagues yet</Text>
+                        </View>
                     )}
                 </LeagueContainer>
-                <StyledLinkButton to={`/join`}>Click here to join a league</StyledLinkButton>
+                <StyledLinkButton to={`/join`}>
+                    <Text>Click here to join a league</Text>
+                </StyledLinkButton>
             </Inner>
         </Container>
     )
