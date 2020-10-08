@@ -1,29 +1,16 @@
 import React from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-import { Image, View } from 'react-native'
+import { Image, TouchableOpacity, View } from 'react-native'
 import { PreviousRound } from '../../previous-round'
 
 const Section = styled.View`
-    background: #fff;
     border-radius: 5px;
-    box-shadow: 0 1px 4px rgba(41, 51, 57, 0.3);
     display: flex;
     flex-direction: column;
-    @media (max-width: 900px) {
-        margin-bottom: 10px;
-    }
 `
 
-const CurrentRoundContainer = styled(Section)`
-    height: 100%;
-    margin: 0 10px;
-    @media (max-width: 900px) {
-        background: transparent;
-        border: none;
-        margin: 0 0 10px 0;
-    }
-`
+const CurrentRoundContainer = styled(Section)``
 
 const CurrentRound = styled.View`
     align-items: center;
@@ -35,60 +22,27 @@ const CurrentRound = styled.View`
 const CurrentSelection = styled.View<any>`
     background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#d8ede2' : '#fff')};
     border-radius: 3px;
+    border-bottom-color: #ccc;
+    border-bottom-width: 1;
     padding: 10px;
-    margin: 10px;
-    width: inherit;
 `
 
-const customReactSelectStyles = {
-    control: (base: any) => ({
-        ...base,
-        background: '#fff',
-        fontSize: 12,
-        margin: 10,
-        marginLeft: 0,
-        marginBottom: 0,
-        width: 150,
-    }),
-    placeholder: (base: any) => ({
-        ...base,
-        fontSize: 12,
-        color: '#9393A8',
-    }),
-    option: (base: any) => ({
-        ...base,
-        fontSize: 12,
-        width: 150,
-    }),
-    menu: (base: any) => ({
-        ...base,
-        fontSize: 12,
-        width: 150,
-    }),
-    menuList: (base: any) => ({
-        ...base,
-        fontSize: 12,
-        width: 150,
-    }),
-}
+const Container = styled.View`
+    background: #f6f6f7;
+`
 
 const ExpandImage = styled.Image<any>`
-    height: 10px;
-    width: 10px;
+    height: 30px;
     transform: ${({ expand }: any) => (expand ? 'rotate(180deg)' : 'rotate(0deg)')};
-
-    @media (max-width: 900px) {
-        width: 30px;
-    }
+    width: 30px;
 `
 
 const HistoricalRounds = styled.View<any>`
-    display: ${({ expand }) => (expand ? 'block' : 'none')};
-    transition: 2.5s;
+    display: ${({ expand }) => (expand ? 'flex' : 'none')};
     margin: 15px;
 `
 
-const PlayerName = styled.View`
+const PlayerName = styled.Text`
     font-size: 15px;
     margin-right: 10px;
 `
@@ -96,6 +50,11 @@ const PlayerName = styled.View`
 const SelectContainer = styled.View`
     display: flex;
     justify-content: flex-end;
+`
+
+const PlayerAndDownArrow = styled.View`
+    display: flex;
+    flex-direction: row;
 `
 
 export const CurrentRoundView = ({
@@ -141,45 +100,41 @@ export const CurrentRoundView = ({
                     }}
                 />
             </SelectContainer> */}
-            <View>
+            <Container>
                 {Object.values(gamesInLeague[currentViewedGame].players).map((player: any, index: any) => (
-                    <CurrentSelection
-                        isCurrentLoggedInPlayer={player.id === currentUserId}
-                        onClick={() => setListOfExpandedPreviousHelper(index)}
-                        value="Current Round"
-                    >
-                        <CurrentRound>
-                            <PlayerName>{player.name}</PlayerName>
-                            <View
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
-                                <View style={{ display: 'flex', marginRight: '10px' }}>
-                                    {showImageForPlayerChoice(
-                                        player.id === currentUserId,
-                                        player,
-                                        selectionTimeEnded, // change this at some point
-                                    )}
-                                </View>
-                                <ExpandImage
-                                    src={'/images/other/down-arrow.svg'}
-                                    expand={listOfExpandedPrevious.includes(index)}
-                                />
-                            </View>
-                        </CurrentRound>
-                        <HistoricalRounds expand={listOfExpandedPrevious.includes(index)}>
-                            {player.rounds
-                                .filter((round: any) => round.choice.value && round.choice.result !== 'pending')
-                                .map((round: any) => (
-                                    <PreviousRound choice={round.choice} />
-                                ))}
-                        </HistoricalRounds>
-                    </CurrentSelection>
+                    <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
+                        <CurrentSelection
+                            key={player.id}
+                            isCurrentLoggedInPlayer={player.id === currentUserId}
+                            value="Current Round"
+                        >
+                            <CurrentRound onPress={() => alert('tyoy')}>
+                                <PlayerName>{player.name}</PlayerName>
+                                <PlayerAndDownArrow>
+                                    <View>
+                                        {showImageForPlayerChoice(
+                                            player.id === currentUserId,
+                                            player,
+                                            selectionTimeEnded, // change this at some point
+                                        )}
+                                    </View>
+                                    <ExpandImage
+                                        source={require('../../../images/other/down-arrow.svg')}
+                                        expand={listOfExpandedPrevious.includes(index)}
+                                    />
+                                </PlayerAndDownArrow>
+                            </CurrentRound>
+                            <HistoricalRounds expand={listOfExpandedPrevious.includes(index)}>
+                                {player.rounds
+                                    .filter((round: any) => round.choice.value && round.choice.result !== 'pending')
+                                    .map((round: any) => (
+                                        <PreviousRound choice={round.choice} />
+                                    ))}
+                            </HistoricalRounds>
+                        </CurrentSelection>
+                    </TouchableOpacity>
                 ))}
-            </View>
+            </Container>
         </CurrentRoundContainer>
     )
 }

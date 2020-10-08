@@ -50,25 +50,28 @@ export const Fixtures = () => {
     const [gameweekFixtures, setGameweekFixtures] = useState([])
 
     useEffect(() => {
-        async function fetchFixtures() {
-            const fixtures: any = await getCurrentGameweekFixtures()
-            setGameweekFixtures(fixtures)
-        }
-
-        fetchFixtures()
+        // async function fetchFixtures() {
+        //     const fixtures: any = await getCurrentGameweekFixtures()
+        //     setGameweekFixtures(fixtures)
+        // }
+        // fetchFixtures()
     }, [])
 
     return (
         <Container>
             {gameweekFixtures.map((match: any) => (
-                <Match>
-                    <Team homeTeam={true}>{match.home}</Team>
+                <Match key={match.home}>
+                    <Team homeTeam={true}>
+                        <Text>{match.home}</Text>
+                    </Team>
                     <Center>
                         <TeamBadge src={`/images/teams/${match.home.replace(/\s/g, '').toLowerCase()}.png`} />
                         <Text> vs </Text>
                         <TeamBadge src={`/images/teams/${match.away.replace(/\s/g, '').toLowerCase()}.png`} />
                     </Center>
-                    <Team homeTeam={false}>{match.away}</Team>
+                    <Team homeTeam={false}>
+                        <Text>{match.away}</Text>
+                    </Team>
                 </Match>
             ))}
         </Container>

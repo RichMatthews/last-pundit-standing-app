@@ -7,11 +7,13 @@ import { CurrentRoundView } from './current-round'
 import { ChooseTeam } from '../choose-team'
 import { PageNotFound } from '../404'
 import { PREMIER_LEAGUE_TEAMS } from '../../teams'
+import * as Images from '../../images'
 import { Fixtures } from '../fixtures'
 import { firebaseApp } from '../../config.js'
 
 interface LeagueProps {
     currentUserId: string
+    navigation: any
 }
 interface ImageStyled {
     lost?: boolean
@@ -24,20 +26,15 @@ const Container = styled.View`
 const Section = styled.View`
     background: #fff;
     border-radius: 5px;
-    box-shadow: 0 1px 4px rgba(41, 51, 57, 0.3);
+    box-shadow: 0 1px 4px rgba(41, 51, 57, 0.2);
     display: flex;
     flex-direction: column;
     padding: 10px;
-    @media (max-width: 900px) {
-        margin-bottom: 10px;
-    }
+    margin-bottom: 10px;
 `
 
 const SelectionWrapper = styled(Section)`
-    margin: 0 10px 10px 10px;
-    @media (max-width: 900px) {
-        margin-right: 0;
-    }
+    margin: 10px 10px 10px 10px;
 `
 
 const LeagueInformationWrapper = styled(SelectionWrapper)`
@@ -48,50 +45,24 @@ const LeagueInformationWrapper = styled(SelectionWrapper)`
     justify-content: space-between;
 `
 
-const BottomSection = styled.View`
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-    @media (max-width: 900px) {
-        flex-direction: row;
-    }
-`
-
-const FixturesWrapper = styled(Section)`
-    margin-right: 10px;
-
-    @media (max-width: 900px) {
-        width: 200px;
-    }
-`
-
 const TeamBadge = styled.Image<ImageStyled>`
     opacity: ${({ lost }) => (lost ? 0.2 : 1)};
     height: 30px;
     width: 30px;
-
-    @media (max-width: 900px) {
-        width: 30px;
-    }
 `
 
 const H1 = styled.Text`
     color: #2f2f2f;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 400;
     margin-left: 10px;
-    @media (max-width: 900px) {
-        font-size: 20px;
-    }
 `
 
 const H2 = styled.Text`
     display: flex;
     font-weight: 400;
     margin: 0;
-    @media (max-width: 900px) {
-        font-size: 16px;
-    }
+    font-size: 16px;
 `
 
 const Eliminated = styled.View`
@@ -114,16 +85,12 @@ const PredictionSubmitted = styled(Eliminated)`
 
 const RoundCloses = styled.View`
     margin-top: 20px;
-    @media (max-width: 900px) {
-        text-align: center;
-    }
+    text-align: center;
 `
 
 const Wrapper = styled.View`
     display: flex;
-    @media (max-width: 900px) {
-        display: block;
-    }
+    flex-direction: column;
 `
 
 const PrizeMoney = styled.View`
@@ -139,7 +106,11 @@ const TextContainer = styled.View`
     }
 `
 
-export const League = ({ currentUserId }: LeagueProps) => {
+const PremierLeagueImage = styled.Image`
+    width: 50px;
+`
+
+export const League = ({ currentUserId, navigation }: LeagueProps) => {
     const [currentGame, setCurrentGame] = useState<any>({})
     const [currentGameweek, setCurrentGameweek] = useState<any>({})
     const [currentPlayer, setCurrentPlayer] = useState<any>({})
@@ -259,7 +230,7 @@ export const League = ({ currentUserId }: LeagueProps) => {
             if (currentRound.choice.hasMadeChoice) {
                 return (
                     <TeamBadge
-                        src={`/images/teams/${playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()}.png`}
+                        source={Images[playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()]}
                         lost={false}
                     />
                 )
@@ -270,14 +241,14 @@ export const League = ({ currentUserId }: LeagueProps) => {
             if (allRemainingPlayersHaveSelected) {
                 return (
                     <TeamBadge
-                        src={`/images/teams/${playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()}.png`}
+                        source={Images[playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()]}
                         lost={false}
                     />
                 )
             } else if (!playersStillAbleToSelectTeams) {
                 return (
                     <TeamBadge
-                        src={`/images/teams/${currentRound.choice.value.replace(/\s/g, '').toLowerCase()}.png`}
+                        source={Images[playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()]}
                         lost={false}
                     />
                 )
@@ -344,6 +315,7 @@ export const League = ({ currentUserId }: LeagueProps) => {
     }
 
     const setListOfExpandedPreviousHelper = (index: number) => {
+        console.debug('cllade')
         if (listOfExpandedPrevious.includes(index)) {
             setListOfExpandedPrevious(listOfExpandedPrevious.filter((x: number) => x !== index))
         } else {
@@ -356,65 +328,62 @@ export const League = ({ currentUserId }: LeagueProps) => {
             <Container>
                 <H1>{league.name}</H1>
                 <Wrapper>
-                    <CurrentRoundView
-                        currentUserId={currentUserId}
-                        currentViewedGame={currentViewedGame}
-                        gamesInLeague={gamesInLeague}
-                        listOfExpandedPrevious={listOfExpandedPrevious}
-                        selectionTimeEnded={selectionTimeEnded}
-                        setCurrentViewedGame={setCurrentViewedGame}
-                        setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                        showImageForPlayerChoice={showImageForPlayerChoice}
-                    />
-                    <BottomSection>
-                        <FixturesWrapper>
-                            <H2>Gameweek Fixtures</H2>
-                            <Fixtures />
-                        </FixturesWrapper>
-
+                    <SelectionWrapper>
+                        <CurrentRoundView
+                            currentUserId={currentUserId}
+                            currentViewedGame={currentViewedGame}
+                            gamesInLeague={gamesInLeague}
+                            listOfExpandedPrevious={listOfExpandedPrevious}
+                            selectionTimeEnded={selectionTimeEnded}
+                            setCurrentViewedGame={setCurrentViewedGame}
+                            setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                            showImageForPlayerChoice={showImageForPlayerChoice}
+                        />
+                    </SelectionWrapper>
+                    <SelectionWrapper>
+                        <H2>Team Selection</H2>
+                        <View>{showTeamSelectionPage()}</View>
+                        <RoundCloses>
+                            <Text>Round closes on {currentGameweek.endsReadable}</Text>
+                        </RoundCloses>
+                    </SelectionWrapper>
+                    <SelectionWrapper>
+                        <H2>Gameweek Fixtures</H2>
+                        <Fixtures />
+                    </SelectionWrapper>
+                    <LeagueInformationWrapper>
+                        <TextContainer>
+                            <PremierLeagueImage source={require('../../images/other/premier-league.png')} />
+                        </TextContainer>
+                        <TextContainer>
+                            <PrizeMoney>
+                                <Text>£20</Text>
+                            </PrizeMoney>
+                            <Text>prize money</Text>
+                        </TextContainer>
+                        <TextContainer>
+                            <PrizeMoney>
+                                <Text>{league.admin.name}</Text>
+                            </PrizeMoney>
+                            <Text>(admin)</Text>
+                        </TextContainer>
+                        <TextContainer>
+                            <PrizeMoney>
+                                <Text>123</Text>
+                            </PrizeMoney>
+                            <Text>join pin</Text>
+                        </TextContainer>
+                    </LeagueInformationWrapper>
+                    <SelectionWrapper>
+                        <H2>League Rules</H2>
                         <View>
-                            <SelectionWrapper>
-                                <H2>Team Selection</H2>
-                                <View>{showTeamSelectionPage()}</View>
-                                <RoundCloses>
-                                    Round closes on <Text>{currentGameweek.endsReadable}</Text>
-                                </RoundCloses>
-                            </SelectionWrapper>
-                            <LeagueInformationWrapper>
-                                <TextContainer>
-                                    {/* <img src="/images/other/premier-league.png" width="100%" /> */}
-                                </TextContainer>
-                                <TextContainer>
-                                    <PrizeMoney>
-                                        <Text>£20</Text>
-                                    </PrizeMoney>
-                                    <Text>prize money</Text>
-                                </TextContainer>
-                                <TextContainer>
-                                    <PrizeMoney>
-                                        <Text>{league.admin.name}</Text>
-                                    </PrizeMoney>
-                                    <Text>(admin)</Text>
-                                </TextContainer>
-                                <TextContainer>
-                                    <PrizeMoney>
-                                        <Text>123</Text>
-                                    </PrizeMoney>
-                                    <Text>join pin</Text>
-                                </TextContainer>
-                            </LeagueInformationWrapper>
-                            <SelectionWrapper>
-                                <H2>League Rules</H2>
-                                <View>
-                                    <Text>Pick a different team every week</Text>
-                                    <Text>Home team must win</Text>
-                                    <Text>Away team must win or draw</Text>
-                                    <Text>Last Pundit Standing wins jackpot</Text>
-                                    <Text>Money rolls over if no winner</Text>
-                                </View>
-                            </SelectionWrapper>
+                            <Text>Pick a different team every week</Text>
+                            <Text>Home team must win</Text>
+                            <Text>Away team must win or draw</Text>
+                            <Text>Last Pundit Standing wins jackpot</Text>
+                            <Text>Money rolls over if no winner</Text>
                         </View>
-                    </BottomSection>
+                    </SelectionWrapper>
                 </Wrapper>
             </Container>
         )

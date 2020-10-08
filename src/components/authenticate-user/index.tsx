@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
-import { TextInput, Text, View } from 'react-native'
-import { Link } from 'react-router-dom'
+import { TextInput, Text, TouchableOpacity, View } from 'react-native'
+import { Link } from 'react-router-native'
 import styled from 'styled-components'
+import { useRoute } from '@react-navigation/native'
 
 import { Button } from '../button'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
 
 const Container = styled.View`
+    align-items: center;
     display: flex;
     justify-content: center;
+    margin-top: 100px;
 `
 
 const Inner = styled.View`
@@ -46,7 +49,7 @@ const StyledLink = styled(Link)`
     text-decoration: none;
 `
 
-export const AuthenticateUserScreen = () => {
+export const AuthenticateUserScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
@@ -54,6 +57,7 @@ export const AuthenticateUserScreen = () => {
     const [error, setError] = useState<any>(null)
 
     const logUserIn = () => {
+        console.log('called log')
         logUserInToApplication(email, password, setError)
     }
 
@@ -71,14 +75,18 @@ export const AuthenticateUserScreen = () => {
         setPassword(e.target.value)
     }
 
-    const isSignUpPage = window.location.pathname.includes('sign-up')
+    const isSignUpPage = useRoute().name.includes('Sign Up')
 
     return (
         <Container>
             <Inner>
                 <SectionDivider>
                     <Text>Last Punding Standing requires you to be logged in</Text>
-                    {error ? <Error>{error}</Error> : null}
+                    {error ? (
+                        <Error>
+                            <Text>{error}</Text>
+                        </Error>
+                    ) : null}
                 </SectionDivider>
                 {isSignUpPage && (
                     <>
@@ -102,9 +110,9 @@ export const AuthenticateUserScreen = () => {
                     />
                 </SectionDivider>
                 <SectionDivider>
-                    <Button onClick={isSignUpPage ? signUserUp : logUserIn}>
-                        {isSignUpPage ? <Text>Sign Up</Text> : <Text>Login</Text>}
-                    </Button>
+                    <TouchableOpacity onPress={isSignUpPage ? signUserUp : logUserIn}>
+                        <Button>{isSignUpPage ? <Text>Sign Up</Text> : <Text>Login</Text>}</Button>
+                    </TouchableOpacity>
                 </SectionDivider>
                 {!isSignUpPage && (
                     <>
@@ -114,7 +122,7 @@ export const AuthenticateUserScreen = () => {
                             </View>
                         </SectionDivider>
                         <StyledLink to={'/sign-up'}>
-                            {!isSignUpPage ? <Text>Sign up now</Text> : <Text>Login</Text>}{' '}
+                            {!isSignUpPage ? <Text>Sign up now</Text> : <Text>Login</Text>}
                         </StyledLink>
                     </>
                 )}

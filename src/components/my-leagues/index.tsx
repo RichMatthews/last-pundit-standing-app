@@ -1,18 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-native'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 interface LeagueState {
     name?: string
     id?: string
 }
 
-interface LeagueProps {
-    userLeagues: []
-}
-
-const Container = styled.View``
+const Container = styled.View`
+    margin-top: 100px;
+`
 
 const Inner = styled.View`
     align-items: center;
@@ -28,22 +25,22 @@ const LeagueContainer = styled.View`
     width: 100%;
 `
 
-const StyledLink = styled(Link)`
-    color: #289960;
-    text-decoration: none;
-`
+// const StyledLink = styled(Link)`
+//     color: #289960;
+//     text-decoration: none;
+// `
 
-const StyledLinkButton = styled(Link)`
-    background: #289960;
-    border-radius: 3px;
-    color: #fff;
-    margin-top: 55px;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-`
+// const StyledLinkButton = styled(Link)`
+//     background: #289960;
+//     border-radius: 3px;
+//     color: #fff;
+//     margin-top: 55px;
+//     padding: 10px;
+//     text-align: center;
+//     text-decoration: none;
+// `
 
-export const MyLeagues = ({ userLeagues }: LeagueProps) => {
+export const MyLeagues = ({ navigation, userLeagues }: any) => {
     return (
         <Container>
             <Inner>
@@ -54,11 +51,11 @@ export const MyLeagues = ({ userLeagues }: LeagueProps) => {
                         userLeagues
                             .filter((league: any) => league.isPrivate)
                             .map((league: LeagueState) => (
-                                <StyledLink to={`/leagues/${league.id}`}>
-                                    <View>
+                                <TouchableOpacity onPress={() => navigation.navigate('League', { id: league.id })}>
+                                    <View key={league.id}>
                                         <Text>{league.name}</Text>
                                     </View>
-                                </StyledLink>
+                                </TouchableOpacity>
                             ))
                     ) : (
                         <View>
@@ -73,11 +70,11 @@ export const MyLeagues = ({ userLeagues }: LeagueProps) => {
                         userLeagues
                             .filter((league: any) => !league.isPrivate)
                             .map((league: LeagueState) => (
-                                <StyledLink to={`/leagues/${league.id}`}>
-                                    <View>
+                                <TouchableOpacity onPress={() => navigation.navigate('My Leagues', { id: league.id })}>
+                                    <View key={league.id}>
                                         <Text>{league.name}</Text>
                                     </View>
-                                </StyledLink>
+                                </TouchableOpacity>
                             ))
                     ) : (
                         <View>
@@ -85,9 +82,9 @@ export const MyLeagues = ({ userLeagues }: LeagueProps) => {
                         </View>
                     )}
                 </LeagueContainer>
-                <StyledLinkButton to={`/join`}>
+                <TouchableOpacity onPress={() => navigation.navigate(`/join`)}>
                     <Text>Click here to join a league</Text>
-                </StyledLinkButton>
+                </TouchableOpacity>
             </Inner>
         </Container>
     )
