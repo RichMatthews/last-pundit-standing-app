@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { Text, View } from 'react-native'
 import styled from 'styled-components'
 import firebase from 'firebase'
 
-import { Button } from '../button'
+import { Button } from '../../ui-components/button'
 
 const auth = firebase.auth()
 
@@ -17,7 +16,7 @@ const Container = styled.View`
 
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('')
-    const history = useHistory()
+    // const history = useHistory()
 
     const resetPassword = () => {
         var actionCodeSettings = {
@@ -28,7 +27,7 @@ export const ForgotPassword = () => {
         auth.sendPasswordResetEmail(email, actionCodeSettings)
             .then(() => {
                 alert('email sent')
-                history.push('/login')
+                // history.push('/login')
             })
             .catch((error) => {
                 console.log(error, 'er')

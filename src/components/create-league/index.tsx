@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { TextInput, Text, View } from 'react-native'
-import Select from 'react-select'
 import styled from 'styled-components'
 import uid from 'uid'
 
-import { Button } from '../button'
-
-import { firebaseApp } from '../../config.js'
+import { Button, ButtonText } from '../../ui-components/button'
+import { H1 } from '../../ui-components/headings'
 import { getLeagueCreatorInformation } from '../../firebase-helpers'
+import { firebaseApp } from '../../config.js'
 
 interface CreateLeagueProps {
     currentUserId: string
@@ -22,19 +20,22 @@ const Container = styled.View`
     align-items: center;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    justify-content: center;
+    margin-top: 100px;
 `
 
 const Input = styled.TextInput`
+    border-color: #ccc;
+    border-width: 1;
     font-size: 15px;
+    margin-bottom: 20px;
     padding: 10px;
     width: 100%;
 `
 
-const InnerContainer = styled.View`
-    display: flex;
-    flex-direction: column;
-    width: 250px;
+const Inner = styled.View`
+    margin-top: 50px;
+    width: 300px;
 `
 
 const LeagueAmountValue = styled.View<HeadingStyled>`
@@ -69,7 +70,6 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
     const [secondPlaceMoneyBack, setSecondPlaceMoneyBack] = useState(false)
     const [leagueName, setLeagueName] = useState('')
     const [selectedFee, setSelectedFee] = useState(10)
-    const history = useHistory()
 
     const getLeagueCreatorInformationThenCreateLeague = async () => {
         const playerInfo: any = await getLeagueCreatorInformation(currentUserId)
@@ -130,7 +130,7 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                 if (error) {
                     alert('Failed to create league, please try again.')
                 } else {
-                    history.push(`/leagues/${leagueId}`)
+                    // history.push(`/leagues/${leagueId}`)
                 }
             })
     }
@@ -148,7 +148,8 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
 
     return (
         <Container>
-            <InnerContainer>
+            <H1>Create League</H1>
+            <Inner>
                 <SectionDivider>
                     <Input onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
                 </SectionDivider>
@@ -193,10 +194,10 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                         onClick={leagueName.length === 0 ? null : getLeagueCreatorInformationThenCreateLeague}
                         disabled={leagueName.length === 0}
                     >
-                        <Text>Create and join league</Text>
+                        <ButtonText>Create and join league</ButtonText>
                     </Button>
                 </SectionDivider>
-            </InnerContainer>
+            </Inner>
         </Container>
     )
 }

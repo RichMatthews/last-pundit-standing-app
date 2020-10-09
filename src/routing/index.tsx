@@ -26,7 +26,11 @@ const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
 const Stacks = ({ userLeagues, userId }: any) => (
-    <Stack.Navigator>
+    <Stack.Navigator
+        screenOptions={{
+            headerShown: false,
+        }}
+    >
         <Stack.Screen name="My Leagues">
             {(props: any) => <MyLeagues userLeagues={userLeagues} navigation={props.navigation} />}
         </Stack.Screen>

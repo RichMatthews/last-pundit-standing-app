@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { TextInput, Text, View } from 'react-native'
-import { useHistory } from 'react-router-dom'
+import { TextInput, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
-import { Button } from '../button'
+import { Button, ButtonText } from '../../ui-components/button'
+import { H1 } from '../../ui-components/headings'
 
 import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from '../../firebase-helpers'
 
@@ -16,10 +16,17 @@ const Container = styled.View`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-top: 100px;
+`
+
+const Inner = styled.View`
     margin-top: 50px;
+    width: 300px;
 `
 
 const Input = styled.TextInput`
+    border-color: #ccc;
+    border-width: 1;
     font-size: 15px;
     margin-bottom: 20px;
     padding: 10px;
@@ -28,7 +35,6 @@ const Input = styled.TextInput`
 
 export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
     const [leaguePin, setLeaguePin] = useState<string | null>(null)
-    const history = useHistory()
 
     const attemptToJoinLeague = (league: any, name: string, surname: string) => {
         const games = Object.values(league.games)
@@ -51,7 +57,7 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
                         name: league.name,
                     },
                 }
-                joinLeagueAndAddLeagueToListOfUserLeagues(history, theDataToBeSynced, league)
+                // joinLeagueAndAddLeagueToListOfUserLeagues(history, theDataToBeSynced, league)
             }
         }
     }
@@ -67,12 +73,17 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
 
     return (
         <Container>
-            <View>
-                <Input onChange={(e) => setLeaguePin(e.target.value)} placeholder="Enter league pin" />
-                <Button onClick={joinLeague}>
-                    <Text>Join League</Text>
-                </Button>
-            </View>
+            <H1>Join a League</H1>
+            <Inner>
+                <View>
+                    <Input onChange={(e) => setLeaguePin(e.target.value)} placeholder="Enter league pin" />
+                    <TouchableOpacity onPress={joinLeague}>
+                        <Button>
+                            <ButtonText>Join League</ButtonText>
+                        </Button>
+                    </TouchableOpacity>
+                </View>
+            </Inner>
         </Container>
     )
 }

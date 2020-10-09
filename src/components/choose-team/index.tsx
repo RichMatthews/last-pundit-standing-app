@@ -4,7 +4,7 @@ import Select from 'react-select'
 import styled from 'styled-components'
 
 import { CURRENT_GAMEWEEK } from '../../admin/current-week'
-import { Button } from '../button'
+import { Button } from '../../ui-components/button'
 
 import { updateUserGamweekChoice } from '../../firebase-helpers'
 

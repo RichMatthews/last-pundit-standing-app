@@ -4,7 +4,7 @@ import { Link } from 'react-router-native'
 import styled from 'styled-components'
 import { useRoute } from '@react-navigation/native'
 
-import { Button } from '../button'
+import { Button } from '../../ui-components/button'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
 

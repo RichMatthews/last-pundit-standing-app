@@ -2,21 +2,24 @@ import React from 'react'
 import styled from 'styled-components'
 import { Text, TouchableOpacity, View } from 'react-native'
 
+import { H1, H2 } from '../../ui-components/headings'
+
 interface LeagueState {
     name?: string
     id?: string
 }
 
 const Container = styled.View`
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin-top: 100px;
 `
 
 const Inner = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    margin-top: 50px;
     width: 300px;
-    margin: auto;
 `
 
 const LeagueContainer = styled.View`
@@ -43,10 +46,10 @@ const LeagueContainer = styled.View`
 export const MyLeagues = ({ navigation, userLeagues }: any) => {
     return (
         <Container>
+            <H1>My Leagues</H1>
             <Inner>
-                <Text>My Leagues</Text>
                 <LeagueContainer>
-                    <Text>Private Leagues</Text>
+                    <H2>Private Leagues</H2>
                     {userLeagues.filter((league: any) => league.isPrivate).length ? (
                         userLeagues
                             .filter((league: any) => league.isPrivate)
@@ -65,7 +68,7 @@ export const MyLeagues = ({ navigation, userLeagues }: any) => {
                 </LeagueContainer>
 
                 <LeagueContainer>
-                    <Text>Public Leagues</Text>
+                    <H2>Public Leagues</H2>
                     {userLeagues.filter((league: any) => !league.isPrivate).length ? (
                         userLeagues
                             .filter((league: any) => !league.isPrivate)

@@ -1,5 +1,4 @@
 import React from 'react'
-import Select from 'react-select'
 import styled from 'styled-components'
 import { Image, TouchableOpacity, View } from 'react-native'
 import { PreviousRound } from '../../previous-round'
@@ -19,16 +18,17 @@ const CurrentRound = styled.View`
     justify-content: space-between;
 `
 
-const CurrentSelection = styled.View<any>`
+const PlayerRow = styled.View<any>`
     background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#d8ede2' : '#fff')};
-    border-radius: 3px;
+    border-radius: 10px;
     border-bottom-color: #ccc;
     border-bottom-width: 1;
     padding: 10px;
+    margin: 5px;
 `
 
 const Container = styled.View`
-    background: #f6f6f7;
+    background: transparent;
 `
 
 const ExpandImage = styled.Image<any>`
@@ -103,7 +103,7 @@ export const CurrentRoundView = ({
             <Container>
                 {Object.values(gamesInLeague[currentViewedGame].players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        <CurrentSelection
+                        <PlayerRow
                             key={player.id}
                             isCurrentLoggedInPlayer={player.id === currentUserId}
                             value="Current Round"
@@ -131,7 +131,7 @@ export const CurrentRoundView = ({
                                         <PreviousRound choice={round.choice} />
                                     ))}
                             </HistoricalRounds>
-                        </CurrentSelection>
+                        </PlayerRow>
                     </TouchableOpacity>
                 ))}
             </Container>
