@@ -3,6 +3,7 @@ import { TextInput, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
 import { Button, ButtonText } from '../../ui-components/button'
+import { Container, Inner } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
 
 import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from '../../firebase-helpers'
@@ -10,19 +11,6 @@ import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeague
 interface JoinLeagueProps {
     currentUserId: string
 }
-
-const Container = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 100px;
-`
-
-const Inner = styled.View`
-    margin-top: 50px;
-    width: 300px;
-`
 
 const Input = styled.TextInput`
     border-color: #ccc;

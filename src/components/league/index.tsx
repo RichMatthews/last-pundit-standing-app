@@ -9,6 +9,8 @@ import * as Images from '../../images'
 import { Fixtures } from '../fixtures'
 import { firebaseApp } from '../../config.js'
 
+import { H1, H2 } from '../../ui-components/headings'
+
 interface LeagueProps {
     currentUserId: string
     navigation: any
@@ -52,20 +54,6 @@ const TeamBadge = styled.Image<ImageStyled>`
     opacity: ${({ lost }) => (lost ? 0.2 : 1)};
     height: 30px;
     width: 30px;
-`
-
-const H1 = styled.Text`
-    color: #2f2f2f;
-    font-size: 30px;
-    font-weight: 700;
-    margin-left: 10px;
-`
-
-const H2 = styled.Text`
-    display: flex;
-    font-weight: 700;
-    margin: 0;
-    font-size: 20px;
 `
 
 const Eliminated = styled.View`

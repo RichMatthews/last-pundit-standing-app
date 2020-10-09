@@ -8,18 +8,7 @@ import { Button } from '../../ui-components/button'
 
 import { updateUserGamweekChoice } from '../../firebase-helpers'
 
-const Container = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-`
-
-const InnerContainer = styled.View`
-    display: flex;
-    flex-direction: column;
-    width: 250px;
-`
+import { Container, Inner } from '../../ui-components/containers'
 
 const SectionDivider = styled.View`
     margin: 15px 0 0 0;
@@ -133,7 +122,7 @@ export const ChooseTeam = ({
 
     return (
         <Container>
-            <InnerContainer>
+            <Inner>
                 {/* <Select
                     onChange={(team: any) => setSelectedTeam(team)}
                     formatOptionLabel={formatOptionLabel}
@@ -149,7 +138,7 @@ export const ChooseTeam = ({
                         <Text>Select team</Text>
                     </Button>
                 </SectionDivider>
-            </InnerContainer>
+            </Inner>
         </Container>
     )
 }

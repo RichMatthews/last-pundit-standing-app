@@ -3,29 +3,29 @@ import styled from 'styled-components'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 import { H1, H2 } from '../../ui-components/headings'
+import { Container, Inner } from '../../ui-components/containers'
 
 interface LeagueState {
     name?: string
     id?: string
 }
 
-const Container = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 100px;
-`
-
-const Inner = styled.View`
-    margin-top: 50px;
-    width: 300px;
-`
-
 const LeagueContainer = styled.View`
     display: flex;
     flex-direction: column;
     width: 100%;
+`
+
+const LeagueItem = styled.View`
+    margin: 10px 10px 10px 0;
+`
+
+const LeagueName = styled.Text`
+    color: #289960;
+    font-size: 15px;
+`
+const NoLeagueText = styled(LeagueName)`
+    color: #000;
 `
 
 // const StyledLink = styled(Link)`
@@ -55,14 +55,16 @@ export const MyLeagues = ({ navigation, userLeagues }: any) => {
                             .filter((league: any) => league.isPrivate)
                             .map((league: LeagueState) => (
                                 <TouchableOpacity onPress={() => navigation.navigate('League', { id: league.id })}>
-                                    <View key={league.id}>
-                                        <Text>{league.name}</Text>
-                                    </View>
+                                    <LeagueItem key={league.id}>
+                                        <LeagueName>{league.name}</LeagueName>
+                                    </LeagueItem>
                                 </TouchableOpacity>
                             ))
                     ) : (
                         <View>
-                            <Text>You have not entered any private leagues yet</Text>
+                            <LeagueItem>
+                                <NoLeagueText>You have not entered any public leagues yet</NoLeagueText>
+                            </LeagueItem>
                         </View>
                     )}
                 </LeagueContainer>
@@ -74,14 +76,16 @@ export const MyLeagues = ({ navigation, userLeagues }: any) => {
                             .filter((league: any) => !league.isPrivate)
                             .map((league: LeagueState) => (
                                 <TouchableOpacity onPress={() => navigation.navigate('My Leagues', { id: league.id })}>
-                                    <View key={league.id}>
-                                        <Text>{league.name}</Text>
-                                    </View>
+                                    <LeagueItem key={league.id}>
+                                        <LeagueName>{league.name}</LeagueName>
+                                    </LeagueItem>
                                 </TouchableOpacity>
                             ))
                     ) : (
                         <View>
-                            <Text>You have not entered any public leagues yet</Text>
+                            <LeagueItem>
+                                <NoLeagueText>You have not entered any public leagues yet</NoLeagueText>
+                            </LeagueItem>
                         </View>
                     )}
                 </LeagueContainer>

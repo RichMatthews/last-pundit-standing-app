@@ -4,15 +4,9 @@ import styled from 'styled-components'
 import firebase from 'firebase'
 
 import { Button } from '../../ui-components/button'
+import { Container, Inner } from '../../ui-components/containers'
 
 const auth = firebase.auth()
-
-const Container = styled.View`
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: 200px;
-`
 
 export const ForgotPassword = () => {
     const [email, setEmail] = useState('')

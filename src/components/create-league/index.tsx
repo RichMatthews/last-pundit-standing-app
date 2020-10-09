@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import uid from 'uid'
 
 import { Button, ButtonText } from '../../ui-components/button'
+import { Container, Inner } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
 import { getLeagueCreatorInformation } from '../../firebase-helpers'
 import { firebaseApp } from '../../config.js'
@@ -16,14 +17,6 @@ interface HeadingStyled {
     amount: boolean
 }
 
-const Container = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 100px;
-`
-
 const Input = styled.TextInput`
     border-color: #ccc;
     border-width: 1;
@@ -31,11 +24,6 @@ const Input = styled.TextInput`
     margin-bottom: 20px;
     padding: 10px;
     width: 100%;
-`
-
-const Inner = styled.View`
-    margin-top: 50px;
-    width: 300px;
 `
 
 const LeagueAmountValue = styled.View<HeadingStyled>`

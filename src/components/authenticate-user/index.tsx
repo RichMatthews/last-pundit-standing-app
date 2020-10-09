@@ -4,22 +4,11 @@ import { Link } from 'react-router-native'
 import styled from 'styled-components'
 import { useRoute } from '@react-navigation/native'
 
-import { Button } from '../../ui-components/button'
+import { Button, ButtonText } from '../../ui-components/button'
+import { Container, Inner } from '../../ui-components/containers'
+import { H2 } from '../../ui-components/headings'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
-
-const Container = styled.View`
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    margin-top: 100px;
-`
-
-const Inner = styled.View`
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-`
 
 const Input = styled.TextInput`
     font-size: 15px;
@@ -79,15 +68,16 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
 
     return (
         <Container>
+            <H2>Sign Up</H2>
             <Inner>
-                <SectionDivider>
+                <View>
                     <Text>Last Punding Standing requires you to be logged in</Text>
                     {error ? (
                         <Error>
                             <Text>{error}</Text>
                         </Error>
                     ) : null}
-                </SectionDivider>
+                </View>
                 {isSignUpPage && (
                     <>
                         <SectionDivider>
@@ -111,7 +101,9 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
                 </SectionDivider>
                 <SectionDivider>
                     <TouchableOpacity onPress={isSignUpPage ? signUserUp : logUserIn}>
-                        <Button>{isSignUpPage ? <Text>Sign Up</Text> : <Text>Login</Text>}</Button>
+                        <Button>
+                            {isSignUpPage ? <ButtonText>Sign Up</ButtonText> : <ButtonText>Login</ButtonText>}
+                        </Button>
                     </TouchableOpacity>
                 </SectionDivider>
                 {!isSignUpPage && (
@@ -122,7 +114,7 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
                             </View>
                         </SectionDivider>
                         <StyledLink to={'/sign-up'}>
-                            {!isSignUpPage ? <Text>Sign up now</Text> : <Text>Login</Text>}
+                            {!isSignUpPage ? <ButtonText>Sign up now</ButtonText> : <ButtonText>Login</ButtonText>}
                         </StyledLink>
                     </>
                 )}
