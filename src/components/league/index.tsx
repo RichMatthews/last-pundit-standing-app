@@ -79,10 +79,6 @@ const RoundStatus = styled.Text`
     font-size: 11px;
 `
 
-const RoundCloses = styled.View`
-    margin-top: 20px;
-`
-
 const Wrapper = styled.View`
     display: flex;
     flex-direction: column;
@@ -271,9 +267,7 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                         <SelectionWrapper>
                             <H2>Team Selection</H2>
                             <TeamSelectionText>{showTeamSelectionPage()}</TeamSelectionText>
-                            <RoundCloses>
-                                <Text>Round closes on {currentGameweek.endsReadable}</Text>
-                            </RoundCloses>
+                            <Text>Round closes on {currentGameweek.endsReadable}</Text>
                         </SelectionWrapper>
                         <SelectionWrapper>
                             <Fixtures />

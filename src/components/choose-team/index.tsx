@@ -1,8 +1,18 @@
 import React, { useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import {
+    Dimensions,
+    Image,
+    Modal,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native'
 import { Picker } from '@react-native-community/picker'
 import styled from 'styled-components'
 
+import * as Images from '../../images'
 import { CURRENT_GAMEWEEK } from '../../admin/current-week'
 import { Button, ButtonText } from '../../ui-components/button'
 
@@ -10,28 +20,30 @@ import { updateUserGamweekChoice } from '../../firebase-helpers'
 
 import { Container, Inner } from '../../ui-components/containers'
 
+const width = Dimensions.get('window').width
+
 const SectionDivider = styled.View`
-    margin: 15px 0 0 0;
+    width: 100%;
 `
 
-const Option = styled.View`
-    align-items: center;
+const SelectedTeam = styled.View`
+    border-width: 1px;
+    border-color: #ccc;
+    border-radius: 5px;
     display: flex;
-    & > div {
-        font-size: 15px;
-    }
-    & > img {
-        margin-right: 10px;
-    }
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
 `
-const formatOptionLabel = ({ label, value }: any) => (
-    <Option>
-        <img src={`/images/teams/${value.replace(/\s/g, '').toLowerCase()}.png`} alt="" height="30" width="30" />
-        <View>
-            <Text>{label}</Text>
-        </View>
-    </Option>
-)
+
+const TeamBadge = styled.Image`
+    resize-mode: contain;
+    height: 30px;
+    width: 30px;
+`
 
 export const ChooseTeam = ({
     calculateTeamsAllowedToPickForCurrentRound,
@@ -42,15 +54,16 @@ export const ChooseTeam = ({
     leagueOnly,
     pullLatestLeagueData,
 }: any) => {
-    const [selectedTeam, setSelectedTeam] = useState<any>({ label: null })
+    const [selectedTeam, setSelectedTeam] = useState<any>(null)
+    const [modalOpen, setModalOpen] = useState(false)
 
     const findOpposition = () => {
         const selectedTeamFixture: any = CURRENT_GAMEWEEK.fixtures.find(
-            (team) => team.home === selectedTeam.label || team.away === selectedTeam.label,
+            (team) => team.home === selectedTeam || team.away === selectedTeam,
         )
         const homeTeam = selectedTeamFixture['home']
         const awayTeam = selectedTeamFixture['away']
-        const selectedTeamPlayingAtHome = homeTeam === selectedTeam.label
+        const selectedTeamPlayingAtHome = homeTeam === selectedTeam
 
         if (selectedTeamPlayingAtHome) {
             return {
@@ -69,14 +82,18 @@ export const ChooseTeam = ({
         }
     }
 
+    const setSelectedTeamHelper = (value: any) => {
+        setSelectedTeam(value)
+        setModalOpen(false)
+    }
+
     const submitChoice = () => {
-        console.log(selectedTeam, 'selet')
-        if (!selectedTeam.label) {
+        if (!selectedTeam) {
             alert('No team selected!')
             return
         }
         const confirmation: any = window.confirm(
-            `You are picking ${selectedTeam.label}. Are you sure? Once you confirm you are locked in for this gameweek.`,
+            `You are picking ${selectedTeam}. Are you sure? Once you confirm you are locked in for this gameweek.`,
         )
         if (confirmation && leagueOnly) {
             const choice = {
@@ -84,28 +101,79 @@ export const ChooseTeam = ({
                 id: selectedTeam.id,
                 ...findOpposition(),
                 result: 'pending',
-                value: selectedTeam.label,
+                value: selectedTeam,
             }
             updateUserGamweekChoice({ choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData })
         }
     }
-    console.log(selectedTeam, 'st')
+
     return (
-        <Container>
-            <Inner>
-                <Picker onValueChange={(value: any) => setSelectedTeam(value)} selectedValue={selectedTeam}>
-                    {calculateTeamsAllowedToPickForCurrentRound().map((item) => {
-                        return <Picker.Item label={item.label} value={item.value} />
-                    })}
-                </Picker>
-                <SectionDivider>
-                    <TouchableOpacity onPress={submitChoice}>
-                        <Button disabled={selectedTeam.label === null}>
-                            <ButtonText>Select team</ButtonText>
-                        </Button>
+        <View>
+            <View style={styles.container}>
+                <Modal
+                    animationType="slide"
+                    onRequestClose={() => setModalOpen(false)}
+                    transparent={true}
+                    visible={modalOpen}
+                    style={styles.modalContent}
+                >
+                    <TouchableOpacity onPress={() => setModalOpen(!modalOpen)}>
+                        <TouchableWithoutFeedback onPress={() => setModalOpen(!modalOpen)}>
+                            <View style={{ height: '100%' }}></View>
+                        </TouchableWithoutFeedback>
                     </TouchableOpacity>
-                </SectionDivider>
-            </Inner>
-        </Container>
+                    <View style={styles.innerContainer}>
+                        <Text> Close </Text>
+                        <Picker
+                            onValueChange={(value: any) => setSelectedTeamHelper(value)}
+                            selectedValue={selectedTeam}
+                            style={{ display: 'flex', width: 150 }}
+                        >
+                            {calculateTeamsAllowedToPickForCurrentRound().map((item) => {
+                                return <Picker.Item label={item.label} value={item.value} />
+                            })}
+                        </Picker>
+                    </View>
+                </Modal>
+            </View>
+            <SectionDivider>
+                <TouchableOpacity onPress={() => setModalOpen(true)}>
+                    <SelectedTeam>
+                        <Text>{selectedTeam ? selectedTeam : 'Select Team'}</Text>
+                        {selectedTeam && (
+                            <TeamBadge source={Images[selectedTeam.replace(/\s/g, '').toLowerCase()]} width="40" />
+                        )}
+                    </SelectedTeam>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={submitChoice}>
+                    <Button disabled={selectedTeam === null}>
+                        <ButtonText>Confirm selection</ButtonText>
+                    </Button>
+                </TouchableOpacity>
+            </SectionDivider>
+        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        width,
+    },
+    modalContent: {
+        margin: 0,
+    },
+    modalContainer: {
+        justifyContent: 'center',
+    },
+    innerContainer: {
+        position: 'absolute',
+        bottom: 0,
+        opacity: 1,
+        alignItems: 'center',
+        backgroundColor: '#ccc',
+        width,
+    },
+})

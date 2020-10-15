@@ -15,4 +15,4 @@ export const ButtonText = styled.Text`
     text-align: center;
 `
 
-export const Button = ({ children }) => <StyledButton>{children}</StyledButton>
+export const Button = ({ children, disabled }) => <StyledButton disabled={disabled}>{children}</StyledButton>

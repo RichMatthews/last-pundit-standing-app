@@ -19,7 +19,7 @@ interface HeadingStyled {
 
 const Input = styled.TextInput`
     border-color: #ccc;
-    border-width: 1;
+    border-width: 1px;
     font-size: 15px;
     margin-bottom: 20px;
     padding: 10px;

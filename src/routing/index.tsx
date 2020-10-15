@@ -4,7 +4,6 @@ import { NativeRouter, Redirect, Route } from 'react-router-native'
 import { View } from 'react-native'
 import { AsyncStorage } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -75,10 +74,15 @@ export const Routing = () => {
 
     return (
         <NavigationContainer>
-            <Tab.Navigator>
+            <Tab.Navigator
+                tabBarOptions={{
+                    activeTintColor: '#289960',
+                    labelStyle: { fontSize: 13 },
+                }}
+            >
                 <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Create League" component={CreateLeague} />
-                <Tab.Screen name="Join League" component={JoinLeague} />
+                <Tab.Screen name="Create" component={CreateLeague} />
+                <Tab.Screen name="Join" component={JoinLeague} />
                 <Tab.Screen name="Leagues">
                     {(props: any) => (
                         <Stacks
