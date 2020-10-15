@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
-import Select from 'react-select'
+import { Text, TouchableOpacity, View } from 'react-native'
+import { Picker } from '@react-native-community/picker'
 import styled from 'styled-components'
 
 import { CURRENT_GAMEWEEK } from '../../admin/current-week'
-import { Button } from '../../ui-components/button'
+import { Button, ButtonText } from '../../ui-components/button'
 
 import { updateUserGamweekChoice } from '../../firebase-helpers'
 
@@ -13,38 +13,6 @@ import { Container, Inner } from '../../ui-components/containers'
 const SectionDivider = styled.View`
     margin: 15px 0 0 0;
 `
-
-const customReactSelectStyles = {
-    control: (base: any) => ({
-        ...base,
-        background: '#fff',
-        fontSize: 12,
-        marginLeft: 0,
-        marginBottom: 0,
-    }),
-    placeholder: (base: any) => ({
-        ...base,
-        fontSize: 12,
-        color: '#9393A8',
-    }),
-    option: (base: any) => ({
-        ...base,
-        fontSize: 12,
-    }),
-    menu: (base: any) => ({
-        ...base,
-        fontSize: 12,
-    }),
-    menuList: (base: any) => ({
-        ...base,
-        fontSize: 12,
-    }),
-    valueContainer: (base: any) => ({
-        ...base,
-        fontSize: 12,
-        minHeight: 40,
-    }),
-}
 
 const Option = styled.View`
     align-items: center;
@@ -102,7 +70,9 @@ export const ChooseTeam = ({
     }
 
     const submitChoice = () => {
+        console.log(selectedTeam, 'selet')
         if (!selectedTeam.label) {
+            alert('No team selected!')
             return
         }
         const confirmation: any = window.confirm(
@@ -119,24 +89,21 @@ export const ChooseTeam = ({
             updateUserGamweekChoice({ choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData })
         }
     }
-
+    console.log(selectedTeam, 'st')
     return (
         <Container>
             <Inner>
-                {/* <Select
-                    onChange={(team: any) => setSelectedTeam(team)}
-                    formatOptionLabel={formatOptionLabel}
-                    isSearchable={false}
-                    // options={calculateTeamsAllowedToPickForCurrentRound()}
-                    options={[{ value: '', label: '' }]}
-                    placeholder="Select a team for this week"
-                    styles={customReactSelectStyles}
-                /> */}
-
+                <Picker onValueChange={(value: any) => setSelectedTeam(value)} selectedValue={selectedTeam}>
+                    {calculateTeamsAllowedToPickForCurrentRound().map((item) => {
+                        return <Picker.Item label={item.label} value={item.value} />
+                    })}
+                </Picker>
                 <SectionDivider>
-                    <Button disabled={selectedTeam.label === null} onClick={submitChoice}>
-                        <Text>Select team</Text>
-                    </Button>
+                    <TouchableOpacity onPress={submitChoice}>
+                        <Button disabled={selectedTeam.label === null}>
+                            <ButtonText>Select team</ButtonText>
+                        </Button>
+                    </TouchableOpacity>
                 </SectionDivider>
             </Inner>
         </Container>

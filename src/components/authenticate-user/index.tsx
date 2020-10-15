@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TextInput, Text, TouchableOpacity, View } from 'react-native'
-import { Link } from 'react-router-native'
 import styled from 'styled-components'
 import { useRoute } from '@react-navigation/native'
 
 import { Button, ButtonText } from '../../ui-components/button'
 import { Container, Inner } from '../../ui-components/containers'
-import { H2 } from '../../ui-components/headings'
+import { H1 } from '../../ui-components/headings'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
+import { firebaseApp } from '../../config.js'
 
 const Input = styled.TextInput`
     font-size: 15px;
@@ -28,7 +28,7 @@ const Error = styled.View`
     padding: 5px;
 `
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.View`
     background: #289960;
     color: #fff;
     border-radius: 3px;
@@ -38,16 +38,26 @@ const StyledLink = styled(Link)`
     text-decoration: none;
 `
 
-export const AuthenticateUserScreen = ({ navigation }: any) => {
+export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [error, setError] = useState<any>(null)
 
+    useEffect(() => {
+        console.log('called dis')
+        firebaseApp.auth().onAuthStateChanged((user) => {
+            console.log('user?', user)
+            if (user) {
+                setUserExists(true)
+            }
+        })
+    }, [])
+
     const logUserIn = () => {
         console.log('called log')
-        logUserInToApplication(email, password, setError)
+        logUserInToApplication({ email, password, navigation, setError, setUserExists })
     }
 
     const signUserUp = () => {
@@ -55,20 +65,21 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
     }
 
     const setEmailHelper = (e: any) => {
+        console.log(e.nativeEvent.text, 'e?')
         setError(null)
-        setEmail(e.target.value)
+        setEmail(e.nativeEvent.text)
     }
 
     const setPasswordHelper = (e: any) => {
         setError(null)
-        setPassword(e.target.value)
+        setPassword(e.nativeEvent.text)
     }
 
     const isSignUpPage = useRoute().name.includes('Sign Up')
 
     return (
         <Container>
-            <H2>Sign Up</H2>
+            <H1>{isSignUpPage ? 'Sign Up' : 'Log in'}</H1>
             <Inner>
                 <View>
                     <Text>Last Punding Standing requires you to be logged in</Text>
@@ -94,7 +105,7 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
                 <SectionDivider>
                     <Input
                         placeholder="password"
-                        type="password"
+                        secureTextEntry={true}
                         onChange={(e: any) => setPasswordHelper(e)}
                         required
                     />
@@ -113,9 +124,11 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
                                 <Text>or</Text>
                             </View>
                         </SectionDivider>
-                        <StyledLink to={'/sign-up'}>
-                            {!isSignUpPage ? <ButtonText>Sign up now</ButtonText> : <ButtonText>Login</ButtonText>}
-                        </StyledLink>
+                        <TouchableOpacity onPress={!isSignUpPage ? () => navigation.navigate('Sign Up') : logUserIn}>
+                            <StyledLink>
+                                {!isSignUpPage ? <ButtonText>Sign up now</ButtonText> : <ButtonText>Login</ButtonText>}
+                            </StyledLink>
+                        </TouchableOpacity>
                     </>
                 )}
             </Inner>

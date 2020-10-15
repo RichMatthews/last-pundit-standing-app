@@ -9,7 +9,9 @@ import * as Images from '../../images'
 import { Fixtures } from '../fixtures'
 import { firebaseApp } from '../../config.js'
 
+import { PREMIER_LEAGUE_TEAMS } from '../../teams'
 import { H1, H2 } from '../../ui-components/headings'
+import { Container } from '../../ui-components/containers'
 
 interface LeagueProps {
     currentUserId: string
@@ -18,11 +20,6 @@ interface LeagueProps {
 interface ImageStyled {
     lost?: boolean
 }
-
-const Container = styled.View`
-    flex: 1;
-    margin: 10px;
-`
 
 const Section = styled.View`
     background: #fff;
@@ -40,6 +37,7 @@ const SelectionWrapper = styled(Section)`
 
 const CurrentRoundSelectionWrapper = styled(Section)`
     background: transparent;
+    padding: 0;
 `
 
 const LeagueInformationWrapper = styled(SelectionWrapper)`
@@ -103,20 +101,30 @@ const TextContainer = styled.View`
     }
 `
 
-const PremierLeagueImage = styled.Image`
-    height: 70px;
-    width: 150px;
+const LeagueTypeImage = styled.Image`
+    resize-mode: contain;
+    flex: 1;
+    margin-right: 10px;
+    height: undefined;
+    width: 100px;
 `
 
 const TeamSelectionText = styled.Text`
     margin-top: 20px;
 `
 
+const LeagueNameAndLeagueTypeImage = styled.View`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`
+
 export const League = ({ currentUserId, navigation }: LeagueProps) => {
     const [currentGame, setCurrentGame] = useState<any>({})
     const [currentGameweek, setCurrentGameweek] = useState<any>({})
     const [currentPlayer, setCurrentPlayer] = useState<any>({})
-    const [currentViewedGame, setCurrentViewedGame] = useState<any>(0)
+    const [currentViewedGame, setCurrentViewedGame] = useState<any>({})
     const [league, setLeague] = useState<any>({ name: '', games: [] })
     const [gamesInLeague, setAllGamesInCurrentLeague] = useState<any>({})
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
@@ -139,16 +147,17 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
     }, [])
 
     const calculateTeamsAllowedToPickForCurrentRound = () => {
-        // if (league.currentRound < 0) {
-        //     return PREMIER_LEAGUE_TEAMS
-        // } else {
-        //     const allTeamsForThisLeague = PREMIER_LEAGUE_TEAMS
-        //     const teamsAlreadyChosen = currentGame[0].players[currentPlayer.id].rounds
-
-        //     return allTeamsForThisLeague.filter((el) => {
-        //         return !teamsAlreadyChosen.find((team: any) => team.choice.value === el.value)
-        //     })
-        // }
+        if (league.currentRound === 0) {
+            return PREMIER_LEAGUE_TEAMS
+        } else {
+            const allTeamsForThisLeague = PREMIER_LEAGUE_TEAMS
+            const teamsAlreadyChosen = Object.values(currentGame.players).filter(
+                (player: any) => player.id === currentPlayer.id,
+            )
+            return allTeamsForThisLeague.filter((el) => {
+                return !teamsAlreadyChosen.find((team: any) => team.choice.value === el.value)
+            })
+        }
         return []
     }
 
@@ -164,14 +173,12 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                             ...snapshot.val(),
                             games: Object.values(snapshot.val().games),
                         }
-                        const currentGame: any = Object.values(snapshot.val().games).filter(
-                            (game: any) => !game.complete,
-                        )
+                        const currentGame: any = Object.values(snapshot.val().games).find((game: any) => !game.complete)
                         setCurrentGame(currentGame)
                         setAllGamesInCurrentLeague(transformPayloadIntoUsableObject.games)
                         setLeague(transformPayloadIntoUsableObject)
-                        setCurrentViewedGame(transformPayloadIntoUsableObject.games.length - 1)
-                        const players = Object.values(currentGame[0].players)
+                        setCurrentViewedGame(currentGame)
+                        const players = Object.values(currentGame.players)
                         const foundPlayer = players.filter((player: any) => player.id === currentUserId)
                         if (!foundPlayer.length) {
                             // return history.push('/home')
@@ -193,92 +200,8 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
         pullLatestLeagueData()
     }, [])
 
-    const showImageForPlayerChoice = (
-        isCurrentLoggedInPlayer: boolean,
-        player: any,
-        playersStillAbleToSelectTeams: boolean,
-    ) => {
-        const playerOutOfGame = player.rounds.filter((round: any) => round.choice.result === 'lost')
-        const playerCurrentRound = player.rounds[gamesInLeague[currentViewedGame].currentGameRound]
-        const currentGameRound = currentGame[0]['currentGameRound']
-        const currentRound = currentPlayer.rounds[currentGameRound]
-        const allPlayers = Object.values(currentGame[0].players)
-        const otherPlayers = allPlayers.filter((play: any) => play.id !== player.id)
-        const allOtherPlayersAreEliminated = otherPlayers.every((player: any) => player.hasBeenEliminated)
-        const playerHasWon = player.hasBeenEliminated === false
-        const remainingPlayers: any = allPlayers.filter((player: any) => player.rounds.length === 4)
-        const allRemainingPlayersHaveSelected = remainingPlayers.every(
-            (player: any) => player.rounds[3].choice.hasMadeChoice,
-        )
-
-        if (allOtherPlayersAreEliminated) {
-            return (
-                <Champion>
-                    <RoundStatus>Champion!</RoundStatus>
-                </Champion>
-            )
-        }
-
-        if (playerOutOfGame.length) {
-            return (
-                <Eliminated>
-                    <RoundStatus>Eliminated</RoundStatus>
-                </Eliminated>
-            )
-        }
-
-        if (isCurrentLoggedInPlayer) {
-            if (currentRound.choice.hasMadeChoice) {
-                return (
-                    <TeamBadge
-                        source={Images[playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()]}
-                        lost={false}
-                    />
-                )
-            }
-        }
-
-        if (currentRound.choice.hasMadeChoice) {
-            if (allRemainingPlayersHaveSelected) {
-                return (
-                    <TeamBadge
-                        source={Images[playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()]}
-                        lost={false}
-                    />
-                )
-            } else if (!playersStillAbleToSelectTeams) {
-                return (
-                    <TeamBadge
-                        source={Images[playerCurrentRound.choice.value.replace(/\s/g, '').toLowerCase()]}
-                        lost={false}
-                    />
-                )
-            } else {
-                return (
-                    <PredictionSubmitted>
-                        <RoundStatus>Prediction Submitted</RoundStatus>
-                    </PredictionSubmitted>
-                )
-            }
-        }
-
-        if (playersStillAbleToSelectTeams) {
-            return (
-                <AwaitingPrediction>
-                    <RoundStatus>Awaiting Prediction</RoundStatus>
-                </AwaitingPrediction>
-            )
-        }
-
-        return (
-            <Eliminated>
-                <RoundStatus>Eliminated</RoundStatus>
-            </Eliminated>
-        )
-    }
-
     const showTeamSelectionPage = () => {
-        const currentGameRound = currentGame[0]['currentGameRound']
+        const currentGameRound = currentGame.currentGameRound
         const currentRound = currentPlayer.rounds[currentGameRound]
         const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
 
@@ -293,9 +216,9 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                 <ChooseTeam
                     calculateTeamsAllowedToPickForCurrentRound={calculateTeamsAllowedToPickForCurrentRound}
                     pullLatestLeagueData={pullLatestLeagueData}
-                    currentRound={gamesInLeague[currentViewedGame].currentGameRound}
+                    currentRound={currentGame.currentGameRound}
                     currentUserId={currentUserId}
-                    gameId={gamesInLeague[currentViewedGame].gameId}
+                    gameId={currentGame.gameId}
                     leagueId={league.id}
                     leagueOnly={true}
                 />
@@ -316,7 +239,6 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
     }
 
     const setListOfExpandedPreviousHelper = (index: number) => {
-        console.debug('cllade')
         if (listOfExpandedPrevious.includes(index)) {
             setListOfExpandedPrevious(listOfExpandedPrevious.filter((x: number) => x !== index))
         } else {
@@ -328,7 +250,12 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
         return (
             <Container>
                 <ScrollView>
-                    <H1>{league.name}</H1>
+                    <LeagueNameAndLeagueTypeImage>
+                        <H1>{league.name}</H1>
+                        <View>
+                            <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
+                        </View>
+                    </LeagueNameAndLeagueTypeImage>
                     <Wrapper>
                         <CurrentRoundSelectionWrapper>
                             <CurrentRoundView
@@ -339,7 +266,6 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                                 selectionTimeEnded={selectionTimeEnded}
                                 setCurrentViewedGame={setCurrentViewedGame}
                                 setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                                showImageForPlayerChoice={showImageForPlayerChoice}
                             />
                         </CurrentRoundSelectionWrapper>
                         <SelectionWrapper>
@@ -353,9 +279,6 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                             <Fixtures />
                         </SelectionWrapper>
                         <LeagueInformationWrapper>
-                            <TextContainer>
-                                <PremierLeagueImage source={require('../../images/other/premier-league.png')} />
-                            </TextContainer>
                             <TextContainer>
                                 <PrizeMoney>
                                     <Text>£20</Text>

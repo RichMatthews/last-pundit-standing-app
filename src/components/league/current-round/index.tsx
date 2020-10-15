@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Image, TouchableOpacity, View } from 'react-native'
+
 import { PreviousRound } from '../../previous-round'
+import { ShowImageForPlayerChoice } from '../show-image-for-player-choice'
 
 const Section = styled.View`
     border-radius: 5px;
@@ -13,6 +15,7 @@ const CurrentRoundContainer = styled(Section)``
 
 const CurrentRound = styled.View`
     align-items: center;
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -22,7 +25,7 @@ const PlayerRow = styled.View<any>`
     background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#d8ede2' : '#fff')};
     border-radius: 10px;
     border-bottom-color: #ccc;
-    border-bottom-width: 1;
+    border-bottom-width: 1px;
     padding: 10px;
     margin: 5px;
 `
@@ -32,9 +35,10 @@ const Container = styled.View`
 `
 
 const ExpandImage = styled.Image<any>`
-    height: 30px;
+    align-self: center;
+    height: 10px;
     transform: ${({ expand }: any) => (expand ? 'rotate(180deg)' : 'rotate(0deg)')};
-    width: 30px;
+    width: 10px;
 `
 
 const HistoricalRounds = styled.View<any>`
@@ -65,7 +69,6 @@ export const CurrentRoundView = ({
     selectionTimeEnded,
     setCurrentViewedGame,
     setListOfExpandedPreviousHelper,
-    showImageForPlayerChoice,
 }: any) => {
     const calculateOptionsForGameSelection = () => {
         let arr: any = []
@@ -101,25 +104,25 @@ export const CurrentRoundView = ({
                 />
             </SelectContainer> */}
             <Container>
-                {Object.values(gamesInLeague[currentViewedGame].players).map((player: any, index: any) => (
+                {Object.values(currentViewedGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
                         <PlayerRow
                             key={player.id}
                             isCurrentLoggedInPlayer={player.id === currentUserId}
                             value="Current Round"
                         >
-                            <CurrentRound onPress={() => alert('tyoy')}>
+                            <CurrentRound>
                                 <PlayerName>{player.name}</PlayerName>
                                 <PlayerAndDownArrow>
-                                    <View>
-                                        {showImageForPlayerChoice(
-                                            player.id === currentUserId,
-                                            player,
-                                            selectionTimeEnded, // change this at some point
-                                        )}
-                                    </View>
+                                    <ShowImageForPlayerChoice
+                                        currentViewedGame={currentViewedGame}
+                                        isCurrentLoggedInPlayer={player.id === currentUserId}
+                                        player={player}
+                                        playersStillAbleToSelectTeams={selectionTimeEnded}
+                                    />
+
                                     <ExpandImage
-                                        source={require('../../../images/other/down-arrow.svg')}
+                                        source={require('../../../images/other/down-arrow.png')}
                                         expand={listOfExpandedPrevious.includes(index)}
                                     />
                                 </PlayerAndDownArrow>

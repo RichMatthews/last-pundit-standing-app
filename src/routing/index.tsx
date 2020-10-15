@@ -25,42 +25,42 @@ import { getUserLeagues } from '../firebase-helpers'
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
-const Stacks = ({ userLeagues, userId }: any) => (
+const Stacks = ({ isSignedIn, setUserExists, userLeagues, userId }: any) => (
     <Stack.Navigator
         screenOptions={{
             headerShown: false,
         }}
     >
-        <Stack.Screen name="My Leagues">
-            {(props: any) => <MyLeagues userLeagues={userLeagues} navigation={props.navigation} />}
-        </Stack.Screen>
-        <Stack.Screen name="League">
-            {(props: any) => <League currentUserId={userId} navigation={props.navigation} />}
-        </Stack.Screen>
+        {isSignedIn ? (
+            <>
+                <Stack.Screen name="My Leagues">
+                    {(props: any) => <MyLeagues userLeagues={userLeagues} navigation={props.navigation} />}
+                </Stack.Screen>
+                <Stack.Screen name="League">
+                    {(props: any) => <League currentUserId={userId} navigation={props.navigation} />}
+                </Stack.Screen>
+            </>
+        ) : (
+            <>
+                <Stack.Screen name="Sign In">
+                    {(props: any) => (
+                        <AuthenticateUserScreen navigation={props.navigation} setUserExists={setUserExists} />
+                    )}
+                </Stack.Screen>
+                <Stack.Screen name="Sign Up">
+                    {(props: any) => (
+                        <AuthenticateUserScreen navigation={props.navigation} setUserExists={setUserExists} />
+                    )}
+                </Stack.Screen>
+            </>
+        )}
     </Stack.Navigator>
 )
 
 export const Routing = () => {
-    let userExists = false
-    AsyncStorage.getItem('authUser').then((value) => {
-        if (value) {
-            userExists = true
-        }
-    })
-
-    // let userId: string | null = null
-    // if (userExists) {
-    //     userId = JSON.parse(userExists()).user.uid
-    // }
-
     const userId = 'L6WkWV0bSPN8a0NIQ0wdTAiGokj2'
-    const ProtectedRoute = ({ component: Component, ...rest }: any) => {
-        return userExists ? <Component {...rest} /> : <Redirect to="/login" />
-    }
-    const PublicRoute = ({ component: Component, ...rest }: any) => {
-        return userExists ? <Redirect to="/leagues" /> : <Component {...rest} />
-    }
     const [userLeagues, setUserLeagues] = useState([])
+    const [userExists, setUserExists] = useState(false)
 
     useEffect(() => {
         if (userId) {
@@ -77,11 +77,17 @@ export const Routing = () => {
         <NavigationContainer>
             <Tab.Navigator>
                 <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Sign Up" component={AuthenticateUserScreen} />
                 <Tab.Screen name="Create League" component={CreateLeague} />
                 <Tab.Screen name="Join League" component={JoinLeague} />
                 <Tab.Screen name="Leagues">
-                    {(props: any) => <Stacks userLeagues={userLeagues} userId={userId} />}
+                    {(props: any) => (
+                        <Stacks
+                            isSignedIn={userExists}
+                            userLeagues={userLeagues}
+                            userId={userId}
+                            setUserExists={setUserExists}
+                        />
+                    )}
                 </Tab.Screen>
             </Tab.Navigator>
         </NavigationContainer>
