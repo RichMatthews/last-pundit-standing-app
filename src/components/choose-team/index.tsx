@@ -41,8 +41,8 @@ const SelectedTeam = styled.View`
 
 const TeamBadge = styled.Image`
     resize-mode: contain;
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
 `
 
 export const ChooseTeam = ({

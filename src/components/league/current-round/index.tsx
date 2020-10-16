@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Image, TouchableOpacity, View } from 'react-native'
+import { Image, TouchableOpacity, Text } from 'react-native'
 
 import { PreviousRound } from '../../previous-round'
 import { ShowImageForPlayerChoice } from '../show-image-for-player-choice'
@@ -15,7 +15,6 @@ const CurrentRoundContainer = styled(Section)``
 
 const CurrentRound = styled.View`
     align-items: center;
-
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -23,11 +22,9 @@ const CurrentRound = styled.View`
 
 const PlayerRow = styled.View<any>`
     background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#d8ede2' : '#fff')};
-    border-radius: 10px;
-    border-bottom-color: #ccc;
-    border-bottom-width: 1px;
+    border-radius: 5px;
     padding: 10px;
-    margin: 5px;
+    margin: 0 10px 10px 10px;
 `
 
 const Container = styled.View`
@@ -128,11 +125,19 @@ export const CurrentRoundView = ({
                                 </PlayerAndDownArrow>
                             </CurrentRound>
                             <HistoricalRounds expand={listOfExpandedPrevious.includes(index)}>
-                                {player.rounds
-                                    .filter((round: any) => round.choice.value && round.choice.result !== 'pending')
-                                    .map((round: any) => (
-                                        <PreviousRound choice={round.choice} />
-                                    ))}
+                                {player.rounds > 1 ? (
+                                    <>
+                                        {player.rounds
+                                            .filter(
+                                                (round: any) => round.choice.value && round.choice.result !== 'pending',
+                                            )
+                                            .map((round: any) => (
+                                                <PreviousRound choice={round.choice} />
+                                            ))}
+                                    </>
+                                ) : (
+                                    <Text>Previous results will show here</Text>
+                                )}
                             </HistoricalRounds>
                         </PlayerRow>
                     </TouchableOpacity>

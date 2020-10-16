@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import * as Images from '../../images'
 import { H2 } from '../../ui-components/headings'
+// import { Container } from '../../ui-components/containers'
 
 import { getCurrentGameweekFixtures } from '../../firebase-helpers'
 
@@ -16,7 +17,9 @@ const Container = styled.View`
 
 const Inner = styled.View`
     display: ${({ expand }) => (expand ? 'flex' : 'none')};
+    margin-top: 20px;
     justify-content: center;
+    width: 300px;
 `
 
 const Center = styled.View`
@@ -59,6 +62,13 @@ const LeagueNameAndLeagueTypeImage = styled.View`
     justify-content: space-between;
 `
 
+const ExpandImage = styled.Image<any>`
+    align-self: center;
+    height: 15px;
+    transform: ${({ expand }: any) => (expand ? 'rotate(180deg)' : 'rotate(0deg)')};
+    width: 15px;
+`
+
 export const Fixtures = () => {
     const [gameweekFixtures, setGameweekFixtures] = useState([])
     const [showFixtures, setShowFixtures] = useState(false)
@@ -75,7 +85,7 @@ export const Fixtures = () => {
         <TouchableOpacity onPress={() => setShowFixtures(!showFixtures)} activeOpacity={1}>
             <LeagueNameAndLeagueTypeImage>
                 <H2>Gameweek Fixtures</H2>
-                <Image source={require('../../images/other/down-arrow.png')} style={{ width: 15, height: 15 }} />
+                <ExpandImage expand={showFixtures} source={require('../../images/other/down-arrow.png')} />
             </LeagueNameAndLeagueTypeImage>
             <Container>
                 <Inner expand={showFixtures}>
@@ -86,7 +96,7 @@ export const Fixtures = () => {
                             </HomeTeam>
                             <Center>
                                 <TeamBadge source={Images[match.home.replace(/\s/g, '').toLowerCase()]} />
-                                <Text> vs </Text>
+                                <Text style={{ marginLeft: 10, marginRight: 10 }}> vs </Text>
                                 <TeamBadge source={Images[match.away.replace(/\s/g, '').toLowerCase()]} />
                             </Center>
                             <AwayTeam homeTeam={false}>

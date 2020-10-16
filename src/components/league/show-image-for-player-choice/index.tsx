@@ -37,9 +37,9 @@ const PredictionSubmittedText = styled.Text`
 
 const Image = styled.Image<ImageStyled>`
     opacity: ${({ lost }) => (lost ? 0.2 : 1)};
-    height: 30px;
+    height: 25px;
     margin-right: 10px;
-    width: 30px;
+    width: 25px;
 `
 
 export const ShowImageForPlayerChoice = ({

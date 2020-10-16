@@ -6,7 +6,7 @@ import { H1 } from '../../ui-components/headings'
 
 export const Home = () => {
     return (
-        <Container>
+        <Container style={{ backgroundColor: '#F2F1F7' }}>
             <H1>Welcome to Last Pundit Standing</H1>
             <Inner>
                 <Text>

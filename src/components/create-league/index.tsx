@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextInput, Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import uid from 'uid'
 
@@ -28,8 +28,10 @@ const Input = styled.TextInput`
 
 const LeagueAmountValue = styled.View<HeadingStyled>`
     align-items: center;
-    background: ${({ amount }) => (amount ? '#ccc' : '#fff')};
-    border: 1px solid #ccc;
+    background: ${({ amount }) => (amount ? '#ccc' : 'transparent')};
+    border-width: 1px;
+    border-color: #ccc;
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     height: 40px;
@@ -39,7 +41,7 @@ const LeagueAmountValue = styled.View<HeadingStyled>`
 
 const EntryFeeContainer = styled.View`
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
     justify-content: space-between;
 `
 
@@ -55,7 +57,6 @@ const SectionDivider = styled.View`
 
 export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
     const [privateLeague, setPrivateLeague] = useState(false)
-    const [secondPlaceMoneyBack, setSecondPlaceMoneyBack] = useState(false)
     const [leagueName, setLeagueName] = useState('')
     const [selectedFee, setSelectedFee] = useState(10)
 
@@ -103,7 +104,6 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                 isPrivate: privateLeague,
                 joinPin: leagueJoinPin,
                 name: leagueName,
-                secondPlaceMoneyBack,
             },
             [`/users/${currentUserId}/leagues/${leagueId}`]: {
                 id: leagueId,
@@ -124,7 +124,7 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
     }
 
     const setLeagueNameHelper = (e: any) => {
-        setLeagueName(e.target.value)
+        setLeagueName(e.nativeEvent.text)
     }
 
     const entryFrees = [
@@ -139,18 +139,12 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
             <H1>Create League</H1>
             <Inner>
                 <SectionDivider>
-                    <Input onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
+                    <Input autoCorrect={false} onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
                 </SectionDivider>
                 <SectionDivider>
                     <QuestionWithToggleOption>
                         <Text>Private League?</Text>
                         {/* <ReactToggle onChange={() => setPrivateLeague(!privateLeague)} /> */}
-                    </QuestionWithToggleOption>
-                </SectionDivider>
-                <SectionDivider>
-                    <QuestionWithToggleOption>
-                        <Text>2nd place money back?</Text>
-                        {/* <ReactToggle onChange={() => setSecondPlaceMoneyBack(!secondPlaceMoneyBack)} /> */}
                     </QuestionWithToggleOption>
                 </SectionDivider>
                 <SectionDivider>
@@ -160,13 +154,11 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                     <SectionDivider>
                         <EntryFeeContainer>
                             {entryFrees.map((fee: { key: number; amount: string }) => (
-                                <LeagueAmountValue
-                                    amount={selectedFee === fee.key}
-                                    key={fee.key}
-                                    onClick={() => setSelectedFee(fee.key)}
-                                >
-                                    <Text>{fee.amount}</Text>
-                                </LeagueAmountValue>
+                                <TouchableOpacity onPress={() => setSelectedFee(fee.key)}>
+                                    <LeagueAmountValue amount={selectedFee === fee.key} key={fee.key}>
+                                        <Text>{fee.amount}</Text>
+                                    </LeagueAmountValue>
+                                </TouchableOpacity>
                             ))}
                         </EntryFeeContainer>
                     </SectionDivider>
@@ -178,12 +170,13 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                     /> */}
                 </SectionDivider>
                 <SectionDivider>
-                    <Button
-                        onClick={leagueName.length === 0 ? null : getLeagueCreatorInformationThenCreateLeague}
-                        disabled={leagueName.length === 0}
+                    <TouchableOpacity
+                        onPress={leagueName.length === 0 ? null : () => getLeagueCreatorInformationThenCreateLeague()}
                     >
-                        <ButtonText>Create and join league</ButtonText>
-                    </Button>
+                        <Button disabled={leagueName.length === 0}>
+                            <ButtonText>Create and join league</ButtonText>
+                        </Button>
+                    </TouchableOpacity>
                 </SectionDivider>
             </Inner>
         </Container>

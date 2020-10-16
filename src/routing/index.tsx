@@ -24,6 +24,7 @@ const Stack = createStackNavigator()
 const Stacks = ({ isSignedIn, setUserExists, userLeagues, userId }: any) => (
     <Stack.Navigator
         screenOptions={{
+            cardStyle: { backgroundColor: '#F2F1F7' },
             headerShown: true,
             headerTitle: '',
         }}

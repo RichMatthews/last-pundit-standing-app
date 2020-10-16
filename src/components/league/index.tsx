@@ -3,6 +3,7 @@ import { Image, ScrollView, Text, View } from 'react-native'
 import styled from 'styled-components'
 
 import { CurrentRoundView } from './current-round'
+import { LeagueRules } from './league-rules'
 import { ChooseTeam } from '../choose-team'
 import { PageNotFound } from '../404'
 import * as Images from '../../images'
@@ -11,7 +12,7 @@ import { firebaseApp } from '../../config.js'
 
 import { PREMIER_LEAGUE_TEAMS } from '../../teams'
 import { H1, H2 } from '../../ui-components/headings'
-import { ContainerWithHeaderShown } from '../../ui-components/containers'
+import { ContainerWithHeaderShown, InnerWithHeaderShown } from '../../ui-components/containers'
 
 interface LeagueProps {
     currentUserId: string
@@ -42,10 +43,6 @@ const CurrentRoundSelectionWrapper = styled(Section)`
 
 const LeagueInformationWrapper = styled(SelectionWrapper)`
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    max-width: 390px;
-    justify-content: space-between;
 `
 
 const TeamBadge = styled.Image<ImageStyled>`
@@ -57,26 +54,7 @@ const TeamBadge = styled.Image<ImageStyled>`
 const Eliminated = styled.View`
     border-radius: 3px;
     background: #de4949;
-
     padding: 5px;
-`
-
-const Champion = styled(Eliminated)`
-    background: gold;
-`
-
-const AwaitingPrediction = styled(Eliminated)`
-    background: #e89843;
-`
-
-const PredictionSubmitted = styled(Eliminated)`
-    background: #2da63f;
-`
-
-const RoundStatus = styled.Text`
-    color: #fff;
-    font-weight: bold;
-    font-size: 11px;
 `
 
 const Wrapper = styled.View`
@@ -84,17 +62,9 @@ const Wrapper = styled.View`
     flex-direction: column;
 `
 
-const PrizeMoney = styled.View`
-    font-size: 22px;
-`
-
 const TextContainer = styled.View`
     margin: 10px;
     text-align: center;
-    width: 150px;
-    & > span {
-        font-size: 12px;
-    }
 `
 
 const LeagueTypeImage = styled.Image`
@@ -114,6 +84,7 @@ const LeagueNameAndLeagueTypeImage = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 15px;
 `
 
 export const League = ({ currentUserId, navigation }: LeagueProps) => {
@@ -244,67 +215,73 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
 
     if (loaded === 'league-found') {
         return (
-            <ContainerWithHeaderShown>
-                <ScrollView>
-                    <LeagueNameAndLeagueTypeImage>
-                        <H1>{league.name}</H1>
-                        <View>
-                            <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
-                        </View>
-                    </LeagueNameAndLeagueTypeImage>
-                    <Wrapper>
-                        <CurrentRoundSelectionWrapper>
-                            <CurrentRoundView
-                                currentUserId={currentUserId}
-                                currentViewedGame={currentViewedGame}
-                                gamesInLeague={gamesInLeague}
-                                listOfExpandedPrevious={listOfExpandedPrevious}
-                                selectionTimeEnded={selectionTimeEnded}
-                                setCurrentViewedGame={setCurrentViewedGame}
-                                setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                            />
-                        </CurrentRoundSelectionWrapper>
-                        <SelectionWrapper>
-                            <H2>Team Selection</H2>
-                            <TeamSelectionText>{showTeamSelectionPage()}</TeamSelectionText>
-                            <Text>Round closes on {currentGameweek.endsReadable}</Text>
-                        </SelectionWrapper>
-                        <SelectionWrapper>
-                            <Fixtures />
-                        </SelectionWrapper>
-                        <LeagueInformationWrapper>
-                            <TextContainer>
-                                <PrizeMoney>
-                                    <Text>£20</Text>
-                                </PrizeMoney>
-                                <Text>prize money</Text>
-                            </TextContainer>
-                            <TextContainer>
-                                <PrizeMoney>
-                                    <Text>{league.admin.name}</Text>
-                                </PrizeMoney>
-                                <Text>(admin)</Text>
-                            </TextContainer>
-                            <TextContainer>
-                                <PrizeMoney>
-                                    <Text>123</Text>
-                                </PrizeMoney>
-                                <Text>join pin</Text>
-                            </TextContainer>
-                        </LeagueInformationWrapper>
-                        <SelectionWrapper>
-                            <H2>League Rules</H2>
+            <ScrollView>
+                <ContainerWithHeaderShown>
+                    <InnerWithHeaderShown>
+                        <LeagueNameAndLeagueTypeImage>
+                            <H1>{league.name}</H1>
                             <View>
-                                <Text>Pick a different team every week</Text>
-                                <Text>Home team must win</Text>
-                                <Text>Away team must win or draw</Text>
-                                <Text>Last Pundit Standing wins jackpot</Text>
-                                <Text>Money rolls over if no winner</Text>
+                                <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
                             </View>
-                        </SelectionWrapper>
-                    </Wrapper>
-                </ScrollView>
-            </ContainerWithHeaderShown>
+                        </LeagueNameAndLeagueTypeImage>
+                        <Wrapper>
+                            <CurrentRoundSelectionWrapper>
+                                <CurrentRoundView
+                                    currentUserId={currentUserId}
+                                    currentViewedGame={currentViewedGame}
+                                    gamesInLeague={gamesInLeague}
+                                    listOfExpandedPrevious={listOfExpandedPrevious}
+                                    selectionTimeEnded={selectionTimeEnded}
+                                    setCurrentViewedGame={setCurrentViewedGame}
+                                    setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                                />
+                            </CurrentRoundSelectionWrapper>
+                            <SelectionWrapper>
+                                <H2>Team Selection</H2>
+                                <TeamSelectionText>{showTeamSelectionPage()}</TeamSelectionText>
+                                <Text>Round closes on {currentGameweek.endsReadable}</Text>
+                            </SelectionWrapper>
+                            <SelectionWrapper>
+                                <Fixtures />
+                            </SelectionWrapper>
+                            <LeagueInformationWrapper>
+                                <TextContainer>
+                                    <View
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            justifyContent: 'flex-end',
+                                        }}
+                                    >
+                                        <Text>Game Jackpot</Text>
+                                        <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                            <Text style={{ fontSize: 45, fontWeight: 'bold' }}>£20</Text>
+                                        </View>
+                                    </View>
+                                </TextContainer>
+                                <TextContainer>
+                                    <View>
+                                        <Text style={{ marginBottom: 10 }}>
+                                            Increase your jackpot now by inviting others to join this league!
+                                        </Text>
+                                        <Text style={{ marginBottom: 20 }}>
+                                            Share this pin --- or simply click one of the apps below
+                                        </Text>
+                                        <Image
+                                            source={require('../../images/other/whatsapp.png')}
+                                            style={{ width: 40, height: 40 }}
+                                        />
+                                    </View>
+                                </TextContainer>
+                            </LeagueInformationWrapper>
+                            <SelectionWrapper>
+                                <LeagueRules />
+                            </SelectionWrapper>
+                        </Wrapper>
+                    </InnerWithHeaderShown>
+                </ContainerWithHeaderShown>
+            </ScrollView>
         )
     }
 
