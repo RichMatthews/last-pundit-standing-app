@@ -3,6 +3,7 @@ import { Image, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
 import * as Images from '../../images'
+import { H2 } from '../../ui-components/headings'
 
 import { getCurrentGameweekFixtures } from '../../firebase-helpers'
 
@@ -51,6 +52,13 @@ const TeamBadge = styled.Image`
     width: 30px;
 `
 
+const LeagueNameAndLeagueTypeImage = styled.View`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`
+
 export const Fixtures = () => {
     const [gameweekFixtures, setGameweekFixtures] = useState([])
     const [showFixtures, setShowFixtures] = useState(false)
@@ -65,8 +73,11 @@ export const Fixtures = () => {
 
     return (
         <TouchableOpacity onPress={() => setShowFixtures(!showFixtures)} activeOpacity={1}>
+            <LeagueNameAndLeagueTypeImage>
+                <H2>Gameweek Fixtures</H2>
+                <Image source={require('../../images/other/down-arrow.png')} style={{ width: 15, height: 15 }} />
+            </LeagueNameAndLeagueTypeImage>
             <Container>
-                <Text>Gameweek Fixtures</Text>
                 <Inner expand={showFixtures}>
                     {gameweekFixtures.map((match: any) => (
                         <Match key={match.home}>

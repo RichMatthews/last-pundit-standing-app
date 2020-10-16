@@ -1,4 +1,3 @@
-import { View } from 'react-native'
 import styled from 'styled-components'
 
 export const Container = styled.View`
@@ -7,6 +6,14 @@ export const Container = styled.View`
     flex-direction: column;
     justify-content: center;
     margin-top: 100px;
+`
+
+export const ContainerWithHeaderShown = styled.View`
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 30px;
 `
 
 export const Inner = styled.View`

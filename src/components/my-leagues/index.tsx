@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 import { H1, H2 } from '../../ui-components/headings'
-import { Container, Inner } from '../../ui-components/containers'
+import { ContainerWithHeaderShown, Inner } from '../../ui-components/containers'
 
 interface LeagueState {
     name?: string
@@ -28,24 +28,9 @@ const NoLeagueText = styled(LeagueName)`
     color: #000;
 `
 
-// const StyledLink = styled(Link)`
-//     color: #289960;
-//     text-decoration: none;
-// `
-
-// const StyledLinkButton = styled(Link)`
-//     background: #289960;
-//     border-radius: 3px;
-//     color: #fff;
-//     margin-top: 55px;
-//     padding: 10px;
-//     text-align: center;
-//     text-decoration: none;
-// `
-
 export const MyLeagues = ({ navigation, userLeagues }: any) => {
     return (
-        <Container>
+        <ContainerWithHeaderShown>
             <H1>My Leagues</H1>
             <Inner>
                 <LeagueContainer>
@@ -93,6 +78,6 @@ export const MyLeagues = ({ navigation, userLeagues }: any) => {
                     <Text>Click here to join a league</Text>
                 </TouchableOpacity>
             </Inner>
-        </Container>
+        </ContainerWithHeaderShown>
     )
 }

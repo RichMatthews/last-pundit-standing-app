@@ -1,8 +1,6 @@
 import 'react-native-gesture-handler'
 import React, { useEffect, useState } from 'react'
-import { NativeRouter, Redirect, Route } from 'react-router-native'
 import { View } from 'react-native'
-import { AsyncStorage } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -13,7 +11,6 @@ import { Home } from '../components/home'
 import { JoinLeague } from '../components/join-league'
 import { MyLeagues } from '../components/my-leagues'
 import { League } from '../components/league'
-import { Navigation } from '../components/navigation'
 import { AuthenticateUserScreen } from '../components/authenticate-user'
 import { PageNotFound } from '../components/404'
 import { AdminView } from '../admin/view'
@@ -27,7 +24,8 @@ const Stack = createStackNavigator()
 const Stacks = ({ isSignedIn, setUserExists, userLeagues, userId }: any) => (
     <Stack.Navigator
         screenOptions={{
-            headerShown: false,
+            headerShown: true,
+            headerTitle: '',
         }}
     >
         {isSignedIn ? (

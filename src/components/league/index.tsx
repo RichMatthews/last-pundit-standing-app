@@ -11,7 +11,7 @@ import { firebaseApp } from '../../config.js'
 
 import { PREMIER_LEAGUE_TEAMS } from '../../teams'
 import { H1, H2 } from '../../ui-components/headings'
-import { Container } from '../../ui-components/containers'
+import { ContainerWithHeaderShown } from '../../ui-components/containers'
 
 interface LeagueProps {
     currentUserId: string
@@ -244,7 +244,7 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
 
     if (loaded === 'league-found') {
         return (
-            <Container>
+            <ContainerWithHeaderShown>
                 <ScrollView>
                     <LeagueNameAndLeagueTypeImage>
                         <H1>{league.name}</H1>
@@ -304,7 +304,7 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                         </SelectionWrapper>
                     </Wrapper>
                 </ScrollView>
-            </Container>
+            </ContainerWithHeaderShown>
         )
     }
 
@@ -313,8 +313,8 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
     }
 
     return (
-        <Container>
+        <ContainerWithHeaderShown>
             <Text>Retrieving League information...</Text>
-        </Container>
+        </ContainerWithHeaderShown>
     )
 }
