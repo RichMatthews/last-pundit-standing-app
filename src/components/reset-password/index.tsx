@@ -3,8 +3,14 @@ import { Text, TextInput, View } from 'react-native'
 import styled from 'styled-components'
 import firebase from 'firebase'
 
-import { Button } from '../../ui-components/button'
+import { Button, ButtonText } from '../../ui-components/button'
 import { Container, Inner } from '../../ui-components/containers'
+
+const StyledTextInput = styled.TextInput`
+    padding: 10px;
+    border-bottom-width: 1;
+    border-bottom-color: #ccc;
+`
 
 const auth = firebase.auth()
 
@@ -16,10 +22,19 @@ export const ResetPassword = () => {
 
     return (
         <Container>
-            <TextInput placeholder="Enter your old password" onChange={(e) => setEmail(e.nativeEvent.text)} />
-            <TextInput placeholder="Enter new password" onChange={(e) => setEmail(e.nativeEvent.text)} />
-            <TextInput placeholder="Enter new password" onChange={(e) => setEmail(e.nativeEvent.text)} />
-            <Text>Rest password</Text>
+            <Inner>
+                <View style={{ marginBottom: 20 }}>
+                    <StyledTextInput
+                        placeholder="Enter your old password"
+                        onChange={(e) => setEmail(e.nativeEvent.text)}
+                    />
+                    <StyledTextInput placeholder="Enter new password" onChange={(e) => setEmail(e.nativeEvent.text)} />
+                    <StyledTextInput placeholder="Enter new password" onChange={(e) => setEmail(e.nativeEvent.text)} />
+                </View>
+                <Button>
+                    <ButtonText>Reset password</ButtonText>
+                </Button>
+            </Inner>
         </Container>
     )
 }

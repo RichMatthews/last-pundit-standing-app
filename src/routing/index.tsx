@@ -17,6 +17,7 @@ import { PageNotFound } from '../components/404'
 import { AdminView } from '../admin/view'
 import { ForgotPassword } from '../components/forgot-password'
 import { ResetPassword } from '../components/reset-password'
+import { UpdateEmail } from '../components/update-email'
 
 import { getUserLeagues } from '../firebase-helpers'
 
@@ -24,10 +25,18 @@ const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 const RootStack = createStackNavigator()
 
-const AuthStack = ({ resetPassword }: any) => (
-    <Stack.Navigator>
+const AuthStack = ({ resetPassword, updateEmail }: any) => (
+    <Stack.Navigator
+        screenOptions={{
+            cardStyle: { backgroundColor: '#F2F1F7' },
+            headerShown: true,
+            headerTitle: '',
+        }}
+    >
         {resetPassword ? (
             <Stack.Screen name="Reset Password">{(props: any) => <ResetPassword />}</Stack.Screen>
+        ) : updateEmail ? (
+            <Stack.Screen name="Update Email">{(props: any) => <UpdateEmail />}</Stack.Screen>
         ) : (
             <Stack.Screen name="Home">{(props: any) => <Home />}</Stack.Screen>
         )}
@@ -80,10 +89,6 @@ const ModalStacks = () => (
     </Stack.Navigator>
 )
 
-// const RootStack = () => <Stack.Screen name="Account" component={Account} options={{ animationEnabled: true }} />
-
-const CreatePlaceholder = () => <View style={{ flex: 1, backgroundColor: 'blue' }} />
-
 const TabNavigation = ({ setUserExists, userExists, userLeagues, userId }: any) => {
     return (
         <Tab.Navigator
@@ -94,7 +99,12 @@ const TabNavigation = ({ setUserExists, userExists, userLeagues, userId }: any) 
         >
             <Tab.Screen name="Home">
                 {(props: any) => {
-                    return <AuthStack resetPassword={props.route.params && props.route.params.resetPassword} />
+                    return (
+                        <AuthStack
+                            resetPassword={props.route.params && props.route.params.resetPassword}
+                            updateEmail={props.route.params && props.route.params.updateEmail}
+                        />
+                    )
                 }}
             </Tab.Screen>
             <Tab.Screen name="Create" children={() => <CreateLeague currentUserId={userId} />} />

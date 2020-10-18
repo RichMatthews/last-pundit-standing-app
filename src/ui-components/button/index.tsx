@@ -10,12 +10,13 @@ const APP_BACKGROUND_COLOR = '#F2F1F7'
 export const ButtonText = styled.Text`
     color: #fff;
     font-size: 17;
+    font-weight: bold;
     text-align: center;
 `
 
 export const Button = ({ children, disabled }) => (
     <LinearGradient
-        colors={disabled ? ['#ccc', '#ccc'] : ['#289960', '#3EDB8C']}
+        colors={disabled ? ['#ccc', '#ccc'] : ['#3eb94e', '#3eb9b4']}
         style={{ borderRadius: 10, padding: 12 }}
     >
         {children}
