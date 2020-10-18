@@ -39,7 +39,9 @@ export const MyLeagues = ({ navigation, userLeagues }: any) => {
                         userLeagues
                             .filter((league: any) => league.isPrivate)
                             .map((league: LeagueState) => (
-                                <TouchableOpacity onPress={() => navigation.navigate('League', { id: league.id })}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('League', { leagueId: league.id })}
+                                >
                                     <LeagueItem key={league.id}>
                                         <LeagueName>{league.name}</LeagueName>
                                     </LeagueItem>

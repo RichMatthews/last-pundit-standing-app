@@ -102,33 +102,34 @@ export const signUserUpToApplication = (
         })
 }
 
-export const signUserOutOfApplication = () => {
-    firebaseApp
+export const signUserOutOfApplication = ({ navigation, setUserExists }) => {
+    return firebaseApp
         .auth()
         .signOut()
         .then(() => {
-            window.localStorage.removeItem('authUser')
-            window.location.reload()
+            setUserExists(false)
+            navigation.navigate('Leagues')
         })
         .catch((e) => console.log(e))
 }
 
 export const getLeagueCreatorInformation = (userId: string) => {
-    return new Promise((res, rej) => {
-        res(
-            firebaseApp
-                .database()
-                .ref(`/users/${userId}`)
-                .once('value')
-                .then((snapshot) => {
-                    const playerName: any = snapshot.val().name + ' ' + snapshot.val().surname
-                    return {
-                        id: userId,
-                        name: playerName,
-                    }
-                }),
-        )
-    })
+    try {
+        return firebaseApp
+            .database()
+            .ref(`/users/${userId}`)
+            .once('value')
+            .then((snapshot) => {
+                console.log('hi?', userId)
+                const playerName: any = snapshot.val().name + ' ' + snapshot.val().surname
+                return {
+                    id: userId,
+                    name: playerName,
+                }
+            })
+    } catch (e) {
+        console.log('EEEE:', e)
+    }
 }
 
 export const joinLeagueAndAddLeagueToListOfUserLeagues = (history: any, league: any, leagueAndUserData: any) => {

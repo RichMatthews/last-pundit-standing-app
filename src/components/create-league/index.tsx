@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import uid from 'uid'
 
@@ -59,19 +59,36 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
     const [privateLeague, setPrivateLeague] = useState(false)
     const [leagueName, setLeagueName] = useState('')
     const [selectedFee, setSelectedFee] = useState(10)
+    const [leagueNameTooLong, setLeagueNameTooLong] = useState(false)
 
     const getLeagueCreatorInformationThenCreateLeague = async () => {
+        console.log(currentUserId, 'cui')
         const playerInfo: any = await getLeagueCreatorInformation(currentUserId)
+        console.log(playerInfo, 'pi')
         createLeague(playerInfo)
     }
 
     const createLeague = (playerInfo: { name: string }) => {
-        const leagueCreationConfirmationMessage = window.confirm(
-            `You are creating a ${
-                privateLeague ? 'private' : 'public'
-            } league called ${leagueName}. Click OK to confirm or cancel to make more changes`,
+        console.log(playerInfo, 'pi')
+        const leagueCreationConfirmationMessage = `You are creating a ${
+            privateLeague ? 'private' : 'public'
+        } league called ${leagueName}. Click OK to confirm or cancel to make more changes`
+
+        const confirmedLeagueSubmission = Alert.alert(
+            'Confirm League Creation',
+            leagueCreationConfirmationMessage,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'Confirm', onPress: () => console.log('OK Pressed') },
+            ],
+            { cancelable: false },
         )
-        if (!leagueCreationConfirmationMessage) {
+
+        if (!confirmedLeagueSubmission) {
             return
         }
         const leagueId = uid()
@@ -124,6 +141,11 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
     }
 
     const setLeagueNameHelper = (e: any) => {
+        if (e.nativeEvent.text.length > 20) {
+            setLeagueNameTooLong(true)
+        } else {
+            setLeagueNameTooLong(false)
+        }
         setLeagueName(e.nativeEvent.text)
     }
 
@@ -138,7 +160,8 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
         <Container>
             <H1>Create League</H1>
             <Inner>
-                <SectionDivider>
+                <SectionDivider style={{ marginTop: 0 }}>
+                    {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
                     <Input autoCorrect={false} onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
                 </SectionDivider>
                 <SectionDivider>
@@ -173,7 +196,7 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                     <TouchableOpacity
                         onPress={leagueName.length === 0 ? null : () => getLeagueCreatorInformationThenCreateLeague()}
                     >
-                        <Button disabled={leagueName.length === 0}>
+                        <Button disabled={leagueName.length === 0 || leagueName.length > 20}>
                             <ButtonText>Create and join league</ButtonText>
                         </Button>
                     </TouchableOpacity>

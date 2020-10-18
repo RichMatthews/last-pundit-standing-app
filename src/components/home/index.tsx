@@ -9,9 +9,7 @@ export const Home = () => {
         <Container style={{ backgroundColor: '#F2F1F7' }}>
             <H1>Welcome to Last Pundit Standing</H1>
             <Inner>
-                <Text>
-                    The place where like minded football loving fans come to find out who is the best armchair pundit
-                </Text>
+                <Text>Better than your mates at predicting the results?</Text>
             </Inner>
         </Container>
     )

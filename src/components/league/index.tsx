@@ -16,6 +16,7 @@ import { ContainerWithHeaderShown, InnerWithHeaderShown } from '../../ui-compone
 
 interface LeagueProps {
     currentUserId: string
+    leagueId: string
     navigation: any
 }
 interface ImageStyled {
@@ -71,7 +72,7 @@ const LeagueTypeImage = styled.Image`
     resize-mode: contain;
     flex: 1;
     margin-right: 10px;
-    height: undefined;
+    height: 35px;
     width: 100px;
 `
 
@@ -85,9 +86,10 @@ const LeagueNameAndLeagueTypeImage = styled.View`
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+    margin-left: 10px;
 `
 
-export const League = ({ currentUserId, navigation }: LeagueProps) => {
+export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => {
     const [currentGame, setCurrentGame] = useState<any>({})
     const [currentGameweek, setCurrentGameweek] = useState<any>({})
     const [currentPlayer, setCurrentPlayer] = useState<any>({})
@@ -97,8 +99,6 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
     const [loaded, setLoaded] = useState<any>(false)
     const [selectionTimeEnded, setSelectionTimeEnded] = useState(false)
-
-    const leagueId = '9hk0btr26u7'
 
     useEffect(() => {
         firebaseApp
@@ -134,6 +134,8 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
             .ref(`leagues/${leagueId}`)
             .once('value')
             .then((snapshot) => {
+                console.log(league, 'lea')
+                console.log(snapshot.val(), 'a 123')
                 if (snapshot.val()) {
                     if (snapshot.val().games) {
                         const transformPayloadIntoUsableObject = {
@@ -219,7 +221,7 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                 <ContainerWithHeaderShown>
                     <InnerWithHeaderShown>
                         <LeagueNameAndLeagueTypeImage>
-                            <H1>{league.name}</H1>
+                            <H2>{league.name}</H2>
                             <View>
                                 <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
                             </View>
@@ -266,7 +268,7 @@ export const League = ({ currentUserId, navigation }: LeagueProps) => {
                                             Increase your jackpot now by inviting others to join this league!
                                         </Text>
                                         <Text style={{ marginBottom: 20 }}>
-                                            Share this pin --- or simply click one of the apps below
+                                            Share this pin {league.joinPin} or simply click one of the apps below
                                         </Text>
                                         <Image
                                             source={require('../../images/other/whatsapp.png')}

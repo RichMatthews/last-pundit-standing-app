@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import { Account } from '../components/account'
 import { CreateLeague } from '../components/create-league'
 import { ChooseTeam } from '../components/choose-team'
 import { Home } from '../components/home'
@@ -15,11 +16,23 @@ import { AuthenticateUserScreen } from '../components/authenticate-user'
 import { PageNotFound } from '../components/404'
 import { AdminView } from '../admin/view'
 import { ForgotPassword } from '../components/forgot-password'
+import { ResetPassword } from '../components/reset-password'
 
 import { getUserLeagues } from '../firebase-helpers'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
+const RootStack = createStackNavigator()
+
+const AuthStack = ({ resetPassword }: any) => (
+    <Stack.Navigator>
+        {resetPassword ? (
+            <Stack.Screen name="Reset Password">{(props: any) => <ResetPassword />}</Stack.Screen>
+        ) : (
+            <Stack.Screen name="Home">{(props: any) => <Home />}</Stack.Screen>
+        )}
+    </Stack.Navigator>
+)
 
 const Stacks = ({ isSignedIn, setUserExists, userLeagues, userId }: any) => (
     <Stack.Navigator
@@ -35,7 +48,13 @@ const Stacks = ({ isSignedIn, setUserExists, userLeagues, userId }: any) => (
                     {(props: any) => <MyLeagues userLeagues={userLeagues} navigation={props.navigation} />}
                 </Stack.Screen>
                 <Stack.Screen name="League">
-                    {(props: any) => <League currentUserId={userId} navigation={props.navigation} />}
+                    {(props: any) => (
+                        <League
+                            currentUserId={userId}
+                            leagueId={props.route.params.leagueId}
+                            navigation={props.navigation}
+                        />
+                    )}
                 </Stack.Screen>
             </>
         ) : (
@@ -55,6 +74,57 @@ const Stacks = ({ isSignedIn, setUserExists, userLeagues, userId }: any) => (
     </Stack.Navigator>
 )
 
+const ModalStacks = () => (
+    <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
+        <Stack.Screen name="My Account" component={Account} options={{ animationEnabled: true }} />
+    </Stack.Navigator>
+)
+
+// const RootStack = () => <Stack.Screen name="Account" component={Account} options={{ animationEnabled: true }} />
+
+const CreatePlaceholder = () => <View style={{ flex: 1, backgroundColor: 'blue' }} />
+
+const TabNavigation = ({ setUserExists, userExists, userLeagues, userId }: any) => {
+    return (
+        <Tab.Navigator
+            tabBarOptions={{
+                activeTintColor: '#289960',
+                labelStyle: { fontSize: 13 },
+            }}
+        >
+            <Tab.Screen name="Home">
+                {(props: any) => {
+                    return <AuthStack resetPassword={props.route.params && props.route.params.resetPassword} />
+                }}
+            </Tab.Screen>
+            <Tab.Screen name="Create" children={() => <CreateLeague currentUserId={userId} />} />
+            <Tab.Screen name="Join" component={JoinLeague} />
+            <Tab.Screen name="Leagues">
+                {(props: any) => {
+                    return (
+                        <Stacks
+                            isSignedIn={userExists}
+                            userLeagues={userLeagues}
+                            userId={userId}
+                            setUserExists={setUserExists}
+                        />
+                    )
+                }}
+            </Tab.Screen>
+            <Tab.Screen
+                name="My Account"
+                component={Account}
+                listeners={({ navigation }) => ({
+                    tabPress: (event) => {
+                        event.preventDefault()
+                        navigation.navigate('Account')
+                    },
+                })}
+            />
+        </Tab.Navigator>
+    )
+}
+
 export const Routing = () => {
     const userId = 'L6WkWV0bSPN8a0NIQ0wdTAiGokj2'
     const [userLeagues, setUserLeagues] = useState([])
@@ -73,26 +143,19 @@ export const Routing = () => {
 
     return (
         <NavigationContainer>
-            <Tab.Navigator
-                tabBarOptions={{
-                    activeTintColor: '#289960',
-                    labelStyle: { fontSize: 13 },
-                }}
-            >
-                <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Create" component={CreateLeague} />
-                <Tab.Screen name="Join" component={JoinLeague} />
-                <Tab.Screen name="Leagues">
+            <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
+                <Stack.Screen name="TabScreen">
                     {(props: any) => (
-                        <Stacks
-                            isSignedIn={userExists}
+                        <TabNavigation
+                            setUserExists={setUserExists}
+                            userExists={userExists}
                             userLeagues={userLeagues}
                             userId={userId}
-                            setUserExists={setUserExists}
                         />
                     )}
-                </Tab.Screen>
-            </Tab.Navigator>
+                </Stack.Screen>
+                <Stack.Screen name="Account">{(props: any) => <ModalStacks />}</Stack.Screen>
+            </Stack.Navigator>
         </NavigationContainer>
     )
 }

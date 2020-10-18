@@ -22,7 +22,7 @@ const Input = styled.TextInput`
 `
 
 export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
-    const [leaguePin, setLeaguePin] = useState<string | null>(null)
+    const [leaguePin, setLeaguePin] = useState<string>('')
 
     const attemptToJoinLeague = (league: any, name: string, surname: string) => {
         const games = Object.values(league.games)
@@ -59,14 +59,16 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
         }
     }
 
+    console.log(leaguePin, 'lp')
+
     return (
         <Container>
             <H1>Join a League</H1>
             <Inner>
                 <View>
-                    <Input onChange={(e) => setLeaguePin(e.target.value)} placeholder="Enter league pin" />
+                    <Input onChange={(e) => setLeaguePin(e.nativeEvent.text)} placeholder="Enter league pin" />
                     <TouchableOpacity onPress={joinLeague}>
-                        <Button>
+                        <Button disabled={leaguePin === ''}>
                             <ButtonText>Join League</ButtonText>
                         </Button>
                     </TouchableOpacity>

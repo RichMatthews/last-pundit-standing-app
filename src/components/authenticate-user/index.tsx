@@ -11,6 +11,8 @@ import { logUserInToApplication, signUserUpToApplication } from '../../firebase-
 import { firebaseApp } from '../../config.js'
 
 const Input = styled.TextInput`
+    border-bottom-width: 1;
+    border-color: #ccc;
     font-size: 15px;
     padding: 10px;
     width: 100%;
@@ -23,9 +25,7 @@ const SectionDivider = styled.View`
 const Error = styled.View`
     background: #eb3455;
     border-radius: 3px;
-    color: #fff;
-    margin-top: 5px;
-    padding: 5px;
+    padding: 10px;
 `
 
 const StyledLink = styled.View`
@@ -82,10 +82,9 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
             <H1>{isSignUpPage ? 'Sign Up' : 'Log in'}</H1>
             <Inner>
                 <View>
-                    <Text>Last Punding Standing requires you to be logged in</Text>
                     {error ? (
                         <Error>
-                            <Text>{error}</Text>
+                            <Text style={{ color: '#fff' }}>{error}</Text>
                         </Error>
                     ) : null}
                 </View>
@@ -119,15 +118,10 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
                 </SectionDivider>
                 {!isSignUpPage && (
                     <>
-                        <SectionDivider>
-                            <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <Text>or</Text>
-                            </View>
-                        </SectionDivider>
                         <TouchableOpacity onPress={!isSignUpPage ? () => navigation.navigate('Sign Up') : logUserIn}>
-                            <StyledLink>
-                                {!isSignUpPage ? <ButtonText>Sign up now</ButtonText> : <ButtonText>Login</ButtonText>}
-                            </StyledLink>
+                            <View>
+                                {!isSignUpPage ? <Text>No account? Sign up now</Text> : <ButtonText>Login</ButtonText>}
+                            </View>
                         </TouchableOpacity>
                     </>
                 )}
