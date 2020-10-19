@@ -24,15 +24,11 @@ export const ResetPassword = () => {
         <Container>
             <Inner>
                 <View style={{ marginBottom: 20 }}>
-                    <StyledTextInput
-                        placeholder="Enter your old password"
-                        onChange={(e) => setEmail(e.nativeEvent.text)}
-                    />
-                    <StyledTextInput placeholder="Enter new password" onChange={(e) => setEmail(e.nativeEvent.text)} />
-                    <StyledTextInput placeholder="Enter new password" onChange={(e) => setEmail(e.nativeEvent.text)} />
+                    <Text>Enter your email and we will send your a password reset link</Text>
+                    <StyledTextInput placeholder="Enter your email" onChange={(e) => setEmail(e.nativeEvent.text)} />
                 </View>
                 <Button>
-                    <ButtonText>Reset password</ButtonText>
+                    <ButtonText>Send password reset link</ButtonText>
                 </Button>
             </Inner>
         </Container>

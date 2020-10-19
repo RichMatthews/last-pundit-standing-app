@@ -65,7 +65,17 @@ export const Account = ({ navigation, setUserExists }) => {
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => changePasswordHelper()}>
-                        <View style={{ borderBottomColor: '#ccc', borderBottomWidth: 1, marginBottom: 100 }}>
+                        <View
+                            style={{
+                                borderBottomColor: '#ccc',
+                                borderBottomWidth: 1,
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginBottom: 20,
+                            }}
+                        >
+                            <MaterialCommIcon name="lock-outline" size={30} style={{ marginRight: 10 }} />
                             <Text style={{ fontSize: 20, marginBottom: 5 }}>Change Password</Text>
                         </View>
                     </TouchableOpacity>

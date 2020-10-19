@@ -1,39 +1,36 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 import styled from 'styled-components'
 import firebase from 'firebase'
 
-import { Button } from '../../ui-components/button'
+import { Button, ButtonText } from '../../ui-components/button'
 import { Container, Inner } from '../../ui-components/containers'
+
+const StyledTextInput = styled.TextInput`
+    padding: 10px;
+    border-bottom-width: 1;
+    border-bottom-color: #ccc;
+`
 
 const auth = firebase.auth()
 
-export const ForgotPassword = () => {
+export const ResetPassword = () => {
     const [email, setEmail] = useState('')
     // const history = useHistory()
 
-    const resetPassword = () => {
-        var actionCodeSettings = {
-            url: 'http://d3pbczmgxzrjcq.cloudfront.net/login',
-            handleCodeInApp: false,
-        }
+    const resetPassword = () => {}
 
-        auth.sendPasswordResetEmail(email, actionCodeSettings)
-            .then(() => {
-                alert('email sent')
-                // history.push('/login')
-            })
-            .catch((error) => {
-                console.log(error, 'er')
-                alert('error')
-            })
-    }
     return (
         <Container>
-            <input placeholder="Enter your email address" onChange={(e) => setEmail(e.target.value)} />
-            <Button onClick={resetPassword}>
-                <Text>Send password reset email</Text>
-            </Button>
+            <Inner>
+                <View style={{ marginBottom: 20 }}>
+                    <Text>Enter your email and we will send your a password reset link</Text>
+                    <StyledTextInput placeholder="Enter your email" onChange={(e) => setEmail(e.nativeEvent.text)} />
+                </View>
+                <Button>
+                    <ButtonText>Send password reset link</ButtonText>
+                </Button>
+            </Inner>
         </Container>
     )
 }
