@@ -66,6 +66,7 @@ export const ShowImageForPlayerChoice = ({
         (playa: any) => playa.rounds[CURRENT_ROUND_WITHIN_CURRENT_GAME - 1].choice.hasMadeChoice,
     )
 
+    console.log(playersStillAbleToSelectTeams, 'pasaasa')
     if (ALL_OTHER_PLAYERS_ELIMINATED) {
         return (
             <Eliminated>
@@ -82,10 +83,21 @@ export const ShowImageForPlayerChoice = ({
         )
     }
 
-    if (isCurrentLoggedInPlayer && PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
-        return (
-            <Image source={Images[PLAYER_CURRENT_ROUND.choice.value.replace(/\s/g, '').toLowerCase()]} lost={false} />
-        )
+    if (isCurrentLoggedInPlayer) {
+        if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
+            return (
+                <Image
+                    source={Images[PLAYER_CURRENT_ROUND.choice.value.replace(/\s/g, '').toLowerCase()]}
+                    lost={false}
+                />
+            )
+        } else {
+            return (
+                <AwaitingPrediction>
+                    <AwaitingPredictionText>Awaiting Prediction</AwaitingPredictionText>
+                </AwaitingPrediction>
+            )
+        }
     }
 
     if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
@@ -113,5 +125,9 @@ export const ShowImageForPlayerChoice = ({
         )
     }
 
-    return <Eliminated>Eliminated</Eliminated>
+    return (
+        <Eliminated>
+            <EliminatedText>Eliminated</EliminatedText>
+        </Eliminated>
+    )
 }

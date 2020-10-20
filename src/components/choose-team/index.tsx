@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {
+    Alert,
     Dimensions,
     Image,
     Modal,
@@ -92,19 +93,34 @@ export const ChooseTeam = ({
             alert('No team selected!')
             return
         }
-        const confirmation: any = window.confirm(
-            `You are picking ${selectedTeam}. Are you sure? Once you confirm you are locked in for this gameweek.`,
+        const confirmationMsg: any = `You are picking ${selectedTeam}. Are you sure? Once you confirm you are locked in for this gameweek.`
+
+        Alert.alert(
+            'Confirm team selection',
+            confirmationMsg,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'Confirm', onPress: () => updateUserGamweekChoiceHelper() },
+            ],
+            { cancelable: false },
         )
-        if (confirmation && leagueOnly) {
-            const choice = {
-                hasMadeChoice: true,
-                id: selectedTeam.id,
-                ...findOpposition(),
-                result: 'pending',
-                value: selectedTeam,
-            }
-            updateUserGamweekChoice({ choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData })
+    }
+
+    const updateUserGamweekChoiceHelper = () => {
+        const choice = {
+            hasMadeChoice: true,
+            // id: selectedTeam.id,
+            ...findOpposition(),
+            result: 'pending',
+            value: selectedTeam,
         }
+        console.log('ty', choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData)
+
+        updateUserGamweekChoice({ choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData })
     }
 
     return (
@@ -123,7 +139,6 @@ export const ChooseTeam = ({
                         </TouchableWithoutFeedback>
                     </TouchableOpacity>
                     <View style={styles.innerContainer}>
-                        <Text> Close </Text>
                         <Picker
                             onValueChange={(value: any) => setSelectedTeamHelper(value)}
                             selectedValue={selectedTeam}

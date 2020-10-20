@@ -11,7 +11,7 @@ import { logUserInToApplication, signUserUpToApplication } from '../../firebase-
 import { firebaseApp } from '../../config.js'
 
 const Input = styled.TextInput`
-    border-bottom-width: 1;
+    border-bottom-width: 1px;
     border-color: #ccc;
     font-size: 15px;
     padding: 10px;
@@ -46,9 +46,7 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
     const [error, setError] = useState<any>(null)
 
     useEffect(() => {
-        console.log('called dis')
         firebaseApp.auth().onAuthStateChanged((user) => {
-            console.log('user?', user)
             if (user) {
                 setUserExists(true)
             }

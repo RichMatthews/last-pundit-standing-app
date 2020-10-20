@@ -29,6 +29,7 @@ const NoLeagueText = styled(LeagueName)`
 `
 
 export const MyLeagues = ({ navigation, userLeagues }: any) => {
+    console.log(userLeagues, 'ul')
     return (
         <ContainerWithHeaderShown>
             <H1>My Leagues</H1>

@@ -24,6 +24,16 @@ export const getCurrentGameweekEndTime = () => {
         })
 }
 
+export const getUserInformation = (uid: string) => {
+    return firebaseApp
+        .database()
+        .ref(`users/${uid}`)
+        .once('value')
+        .then((snapshot) => {
+            return snapshot.val()
+        })
+}
+
 export const updateUserGamweekChoice = ({
     choice,
     currentRound,

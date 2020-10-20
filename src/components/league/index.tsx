@@ -185,7 +185,7 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
                 <ChooseTeam
                     calculateTeamsAllowedToPickForCurrentRound={calculateTeamsAllowedToPickForCurrentRound}
                     pullLatestLeagueData={pullLatestLeagueData}
-                    currentRound={currentGame.currentGameRound}
+                    currentRound={currentGameRound}
                     currentUserId={currentUserId}
                     gameId={currentGame.gameId}
                     leagueId={league.id}

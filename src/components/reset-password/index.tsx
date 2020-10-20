@@ -8,7 +8,7 @@ import { Container, Inner } from '../../ui-components/containers'
 
 const StyledTextInput = styled.TextInput`
     padding: 10px;
-    border-bottom-width: 1;
+    border-bottom-width: 1px;
     border-bottom-color: #ccc;
 `
 

@@ -19,7 +19,8 @@ import { ForgotPassword } from '../components/forgot-password'
 import { ResetPassword } from '../components/reset-password'
 import { UpdateEmail } from '../components/update-email'
 
-import { getUserLeagues } from '../firebase-helpers'
+import { getUserLeagues, getUserInformation } from '../firebase-helpers'
+import { firebaseApp } from '../config.js'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -83,9 +84,13 @@ const Stacks = ({ isSignedIn, setUserExists, userLeagues, userId }: any) => (
     </Stack.Navigator>
 )
 
-const ModalStacks = () => (
+const ModalStacks = ({ setUserExists, user }) => (
     <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
-        <Stack.Screen name="My Account" component={Account} options={{ animationEnabled: true }} />
+        <Stack.Screen name="My Account" options={{ animationEnabled: true }}>
+            {(props: any) => {
+                return <Account navigation={props.navigation} setUserExists={setUserExists} user={user} />
+            }}
+        </Stack.Screen>
     </Stack.Navigator>
 )
 
@@ -123,27 +128,39 @@ const TabNavigation = ({ setUserExists, userExists, userLeagues, userId }: any) 
             </Tab.Screen>
             <Tab.Screen
                 name="My Account"
-                component={Account}
                 listeners={({ navigation }) => ({
                     tabPress: (event) => {
                         event.preventDefault()
                         navigation.navigate('Account')
                     },
                 })}
-            />
+            >
+                {(props: any) => {
+                    return <Account />
+                }}
+            </Tab.Screen>
         </Tab.Navigator>
     )
 }
 
 export const Routing = () => {
-    const userId = 'L6WkWV0bSPN8a0NIQ0wdTAiGokj2'
     const [userLeagues, setUserLeagues] = useState([])
     const [userExists, setUserExists] = useState(false)
+    const [user, setUser] = useState({ name: '' })
 
     useEffect(() => {
-        if (userId) {
-            getUserLeagues2(userId)
+        async function getUser() {
+            const currentUser = firebaseApp.auth().currentUser
+
+            if (currentUser) {
+                const userInfo = await getUserInformation(currentUser.uid)
+                getUserLeagues2(userInfo.id)
+                setUserExists(true)
+                setUser(userInfo)
+            }
         }
+
+        getUser()
     }, [])
 
     const getUserLeagues2 = async (userId: any) => {
@@ -160,11 +177,13 @@ export const Routing = () => {
                             setUserExists={setUserExists}
                             userExists={userExists}
                             userLeagues={userLeagues}
-                            userId={userId}
+                            userId={user && user.id}
                         />
                     )}
                 </Stack.Screen>
-                <Stack.Screen name="Account">{(props: any) => <ModalStacks />}</Stack.Screen>
+                <Stack.Screen name="Account">
+                    {(props: any) => <ModalStacks setUserExists={setUserExists} user={user} />}
+                </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     )
