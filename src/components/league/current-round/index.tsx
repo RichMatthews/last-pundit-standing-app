@@ -103,6 +103,7 @@ export const CurrentRoundView = ({
             <Container>
                 {Object.values(currentViewedGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
+                        {console.log(player.rounds.length)}
                         <PlayerRow
                             key={player.id}
                             isCurrentLoggedInPlayer={player.id === currentUserId}
@@ -125,7 +126,7 @@ export const CurrentRoundView = ({
                                 </PlayerAndDownArrow>
                             </CurrentRound>
                             <HistoricalRounds expand={listOfExpandedPrevious.includes(index)}>
-                                {player.rounds > 1 ? (
+                                {player.rounds.length > 1 ? (
                                     <>
                                         {player.rounds
                                             .filter(

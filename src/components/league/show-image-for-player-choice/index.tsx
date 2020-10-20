@@ -60,13 +60,12 @@ export const ShowImageForPlayerChoice = ({
     )
     const PLAYER_CURRENT_ROUND = player.rounds[CURRENT_ROUND_WITHIN_CURRENT_GAME]
     const REMAINING_PLAYERS_IN_CURRENT_GAME: any = ALL_PLAYERS_IN_CURRENT_GAME.filter(
-        (playa: any) => playa.rounds.length === CURRENT_ROUND_WITHIN_CURRENT_GAME,
+        (playa: any) => playa.rounds.length === CURRENT_ROUND_WITHIN_CURRENT_GAME + 1,
     )
     const ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE = REMAINING_PLAYERS_IN_CURRENT_GAME.every(
-        (playa: any) => playa.rounds[CURRENT_ROUND_WITHIN_CURRENT_GAME - 1].choice.hasMadeChoice,
+        (playa: any) => playa.rounds[CURRENT_ROUND_WITHIN_CURRENT_GAME].choice.hasMadeChoice,
     )
 
-    console.log(playersStillAbleToSelectTeams, 'pasaasa')
     if (ALL_OTHER_PLAYERS_ELIMINATED) {
         return (
             <Eliminated>

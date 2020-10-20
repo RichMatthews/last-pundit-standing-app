@@ -58,7 +58,7 @@ export const ChooseTeam = ({
     const [selectedTeam, setSelectedTeam] = useState<any>(null)
     const [modalOpen, setModalOpen] = useState(false)
 
-    const findOpposition = () => {
+    const findOpponent = () => {
         const selectedTeamFixture: any = CURRENT_GAMEWEEK.fixtures.find(
             (team) => team.home === selectedTeam || team.away === selectedTeam,
         )
@@ -114,7 +114,7 @@ export const ChooseTeam = ({
         const choice = {
             hasMadeChoice: true,
             // id: selectedTeam.id,
-            ...findOpposition(),
+            ...findOpponent(),
             result: 'pending',
             value: selectedTeam,
         }

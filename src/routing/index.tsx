@@ -147,11 +147,11 @@ export const Routing = () => {
     const [userLeagues, setUserLeagues] = useState([])
     const [userExists, setUserExists] = useState(false)
     const [user, setUser] = useState({ name: '' })
+    const currentUser = firebaseApp.auth().currentUser
 
     useEffect(() => {
         async function getUser() {
-            const currentUser = firebaseApp.auth().currentUser
-
+            console.log(currentUser, 'cu')
             if (currentUser) {
                 const userInfo = await getUserInformation(currentUser.uid)
                 getUserLeagues2(userInfo.id)
@@ -161,7 +161,7 @@ export const Routing = () => {
         }
 
         getUser()
-    }, [])
+    }, [currentUser])
 
     const getUserLeagues2 = async (userId: any) => {
         const userLeagues: any = await getUserLeagues({ userId })

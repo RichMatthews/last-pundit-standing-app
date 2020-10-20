@@ -49,7 +49,7 @@ const roundResultDetails = ({ currentPlayerGameRound, fixture, playingAthome, wo
         teamPlayingAtHome: playingAthome,
         value: currentPlayerGameRound.choice.value,
         goals: fixture[showHomeDetails].goals,
-        opposition: {
+        opponent: {
             name: fixture[showAwayDetails].team,
             goals: fixture[showAwayDetails].goals,
         },
