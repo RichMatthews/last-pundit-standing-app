@@ -54,21 +54,18 @@ export const updateUserGamweekChoice = ({
         })
 }
 
-export const getUserLeagues = ({ userId }: any) => {
-    return new Promise((res: any, rej: any) => {
-        res(
-            firebaseApp
-                .database()
-                .ref(`users/${userId}/leagues`)
-                .once('value')
-                .then((snapshot) => {
-                    if (snapshot.val()) {
-                        return Object.values(snapshot.val())
-                    }
-                    return []
-                }),
-        )
-    })
+export const getUserLeagues = ({ setUserLeaguesFetchComplete, userId }: any) => {
+    return firebaseApp
+        .database()
+        .ref(`users/${userId}/leagues`)
+        .once('value')
+        .then((snapshot) => {
+            setUserLeaguesFetchComplete(true)
+            if (snapshot.val()) {
+                return Object.values(snapshot.val())
+            }
+            return []
+        })
 }
 
 export const logUserInToApplication = ({ email, password, navigation, setError, setUserExists }: any) => {
@@ -130,7 +127,6 @@ export const getLeagueCreatorInformation = (userId: string) => {
             .ref(`/users/${userId}`)
             .once('value')
             .then((snapshot) => {
-                console.log('hi?', userId)
                 const playerName: any = snapshot.val().name + ' ' + snapshot.val().surname
                 return {
                     id: userId,
@@ -138,50 +134,47 @@ export const getLeagueCreatorInformation = (userId: string) => {
                 }
             })
     } catch (e) {
-        console.log('EEEE:', e)
+        console.error('EEEE:', e)
     }
 }
 
-export const joinLeagueAndAddLeagueToListOfUserLeagues = (history: any, league: any, leagueAndUserData: any) => {
-    firebaseApp
+export const joinLeagueAndAddLeagueToListOfUserLeagues = ({ league, leagueAndUserData, navigation }) => {
+    return firebaseApp
         .database()
         .ref()
         .update(leagueAndUserData, (error) => {
             if (error) {
                 alert('Failed to join league, please try again.')
             } else {
-                history.push(`/leagues/${league.id}`)
+                console.log('navigate????')
+                navigation.navigate('My Leagues', { id: league.id })
             }
         })
 }
 
 export const attemptToJoinLeaugeIfItExists = ({ currentUserId, leaguePin }: any) => {
-    return new Promise((res, rej) => {
-        res(
-            firebaseApp
+    return firebaseApp
+        .database()
+        .ref(`users/${currentUserId}`)
+        .once('value')
+        .then((snapshot) => {
+            const { name, surname } = snapshot.val()
+            return firebaseApp
                 .database()
-                .ref(`users/${currentUserId}`)
+                .ref(`leagues`)
                 .once('value')
                 .then((snapshot) => {
-                    const { name, surname } = snapshot.val()
-                    firebaseApp
-                        .database()
-                        .ref(`leagues`)
-                        .once('value')
-                        .then((snapshot) => {
-                            const allLeagues = Object.values(snapshot.val())
-                            const foundLeague = allLeagues.filter((league: any) => league.joinPin === leaguePin)
-                            if (foundLeague.length) {
-                                return {
-                                    league: foundLeague[0],
-                                    name,
-                                    surname,
-                                }
-                            } else {
-                                alert('League not found, please try again or contact league admin')
-                            }
-                        })
-                }),
-        )
-    })
+                    const allLeagues = Object.values(snapshot.val())
+                    const foundLeague = allLeagues.filter((league: any) => league.joinPin === leaguePin)
+                    if (foundLeague.length) {
+                        return {
+                            league: foundLeague[0],
+                            name,
+                            surname,
+                        }
+                    } else {
+                        alert('League not found, please try again or contact league admin')
+                    }
+                })
+        })
 }

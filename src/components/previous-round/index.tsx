@@ -24,7 +24,6 @@ const TeamBadge = styled.Image<ImageStyled>`
 `
 
 export const PreviousRound = ({ choice }: any) => {
-    console.log(choice, 'choice!')
     const opponentTeamName: any = choice.opponent.name.replace(/\s/g, '').toLowerCase()
     const userTeamName: any = choice.value.replace(/\s/g, '').toLowerCase()
 

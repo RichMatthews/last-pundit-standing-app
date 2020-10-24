@@ -122,7 +122,6 @@ const calculateGameweekResults = () => {
                         if (game.complete === false) {
                             const allGamePlayers = Object.values(game.players)
                             allGamePlayers.forEach((player) => {
-                                console.log('log here..')
                                 const currentPlayerGameRound = player.rounds[game.currentGameRound]
                                 // fix the line below to update firebase if someone has not made a choice
                                 if (
@@ -190,6 +189,7 @@ const updateCurrentGameStatus = ({ game, league }) => {
                 return
             }
             if (gameHasWinner) {
+                updateGameWithWinner()
                 return
             }
             if (gameStillInProgress) {

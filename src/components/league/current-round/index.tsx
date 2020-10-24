@@ -103,7 +103,6 @@ export const CurrentRoundView = ({
             <Container>
                 {Object.values(currentViewedGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        {console.log(player.rounds.length)}
                         <PlayerRow
                             key={player.id}
                             isCurrentLoggedInPlayer={player.id === currentUserId}

@@ -39,7 +39,6 @@ export const Account = ({ navigation, setUserExists, user }) => {
             <LinearGradient
                 colors={['#3eb94e', '#3eb9b4']}
                 style={{
-                    borderRadius: 10,
                     backgroundColor: '#B972FE',
                     borderBottomRightRadius: 250,
                     height: 300,

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Text, TouchableOpacity, View } from 'react-native'
 
+import { Button, ButtonText } from '../../ui-components/button'
 import { H1, H2 } from '../../ui-components/headings'
-import { ContainerWithHeaderShown, Inner } from '../../ui-components/containers'
+import { Container, Inner } from '../../ui-components/containers'
 
 interface LeagueState {
     name?: string
@@ -21,24 +22,51 @@ const LeagueItem = styled.View`
 `
 
 const LeagueName = styled.Text`
-    color: #289960;
-    font-size: 15px;
+    color: #827ee6;
+    font-size: 17px;
 `
 const NoLeagueText = styled(LeagueName)`
     color: #000;
 `
 
-export const MyLeagues = ({ navigation, userLeagues }: any) => {
-    console.log(userLeagues, 'ul')
+export const MyLeagues = ({ navigation, userLeaguesFetchComplete, userLeagues }: any) => {
     return (
-        <ContainerWithHeaderShown>
+        <Container>
             <H1>My Leagues</H1>
             <Inner>
                 <LeagueContainer>
                     <H2>Private Leagues</H2>
-                    {userLeagues.filter((league: any) => league.isPrivate).length ? (
+
+                    {userLeaguesFetchComplete ? (
+                        userLeagues.filter((league: any) => league.isPrivate).length ? (
+                            userLeagues
+                                .filter((league: any) => league.isPrivate)
+                                .map((league: LeagueState) => (
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('League', { leagueId: league.id })}
+                                    >
+                                        <LeagueItem key={league.id}>
+                                            <LeagueName>{league.name}</LeagueName>
+                                        </LeagueItem>
+                                    </TouchableOpacity>
+                                ))
+                        ) : (
+                            <View>
+                                <LeagueItem>
+                                    <NoLeagueText>You have not entered any public leagues yet</NoLeagueText>
+                                </LeagueItem>
+                            </View>
+                        )
+                    ) : (
+                        <Text>Fetching Leagues...</Text>
+                    )}
+                </LeagueContainer>
+
+                <LeagueContainer>
+                    <H2>Public Leagues</H2>
+                    {userLeagues.filter((league: any) => !league.isPrivate).length ? (
                         userLeagues
-                            .filter((league: any) => league.isPrivate)
+                            .filter((league: any) => !league.isPrivate)
                             .map((league: LeagueState) => (
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('League', { leagueId: league.id })}
@@ -56,31 +84,12 @@ export const MyLeagues = ({ navigation, userLeagues }: any) => {
                         </View>
                     )}
                 </LeagueContainer>
-
-                <LeagueContainer>
-                    <H2>Public Leagues</H2>
-                    {userLeagues.filter((league: any) => !league.isPrivate).length ? (
-                        userLeagues
-                            .filter((league: any) => !league.isPrivate)
-                            .map((league: LeagueState) => (
-                                <TouchableOpacity onPress={() => navigation.navigate('My Leagues', { id: league.id })}>
-                                    <LeagueItem key={league.id}>
-                                        <LeagueName>{league.name}</LeagueName>
-                                    </LeagueItem>
-                                </TouchableOpacity>
-                            ))
-                    ) : (
-                        <View>
-                            <LeagueItem>
-                                <NoLeagueText>You have not entered any public leagues yet</NoLeagueText>
-                            </LeagueItem>
-                        </View>
-                    )}
-                </LeagueContainer>
-                <TouchableOpacity onPress={() => navigation.navigate(`/join`)}>
-                    <Text>Click here to join a league</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('Join')}>
+                    <Button marginTop={100}>
+                        <ButtonText>Click here to join a league</ButtonText>
+                    </Button>
                 </TouchableOpacity>
             </Inner>
-        </ContainerWithHeaderShown>
+        </Container>
     )
 }

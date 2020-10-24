@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import uid from 'uid'
 
@@ -55,42 +55,40 @@ const SectionDivider = styled.View`
     margin: 15px 0 0 0;
 `
 
-export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
+export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) => {
     const [privateLeague, setPrivateLeague] = useState(false)
     const [leagueName, setLeagueName] = useState('')
     const [selectedFee, setSelectedFee] = useState(10)
     const [leagueNameTooLong, setLeagueNameTooLong] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const getLeagueCreatorInformationThenCreateLeague = async () => {
-        console.log(currentUserId, 'cui')
+        setLoading(true)
         const playerInfo: any = await getLeagueCreatorInformation(currentUserId)
-        console.log(playerInfo, 'pi')
         createLeague(playerInfo)
     }
 
     const createLeague = (playerInfo: { name: string }) => {
-        console.log(playerInfo, 'pi')
         const leagueCreationConfirmationMessage = `You are creating a ${
             privateLeague ? 'private' : 'public'
         } league called ${leagueName}. Click OK to confirm or cancel to make more changes`
 
-        const confirmedLeagueSubmission = Alert.alert(
+        Alert.alert(
             'Confirm League Creation',
             leagueCreationConfirmationMessage,
             [
                 {
                     text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
+                    onPress: () => setLoading(false),
                     style: 'cancel',
                 },
-                { text: 'Confirm', onPress: () => console.log('OK Pressed') },
+                { text: 'Confirm', onPress: () => userConfirmedLeagueCreation(playerInfo) },
             ],
             { cancelable: false },
         )
+    }
 
-        if (!confirmedLeagueSubmission) {
-            return
-        }
+    const userConfirmedLeagueCreation = (playerInfo) => {
         const leagueId = uid()
         const leagueJoinPin = uid()
         const newGameId = uid()
@@ -128,14 +126,15 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
                 name: leagueName,
             },
         }
-        firebaseApp
+        return firebaseApp
             .database()
             .ref()
             .update(updateMultipleLeaguesAndUsersJoinedLeagues, (error) => {
                 if (error) {
                     alert('Failed to create league, please try again.')
                 } else {
-                    // history.push(`/leagues/${leagueId}`)
+                    setLoading(false)
+                    navigation.navigate('League', { leagueId: leagueId })
                 }
             })
     }
@@ -156,7 +155,12 @@ export const CreateLeague = ({ currentUserId }: CreateLeagueProps) => {
         { amount: '£20', key: 20 },
     ]
 
-    return (
+    return loading ? (
+        <Container>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text>Creating League...</Text>
+        </Container>
+    ) : (
         <Container>
             <H1>Create League</H1>
             <Inner>

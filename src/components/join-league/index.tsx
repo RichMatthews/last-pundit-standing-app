@@ -10,6 +10,9 @@ import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeague
 
 interface JoinLeagueProps {
     currentUserId: string
+    navigation: {
+        navigate: () => void
+    }
 }
 
 const Input = styled.TextInput`
@@ -21,7 +24,7 @@ const Input = styled.TextInput`
     width: 100%;
 `
 
-export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
+export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
     const [leaguePin, setLeaguePin] = useState<string>('')
 
     const attemptToJoinLeague = (league: any, name: string, surname: string) => {
@@ -33,7 +36,7 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
             if (playerAlreadyInLeague) {
                 alert('You have already entered this league!')
             } else {
-                const theDataToBeSynced = {
+                const leagueAndUserData = {
                     [`/leagues/${league.id}/games/${currentGame[0].gameId}/players/${currentUserId}`]: {
                         id: currentUserId,
                         name: name + surname,
@@ -45,7 +48,7 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
                         name: league.name,
                     },
                 }
-                // joinLeagueAndAddLeagueToListOfUserLeagues(history, theDataToBeSynced, league)
+                joinLeagueAndAddLeagueToListOfUserLeagues({ leagueAndUserData, league, navigation })
             }
         }
     }
@@ -58,8 +61,6 @@ export const JoinLeague = ({ currentUserId }: JoinLeagueProps) => {
             attemptToJoinLeague(league, name, surname)
         }
     }
-
-    console.log(leaguePin, 'lp')
 
     return (
         <Container>

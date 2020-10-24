@@ -19,7 +19,6 @@ export const UpdateEmail = ({ currentUser }) => {
 
     const updateEmail = () => {
         var user = firebase.auth().currentUser
-        console.log('USER:', user)
         user.updateEmail(email)
             .then(() => {
                 console.log('success')

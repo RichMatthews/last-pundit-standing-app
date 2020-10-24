@@ -118,7 +118,6 @@ export const ChooseTeam = ({
             result: 'pending',
             value: selectedTeam,
         }
-        console.log('ty', choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData)
 
         updateUserGamweekChoice({ choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData })
     }
