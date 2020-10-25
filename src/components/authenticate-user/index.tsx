@@ -7,7 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { Button } from '../../ui-components/button'
-import { Container, Inner } from '../../ui-components/containers'
+import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
@@ -113,63 +113,62 @@ const LoginScreen = ({
     return (
         <Container>
             <H1>Login</H1>
-            <Inner>
+
+            <View>
+                {error ? (
+                    <Error>
+                        <Text style={{ color: '#fff', fontWeight: 'bold' }}>{error}</Text>
+                    </Error>
+                ) : null}
+            </View>
+            <StyledLogInSection
+                style={{
+                    backgroundColor: '#F2F1F7',
+                    borderRadius: 5,
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 10,
+                    elevation: 5,
+                }}
+            >
+                <SectionDivider>
+                    <MaterialIcons
+                        name={'email-outline'}
+                        size={20}
+                        color={'#000'}
+                        style={{ textAlign: 'center', alignSelf: 'center' }}
+                    />
+                    <Input
+                        autoCapitalize="none"
+                        placeholder="email"
+                        placeholderTextColor="#666464"
+                        onChange={(e: any) => setEmailHelper(e)}
+                    />
+                </SectionDivider>
+                <SectionDivider style={{ marginBottom: 70 }}>
+                    <MaterialCommIcon name="lock-outline" size={20} />
+                    <Input
+                        placeholder="password"
+                        placeholderTextColor="#666464"
+                        secureTextEntry={true}
+                        onChange={(e: any) => setPasswordHelper(e)}
+                        required
+                    />
+                </SectionDivider>
                 <View>
-                    {error ? (
-                        <Error>
-                            <Text style={{ color: '#fff', fontWeight: 'bold' }}>{error}</Text>
-                        </Error>
-                    ) : null}
+                    <TouchableOpacity onPress={logUserIn}>
+                        <Button bottom={-20} height={40} right={90} padding={0} position={'absolute'} width={100}>
+                            <FontAwesomeIcons
+                                name={'long-arrow-right'}
+                                size={40}
+                                color={'#fff'}
+                                style={{ textAlign: 'center', alignSelf: 'center' }}
+                            />
+                        </Button>
+                    </TouchableOpacity>
                 </View>
-                <StyledLogInSection
-                    style={{
-                        backgroundColor: '#F2F1F7',
-                        borderRadius: 5,
-                        shadowColor: '#000',
-                        shadowOffset: { width: 0, height: 6 },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 10,
-                        elevation: 5,
-                    }}
-                >
-                    <SectionDivider>
-                        <MaterialIcons
-                            name={'email-outline'}
-                            size={20}
-                            color={'#000'}
-                            style={{ textAlign: 'center', alignSelf: 'center' }}
-                        />
-                        <Input
-                            autoCapitalize="none"
-                            placeholder="email"
-                            placeholderTextColor="#666464"
-                            onChange={(e: any) => setEmailHelper(e)}
-                        />
-                    </SectionDivider>
-                    <SectionDivider style={{ marginBottom: 70 }}>
-                        <MaterialCommIcon name="lock-outline" size={20} />
-                        <Input
-                            placeholder="password"
-                            placeholderTextColor="#666464"
-                            secureTextEntry={true}
-                            onChange={(e: any) => setPasswordHelper(e)}
-                            required
-                        />
-                    </SectionDivider>
-                    <View>
-                        <TouchableOpacity onPress={logUserIn}>
-                            <Button bottom={-20} height={40} right={90} padding={0} position={'absolute'} width={100}>
-                                <FontAwesomeIcons
-                                    name={'long-arrow-right'}
-                                    size={40}
-                                    color={'#fff'}
-                                    style={{ textAlign: 'center', alignSelf: 'center' }}
-                                />
-                            </Button>
-                        </TouchableOpacity>
-                    </View>
-                </StyledLogInSection>
-            </Inner>
+            </StyledLogInSection>
         </Container>
     )
 }
@@ -194,84 +193,82 @@ const SignUpScreen = ({
     return (
         <Container>
             <H1>Login</H1>
-            <Inner>
-                <View>
-                    {error ? (
-                        <Error>
-                            <Text style={{ color: '#fff' }}>{error}</Text>
-                        </Error>
-                    ) : null}
-                </View>
-                <>
-                    <SectionDivider>
-                        <Input placeholder="name" onChange={(e: any) => setName(e.target.value)} />
-                    </SectionDivider>
-                    <SectionDivider>
-                        <Input
-                            placeholder="surname"
-                            placeholderTextColor="#666464"
-                            onChange={(e: any) => setSurname(e.target.value)}
-                        />
-                    </SectionDivider>
-                </>
-                <StyledLogInSection
+            <View>
+                {error ? (
+                    <Error>
+                        <Text style={{ color: '#fff' }}>{error}</Text>
+                    </Error>
+                ) : null}
+            </View>
+            <>
+                <SectionDivider>
+                    <Input placeholder="name" onChange={(e: any) => setName(e.target.value)} />
+                </SectionDivider>
+                <SectionDivider>
+                    <Input
+                        placeholder="surname"
+                        placeholderTextColor="#666464"
+                        onChange={(e: any) => setSurname(e.target.value)}
+                    />
+                </SectionDivider>
+            </>
+            <StyledLogInSection
+                style={{
+                    backgroundColor: '#F2F1F7',
+                    borderRadius: 5,
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 10,
+                    elevation: 5,
+                }}
+            >
+                <SectionDivider
                     style={{
-                        backgroundColor: '#F2F1F7',
-                        borderRadius: 5,
-                        shadowColor: '#000',
-                        shadowOffset: { width: 0, height: 6 },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 10,
-                        elevation: 5,
+                        borderBottomWidth: 1,
+                        borderColor: '#ccc',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        margin: 10,
+                        marginTop: 20,
+                        marginBottom: 0,
                     }}
                 >
-                    <SectionDivider
-                        style={{
-                            borderBottomWidth: 1,
-                            borderColor: '#ccc',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            margin: 10,
-                            marginTop: 20,
-                            marginBottom: 0,
-                        }}
-                    >
-                        <MaterialIcons
-                            name={'email-outline'}
-                            size={20}
-                            color={'#000'}
-                            style={{ textAlign: 'center', alignSelf: 'center' }}
-                        />
-                        <Input
-                            placeholder="email"
-                            placeholderTextColor="#666464"
-                            onChange={(e: any) => setEmailHelper(e)}
-                        />
-                    </SectionDivider>
-                    <SectionDivider style={{ marginBottom: 40 }}>
-                        <Input
-                            placeholder="password"
-                            placeholderTextColor="#666464"
-                            secureTextEntry={true}
-                            onChange={(e: any) => setPasswordHelper(e)}
-                            required
-                        />
-                    </SectionDivider>
-                    <SectionDivider>
-                        <TouchableOpacity onPress={signUserUp}>
-                            <Button position={'absolute'} width={100}>
-                                <FontAwesomeIcons
-                                    name={'long-arrow-right'}
-                                    size={40}
-                                    color={'#fff'}
-                                    style={{ textAlign: 'center', alignSelf: 'center' }}
-                                />
-                            </Button>
-                        </TouchableOpacity>
-                    </SectionDivider>
-                </StyledLogInSection>
-            </Inner>
+                    <MaterialIcons
+                        name={'email-outline'}
+                        size={20}
+                        color={'#000'}
+                        style={{ textAlign: 'center', alignSelf: 'center' }}
+                    />
+                    <Input
+                        placeholder="email"
+                        placeholderTextColor="#666464"
+                        onChange={(e: any) => setEmailHelper(e)}
+                    />
+                </SectionDivider>
+                <SectionDivider style={{ marginBottom: 40 }}>
+                    <Input
+                        placeholder="password"
+                        placeholderTextColor="#666464"
+                        secureTextEntry={true}
+                        onChange={(e: any) => setPasswordHelper(e)}
+                        required
+                    />
+                </SectionDivider>
+                <SectionDivider>
+                    <TouchableOpacity onPress={signUserUp}>
+                        <Button position={'absolute'} width={100}>
+                            <FontAwesomeIcons
+                                name={'long-arrow-right'}
+                                size={40}
+                                color={'#fff'}
+                                style={{ textAlign: 'center', alignSelf: 'center' }}
+                            />
+                        </Button>
+                    </TouchableOpacity>
+                </SectionDivider>
+            </StyledLogInSection>
         </Container>
     )
 }

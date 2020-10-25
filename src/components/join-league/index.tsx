@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { TextInput, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, TextInput, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
 import { Button, ButtonText } from '../../ui-components/button'
-import { Container, Inner } from '../../ui-components/containers'
+import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
 
 import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from '../../firebase-helpers'
@@ -21,7 +21,7 @@ const Input = styled.TextInput`
     font-size: 15px;
     margin-bottom: 20px;
     padding: 10px;
-    width: 100%;
+    width: 300px;
 `
 
 export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
@@ -63,18 +63,18 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
     }
 
     return (
-        <Container>
-            <H1>Join a League</H1>
-            <Inner>
+        <SafeAreaView>
+            <Container>
+                <H1 style={{ marginBottom: 30 }}>Join a League</H1>
                 <View>
                     <Input onChange={(e) => setLeaguePin(e.nativeEvent.text)} placeholder="Enter league pin" />
-                    <TouchableOpacity onPress={joinLeague}>
+                    <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>
                         <Button disabled={leaguePin === ''}>
                             <ButtonText>Join League</ButtonText>
                         </Button>
                     </TouchableOpacity>
                 </View>
-            </Inner>
-        </Container>
+            </Container>
+        </SafeAreaView>
     )
 }

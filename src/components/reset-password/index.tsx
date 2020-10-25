@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import firebase from 'firebase'
 
@@ -22,8 +22,8 @@ export const ResetPassword = () => {
     const resetPassword = () => {}
 
     return (
-        <Container>
-            <Inner>
+        <SafeAreaView>
+            <Container>
                 <View style={{ marginBottom: 20 }}>
                     <Text>Enter your email and we will send you a link to reset your password </Text>
                     <StyledTextInput placeholder="Enter your email" onChange={(e) => setEmail(e.nativeEvent.text)} />
@@ -33,7 +33,7 @@ export const ResetPassword = () => {
                         <ButtonText>Send password reset link</ButtonText>
                     </Button>
                 </TouchableOpacity>
-            </Inner>
-        </Container>
+            </Container>
+        </SafeAreaView>
     )
 }

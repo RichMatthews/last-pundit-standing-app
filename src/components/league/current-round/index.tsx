@@ -125,7 +125,7 @@ export const CurrentRoundView = ({
                                 </PlayerAndDownArrow>
                             </CurrentRound>
                             <HistoricalRounds expand={listOfExpandedPrevious.includes(index)}>
-                                {player.rounds.length > 1 ? (
+                                {player.rounds.length > 0 ? (
                                     <>
                                         {player.rounds
                                             .filter(

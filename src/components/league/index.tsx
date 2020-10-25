@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Image, ScrollView, Text, View } from 'react-native'
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, View } from 'react-native'
 import styled from 'styled-components'
 
 import { CurrentRoundView } from './current-round'
@@ -12,7 +12,7 @@ import { firebaseApp } from '../../config.js'
 
 import { PREMIER_LEAGUE_TEAMS } from '../../teams'
 import { H1, H2 } from '../../ui-components/headings'
-import { Container, InnerWithHeaderShown } from '../../ui-components/containers'
+import { Container } from '../../ui-components/containers'
 
 interface LeagueProps {
     currentUserId: string
@@ -46,18 +46,6 @@ const LeagueInformationWrapper = styled(SelectionWrapper)`
     display: flex;
 `
 
-const TeamBadge = styled.Image<ImageStyled>`
-    opacity: ${({ lost }) => (lost ? 0.2 : 1)};
-    height: 30px;
-    width: 30px;
-`
-
-const Eliminated = styled.View`
-    border-radius: 3px;
-    background: #de4949;
-    padding: 5px;
-`
-
 const Wrapper = styled.View`
     display: flex;
     flex-direction: column;
@@ -86,7 +74,8 @@ const LeagueNameAndLeagueTypeImage = styled.View`
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
-    margin-left: 10px;
+    padding-left: 10px;
+    width: 100%;
 `
 
 export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => {
@@ -218,8 +207,8 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
     if (loaded === 'league-found') {
         return (
             <ScrollView>
-                <Container>
-                    <InnerWithHeaderShown>
+                <SafeAreaView>
+                    <Container>
                         <LeagueNameAndLeagueTypeImage>
                             <H2>{league.name}</H2>
                             <View>
@@ -281,8 +270,8 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
                                 <LeagueRules />
                             </SelectionWrapper>
                         </Wrapper>
-                    </InnerWithHeaderShown>
-                </Container>
+                    </Container>
+                </SafeAreaView>
             </ScrollView>
         )
     }
@@ -292,7 +281,8 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
     }
 
     return (
-        <Container>
+        <Container style={{ marginTop: 100 }}>
+            <ActivityIndicator size="large" color="#0000ff" />
             <Text>Retrieving League information...</Text>
         </Container>
     )

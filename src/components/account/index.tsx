@@ -7,7 +7,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
 import LinearGradient from 'react-native-linear-gradient'
 
-import { ContainerWithHeaderShown, InnerWithHeaderShown } from '../../ui-components/containers'
+import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
 import { signUserOutOfApplication } from '../../firebase-helpers'
 
@@ -19,6 +19,7 @@ const Section = styled.View`
     align-items: center;
     margin-bottom: 20px;
     padding-bottom: 10px;
+    width: 350px;
 `
 
 export const Account = ({ navigation, setUserExists, user }) => {
@@ -58,35 +59,31 @@ export const Account = ({ navigation, setUserExists, user }) => {
                 </TouchableOpacity>
             </LinearGradient>
 
-            <ContainerWithHeaderShown>
-                <InnerWithHeaderShown>
-                    <H1 style={{ marginBottom: 40, textAlign: 'center' }}> Your Account </H1>
-                    <TouchableOpacity onPress={() => updateEmailHelper()}>
-                        <Section>
-                            <MaterialCommIcon name="email-edit-outline" size={30} style={{ marginRight: 10 }} />
-                            <Text style={{ fontSize: 20, marginBottom: 5 }}>Update Email</Text>
-                        </Section>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => changePasswordHelper()}>
-                        <Section>
-                            <MaterialCommIcon name="lock-outline" size={30} style={{ marginRight: 10 }} />
-                            <Text style={{ fontSize: 20, marginBottom: 5 }}>Change Password</Text>
-                        </Section>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => signUserOutOfApplication({ navigation, setUserExists })}>
-                        <Section
-                            style={{
-                                position: 'absolute',
-                                bottom: -300,
-                                width: '100%',
-                            }}
-                        >
-                            <MaterialIcon name="exit-to-app" size={30} style={{ marginRight: 10 }} />
-                            <Text style={{ fontSize: 20, marginBottom: 5 }}>Sign out</Text>
-                        </Section>
-                    </TouchableOpacity>
-                </InnerWithHeaderShown>
-            </ContainerWithHeaderShown>
+            <H1 style={{ marginTop: 20, textAlign: 'center' }}> Your Account </H1>
+            <Container>
+                <TouchableOpacity onPress={() => updateEmailHelper()}>
+                    <Section>
+                        <MaterialCommIcon name="email-edit-outline" size={30} style={{ marginRight: 10 }} />
+                        <Text style={{ fontSize: 20, marginBottom: 5 }}>Update Email</Text>
+                    </Section>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => changePasswordHelper()}>
+                    <Section>
+                        <MaterialCommIcon name="lock-outline" size={30} style={{ marginRight: 10 }} />
+                        <Text style={{ fontSize: 20, marginBottom: 5 }}>Change Password</Text>
+                    </Section>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => signUserOutOfApplication({ navigation, setUserExists })}>
+                    <Section
+                        style={{
+                            bottom: -200,
+                        }}
+                    >
+                        <MaterialIcon name="exit-to-app" size={30} style={{ marginRight: 10 }} />
+                        <Text style={{ fontSize: 20, marginBottom: 5 }}>Sign out</Text>
+                    </Section>
+                </TouchableOpacity>
+            </Container>
         </View>
     )
 }

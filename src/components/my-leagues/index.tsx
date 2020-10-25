@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 
 import { Button, ButtonText } from '../../ui-components/button'
 import { H1, H2 } from '../../ui-components/headings'
@@ -14,7 +14,9 @@ interface LeagueState {
 const LeagueContainer = styled.View`
     display: flex;
     flex-direction: column;
-    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 50px;
 `
 
 const LeagueItem = styled.View`
@@ -31,9 +33,10 @@ const NoLeagueText = styled(LeagueName)`
 
 export const MyLeagues = ({ navigation, userLeaguesFetchComplete, userLeagues }: any) => {
     return (
-        <Container>
-            <H1>My Leagues</H1>
-            <Inner>
+        <SafeAreaView>
+            <Container>
+                <H1>My Leagues</H1>
+
                 <LeagueContainer>
                     <H2>Private Leagues</H2>
 
@@ -89,7 +92,7 @@ export const MyLeagues = ({ navigation, userLeaguesFetchComplete, userLeagues }:
                         <ButtonText>Click here to join a league</ButtonText>
                     </Button>
                 </TouchableOpacity>
-            </Inner>
-        </Container>
+            </Container>
+        </SafeAreaView>
     )
 }
