@@ -10,6 +10,12 @@ target 'LastPunditStanding' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'appcenter-core', :path => '../node_modules/appcenter'
+
+  pod 'appcenter-analytics', :path => '../node_modules/appcenter-analytics'
+
+  pod 'appcenter-crashes', :path => '../node_modules/appcenter-crashes'
+
   target 'LastPunditStandingTests' do
     inherit! :complete
     # Pods for testing
