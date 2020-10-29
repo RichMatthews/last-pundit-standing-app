@@ -18,18 +18,30 @@ const PROD_CONFIG = {
 }
 const firebaseApp = firebase.initializeApp(PROD_CONFIG)
 
+// fixtures: [
+//     { home: { team: 'Everton', goals: 2 }, away: { team: 'Liverpool', goals: 2 }, result: 'draw' },
+//     { home: { team: 'Chelsea', goals: 3 }, away: { team: 'Southampton', goals: 3 }, result: 'draw' },
+//     { home: { team: 'Man City', goals: 1 }, away: { team: 'Arsenal', goals: 0 }, result: 'Man City' },
+//     { home: { team: 'Newcastle', goals: 1 }, away: { team: 'Man United', goals: 4 }, result: 'Man United' },
+//     { home: { team: 'Sheffield United', goals: 1 }, away: { team: 'Fulham', goals: 1 }, result: 'draw' },
+//     { home: { team: 'Crystal Palace', goals: 1 }, away: { team: 'Brighton', goals: 1 }, result: 'draw' },
+//     { home: { team: 'Spurs', goals: 3 }, away: { team: 'West Ham', goals: 3 }, result: 'draw' },
+//     { home: { team: 'Leicester', goals: 0 }, away: { team: 'Aston Villa', goals: 1 }, result: 'Aston Villa' },
+//     { home: { team: 'West Brom', goals: 0 }, away: { team: 'Burnley', goals: 0 }, result: 'pending' },
+//     { home: { team: 'Leeds', goals: 0 }, away: { team: 'Wolves', goals: 0 }, result: 'pending' },
+// ],
 const CURRENT_GAMEWEEK = {
     fixtures: [
-        { home: { team: 'Everton', goals: 2 }, away: { team: 'Liverpool', goals: 2 }, result: 'draw' },
-        { home: { team: 'Chelsea', goals: 3 }, away: { team: 'Southampton', goals: 3 }, result: 'draw' },
-        { home: { team: 'Man City', goals: 1 }, away: { team: 'Arsenal', goals: 0 }, result: 'Man City' },
-        { home: { team: 'Newcastle', goals: 1 }, away: { team: 'Man United', goals: 4 }, result: 'Man United' },
-        { home: { team: 'Sheffield United', goals: 1 }, away: { team: 'Fulham', goals: 1 }, result: 'draw' },
-        { home: { team: 'Crystal Palace', goals: 1 }, away: { team: 'Brighton', goals: 1 }, result: 'draw' },
-        { home: { team: 'Spurs', goals: 3 }, away: { team: 'West Ham', goals: 3 }, result: 'draw' },
-        { home: { team: 'Leicester', goals: 0 }, away: { team: 'Aston Villa', goals: 1 }, result: 'Aston Villa' },
-        { home: { team: 'West Brom', goals: 0 }, away: { team: 'Burnley', goals: 0 }, result: 'pending' },
-        { home: { team: 'Leeds', goals: 0 }, away: { team: 'Wolves', goals: 0 }, result: 'pending' },
+        { home: { team: 'Aston Villa', goals: 0 }, away: { team: 'Leeds', goals: 3 }, result: 'Leeds' },
+        { home: { team: 'West Ham', goals: 1 }, away: { team: 'Man City', goals: 1 }, result: 'draw' },
+        { home: { team: 'Fulham', goals: 1 }, away: { team: 'Crystal Palace', goals: 2 }, result: 'Crystal Palace' },
+        { home: { team: 'Man United', goals: 0 }, away: { team: 'Chelsea', goals: 0 }, result: 'draw' },
+        { home: { team: 'Liverpool', goals: 2 }, away: { team: 'Sheffield United', goals: 1 }, result: 'Liverpool' },
+        { home: { team: 'Southampton', goals: 2 }, away: { team: 'Everton', goals: 0 }, result: 'Southampton' },
+        { home: { team: 'Wolves', goals: 1 }, away: { team: 'Newcastle', goals: 1 }, result: 'draw' },
+        { home: { team: 'Arsenal', goals: 0 }, away: { team: 'Leicester', goals: 1 }, result: 'Leicester' },
+        { home: { team: 'Brighton', goals: 1 }, away: { team: 'West Brom', goals: 1 }, result: 'draw' },
+        { home: { team: 'Burnley', goals: 0 }, away: { team: 'Spurs', goals: 1 }, result: 'Spurs' },
     ],
 }
 
@@ -107,6 +119,7 @@ const calculateIfTheChoiceWon = ({ currentPlayerGameRound, fixture, game, league
     }
 }
 
+// .filter((league) => league.id === '8hk0btr26u7')
 const calculateGameweekResults = () => {
     return firebaseApp
         .database()
@@ -114,35 +127,33 @@ const calculateGameweekResults = () => {
         .once('value')
         .then((snapshot) => {
             const allLeagues = Object.values(snapshot.val())
-            allLeagues
-                .filter((league) => league.id === '8hk0btr26u7')
-                .forEach((league) => {
-                    const allGames = Object.values(league.games).filter((game) => !game.complete)
-                    allGames.forEach((game) => {
-                        if (game.complete === false) {
-                            const allGamePlayers = Object.values(game.players)
-                            allGamePlayers.forEach((player) => {
-                                const currentPlayerGameRound = player.rounds[game.currentGameRound]
-                                // fix the line below to update firebase if someone has not made a choice
-                                if (
-                                    currentPlayerGameRound &&
-                                    currentPlayerGameRound.choice &&
-                                    currentPlayerGameRound.choice.hasMadeChoice
-                                ) {
-                                    const fixture = findFixture(currentPlayerGameRound.choice)
-                                    calculateIfTheChoiceWon({
-                                        currentPlayerGameRound,
-                                        fixture,
-                                        game,
-                                        league,
-                                        player,
-                                        playingAthome: currentPlayerGameRound.choice.teamPlayingAtHome,
-                                    })
-                                }
-                            })
-                        }
-                    })
+            allLeagues.forEach((league) => {
+                const allGames = Object.values(league.games).filter((game) => !game.complete)
+                allGames.forEach((game) => {
+                    if (game.complete === false) {
+                        const allGamePlayers = Object.values(game.players)
+                        allGamePlayers.forEach((player) => {
+                            const currentPlayerGameRound = player.rounds[game.currentGameRound]
+                            // fix the line below to update firebase if someone has not made a choice
+                            if (
+                                currentPlayerGameRound &&
+                                currentPlayerGameRound.choice &&
+                                currentPlayerGameRound.choice.hasMadeChoice
+                            ) {
+                                const fixture = findFixture(currentPlayerGameRound.choice)
+                                calculateIfTheChoiceWon({
+                                    currentPlayerGameRound,
+                                    fixture,
+                                    game,
+                                    league,
+                                    player,
+                                    playingAthome: currentPlayerGameRound.choice.teamPlayingAtHome,
+                                })
+                            }
+                        })
+                    }
                 })
+            })
             console.log('updating leagues finished')
         })
 }

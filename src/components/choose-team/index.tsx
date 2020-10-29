@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
     Alert,
     Dimensions,
-    Image,
     Modal,
     StyleSheet,
     Text,
@@ -19,11 +18,10 @@ import { Button, ButtonText } from '../../ui-components/button'
 
 import { updateUserGamweekChoice } from '../../firebase-helpers'
 
-import { Container, Inner } from '../../ui-components/containers'
-
 const width = Dimensions.get('window').width
 
 const SectionDivider = styled.View`
+    min-width: 100%;
     width: 100%;
 `
 
@@ -84,8 +82,11 @@ export const ChooseTeam = ({
     }
 
     const setSelectedTeamHelper = (value: any) => {
-        setSelectedTeam(value)
-        setModalOpen(false)
+        console.log(value === '0', 'val')
+        if (value !== '0') {
+            setSelectedTeam(value)
+            // setModalOpen(false)
+        }
     }
 
     const submitChoice = () => {
@@ -143,6 +144,7 @@ export const ChooseTeam = ({
                             selectedValue={selectedTeam}
                             style={{ display: 'flex', width: 150 }}
                         >
+                            <Picker.Item label="Select a team.." value="0" />
                             {calculateTeamsAllowedToPickForCurrentRound().map((item) => {
                                 return <Picker.Item label={item.label} value={item.value} />
                             })}
@@ -159,7 +161,7 @@ export const ChooseTeam = ({
                         )}
                     </SelectedTeam>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={submitChoice}>
+                <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice}>
                     <Button disabled={selectedTeam === null}>
                         <ButtonText>Confirm selection</ButtonText>
                     </Button>

@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Image, TouchableOpacity, Text } from 'react-native'
+import { Dimensions, TouchableOpacity, Text, View } from 'react-native'
+import Modal from 'react-native-modal'
 
 import { PreviousRound } from '../../previous-round'
 import { ShowImageForPlayerChoice } from '../show-image-for-player-choice'
+import { H2 } from '../../../ui-components/headings'
+import { Button, ButtonText } from '../../../ui-components/button'
 
 const Section = styled.View`
     border-radius: 5px;
@@ -58,6 +61,9 @@ const PlayerAndDownArrow = styled.View`
     flex-direction: row;
 `
 
+const windowHeight = Dimensions.get('window').height
+const windowWidth = Dimensions.get('window').width
+
 export const CurrentRoundView = ({
     currentViewedGame,
     currentUserId,
@@ -67,39 +73,141 @@ export const CurrentRoundView = ({
     setCurrentViewedGame,
     setListOfExpandedPreviousHelper,
 }: any) => {
-    const calculateOptionsForGameSelection = () => {
-        let arr: any = []
-        gamesInLeague.forEach((game: any, index: any) => {
-            if (game.complete) {
-                arr.push({ value: index, label: `Game ${index + 1}` })
-            } else {
-                arr.push({ value: index, label: `Current Game` })
-            }
-        })
-        return arr
-    }
+    const [gameSelectModalOpen, setGameSelectModalOpen] = useState(false)
 
     return (
         <CurrentRoundContainer>
-            {/* <SelectContainer>
-                <Select
-                    options={calculateOptionsForGameSelection()}
-                    isSearchable={false}
-                    placeholder="Select a game"
-                    onChange={({ value }: any) => setCurrentViewedGame(value)}
-                    styles={customReactSelectStyles}
-                    value={{
-                        value:
-                            currentViewedGame === gamesInLeague.length - 1
-                                ? gamesInLeague.length - 1
-                                : currentViewedGame,
-                        label:
-                            currentViewedGame === gamesInLeague.length - 1
-                                ? 'Current Game'
-                                : `Game ${currentViewedGame + 1}`,
+            <Modal
+                animationIn={'zoomIn'}
+                animationOut={'zoomOut'}
+                animationInTiming={500}
+                animationOutTiming={500}
+                backdropTransitionOutTiming={0}
+                onBackdropPress={() => setGameSelectModalOpen(false)}
+                isVisible={gameSelectModalOpen}
+            >
+                <View
+                    style={{
+                        alignSelf: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#fff',
+                        borderRadius: 5,
+                        width: windowWidth * 0.8,
+                        height: windowHeight * 0.5,
+                        paddingTop: 50,
+                        margin: 0,
                     }}
-                />
-            </SelectContainer> */}
+                >
+                    <H2>Select a game to view</H2>
+
+                    <View
+                        style={{
+                            alignItems: 'flex-start',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '80%',
+                        }}
+                    >
+                        {gamesInLeague
+                            .sort((x: any, y: any) => y - x)
+                            .map((game: any, index: number) => (
+                                <View style={{ padding: 10, width: '100%' }}>
+                                    <TouchableOpacity onPress={() => setCurrentViewedGame(game)}>
+                                        {game.complete ? (
+                                            <View
+                                                style={{
+                                                    alignItems: 'center',
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                }}
+                                            >
+                                                <Text style={{ fontSize: 17 }}>Game {index} </Text>
+                                                {currentViewedGame.gameId === game.gameId ? (
+                                                    <View
+                                                        style={{
+                                                            height: 20,
+                                                            width: 20,
+                                                            borderRadius: 20,
+                                                            borderWidth: 1,
+                                                            borderColor: '#827ee6',
+                                                            backgroundColor: '#827ee6',
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <View
+                                                        style={{
+                                                            height: 20,
+                                                            width: 20,
+                                                            borderRadius: 20,
+                                                            borderWidth: 1,
+                                                            borderColor: '#827ee6',
+                                                            backgroundColor: '#fff',
+                                                        }}
+                                                    />
+                                                )}
+                                            </View>
+                                        ) : (
+                                            <View
+                                                style={{
+                                                    alignItems: 'center',
+                                                    display: 'flex',
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                }}
+                                            >
+                                                <Text style={{ fontSize: 17 }}>Current Game</Text>
+                                                {currentViewedGame.gameId === game.gameId ? (
+                                                    <View
+                                                        style={{
+                                                            height: 20,
+                                                            width: 20,
+                                                            borderRadius: 20,
+                                                            borderWidth: 1,
+                                                            borderColor: '#827ee6',
+                                                            backgroundColor: '#827ee6',
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <View
+                                                        style={{
+                                                            height: 20,
+                                                            width: 20,
+                                                            borderRadius: 20,
+                                                            borderWidth: 1,
+                                                            borderColor: '#827ee6',
+                                                            backgroundColor: '#fff',
+                                                        }}
+                                                    />
+                                                )}
+                                            </View>
+                                        )}
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                    </View>
+                    <View style={{ bottom: 50, position: 'absolute' }}>
+                        <TouchableOpacity onPress={() => setGameSelectModalOpen(false)}>
+                            <Button>
+                                <ButtonText>View game</ButtonText>
+                            </Button>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+            <TouchableOpacity onPress={() => setGameSelectModalOpen(true)}>
+                <View
+                    style={{
+                        backgroundColor: '#fff',
+                        borderWidth: 1,
+                        borderColor: '#ccc',
+                        padding: 5,
+                        margin: 5,
+                    }}
+                >
+                    <Text>You are viewing the current game</Text>
+                </View>
+            </TouchableOpacity>
             <Container>
                 {Object.values(currentViewedGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>

@@ -8,6 +8,7 @@ export const H1 = styled.Text`
 `
 
 export const H2 = styled.Text`
+    color: #191f30;
     display: flex;
     font-weight: 700;
     margin: 0;

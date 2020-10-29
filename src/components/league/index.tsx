@@ -103,18 +103,18 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
     }, [])
 
     const calculateTeamsAllowedToPickForCurrentRound = () => {
-        if (league.currentRound === 0) {
+        if (currentGame.currentRound === 0) {
             return PREMIER_LEAGUE_TEAMS
         } else {
             const allTeamsForThisLeague = PREMIER_LEAGUE_TEAMS
-            const teamsAlreadyChosen = Object.values(currentGame.players).filter(
-                (player: any) => player.id === currentPlayer.id,
-            )
-            return allTeamsForThisLeague.filter((el) => {
-                return !teamsAlreadyChosen.find((team: any) => team.choice.value === el.value)
+            let teamsAlreadyChosen: any = []
+            currentPlayer.rounds.forEach((round: any) => {
+                if (round.choice.value) {
+                    teamsAlreadyChosen.push(round.choice.value)
+                }
             })
+            return allTeamsForThisLeague.filter((team) => !teamsAlreadyChosen.includes(team.value))
         }
-        return []
     }
 
     const pullLatestLeagueData = () => {
@@ -123,8 +123,6 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
             .ref(`leagues/${leagueId}`)
             .once('value')
             .then((snapshot) => {
-                console.log(league, 'lea')
-                console.log(snapshot.val(), 'a 123')
                 if (snapshot.val()) {
                     if (snapshot.val().games) {
                         const transformPayloadIntoUsableObject = {
@@ -230,7 +228,7 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
                             <SelectionWrapper>
                                 <H2>Team Selection</H2>
                                 <TeamSelectionText>{showTeamSelectionPage()}</TeamSelectionText>
-                                <Text>Round closes on {currentGameweek.endsReadable}</Text>
+                                <Text style={{ fontSize: 18 }}>Round closes on {currentGameweek.endsReadable}</Text>
                             </SelectionWrapper>
                             <SelectionWrapper>
                                 <Fixtures />

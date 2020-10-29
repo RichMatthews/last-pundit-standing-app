@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 
 import { Button, ButtonText } from '../../ui-components/button'
 import { H1, H2 } from '../../ui-components/headings'
-import { Container, Inner } from '../../ui-components/containers'
+import { Container } from '../../ui-components/containers'
 
 interface LeagueState {
     name?: string
@@ -16,7 +16,8 @@ const LeagueContainer = styled.View`
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    margin-top: 50px;
+    margin-top: 20px;
+    width: 300px;
 `
 
 const LeagueItem = styled.View`
@@ -25,7 +26,7 @@ const LeagueItem = styled.View`
 
 const LeagueName = styled.Text`
     color: #827ee6;
-    font-size: 17px;
+    font-size: 20px;
 `
 const NoLeagueText = styled(LeagueName)`
     color: #000;
@@ -87,11 +88,13 @@ export const MyLeagues = ({ navigation, userLeaguesFetchComplete, userLeagues }:
                         </View>
                     )}
                 </LeagueContainer>
-                <TouchableOpacity onPress={() => navigation.navigate('Join')}>
-                    <Button marginTop={100}>
-                        <ButtonText>Click here to join a league</ButtonText>
-                    </Button>
-                </TouchableOpacity>
+                <View style={{ position: 'absolute', bottom: 200 }}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Join')}>
+                        <Button>
+                            <ButtonText>Click here to join a league</ButtonText>
+                        </Button>
+                    </TouchableOpacity>
+                </View>
             </Container>
         </SafeAreaView>
     )
