@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import LinearGradient from 'react-native-linear-gradient'
 import { View } from 'react-native'
 
 const APP_BRAND_COLOR = '#289960'

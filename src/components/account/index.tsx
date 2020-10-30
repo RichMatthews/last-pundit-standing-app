@@ -5,7 +5,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
-import LinearGradient from 'react-native-linear-gradient'
+// import LinearGradient from 'react-native-linear-gradient'
 
 import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
@@ -37,7 +37,7 @@ export const Account = ({ navigation, setUserExists, user }) => {
 
     return (
         <View>
-            <LinearGradient
+            {/* <LinearGradient
                 colors={['#3eb94e', '#3eb9b4']}
                 style={{
                     backgroundColor: '#B972FE',
@@ -57,7 +57,7 @@ export const Account = ({ navigation, setUserExists, user }) => {
                         style={{ position: 'absolute', right: 30, top: -100 }}
                     />
                 </TouchableOpacity>
-            </LinearGradient>
+            </LinearGradient> */}
 
             <H1 style={{ marginTop: 20, textAlign: 'center' }}> Your Account </H1>
             <Container>

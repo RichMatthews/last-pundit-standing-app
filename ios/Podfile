@@ -9,7 +9,6 @@ target 'LastPunditStanding' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
   target 'LastPunditStandingTests' do
     inherit! :complete
