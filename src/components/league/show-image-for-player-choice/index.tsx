@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text } from 'react-native'
+import AntDesignIcon from 'react-native-vector-icons/AntDesign'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
+
 
 import * as Images from '../../../images'
 
@@ -8,31 +10,8 @@ interface ImageStyled {
     lost?: boolean
 }
 
-const Eliminated = styled.View`
-    border: 1px solid red;
-    border-radius: 3px;
-    font-size: 13px;
-    padding: 3px;
+const GameStatusIndicator = styled.View`
     margin-right: 10px;
-`
-
-const EliminatedText = styled.Text`
-    color: red;
-`
-const AwaitingPrediction = styled(Eliminated)`
-    border: 1px solid orange;
-`
-
-const AwaitingPredictionText = styled.Text`
-    color: orange;
-`
-
-const PredictionSubmitted = styled(Eliminated)`
-    border: 1px solid green;
-`
-
-const PredictionSubmittedText = styled.Text`
-    color: green;
 `
 
 const Image = styled.Image<ImageStyled>`
@@ -68,17 +47,17 @@ export const ShowImageForPlayerChoice = ({
 
     if (ALL_OTHER_PLAYERS_ELIMINATED) {
         return (
-            <Eliminated>
-                <EliminatedText>Champion!</EliminatedText>
-            </Eliminated>
+            <GameStatusIndicator>
+               <EntypoIcon name={'trophy'} size={25} color={'gold'} />
+            </GameStatusIndicator>
         )
     }
 
     if (PLAYER_OUT_OF_CURRENT_GAME.length) {
         return (
-            <Eliminated>
-                <EliminatedText>Eliminated</EliminatedText>
-            </Eliminated>
+            <GameStatusIndicator> 
+                <EntypoIcon name={'cross'} size={25} color={'red'} />
+            </GameStatusIndicator>
         )
     }
 
@@ -92,9 +71,9 @@ export const ShowImageForPlayerChoice = ({
             )
         } else {
             return (
-                <AwaitingPrediction>
-                    <AwaitingPredictionText>Awaiting Prediction</AwaitingPredictionText>
-                </AwaitingPrediction>
+                <GameStatusIndicator>
+                    <EntypoIcon name={'time-slot'} size={25} color={'orange'} />
+                </GameStatusIndicator>
             )
         }
     }
@@ -109,24 +88,24 @@ export const ShowImageForPlayerChoice = ({
             )
         } else {
             return (
-                <PredictionSubmitted>
-                    <PredictionSubmittedText>Prediction Submitted</PredictionSubmittedText>
-                </PredictionSubmitted>
+                <GameStatusIndicator>
+                     <AntDesignIcon name={'checkcircleo'} size={25} color={'green'} />
+                </GameStatusIndicator>
             )
         }
     }
 
     if (playersStillAbleToSelectTeams) {
         return (
-            <AwaitingPrediction>
-                <AwaitingPredictionText>Awaiting Prediction</AwaitingPredictionText>
-            </AwaitingPrediction>
+            <GameStatusIndicator>
+                 <EntypoIcon name={'time-slot'} size={25} color={'orange'} />
+            </GameStatusIndicator>
         )
     }
 
     return (
-        <Eliminated>
-            <EliminatedText>Eliminated</EliminatedText>
-        </Eliminated>
+        <GameStatusIndicator>
+            <EntypoIcon name={'cross'} size={25} color={'red'} />
+        </GameStatusIndicator>
     )
 }

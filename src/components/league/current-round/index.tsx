@@ -14,7 +14,10 @@ const Section = styled.View`
     flex-direction: column;
 `
 
-const CurrentRoundContainer = styled(Section)``
+const CurrentRoundContainer = styled(Section)`
+border-bottom-width: 5px;
+border-bottom-color: #ccc;
+`
 
 const CurrentRound = styled.View`
     align-items: center;
@@ -25,9 +28,9 @@ const CurrentRound = styled.View`
 
 const PlayerRow = styled.View<any>`
     background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#d8ede2' : '#fff')};
-    border-radius: 5px;
-    padding: 10px;
-    margin: 0 10px 10px 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: #ccc;
+    padding: 15px;
 `
 
 const Container = styled.View`
@@ -198,14 +201,19 @@ export const CurrentRoundView = ({
             <TouchableOpacity onPress={() => setGameSelectModalOpen(true)}>
                 <View
                     style={{
-                        backgroundColor: '#fff',
                         borderWidth: 1,
                         borderColor: '#ccc',
+                        borderRadius: 5,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignSelf: 'center',
                         padding: 5,
                         margin: 5,
+                        width: 120,
                     }}
                 >
-                    <Text>You are viewing the current game</Text>
+                    <Text>Current Game</Text>
                 </View>
             </TouchableOpacity>
             <Container>

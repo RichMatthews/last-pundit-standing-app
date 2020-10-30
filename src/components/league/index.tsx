@@ -26,15 +26,14 @@ interface ImageStyled {
 const Section = styled.View`
     background: #fff;
     border-radius: 5px;
-    box-shadow: 0 1px 4px rgba(41, 51, 57, 0.1);
     display: flex;
     flex-direction: column;
     padding: 10px;
-    margin-bottom: 10px;
 `
 
 const SelectionWrapper = styled(Section)`
-    margin: 10px 10px 10px 10px;
+    border-bottom-width: 5px;
+    border-bottom-color: #ccc;
 `
 
 const CurrentRoundSelectionWrapper = styled(Section)`
@@ -70,12 +69,8 @@ const TeamSelectionText = styled.Text`
 
 const LeagueNameAndLeagueTypeImage = styled.View`
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     margin-bottom: 15px;
-    padding-left: 10px;
-    width: 100%;
 `
 
 export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => {
@@ -202,17 +197,19 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
         }
     }
 
+//     <View>
+//     <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
+// </View>
+
     if (loaded === 'league-found') {
         return (
             <ScrollView>
                 <SafeAreaView>
                     <Container>
                         <LeagueNameAndLeagueTypeImage>
-                            <H2>{league.name}</H2>
-                            <View>
-                                <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
-                            </View>
+                            <H2 style={{fontSize: 30}}>{league.name}</H2>
                         </LeagueNameAndLeagueTypeImage>
+                        <Text style={{ fontSize: 17 }}>Round closes on {currentGameweek.endsReadable}</Text>
                         <Wrapper>
                             <CurrentRoundSelectionWrapper>
                                 <CurrentRoundView
@@ -228,7 +225,7 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
                             <SelectionWrapper>
                                 <H2>Team Selection</H2>
                                 <TeamSelectionText>{showTeamSelectionPage()}</TeamSelectionText>
-                                <Text style={{ fontSize: 18 }}>Round closes on {currentGameweek.endsReadable}</Text>
+                                
                             </SelectionWrapper>
                             <SelectionWrapper>
                                 <Fixtures />

@@ -9,7 +9,6 @@ export const Container = styled.View`
     display: flex;
     flex-direction: column;
     height: ${height}px;
-    padding: 20px;
     margin-top: 50px;
     width: ${width}px;
 `

@@ -1,5 +1,10 @@
 apply plugin: "com.android.application"
 
+dependencies {
+    def appCenterSdkVersion = '3.3.1'
+    implementation "com.microsoft.appcenter:appcenter-distribute:${appCenterSdkVersion}"
+}
+
 import com.android.build.OutputFile
 
 /**
