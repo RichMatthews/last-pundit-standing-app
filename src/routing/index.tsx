@@ -27,7 +27,7 @@ const AuthStack = ({ resetPassword, updateEmail }: any) => (
     <Stack.Navigator
         screenOptions={{
             animationEnabled: false,
-            cardStyle: { backgroundColor: '#F2F1F7' },
+            cardStyle: { backgroundColor: '#fff' },
             headerShown: false,
             headerTitle: '',
         }}
@@ -41,7 +41,7 @@ const AuthStack = ({ resetPassword, updateEmail }: any) => (
 const Stacks = ({ isSignedIn, setUserExists, userLeagues, userLeaguesFetchComplete, userId }: any) => (
     <Stack.Navigator
         screenOptions={{
-            cardStyle: { backgroundColor: '#F2F1F7' },
+            cardStyle: { backgroundColor: '#fff' },
             headerShown: false,
             headerTitle: '',
         }}

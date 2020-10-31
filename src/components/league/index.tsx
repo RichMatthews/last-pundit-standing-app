@@ -57,9 +57,7 @@ const TextContainer = styled.View`
 
 const LeagueTypeImage = styled.Image`
     resize-mode: contain;
-    flex: 1;
-    margin-right: 10px;
-    height: 35px;
+    height: 30px;
     width: 100px;
 `
 
@@ -207,7 +205,8 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
                 <SafeAreaView>
                     <Container>
                         <LeagueNameAndLeagueTypeImage>
-                            <H2 style={{fontSize: 30}}>{league.name}</H2>
+                            <H2 style={{fontSize: 30, marginBottom: 5}}>{league.name}</H2>
+                            <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
                         </LeagueNameAndLeagueTypeImage>
                         <Text style={{ fontSize: 17 }}>Round closes on {currentGameweek.endsReadable}</Text>
                         <Wrapper>

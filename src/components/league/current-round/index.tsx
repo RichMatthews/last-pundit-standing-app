@@ -27,7 +27,7 @@ const CurrentRound = styled.View`
 `
 
 const PlayerRow = styled.View<any>`
-    background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#d8ede2' : '#fff')};
+    background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#cbcae8' : '#fff')};
     border-bottom-width: 1px;
     border-bottom-color: #ccc;
     padding: 15px;
@@ -51,6 +51,7 @@ const HistoricalRounds = styled.View<any>`
 
 const PlayerName = styled.Text`
     font-size: 15px;
+    font-weight: 700;
     margin-right: 10px;
 `
 
