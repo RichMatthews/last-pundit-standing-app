@@ -6,9 +6,9 @@ var width = Dimensions.get('window').width
 
 export const Container = styled.View`
     align-items: center;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
     height: ${height}px;
-    margin-top: 50px;
     width: ${width}px;
 `

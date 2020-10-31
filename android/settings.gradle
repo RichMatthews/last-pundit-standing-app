@@ -1,4 +1,6 @@
 rootProject.name = 'LastPunditStanding'
+include ':react-native-share'
+project(':react-native-share').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-share/android')
 include ':appcenter-crashes'
 project(':appcenter-crashes').projectDir = new File(rootProject.projectDir, '../node_modules/appcenter-crashes/android')
 include ':appcenter-analytics'

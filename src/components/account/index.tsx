@@ -4,8 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
-
-// import LinearGradient from 'react-native-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient'
 
 import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
@@ -37,8 +36,8 @@ export const Account = ({ navigation, setUserExists, user }) => {
 
     return (
         <View>
-            {/* <LinearGradient
-                colors={['#3eb94e', '#3eb9b4']}
+            <LinearGradient
+                colors={['#827ee6', '#b4b3e8']}
                 style={{
                     backgroundColor: '#B972FE',
                     borderBottomRightRadius: 250,
@@ -46,19 +45,33 @@ export const Account = ({ navigation, setUserExists, user }) => {
                     paddingTop: 150,
                 }}
             >
-                <Text style={{ fontSize: 20, textAlign: 'center' }}>
-                    {user.name} {user.surname}
-                </Text>
+                <View>
+                    <Text
+                        style={{
+                            borderColor: '#fff',
+                            borderWidth: 4,
+                            borderRadius: 85 / 2,
+                            alignSelf: 'center',
+                            lineHeight: 80,
+                            height: 85,
+                            fontSize: 40,
+                            textAlign: 'center',
+                            width: 85,
+                        }}
+                    >
+                        {user.name.split('')[0]}
+                        {user.surname.split('')[0]}
+                    </Text>
+                </View>
                 <TouchableOpacity onPress={() => closeModalHelper()}>
                     <AntIcon
                         name="close"
                         color="#fff"
                         size={30}
-                        style={{ position: 'absolute', right: 30, top: -100 }}
+                        style={{ position: 'absolute', right: 30, top: -150 }}
                     />
                 </TouchableOpacity>
-            </LinearGradient> */}
-
+            </LinearGradient>
             <H1 style={{ marginTop: 20, textAlign: 'center' }}> Your Account </H1>
             <Container>
                 <TouchableOpacity onPress={() => updateEmailHelper()}>

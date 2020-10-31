@@ -15,8 +15,8 @@ const Section = styled.View`
 `
 
 const CurrentRoundContainer = styled(Section)`
-border-bottom-width: 5px;
-border-bottom-color: #ccc;
+    border-bottom-width: 5px;
+    border-bottom-color: #ccc;
 `
 
 const CurrentRound = styled.View`

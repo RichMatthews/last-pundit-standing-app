@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { View } from 'react-native'
 
-const APP_BRAND_COLOR = '#289960'
+const APP_BRAND_COLOR = '#827ee6'
 const APP_BACKGROUND_COLOR = '#F2F1F7'
 
 // background: ${({ disabled }) => (disabled ? 'grey' : '#289960')};

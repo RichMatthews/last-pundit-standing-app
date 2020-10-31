@@ -157,7 +157,7 @@ export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) =
 
     return loading ? (
         <Container>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="#827ee6" />
             <Text>Creating League...</Text>
         </Container>
     ) : (

@@ -8,7 +8,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { Account } from '../components/account'
 import { CreateLeague } from '../components/create-league'
-import { ChooseTeam } from '../components/choose-team'
 import { Home } from '../components/home'
 import { JoinLeague } from '../components/join-league'
 import { MyLeagues } from '../components/my-leagues'
@@ -23,7 +22,7 @@ import { firebaseApp } from '../config.js'
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
-const AuthStack = ({ resetPassword, updateEmail }: any) => (
+const AuthStack = () => (
     <Stack.Navigator
         screenOptions={{
             animationEnabled: false,
@@ -32,16 +31,16 @@ const AuthStack = ({ resetPassword, updateEmail }: any) => (
             headerTitle: '',
         }}
     >
+        <Stack.Screen name="Home">{(props: any) => <Home />}</Stack.Screen>
         <Stack.Screen name="Reset Password">{(props: any) => <ResetPassword />}</Stack.Screen>
         <Stack.Screen name="Update Email">{(props: any) => <UpdateEmail />}</Stack.Screen>
-        <Stack.Screen name="Home">{(props: any) => <Home />}</Stack.Screen>
     </Stack.Navigator>
 )
 
 const Stacks = ({ isSignedIn, setUserExists, userLeagues, userLeaguesFetchComplete, userId }: any) => (
     <Stack.Navigator
         screenOptions={{
-            cardStyle: { backgroundColor: '#fff' },
+            cardStyle: { backgroundColor: '#F2F1F7' },
             headerShown: false,
             headerTitle: '',
         }}
@@ -151,9 +150,7 @@ const TabNavigation = ({ setUserExists, userExists, userLeagues, userLeaguesFetc
                 name="Home"
                 listeners={({ navigation }) => ({
                     tabPress: (event) => {
-                        console.log('press')
                         event.preventDefault()
-                        console.log(userExists)
                         navigation.navigate('Home', { screen: 'Home', resetPassword: false, updateEmail: false })
                     },
                 })}

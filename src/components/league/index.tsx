@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, View } from 'react-native'
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
 import { CurrentRoundView } from './current-round'
 import { LeagueRules } from './league-rules'
 import { ChooseTeam } from '../choose-team'
 import { PageNotFound } from '../404'
-import * as Images from '../../images'
 import { Fixtures } from '../fixtures'
 import { firebaseApp } from '../../config.js'
 
@@ -66,9 +65,12 @@ const TeamSelectionText = styled.Text`
 `
 
 const LeagueNameAndLeagueTypeImage = styled.View`
+    background: #827ee6;
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    padding-top: 35px;
+    width: 100%;
 `
 
 export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => {
@@ -81,6 +83,7 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
     const [loaded, setLoaded] = useState<any>(false)
     const [selectionTimeEnded, setSelectionTimeEnded] = useState(false)
+    const [currentScreenView, setCurrentScreenView] = useState('game')
 
     useEffect(() => {
         firebaseApp
@@ -195,20 +198,101 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
         }
     }
 
-//     <View>
-//     <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
-// </View>
+    const sharePin = () => {
+        const shareOptions = {
+            title: 'Share league pin with friends',
+            message: `Hi, I'm inviting you to join my Last Pundit Standing league. here is the league code: ${league.joinPin}`,
+            url: 'www.example.com',
+            subject: 'Subject',
+        }
+        Share.share(shareOptions)
+    }
 
     if (loaded === 'league-found') {
         return (
             <ScrollView>
-                <SafeAreaView>
+                <SafeAreaView style={{ flex: 0.5, backgroundColor: '#827ee6' }} />
+                <SafeAreaView style={{ flex: 0, backgroundColor: 'transparent' }}>
                     <Container>
                         <LeagueNameAndLeagueTypeImage>
-                            <H2 style={{fontSize: 30, marginBottom: 5}}>{league.name}</H2>
-                            <LeagueTypeImage source={require('../../images/other/premier-league.png')} />
+                            <H2 style={{ color: '#fff', fontSize: 30, marginBottom: 5 }}>{league.name}</H2>
+                            <LeagueTypeImage
+                                source={require('../../images/other/premier-league.png')}
+                                style={{ marginBottom: 20 }}
+                            />
                         </LeagueNameAndLeagueTypeImage>
-                        <Text style={{ fontSize: 17 }}>Round closes on {currentGameweek.endsReadable}</Text>
+                        <View
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                padding: 10,
+                                width: 350,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    backgroundColor: currentScreenView === 'game' ? '#827ee6' : 'transparent',
+                                    borderTopLeftRadius: 5,
+                                    borderColor: '#827ee6',
+                                    borderWidth: 2,
+                                    borderBottomLeftRadius: 5,
+                                    borderRightWidth: 0,
+                                    padding: 5,
+                                    width: '30%',
+                                }}
+                            >
+                                <TouchableOpacity onPress={() => setCurrentScreenView('game')}>
+                                    <Text
+                                        style={{
+                                            color: currentScreenView === 'game' ? '#fff' : '#000',
+                                            fontSize: 17,
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        GAME
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{
+                                    backgroundColor: currentScreenView === 'info' ? '#827ee6' : 'transparent',
+                                    borderTopRightRadius: 5,
+                                    borderColor: '#827ee6',
+                                    borderWidth: 2,
+                                    borderBottomRightRadius: 5,
+                                    borderLeftWidth: 0,
+                                    padding: 5,
+                                    width: '30%',
+                                }}
+                            >
+                                <TouchableOpacity onPress={() => setCurrentScreenView('info')}>
+                                    <Text
+                                        style={{
+                                            color: currentScreenView === 'info' ? '#fff' : '#000',
+                                            fontSize: 17,
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        INFO
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                                // borderTopWidth: 1,
+                                // borderBottomWidth: 1,
+                                borderColor: '#ccc',
+                                padding: 10,
+                                width: '100%',
+                            }}
+                        >
+                            <Text style={{ fontSize: 17, fontWeight: '700', textAlign: 'center' }}>
+                                <Text style={{ fontWeight: '400' }}>Round closes: </Text>
+                                {currentGameweek.endsReadable}
+                            </Text>
+                        </View>
                         <Wrapper>
                             <CurrentRoundSelectionWrapper>
                                 <CurrentRoundView
@@ -224,27 +308,11 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
                             <SelectionWrapper>
                                 <H2>Team Selection</H2>
                                 <TeamSelectionText>{showTeamSelectionPage()}</TeamSelectionText>
-                                
                             </SelectionWrapper>
                             <SelectionWrapper>
                                 <Fixtures />
                             </SelectionWrapper>
                             <LeagueInformationWrapper>
-                                <TextContainer>
-                                    <View
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            alignItems: 'center',
-                                            justifyContent: 'flex-end',
-                                        }}
-                                    >
-                                        <Text>Game Jackpot</Text>
-                                        <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                            <Text style={{ fontSize: 45, fontWeight: 'bold' }}>£20</Text>
-                                        </View>
-                                    </View>
-                                </TextContainer>
                                 <TextContainer>
                                     <View>
                                         <Text style={{ marginBottom: 10 }}>
@@ -253,10 +321,12 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
                                         <Text style={{ marginBottom: 20 }}>
                                             Share this pin {league.joinPin} or simply click one of the apps below
                                         </Text>
-                                        <Image
-                                            source={require('../../images/other/whatsapp.png')}
-                                            style={{ width: 40, height: 40 }}
-                                        />
+                                        <TouchableOpacity onPress={() => sharePin()}>
+                                            <Image
+                                                source={require('../../images/other/whatsapp.png')}
+                                                style={{ width: 40, height: 40 }}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                 </TextContainer>
                             </LeagueInformationWrapper>
@@ -276,8 +346,8 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
 
     return (
         <Container style={{ marginTop: 100 }}>
-            <ActivityIndicator size="large" color="#0000ff" />
-            <Text>Retrieving League information...</Text>
+            <ActivityIndicator size="large" color="#827ee6" />
+            <Text style={{ fontSize: 20 }}>Retrieving League information...</Text>
         </Container>
     )
 }

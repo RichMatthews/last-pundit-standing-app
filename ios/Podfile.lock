@@ -18,6 +18,8 @@ PODS:
   - AppCenterReactNativeShared (3.1.2):
     - AppCenter/Core (= 3.3.4)
   - boost-for-react-native (1.63.0)
+  - BVLinearGradient (2.5.6):
+    - React
   - CocoaAsyncSocket (7.6.4)
   - CocoaLibEvent (1.0.0)
   - DoubleConversion (1.1.6)
@@ -356,6 +358,8 @@ PODS:
     - React-Core
   - RNVectorIcons (7.1.0):
     - React
+  - TouchID (4.4.1):
+    - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -364,6 +368,7 @@ DEPENDENCIES:
   - appcenter-analytics (from `../node_modules/appcenter-analytics/ios`)
   - appcenter-core (from `../node_modules/appcenter/ios`)
   - appcenter-crashes (from `../node_modules/appcenter-crashes/ios`)
+  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
@@ -419,6 +424,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - TouchID (from `../node_modules/react-native-touch-id`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -452,6 +458,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/appcenter/ios"
   appcenter-crashes:
     :path: "../node_modules/appcenter-crashes/ios"
+  BVLinearGradient:
+    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   FBLazyVector:
@@ -520,6 +528,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  TouchID:
+    :path: "../node_modules/react-native-touch-id"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -530,6 +540,7 @@ SPEC CHECKSUMS:
   appcenter-crashes: 5da5dca952c3d1a3eea2d596748d94ec0412fbd1
   AppCenterReactNativeShared: 66667cd2dfad295b84bbf0f462e0e139e2128284
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: cde416483dac037923206447da6e1454df403714
@@ -581,9 +592,10 @@ SPEC CHECKSUMS:
   RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
   RNScreens: 4b488fdf9537bbce829e2910c8cce1d17f6d9be8
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
+  TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   Yoga: 7d13633d129fd179e01b8953d38d47be90db185a
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 66b5abc11c8346274891300fffdc787fc87bf749
+PODFILE CHECKSUM: d2b7a4176eb14db3043b0b5b9f70f65dee3664d5
 
 COCOAPODS: 1.10.0
