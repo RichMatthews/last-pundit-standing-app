@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import { useRoute } from '@react-navigation/native'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome'
@@ -49,6 +49,7 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [error, setError] = useState<any>(null)
+    const [loaded, setLoaded] = useState(true)
 
     useEffect(() => {
         firebaseApp.auth().onAuthStateChanged((user) => {
@@ -74,10 +75,12 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
         <SignUpScreen
             email={email}
             navigation={navigation}
+            name={name}
+            loaded={loaded}
             password={password}
             setEmailHelper={setEmailHelper}
             setPasswordHelper={setPasswordHelper}
-            name={name}
+            setLoaded={setLoaded}
             setName={setName}
             surname={surname}
             setSurname={setSurname}
@@ -86,11 +89,13 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
         <LoginScreen
             email={email}
             error={error}
+            loaded={loaded}
             navigation={navigation}
             password={password}
             setEmailHelper={setEmailHelper}
             setPasswordHelper={setPasswordHelper}
             setError={setError}
+            setLoaded={setLoaded}
             setUserExists={setUserExists}
         />
     )
@@ -99,20 +104,24 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
 const LoginScreen = ({
     email,
     error,
+    loaded,
     navigation,
     password,
     setEmailHelper,
     setError,
+    setLoaded,
     setPasswordHelper,
     setUserExists,
-}) => {
+}: any) => {
     const logUserIn = () => {
-        logUserInToApplication({ email, password, navigation, setError, setUserExists })
+        setLoaded(false)
+        logUserInToApplication({ email, password, navigation, setError, setLoaded, setUserExists })
     }
 
-    return (
-        <Container>
-            <H1>Login</H1>
+    console.log(loaded, 'ld')
+    return loaded ? (
+        <Container style={{ marginTop: 250 }}>
+            <H1 style={{ marginBottom: 50 }}>Login</H1>
 
             <View>
                 {error ? (
@@ -158,17 +167,33 @@ const LoginScreen = ({
                 </SectionDivider>
                 <View>
                     <TouchableOpacity onPress={logUserIn}>
-                        <Button bottom={-20} height={40} right={90} padding={0} position={'absolute'} width={100}>
-                            <FontAwesomeIcons
-                                name={'long-arrow-right'}
-                                size={40}
-                                color={'#fff'}
-                                style={{ textAlign: 'center', alignSelf: 'center' }}
-                            />
-                        </Button>
+                        <View
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Button height={40} padding={0} width={100}>
+                                <FontAwesomeIcons
+                                    name={'long-arrow-right'}
+                                    size={40}
+                                    color={'#fff'}
+                                    style={{ textAlign: 'center', alignSelf: 'center' }}
+                                />
+                            </Button>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </StyledLogInSection>
+        </Container>
+    ) : (
+        <Container style={{ marginTop: 200 }}>
+            <ActivityIndicator size="large" color="#827ee6" />
         </Container>
     )
 }
@@ -176,21 +201,22 @@ const LoginScreen = ({
 const SignUpScreen = ({
     email,
     error,
-    navigation,
+    loaded,
     password,
     name,
     setEmailHelper,
     setError,
     setName,
+    setLoaded,
     setSurname,
     surname,
     setPasswordHelper,
-}) => {
+}: any) => {
     const signUserUp = () => {
         signUserUpToApplication(email, password, name, setError, surname)
     }
 
-    return (
+    return loaded ? (
         <Container>
             <H1>Login</H1>
             <View>
@@ -270,5 +296,9 @@ const SignUpScreen = ({
                 </SectionDivider>
             </StyledLogInSection>
         </Container>
+    ) : (
+        <View>
+            <ActivityIndicator size="large" color="#827ee6" />
+        </View>
     )
 }

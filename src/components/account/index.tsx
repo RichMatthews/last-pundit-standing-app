@@ -72,7 +72,7 @@ export const Account = ({ navigation, setUserExists, user }) => {
                     />
                 </TouchableOpacity>
             </LinearGradient>
-            <H1 style={{ marginTop: 20, textAlign: 'center' }}> Your Account </H1>
+            <H1 style={{ marginTop: 50, marginBottom: 50, textAlign: 'center' }}> Your Account </H1>
             <Container>
                 <TouchableOpacity onPress={() => updateEmailHelper()}>
                     <Section>
@@ -89,7 +89,11 @@ export const Account = ({ navigation, setUserExists, user }) => {
                 <TouchableOpacity onPress={() => signUserOutOfApplication({ navigation, setUserExists })}>
                     <Section
                         style={{
-                            bottom: -200,
+                            position: 'absolute',
+                            bottom: -300,
+                            display: 'flex',
+                            // justifyContent: 'center',
+                            alignSelf: 'center',
                         }}
                     >
                         <MaterialIcon name="exit-to-app" size={30} style={{ marginRight: 10 }} />

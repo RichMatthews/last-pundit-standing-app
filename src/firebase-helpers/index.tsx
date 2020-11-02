@@ -68,16 +68,18 @@ export const getUserLeagues = ({ setUserLeaguesFetchComplete, userId }: any) => 
         })
 }
 
-export const logUserInToApplication = ({ email, password, navigation, setError, setUserExists }: any) => {
+export const logUserInToApplication = ({ email, password, navigation, setError, setLoaded, setUserExists }: any) => {
     firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((res) => {
             // navigation.navigate('Leagues', { screen: 'My Leagues' })
             setUserExists(true)
+            setLoaded(true)
         })
         .catch((error) => {
             setError(error.message)
+            setLoaded(true)
         })
 }
 
