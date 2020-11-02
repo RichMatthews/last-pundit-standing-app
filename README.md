@@ -4,4 +4,4 @@ A React Native app where users can join leagues, submit predictions for the week
 
 The app is using react native and firebase as a backend. 
 
-The app is available to people if they wish to use it for testing purpose
+The app is available to people if they wish to use it for testing purpose, please contact richjmatt26@gmail.com
