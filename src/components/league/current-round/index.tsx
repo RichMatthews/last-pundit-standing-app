@@ -199,22 +199,28 @@ export const CurrentRoundView = ({
                     </View>
                 </View>
             </Modal>
-            <TouchableOpacity onPress={() => setGameSelectModalOpen(true)}>
+            <TouchableOpacity activeOpacity={1} onPress={() => setGameSelectModalOpen(true)}>
                 <View
                     style={{
-                        borderWidth: 1,
-                        borderColor: '#ccc',
-                        borderRadius: 5,
+                        backgroundColor: '#fff',
                         display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        alignSelf: 'center',
+                        alignItems: 'flex-end',
                         padding: 5,
-                        margin: 5,
-                        width: 120,
+                        width: '100%',
                     }}
                 >
-                    <Text>Current Game</Text>
+                    <View
+                        style={{
+                            backgroundColor: '#fff',
+                            borderWidth: 1,
+                            borderColor: '#ccc',
+                            borderRadius: 5,
+                            padding: 5,
+                            width: 150,
+                        }}
+                    >
+                        <Text style={{ fontSize: 15, textAlign: 'center' }}>Select game to view</Text>
+                    </View>
                 </View>
             </TouchableOpacity>
             <Container>
