@@ -138,7 +138,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.4"
     }
     splits {
         abi {
@@ -149,6 +149,12 @@ android {
         }
     }
     signingConfigs {
+        release {
+            storeFile file('rich.keystore')
+            storePassword 'lps2020'
+            keyAlias 'richm'
+            keyPassword 'lps2020'
+        }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
