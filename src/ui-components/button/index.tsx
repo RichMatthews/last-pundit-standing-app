@@ -35,6 +35,7 @@ export const Button = ({
             padding,
             position,
             width,
+            zIndex: 100,
         }}
     >
         {children}

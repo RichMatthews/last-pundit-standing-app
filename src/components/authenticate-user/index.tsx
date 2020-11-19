@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Platform, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import { useRoute } from '@react-navigation/native'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import ReactNativeBiometrics from 'react-native-biometrics'
 
 import { Button } from '../../ui-components/button'
 import { Container } from '../../ui-components/containers'
@@ -52,12 +53,24 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
     const [loaded, setLoaded] = useState(true)
 
     useEffect(() => {
-        firebaseApp.auth().onAuthStateChanged((user) => {
-            if (user) {
-                setUserExists(true)
-            }
-        })
+        console.log('call..')
+        callBiometricAuth()
+        // firebaseApp.auth().onAuthStateChanged((user) => {
+        //     if (user) {
+        //         setUserExists(true)
+        //     }
+        // })
     }, [])
+
+    const callBiometricAuth = async () => {
+        const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
+
+        if (biometryType === ReactNativeBiometrics.FaceID) {
+            console.log('touch id ')
+        } else {
+            console.log('not avail')
+        }
+    }
 
     const setEmailHelper = (e: any) => {
         setError(null)
@@ -118,9 +131,8 @@ const LoginScreen = ({
         logUserInToApplication({ email, password, navigation, setError, setLoaded, setUserExists })
     }
 
-    console.log(loaded, 'ld')
     return loaded ? (
-        <Container style={{ marginTop: 250 }}>
+        <Container style={{ marginTop: Platform.OS === 'ios' ? 250 : 100 }}>
             <H1 style={{ marginBottom: 50 }}>Login</H1>
 
             <View>
@@ -166,10 +178,10 @@ const LoginScreen = ({
                     />
                 </SectionDivider>
                 <View>
-                    <TouchableOpacity onPress={logUserIn}>
+                    <TouchableOpacity onPressIn={logUserIn}>
                         <View
                             style={{
-                                position: 'absolute',
+                                position: Platform.OS === 'ios' ? 'absolute' : 'relative',
                                 top: 0,
                                 left: 0,
                                 right: 0,

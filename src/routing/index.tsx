@@ -43,6 +43,10 @@ const Stacks = ({ isSignedIn, setUserExists, userLeagues, userLeaguesFetchComple
             cardStyle: { backgroundColor: '#F2F1F7' },
             headerShown: false,
             headerTitle: '',
+            headerStyle: {
+                elevation: 0,
+                shadowOpacity: 0,
+            },
         }}
     >
         {isSignedIn ? (
@@ -56,7 +60,15 @@ const Stacks = ({ isSignedIn, setUserExists, userLeagues, userLeaguesFetchComple
                         />
                     )}
                 </Stack.Screen>
-                <Stack.Screen name="League">
+                <Stack.Screen
+                    name="League"
+                    options={{
+                        headerTintColor: '#fff',
+                        headerBackTitle: 'Back to leagues',
+                        headerShown: true,
+                        headerStyle: { backgroundColor: '#827ee6', elevation: 0, shadowOpacity: 0 },
+                    }}
+                >
                     {(props: any) => (
                         <League
                             currentUserId={userId}

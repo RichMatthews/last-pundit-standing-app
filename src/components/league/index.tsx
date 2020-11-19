@@ -1,5 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Image, SafeAreaView, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import {
+    ActivityIndicator,
+    Image,
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    Share,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native'
 import styled from 'styled-components'
 
 import { CurrentRoundView } from './current-round'
@@ -69,11 +79,17 @@ const LeagueNameAndLeagueTypeImage = styled.View`
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-    padding-top: 35px;
+    padding-top: 15px;
     width: 100%;
 `
 
-export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => {
+const wait = (timeout: any) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, timeout)
+    })
+}
+
+export const League = ({ currentUserId, leagueId }: LeagueProps) => {
     const [currentGame, setCurrentGame] = useState<any>({})
     const [currentGameweek, setCurrentGameweek] = useState<any>({})
     const [currentPlayer, setCurrentPlayer] = useState<any>({})
@@ -84,6 +100,13 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
     const [loaded, setLoaded] = useState<any>(false)
     const [selectionTimeEnded, setSelectionTimeEnded] = useState(false)
     const [currentScreenView, setCurrentScreenView] = useState('game')
+    const [refreshing, setRefreshing] = useState(false)
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        pullLatestLeagueData()
+        wait(2000).then(() => setRefreshing(false))
+    }, [])
 
     useEffect(() => {
         firebaseApp
@@ -210,8 +233,7 @@ export const League = ({ currentUserId, leagueId, navigation }: LeagueProps) => 
 
     if (loaded === 'league-found') {
         return (
-            <ScrollView>
-                <SafeAreaView style={{ flex: 0.5, backgroundColor: '#827ee6' }} />
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                 <SafeAreaView style={{ flex: 0, backgroundColor: 'transparent' }}>
                     <Container>
                         <LeagueNameAndLeagueTypeImage>
