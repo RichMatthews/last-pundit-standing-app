@@ -45,11 +45,15 @@ const firebaseApp = firebase.initializeApp(PROD_CONFIG)
 //     ],
 // }
 
+// const CURRENT_GAMEWEEK = {
+//     fixtures: [
+//         { home: { team: 'Wolves', goals: 2 }, away: { team: 'Crystal Palace', goals: 3 }, result: 'Leeds' },
+//         { home: { team: 'West Brom', goals: 0 }, away: { team: 'Spurs', goals: 1 }, result: 'Spurs' },
+//     ],
+// }
+
 const CURRENT_GAMEWEEK = {
-    fixtures: [
-        { home: { team: 'Wolves', goals: 2 }, away: { team: 'Crystal Palace', goals: 3 }, result: 'Leeds' },
-        { home: { team: 'West Brom', goals: 0 }, away: { team: 'Spurs', goals: 1 }, result: 'Spurs' },
-    ],
+    fixtures: [{ home: { team: 'Fulham', goals: 2 }, away: { team: 'Everton', goals: 3 }, result: 'Everton' }],
 }
 
 const findFixture = (choice) => {

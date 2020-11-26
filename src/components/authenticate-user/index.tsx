@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { ActivityIndicator, Platform, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, ActivityIndicator, Platform, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import { useRoute } from '@react-navigation/native'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import ReactNativeBiometrics from 'react-native-biometrics'
-
+import * as LocalAuthentication from 'expo-local-authentication'
+import { Constants } from 'react-native-unimodules'
 import { Button } from '../../ui-components/button'
 import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
+import SecureStorage from 'react-native-secure-storage'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
 import { firebaseApp } from '../../config.js'
@@ -44,32 +45,28 @@ const StyledLogInSection = styled.View`
 `
 
 // box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
-export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
+export const AuthenticateUserScreen = ({ callBiometricAuth, navigation, setUserExists }: any) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
     const [error, setError] = useState<any>(null)
     const [loaded, setLoaded] = useState(true)
+    const currentUser = firebaseApp.auth().currentUser
 
     useEffect(() => {
-        console.log('call..')
-        callBiometricAuth()
+        // callBiometricAuth()
         // firebaseApp.auth().onAuthStateChanged((user) => {
+        //     console.log('user', user)
         //     if (user) {
         //         setUserExists(true)
         //     }
         // })
     }, [])
 
-    const callBiometricAuth = async () => {
-        const { biometryType } = await ReactNativeBiometrics.isSensorAvailable()
-
-        if (biometryType === ReactNativeBiometrics.FaceID) {
-            console.log('touch id ')
-        } else {
-            console.log('not avail')
-        }
+    const saveCredentialsToSecureStorage: any = async () => {
+        await SecureStorage.setItem('secureEmail', email)
+        await SecureStorage.setItem('securePassword', password)
     }
 
     const setEmailHelper = (e: any) => {
@@ -100,11 +97,13 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
         />
     ) : (
         <LoginScreen
+            callBiometricAuth={callBiometricAuth}
             email={email}
             error={error}
             loaded={loaded}
             navigation={navigation}
             password={password}
+            saveCredentialsToSecureStorage={saveCredentialsToSecureStorage}
             setEmailHelper={setEmailHelper}
             setPasswordHelper={setPasswordHelper}
             setError={setError}
@@ -115,11 +114,13 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
 }
 
 const LoginScreen = ({
+    callBiometricAuth,
     email,
     error,
     loaded,
     navigation,
     password,
+    saveCredentialsToSecureStorage,
     setEmailHelper,
     setError,
     setLoaded,
@@ -128,6 +129,7 @@ const LoginScreen = ({
 }: any) => {
     const logUserIn = () => {
         setLoaded(false)
+        saveCredentialsToSecureStorage()
         logUserInToApplication({ email, password, navigation, setError, setLoaded, setUserExists })
     }
 
@@ -202,6 +204,11 @@ const LoginScreen = ({
                     </TouchableOpacity>
                 </View>
             </StyledLogInSection>
+            <TouchableOpacity onPress={callBiometricAuth}>
+                <View style={{ position: 'absolute', bottom: -100, alignSelf: 'center' }}>
+                    <Text>or log in with Face Id</Text>
+                </View>
+            </TouchableOpacity>
         </Container>
     ) : (
         <Container style={{ marginTop: 200 }}>

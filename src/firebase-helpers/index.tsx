@@ -1,3 +1,4 @@
+import { NavigationActions } from 'react-navigation'
 import { firebaseApp } from '../config.js'
 
 export const getCurrentGameweekFixtures = () => {
@@ -68,16 +69,26 @@ export const getUserLeagues = ({ setUserLeaguesFetchComplete, userId }: any) => 
         })
 }
 
-export const logUserInToApplication = ({ email, password, navigation, setError, setLoaded, setUserExists }: any) => {
-    firebaseApp
+export const logUserInToApplication = ({
+    email,
+    password,
+    navigation,
+    setError,
+    setLoaded,
+    setUserExists,
+    splash,
+}: any) => {
+    return firebaseApp
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then((res) => {
             // navigation.navigate('Leagues', { screen: 'My Leagues' })
             setUserExists(true)
             setLoaded(true)
+            splash.hide()
         })
         .catch((error) => {
+            console.log('err??')
             setError(error.message)
             setLoaded(true)
         })
@@ -117,7 +128,14 @@ export const signUserOutOfApplication = ({ navigation, setUserExists }) => {
         .signOut()
         .then(() => {
             setUserExists(false)
-            navigation.navigate('Leagues')
+            navigation.navigate('Leagues', { previous_screen: 'CURRENT_SCREEN' })
+            // const a = NavigationActions.navigate({
+            //     routeName: 'Account',
+            //     params: { previous_screen: 'SIGN_OUT' },
+            //     action: NavigationActions.navigate({ routeName: 'Leagues' }),
+            // })
+
+            // navigation.dispatch(a)
         })
         .catch((e) => console.log(e))
 }
@@ -129,7 +147,7 @@ export const getLeagueCreatorInformation = (userId: string) => {
             .ref(`/users/${userId}`)
             .once('value')
             .then((snapshot) => {
-                const playerName: any = snapshot.val().name + ' ' + snapshot.val().surname
+                const playerName: any = snapshot.val().name.trim() + ' ' + snapshot.val().surname.trim()
                 return {
                     id: userId,
                     name: playerName,
@@ -148,7 +166,6 @@ export const joinLeagueAndAddLeagueToListOfUserLeagues = ({ league, leagueAndUse
             if (error) {
                 alert('Failed to join league, please try again.')
             } else {
-                console.log('navigate????')
                 navigation.navigate('My Leagues', { id: league.id })
             }
         })

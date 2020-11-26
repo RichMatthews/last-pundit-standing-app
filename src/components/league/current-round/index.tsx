@@ -12,6 +12,7 @@ const Section = styled.View`
     border-radius: 5px;
     display: flex;
     flex-direction: column;
+    width: 350px;
 `
 
 const CurrentRoundContainer = styled(Section)`
@@ -27,7 +28,6 @@ const CurrentRound = styled.View`
 `
 
 const PlayerRow = styled.View<any>`
-    background: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#cbcae8' : '#fff')};
     border-bottom-width: 1px;
     border-bottom-color: #ccc;
     padding: 15px;
@@ -50,9 +50,9 @@ const HistoricalRounds = styled.View<any>`
 `
 
 const PlayerName = styled.Text`
+    color: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#827ee6' : 'black')};
     font-size: 15px;
     font-weight: 700;
-    margin-right: 10px;
 `
 
 const SelectContainer = styled.View`
@@ -94,7 +94,7 @@ export const CurrentRoundView = ({
                     style={{
                         alignSelf: 'center',
                         alignItems: 'center',
-                        backgroundColor: '#fff',
+                        backgroundColor: 'transparent',
                         borderRadius: 5,
                         width: windowWidth * 0.8,
                         height: windowHeight * 0.5,
@@ -199,40 +199,15 @@ export const CurrentRoundView = ({
                     </View>
                 </View>
             </Modal>
-            <TouchableOpacity activeOpacity={1} onPress={() => setGameSelectModalOpen(true)}>
-                <View
-                    style={{
-                        backgroundColor: '#fff',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        padding: 5,
-                        width: '100%',
-                    }}
-                >
-                    <View
-                        style={{
-                            backgroundColor: '#fff',
-                            borderWidth: 1,
-                            borderColor: '#ccc',
-                            borderRadius: 5,
-                            padding: 5,
-                            width: 150,
-                        }}
-                    >
-                        <Text style={{ fontSize: 15, textAlign: 'center' }}>Select game to view</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
+
             <Container>
                 {Object.values(currentViewedGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        <PlayerRow
-                            key={player.id}
-                            isCurrentLoggedInPlayer={player.id === currentUserId}
-                            value="Current Round"
-                        >
+                        <PlayerRow key={player.id} value="Current Round">
                             <CurrentRound>
-                                <PlayerName>{player.name}</PlayerName>
+                                <PlayerName isCurrentLoggedInPlayer={player.id === currentUserId}>
+                                    {player.name}
+                                </PlayerName>
                                 <PlayerAndDownArrow>
                                     <ShowImageForPlayerChoice
                                         currentViewedGame={currentViewedGame}

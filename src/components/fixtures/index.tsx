@@ -109,7 +109,3 @@ export const Fixtures = () => {
         </TouchableOpacity>
     )
 }
-// const HistoricalRounds = styled.View<any>`
-//     display: ${({ expand }) => (expand ? 'flex' : 'none')};
-//     margin: 15px;
-// `
