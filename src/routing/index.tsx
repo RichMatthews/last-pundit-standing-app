@@ -8,6 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
 import * as LocalAuthentication from 'expo-local-authentication'
 import SecureStorage from 'react-native-secure-storage'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Account } from '../components/account'
 import { CreateLeague } from '../components/create-league'
@@ -19,8 +20,10 @@ import { AuthenticateUserScreen } from '../components/authenticate-user'
 import { ResetPassword } from '../components/reset-password'
 import { UpdateEmail } from '../components/update-email'
 import { logUserInToApplication, signUserUpToApplication } from '../firebase-helpers'
+import { getLeagues } from 'src/redux/reducer/leagues'
+import { getCurrentUser } from 'src/redux/reducer/user'
 
-import { getUserLeagues, getUserInformation } from '../firebase-helpers'
+import { getUserInformation } from '../firebase-helpers'
 import { firebaseApp } from '../config.js'
 
 const Tab = createBottomTabNavigator()
@@ -45,7 +48,7 @@ const Stacks = ({
     callBiometricAuth,
     isSignedIn,
     setUserExists,
-    userLeagues,
+    // userLeagues,
     userLeaguesFetchComplete,
     userId,
 }: any) => (
@@ -67,7 +70,7 @@ const Stacks = ({
                     {(props: any) => (
                         <MyLeagues
                             navigation={props.navigation}
-                            userLeagues={userLeagues}
+                            // userLeagues={userLeagues}
                             userLeaguesFetchComplete={userLeaguesFetchComplete}
                         />
                     )}
@@ -151,7 +154,7 @@ const TabNavigation = ({
     callBiometricAuth,
     setUserExists,
     userExists,
-    userLeagues,
+    // userLeagues,
     userLeaguesFetchComplete,
     userId,
 }: any) => {
@@ -188,7 +191,7 @@ const TabNavigation = ({
                             callBiometricAuth={callBiometricAuth}
                             isSignedIn={userExists}
                             userLeaguesFetchComplete={userLeaguesFetchComplete}
-                            userLeagues={userLeagues}
+                            // userLeagues={userLeagues}
                             userId={userId}
                             setUserExists={setUserExists}
                         />
@@ -244,18 +247,18 @@ const TabNavigation = ({
 }
 
 export const Routing = () => {
-    const [userLeagues, setUserLeagues] = useState([])
     const [userExists, setUserExists] = useState(false)
     const [user, setUser] = useState({ name: '' })
     const [userLeaguesFetchComplete, setUserLeaguesFetchComplete] = useState(false)
     const currentUser = firebaseApp.auth().currentUser
-
+    const dispatch = useDispatch()
     useEffect(() => {
         async function getUser() {
             if (currentUser) {
                 console.log('we have a user')
-                const userInfo = await getUserInformation(currentUser.uid)
-                fetchUserLeagues(userInfo.id)
+                const userInfo = await dispatch(getCurrentUser({ userId: currentUser.uid }))
+                console.log('happening afteR??????????')
+                await dispatch(getLeagues({ setUserLeaguesFetchComplete, userId: currentUser.uid }))
                 setUserExists(true)
                 setUser(userInfo)
                 SplashScreen.hide()
@@ -321,10 +324,10 @@ export const Routing = () => {
         }
     }
 
-    const fetchUserLeagues = async (userId: any) => {
-        const userLeagues: any = await getUserLeagues({ setUserLeaguesFetchComplete, userId })
-        setUserLeagues(userLeagues)
-    }
+    // const fetchUserLeagues = async (userId: any) => {
+    //     const userLeagues: any = await getUserLeagues({ setUserLeaguesFetchComplete, userId })
+    //     setUserLeagues(userLeagues)
+    // }
 
     return (
         <NavigationContainer>
@@ -335,7 +338,7 @@ export const Routing = () => {
                             callBiometricAuth={callBiometricAuth}
                             setUserExists={setUserExists}
                             userExists={userExists}
-                            userLeagues={userLeagues}
+                            // userLeagues={userLeagues}
                             userLeaguesFetchComplete={userLeaguesFetchComplete}
                             userId={user && user.id}
                         />

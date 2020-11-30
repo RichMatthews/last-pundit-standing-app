@@ -176,7 +176,7 @@ const calculateGameweekResults = () => {
 const updateWinOrLose = ({ game, league, roundResult, player }) => {
     return firebaseApp
         .database()
-        .ref(`leagues/${league.id}/games/${game.gameId}/players/${player.id}/rounds/${game.currentGameRound}`)
+        .ref(`leagues/${league.id}/games/${game.id}/players/${player.id}/rounds/${game.currentGameRound}`)
         .update({ choice: roundResult }, (error) => {
             if (error) {
                 console.log('ERROR!:', error)
@@ -189,7 +189,7 @@ const updateWinOrLose = ({ game, league, roundResult, player }) => {
 const updatePlayerStatus = ({ eliminated, game, league, player }) => {
     return firebaseApp
         .database()
-        .ref(`leagues/${league.id}/games/${game.gameId}/players/${player.id}`)
+        .ref(`leagues/${league.id}/games/${game.id}/players/${player.id}`)
         .update({ hasBeenEliminated: eliminated }, (error) => {
             if (error) {
                 console.log('ERROR!:', error)
@@ -202,7 +202,7 @@ const updatePlayerStatus = ({ eliminated, game, league, player }) => {
 const updateCurrentGameStatus = ({ game, league }) => {
     return firebaseApp
         .database()
-        .ref(`leagues/${league.id}/games/${game.gameId}`)
+        .ref(`leagues/${league.id}/games/${game.id}`)
         .once('value')
         .then((snapshot) => {
             const allPlayers = Object.values(snapshot.val().players)
@@ -237,7 +237,7 @@ const updateGameWithWinner = () => {}
 const updateGameStillInProgress = ({ game, league, remainingPlayers, roundId }) => {
     firebaseApp
         .database()
-        .ref(`leagues/${league.id}/games/${game.gameId}`)
+        .ref(`leagues/${league.id}/games/${game.id}`)
         .update({ currentGameRound: roundId }, (error) => {
             if (error) {
                 console.log('ERROR!:', error)
@@ -248,7 +248,7 @@ const updateGameStillInProgress = ({ game, league, remainingPlayers, roundId }) 
     return remainingPlayers.forEach((player) => {
         return firebaseApp
             .database()
-            .ref(`leagues/${league.id}/games/${game.gameId}/players/${player.id}/rounds/${roundId}`)
+            .ref(`leagues/${league.id}/games/${game.id}/players/${player.id}/rounds/${roundId}`)
             .update({ choice: { hasMadeChoice: false } }, (error) => {
                 if (error) {
                     console.log('ERROR!:', error)

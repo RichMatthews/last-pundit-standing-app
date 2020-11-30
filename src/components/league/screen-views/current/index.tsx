@@ -10,6 +10,7 @@ import {
     View,
 } from 'react-native'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 
 import { CurrentRoundView } from '../../current-round'
 import { ChooseTeam } from '../../../choose-team'
@@ -46,10 +47,6 @@ const CurrentRoundSelectionWrapper = styled(Section)`
     padding: 0;
 `
 
-const LeagueInformationWrapper = styled(SelectionWrapper)`
-    display: flex;
-`
-
 const Wrapper = styled.View`
     display: flex;
     flex-direction: column;
@@ -71,24 +68,20 @@ const wait = (timeout: any) => {
 }
 
 export const CurrentGame = ({
-    currentGame,
-    currentGameweek,
-    currentPlayer,
-    currentViewedGame,
     currentUserId,
     league,
     gamesInLeague,
     listOfExpandedPrevious,
     loaded,
-    selectionTimeEnded,
-    currentScreenView,
     refreshing,
     pullLatestLeagueData,
     setRefreshing,
-    calculateTeamsAllowedToPickForCurrentRound,
-    setCurrentViewedGame,
     setListOfExpandedPrevious,
 }: any) => {
+    const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
+    const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
+    console.log(currentPlayer, 'cp')
+
     const onRefresh = useCallback(() => {
         setRefreshing(true)
         pullLatestLeagueData()
@@ -109,13 +102,12 @@ export const CurrentGame = ({
         } else if (currentRound && currentRound.choice.hasMadeChoice === false) {
             return (
                 <ChooseTeam
-                    calculateTeamsAllowedToPickForCurrentRound={calculateTeamsAllowedToPickForCurrentRound}
-                    pullLatestLeagueData={pullLatestLeagueData}
                     currentRound={currentGameRound}
                     currentUserId={currentUserId}
-                    gameId={currentGame.gameId}
-                    leagueId={league.id}
+                    currentGame={currentGame}
+                    league={league}
                     leagueOnly={true}
+                    pullLatestLeagueData={pullLatestLeagueData}
                 />
             )
         } else if (currentRound && currentRound.choice.hasMadeChoice) {
@@ -149,12 +141,10 @@ export const CurrentGame = ({
                         <Wrapper>
                             <CurrentRoundSelectionWrapper>
                                 <CurrentRoundView
+                                    currentGame={currentGame}
                                     currentUserId={currentUserId}
-                                    currentViewedGame={currentViewedGame}
                                     gamesInLeague={gamesInLeague}
                                     listOfExpandedPrevious={listOfExpandedPrevious}
-                                    selectionTimeEnded={selectionTimeEnded}
-                                    setCurrentViewedGame={setCurrentViewedGame}
                                     setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
                                 />
                             </CurrentRoundSelectionWrapper>

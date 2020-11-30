@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import * as Images from '../../images'
 import { CURRENT_GAMEWEEK } from '../../admin/current-week'
 import { Button, ButtonText } from '../../ui-components/button'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { updateUserGamweekChoice } from '../../firebase-helpers'
 
@@ -44,17 +45,11 @@ const TeamBadge = styled.Image`
     width: 25px;
 `
 
-export const ChooseTeam = ({
-    calculateTeamsAllowedToPickForCurrentRound,
-    currentRound,
-    currentUserId,
-    gameId,
-    leagueId,
-    leagueOnly,
-    pullLatestLeagueData,
-}: any) => {
+export const ChooseTeam = ({ currentRound, currentUserId, league, pullLatestLeagueData }: any) => {
     const [selectedTeam, setSelectedTeam] = useState<any>(null)
     const [modalOpen, setModalOpen] = useState(false)
+    const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
+    const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
 
     const findOpponent = () => {
         const selectedTeamFixture: any = CURRENT_GAMEWEEK.fixtures.find(
@@ -120,7 +115,7 @@ export const ChooseTeam = ({
             value: selectedTeam,
         }
 
-        updateUserGamweekChoice({ choice, currentRound, currentUserId, gameId, leagueId, pullLatestLeagueData })
+        updateUserGamweekChoice({ choice, currentRound, currentUserId, currentGame, league, pullLatestLeagueData })
     }
 
     return (
@@ -145,7 +140,11 @@ export const ChooseTeam = ({
                             style={{ display: 'flex', width: 150 }}
                         >
                             <Picker.Item label="Select a team.." value="0" />
-                            {calculateTeamsAllowedToPickForCurrentRound().map((item) => {
+                            {calculateTeamsAllowedToPickForCurrentRound({
+                                currentGame,
+                                currentPlayer,
+                                leagueTeams: PREMIER_LEAGUE_TEAMS,
+                            }).map((item) => {
                                 return <Picker.Item label={item.label} value={item.value} />
                             })}
                         </Picker>

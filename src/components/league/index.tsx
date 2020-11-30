@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Text, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { LeagueInfo } from './screen-views/info'
-import { CurrentGame } from './screen-views/current'
-import { PreviousGames } from './screen-views/previous'
-import { ScreenSelection } from './screen-selection'
+import { LeagueInfo } from 'src/components/league/screen-views/info'
+import { CurrentGame } from 'src/components/league/screen-views/current'
+import { PreviousGames } from 'src/components/league/screen-views/previous'
+import { ScreenSelection } from 'src/components/league/screen-selection'
 
-import { firebaseApp } from '../../config.js'
-import { PREMIER_LEAGUE_TEAMS } from '../../teams'
+import { firebaseApp } from 'src/config.js'
+import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
 
-import { H1, H2 } from '../../ui-components/headings'
+import { H2 } from 'src/ui-components/headings'
+import { getCurrentGame } from 'src/redux/reducer/current-game'
+import { setCurrentPlayer } from 'src/redux/reducer/current-player'
 
 const LeagueNameAndLeagueTypeImage = styled.View`
     background: #827ee6;
@@ -27,49 +30,20 @@ const LeagueTypeImage = styled.Image`
     width: 100px;
 `
 
-export const League = ({ currentUserId, leagueId }: any) => {
+export const League = ({ leagueId }: any) => {
     const [currentScreenView, setCurrentScreenView] = useState('game')
     const [currentGame, setCurrentGame] = useState<any>({})
     const [currentGameweek, setCurrentGameweek] = useState<any>({})
-    const [currentPlayer, setCurrentPlayer] = useState<any>({})
-    const [currentViewedGame, setCurrentViewedGame] = useState<any>({})
     const [league, setLeague] = useState<any>({ name: '', games: [] })
     const [gamesInLeague, setAllGamesInCurrentLeague] = useState<any>({})
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
     const [loaded, setLoaded] = useState<any>(false)
-    const [selectionTimeEnded, setSelectionTimeEnded] = useState(false)
     const [refreshing, setRefreshing] = useState(false)
-
-    useEffect(() => {
-        firebaseApp
-            .database()
-            .ref(`information`)
-            .once('value')
-            .then((snapshot) => {
-                setCurrentGameweek(snapshot.val().gameweek.current)
-                if (Math.ceil(Date.now() / 1000) < snapshot.val().gameweek.current.ends) {
-                    setSelectionTimeEnded(true)
-                }
-            })
-    }, [])
-
-    const calculateTeamsAllowedToPickForCurrentRound = () => {
-        if (currentGame.currentRound === 0) {
-            return PREMIER_LEAGUE_TEAMS
-        } else {
-            const allTeamsForThisLeague = PREMIER_LEAGUE_TEAMS
-            let teamsAlreadyChosen: any = []
-            currentPlayer.rounds.forEach((round: any) => {
-                if (round.choice.value) {
-                    teamsAlreadyChosen.push(round.choice.value)
-                }
-            })
-            return allTeamsForThisLeague.filter((team) => !teamsAlreadyChosen.includes(team.value))
-        }
-    }
+    const dispatch = useDispatch()
+    const currentUser = useSelector((store: { user: any }) => store.user)
 
     const pullLatestLeagueData = () => {
-        firebaseApp
+        return firebaseApp
             .database()
             .ref(`leagues/${leagueId}`)
             .once('value')
@@ -81,16 +55,18 @@ export const League = ({ currentUserId, leagueId }: any) => {
                             games: Object.values(snapshot.val().games),
                         }
                         const currentGame: any = Object.values(snapshot.val().games).find((game: any) => !game.complete)
-                        setCurrentGame(currentGame)
+                        const players = Object.values(currentGame.players)
+                        const currentPlayer = players.find((player: any) => player.id === currentUser.id)
+
+                        dispatch(getCurrentGame({ currentGame }))
                         setAllGamesInCurrentLeague(transformPayloadIntoUsableObject.games)
                         setLeague(transformPayloadIntoUsableObject)
-                        setCurrentViewedGame(currentGame)
-                        const players = Object.values(currentGame.players)
-                        const foundPlayer = players.filter((player: any) => player.id === currentUserId)
-                        if (!foundPlayer.length) {
+                        console.log('CURRENTPLAYER:::', currentPlayer)
+                        if (!currentPlayer) {
                             // return history.push('/home')
+                            return
                         }
-                        setCurrentPlayer(foundPlayer[0])
+                        dispatch(setCurrentPlayer({ currentPlayer }))
                         setLoaded('league-found')
                     } else {
                         setLeague(snapshot.val())
@@ -100,6 +76,10 @@ export const League = ({ currentUserId, leagueId }: any) => {
                     setLoaded('no-league-found')
                     return null
                 }
+            })
+            .catch((e) => {
+                console.log(e)
+                console.log('error somewhere pulling')
             })
     }
 
@@ -115,24 +95,19 @@ export const League = ({ currentUserId, leagueId }: any) => {
         }
         return (
             <CurrentGame
-                currentUserId={currentUserId}
-                leagueId={leagueId}
+                league={league}
+                listOfExpandedPrevious={listOfExpandedPrevious}
+                setListOfExpandedPrevious={setListOfExpandedPrevious}
+                pullLatestLeagueData={pullLatestLeagueData}
+                //props to grab from redux instead
                 currentGame={currentGame}
                 currentGameweek={currentGameweek}
-                currentPlayer={currentPlayer}
-                currentViewedGame={currentViewedGame}
-                league={league}
                 gamesInLeague={gamesInLeague}
-                listOfExpandedPrevious={listOfExpandedPrevious}
                 loaded={loaded}
-                selectionTimeEnded={selectionTimeEnded}
                 currentScreenView={currentScreenView}
                 refreshing={refreshing}
-                pullLatestLeagueData={pullLatestLeagueData}
                 setRefreshing={setRefreshing}
                 setCurrentScreenView={setCurrentScreenView}
-                calculateTeamsAllowedToPickForCurrentRound={calculateTeamsAllowedToPickForCurrentRound}
-                setListOfExpandedPrevious={setListOfExpandedPrevious}
             />
         )
     }

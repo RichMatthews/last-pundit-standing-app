@@ -1,4 +1,3 @@
-import { NavigationActions } from 'react-navigation'
 import { firebaseApp } from '../config.js'
 
 export const getCurrentGameweekFixtures = () => {
@@ -25,10 +24,10 @@ export const getCurrentGameweekEndTime = () => {
         })
 }
 
-export const getUserInformation = (uid: string) => {
+export const getUserInformation = ({ userId }) => {
     return firebaseApp
         .database()
-        .ref(`users/${uid}`)
+        .ref(`users/${userId}`)
         .once('value')
         .then((snapshot) => {
             return snapshot.val()
@@ -38,14 +37,14 @@ export const getUserInformation = (uid: string) => {
 export const updateUserGamweekChoice = ({
     choice,
     currentRound,
-    currentUserId,
-    gameId,
-    leagueId,
+    currentUser,
+    game,
+    league,
     pullLatestLeagueData,
 }: any) => {
     firebaseApp
         .database()
-        .ref(`leagues/${leagueId}/games/${gameId}/players/${currentUserId}/rounds/${currentRound}`)
+        .ref(`leagues/${league.id}/games/${game.id}/players/${currentUser.id}/rounds/${currentRound}`)
         .update({ choice }, (error) => {
             if (error) {
                 alert('Oops something went wrong. Please try again or contact admin')
@@ -67,6 +66,7 @@ export const getUserLeagues = ({ setUserLeaguesFetchComplete, userId }: any) => 
             }
             return []
         })
+        .catch((e) => console.log('ERROR:', e))
 }
 
 export const logUserInToApplication = ({

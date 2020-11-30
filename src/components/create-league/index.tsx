@@ -105,7 +105,7 @@ export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) =
                     [newGameId]: {
                         complete: false,
                         currentGameRound: 0,
-                        gameId: newGameId,
+                        id: newGameId,
                         players: {
                             [currentUserId]: {
                                 id: currentUserId,

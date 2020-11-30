@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 
-
 import * as Images from '../../../images'
+
+import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
 
 interface ImageStyled {
     lost?: boolean
@@ -21,15 +22,10 @@ const Image = styled.Image<ImageStyled>`
     width: 25px;
 `
 
-export const ShowImageForPlayerChoice = ({
-    currentViewedGame,
-    isCurrentLoggedInPlayer,
-    player,
-    playersStillAbleToSelectTeams,
-}: any) => {
+export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer, player }: any) => {
     const PLAYER_OUT_OF_CURRENT_GAME = player.rounds.filter((round: any) => round.choice.result === 'lost')
-    const ALL_PLAYERS_IN_CURRENT_GAME = Object.values(currentViewedGame.players)
-    const CURRENT_ROUND_WITHIN_CURRENT_GAME = currentViewedGame.currentGameRound
+    const ALL_PLAYERS_IN_CURRENT_GAME = Object.values(currentGame.players)
+    const CURRENT_ROUND_WITHIN_CURRENT_GAME = currentGame.currentGameRound
 
     const OTHER_PLAYERS_EXCEPT_CURRENT_LOGGED_IN_PLAYER = ALL_PLAYERS_IN_CURRENT_GAME.filter(
         (play: any) => play.id !== player.id,
@@ -48,14 +44,14 @@ export const ShowImageForPlayerChoice = ({
     if (ALL_OTHER_PLAYERS_ELIMINATED) {
         return (
             <GameStatusIndicator>
-               <EntypoIcon name={'trophy'} size={25} color={'gold'} />
+                <EntypoIcon name={'trophy'} size={25} color={'gold'} />
             </GameStatusIndicator>
         )
     }
 
     if (PLAYER_OUT_OF_CURRENT_GAME.length) {
         return (
-            <GameStatusIndicator> 
+            <GameStatusIndicator>
                 <EntypoIcon name={'cross'} size={25} color={'red'} />
             </GameStatusIndicator>
         )
@@ -89,16 +85,16 @@ export const ShowImageForPlayerChoice = ({
         } else {
             return (
                 <GameStatusIndicator>
-                     <AntDesignIcon name={'checkcircleo'} size={25} color={'green'} />
+                    <AntDesignIcon name={'checkcircleo'} size={25} color={'green'} />
                 </GameStatusIndicator>
             )
         }
     }
 
-    if (playersStillAbleToSelectTeams) {
+    if (gameweekSelectionTimeEnded()) {
         return (
             <GameStatusIndicator>
-                 <EntypoIcon name={'time-slot'} size={25} color={'orange'} />
+                <EntypoIcon name={'time-slot'} size={25} color={'orange'} />
             </GameStatusIndicator>
         )
     }

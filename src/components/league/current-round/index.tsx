@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Dimensions, TouchableOpacity, Text, View } from 'react-native'
 import Modal from 'react-native-modal'
+import Collapsible from 'react-native-collapsible'
+import { useSelector } from 'react-redux'
 
 import { PreviousRound } from '../../previous-round'
 import { ShowImageForPlayerChoice } from '../show-image-for-player-choice'
@@ -44,8 +46,9 @@ const ExpandImage = styled.Image<any>`
     width: 10px;
 `
 
+// display: ${({ expand }) => (expand ? 'flex' : 'none')};
 const HistoricalRounds = styled.View<any>`
-    display: ${({ expand }) => (expand ? 'flex' : 'none')};
+    display: flex;
     margin: 15px;
 `
 
@@ -68,140 +71,13 @@ const PlayerAndDownArrow = styled.View`
 const windowHeight = Dimensions.get('window').height
 const windowWidth = Dimensions.get('window').width
 
-export const CurrentRoundView = ({
-    currentViewedGame,
-    currentUserId,
-    gamesInLeague,
-    listOfExpandedPrevious,
-    selectionTimeEnded,
-    setCurrentViewedGame,
-    setListOfExpandedPreviousHelper,
-}: any) => {
-    const [gameSelectModalOpen, setGameSelectModalOpen] = useState(false)
+export const CurrentRoundView = ({ currentUserId, listOfExpandedPrevious, setListOfExpandedPreviousHelper }: any) => {
+    const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
 
     return (
         <CurrentRoundContainer>
-            <Modal
-                animationIn={'zoomIn'}
-                animationOut={'zoomOut'}
-                animationInTiming={500}
-                animationOutTiming={500}
-                backdropTransitionOutTiming={0}
-                onBackdropPress={() => setGameSelectModalOpen(false)}
-                isVisible={gameSelectModalOpen}
-            >
-                <View
-                    style={{
-                        alignSelf: 'center',
-                        alignItems: 'center',
-                        backgroundColor: 'transparent',
-                        borderRadius: 5,
-                        width: windowWidth * 0.8,
-                        height: windowHeight * 0.5,
-                        paddingTop: 50,
-                        margin: 0,
-                    }}
-                >
-                    <H2>Select a game to view</H2>
-
-                    <View
-                        style={{
-                            alignItems: 'flex-start',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            width: '80%',
-                        }}
-                    >
-                        {gamesInLeague
-                            .sort((x: any, y: any) => y - x)
-                            .map((game: any, index: number) => (
-                                <View style={{ padding: 10, width: '100%' }}>
-                                    <TouchableOpacity onPress={() => setCurrentViewedGame(game)}>
-                                        {game.complete ? (
-                                            <View
-                                                style={{
-                                                    alignItems: 'center',
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'space-between',
-                                                }}
-                                            >
-                                                <Text style={{ fontSize: 17 }}>Game {index} </Text>
-                                                {currentViewedGame.gameId === game.gameId ? (
-                                                    <View
-                                                        style={{
-                                                            height: 20,
-                                                            width: 20,
-                                                            borderRadius: 20,
-                                                            borderWidth: 1,
-                                                            borderColor: '#827ee6',
-                                                            backgroundColor: '#827ee6',
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <View
-                                                        style={{
-                                                            height: 20,
-                                                            width: 20,
-                                                            borderRadius: 20,
-                                                            borderWidth: 1,
-                                                            borderColor: '#827ee6',
-                                                            backgroundColor: '#fff',
-                                                        }}
-                                                    />
-                                                )}
-                                            </View>
-                                        ) : (
-                                            <View
-                                                style={{
-                                                    alignItems: 'center',
-                                                    display: 'flex',
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'space-between',
-                                                }}
-                                            >
-                                                <Text style={{ fontSize: 17 }}>Current Game</Text>
-                                                {currentViewedGame.gameId === game.gameId ? (
-                                                    <View
-                                                        style={{
-                                                            height: 20,
-                                                            width: 20,
-                                                            borderRadius: 20,
-                                                            borderWidth: 1,
-                                                            borderColor: '#827ee6',
-                                                            backgroundColor: '#827ee6',
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <View
-                                                        style={{
-                                                            height: 20,
-                                                            width: 20,
-                                                            borderRadius: 20,
-                                                            borderWidth: 1,
-                                                            borderColor: '#827ee6',
-                                                            backgroundColor: '#fff',
-                                                        }}
-                                                    />
-                                                )}
-                                            </View>
-                                        )}
-                                    </TouchableOpacity>
-                                </View>
-                            ))}
-                    </View>
-                    <View style={{ bottom: 50, position: 'absolute' }}>
-                        <TouchableOpacity onPress={() => setGameSelectModalOpen(false)}>
-                            <Button>
-                                <ButtonText>View game</ButtonText>
-                            </Button>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-
             <Container>
-                {Object.values(currentViewedGame.players).map((player: any, index: any) => (
+                {Object.values(currentGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
                         <PlayerRow key={player.id} value="Current Round">
                             <CurrentRound>
@@ -210,10 +86,9 @@ export const CurrentRoundView = ({
                                 </PlayerName>
                                 <PlayerAndDownArrow>
                                     <ShowImageForPlayerChoice
-                                        currentViewedGame={currentViewedGame}
+                                        currentGame={currentGame}
                                         isCurrentLoggedInPlayer={player.id === currentUserId}
                                         player={player}
-                                        playersStillAbleToSelectTeams={selectionTimeEnded}
                                     />
 
                                     <ExpandImage
@@ -222,21 +97,24 @@ export const CurrentRoundView = ({
                                     />
                                 </PlayerAndDownArrow>
                             </CurrentRound>
-                            <HistoricalRounds expand={listOfExpandedPrevious.includes(index)}>
-                                {player.rounds.length > 0 ? (
-                                    <>
-                                        {player.rounds
-                                            .filter(
-                                                (round: any) => round.choice.value && round.choice.result !== 'pending',
-                                            )
-                                            .map((round: any) => (
-                                                <PreviousRound choice={round.choice} />
-                                            ))}
-                                    </>
-                                ) : (
-                                    <Text>Previous results will show here</Text>
-                                )}
-                            </HistoricalRounds>
+                            <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={500}>
+                                <HistoricalRounds>
+                                    {player.rounds.length > 0 ? (
+                                        <>
+                                            {player.rounds
+                                                .filter(
+                                                    (round: any) =>
+                                                        round.choice.value && round.choice.result !== 'pending',
+                                                )
+                                                .map((round: any) => (
+                                                    <PreviousRound choice={round.choice} />
+                                                ))}
+                                        </>
+                                    ) : (
+                                        <Text>Previous results will show here</Text>
+                                    )}
+                                </HistoricalRounds>
+                            </Collapsible>
                         </PlayerRow>
                     </TouchableOpacity>
                 ))}

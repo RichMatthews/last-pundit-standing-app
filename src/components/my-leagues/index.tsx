@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons'
+import { useSelector } from 'react-redux'
 
 import { ButtonText } from '../../ui-components/button'
 import { H1 } from '../../ui-components/headings'
@@ -41,7 +42,9 @@ const NoLeagueText = styled(LeagueName)`
     color: #000;
 `
 
-export const MyLeagues = ({ navigation, userLeaguesFetchComplete, userLeagues }: any) => {
+export const MyLeagues = ({ navigation, userLeaguesFetchComplete }: any) => {
+    const userLeagues = useSelector((store: { leagues: any }) => store.leagues)
+
     return (
         <SafeAreaView>
             <Container style={{ marginTop: 50 }}>

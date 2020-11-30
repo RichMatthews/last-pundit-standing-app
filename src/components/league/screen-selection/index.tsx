@@ -1,84 +1,52 @@
 import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+interface ScreenSelection {
+    currentScreenView: string
+    setCurrentScreenView: (screen: string) => void
+}
 
-export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }) => {
+const reusableView = (currentScreenView: string, setCurrentScreenView: any, screen: string) => (
+    <View style={[styles.innerContainer, currentScreenView === screen ? styles.viewed : styles.notViewed]}>
+        <TouchableOpacity onPress={() => setCurrentScreenView(screen)}>
+            <Text style={[styles.text, currentScreenView === screen ? styles.viewed : styles.notViewed]}>
+                Current Game
+            </Text>
+        </TouchableOpacity>
+    </View>
+)
+
+export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }: ScreenSelection) => {
     return (
-        <View
-            style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignSelf: 'center',
-                paddingBottom: 10,
-                width: 350,
-            }}
-        >
+        <View style={styles.container}>
             <View
-                style={{
-                    backgroundColor: currentScreenView === 'game' ? '#827ee6' : 'transparent',
-                    borderTopLeftRadius: 5,
-                    borderColor: '#827ee6',
-                    borderWidth: 2,
-                    borderBottomLeftRadius: 5,
-                    borderRightWidth: 0,
-                    padding: 5,
-                    width: '30%',
-                }}
+                style={[
+                    styles.innerContainer,
+                    styles.borderLeft,
+                    currentScreenView === 'game' ? styles.viewed : styles.notViewed,
+                ]}
             >
                 <TouchableOpacity onPress={() => setCurrentScreenView('game')}>
-                    <Text
-                        style={{
-                            color: currentScreenView === 'game' ? '#fff' : '#000',
-                            fontSize: 12,
-                            textAlign: 'center',
-                        }}
-                    >
+                    <Text style={[styles.text, currentScreenView === 'game' ? styles.viewed : styles.notViewed]}>
                         Current Game
                     </Text>
                 </TouchableOpacity>
             </View>
-            <View
-                style={{
-                    backgroundColor: currentScreenView === 'info' ? '#827ee6' : 'transparent',
-                    borderColor: '#827ee6',
-                    borderWidth: 2,
-                    borderLeftWidth: 1,
-                    padding: 5,
-                    width: '30%',
-                }}
-            >
+            <View style={[styles.innerContainer, currentScreenView === 'info' ? styles.viewed : styles.notViewed]}>
                 <TouchableOpacity onPress={() => setCurrentScreenView('info')}>
-                    <Text
-                        style={{
-                            color: currentScreenView === 'info' ? '#fff' : '#000',
-                            fontSize: 12,
-                            textAlign: 'center',
-                        }}
-                    >
+                    <Text style={[styles.text, currentScreenView === 'info' ? styles.viewed : styles.notViewed]}>
                         League Info
                     </Text>
                 </TouchableOpacity>
             </View>
             <View
-                style={{
-                    backgroundColor: currentScreenView === 'previous' ? '#827ee6' : 'transparent',
-                    borderTopRightRadius: 5,
-                    borderColor: '#827ee6',
-                    borderWidth: 2,
-                    borderBottomRightRadius: 5,
-                    borderLeftWidth: 0,
-                    padding: 5,
-                    width: '30%',
-                }}
+                style={[
+                    styles.innerContainer,
+                    styles.borderRight,
+                    currentScreenView === 'previous' ? styles.viewed : styles.notViewed,
+                ]}
             >
                 <TouchableOpacity onPress={() => setCurrentScreenView('previous')}>
-                    <Text
-                        style={{
-                            color: currentScreenView === 'previous' ? '#fff' : '#000',
-                            fontSize: 12,
-                            textAlign: 'center',
-                        }}
-                    >
+                    <Text style={[styles.text, currentScreenView === 'previous' ? styles.viewed : styles.notViewed]}>
                         Previous Game
                     </Text>
                 </TouchableOpacity>
@@ -86,3 +54,48 @@ export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }) => 
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    borderRight: {
+        borderRightWidth: 2,
+        borderBottomRightRadius: 5,
+        borderTopRightRadius: 5,
+    },
+    borderLeft: {
+        borderBottomLeftRadius: 5,
+        borderTopLeftRadius: 5,
+    },
+    container: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        paddingBottom: 10,
+        width: 350,
+    },
+    innerContainer: {
+        borderColor: '#827ee6',
+        borderWidth: 2,
+        borderRightWidth: 0,
+        padding: 5,
+        width: '30%',
+    },
+    leagueInfo: {
+        borderColor: '#827ee6',
+        borderWidth: 2,
+        borderLeftWidth: 1,
+        padding: 5,
+        width: '30%',
+    },
+    viewed: {
+        textAlign: 'center',
+        backgroundColor: '#827ee6',
+    },
+    notViewed: {
+        backgroundColor: 'transparent',
+    },
+    text: {
+        fontSize: 12,
+        textAlign: 'center',
+    },
+})
