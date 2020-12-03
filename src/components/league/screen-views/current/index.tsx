@@ -1,129 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import {
-    ActivityIndicator,
-    RefreshControl,
-    SafeAreaView,
-    ScrollView,
-    Share,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native'
-import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 
 import { CurrentRoundView } from '../../current-round'
-import { ChooseTeam } from '../../../choose-team'
 import { PageNotFound } from '../../../404'
-import { firebaseApp } from '../../../../config.js'
 
-import { H1, H2 } from '../../../../ui-components/headings'
 import { Container } from '../../../../ui-components/containers'
 
-interface LeagueProps {
-    currentUserId: string
-    leagueId: string
-    navigation: any
-}
-interface ImageStyled {
-    lost?: boolean
-}
-
-const Section = styled.View`
-    background: transparent;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-`
-
-const SelectionWrapper = styled(Section)`
-    border-bottom-width: 5px;
-    border-bottom-color: #ccc;
-`
-
-const CurrentRoundSelectionWrapper = styled(Section)`
-    background: transparent;
-    padding: 0;
-`
-
-const Wrapper = styled.View`
-    display: flex;
-    flex-direction: column;
-`
-
-const TextContainer = styled.View`
-    margin: 10px;
-    text-align: center;
-`
-
-const TeamSelectionText = styled.Text`
-    margin-top: 20px;
-`
-
-const wait = (timeout: any) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, timeout)
-    })
-}
-
-export const CurrentGame = ({
-    currentUserId,
-    league,
-    gamesInLeague,
-    listOfExpandedPrevious,
-    loaded,
-    refreshing,
-    pullLatestLeagueData,
-    setRefreshing,
-    setListOfExpandedPrevious,
-}: any) => {
-    const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
-    const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
-    console.log(currentPlayer, 'cp')
-
-    const onRefresh = useCallback(() => {
-        setRefreshing(true)
-        pullLatestLeagueData()
-        wait(2000).then(() => setRefreshing(false))
-    }, [])
-
-    const showTeamSelectionPage = () => {
-        const currentGameRound = currentGame.currentGameRound
-        const currentRound = currentPlayer.rounds[currentGameRound]
-        const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
-
-        if (playerOutOfGame.length) {
-            return (
-                <View>
-                    <Text>You are no longer in this game</Text>
-                </View>
-            )
-        } else if (currentRound && currentRound.choice.hasMadeChoice === false) {
-            return (
-                <ChooseTeam
-                    currentRound={currentGameRound}
-                    currentUserId={currentUserId}
-                    currentGame={currentGame}
-                    league={league}
-                    leagueOnly={true}
-                    pullLatestLeagueData={pullLatestLeagueData}
-                />
-            )
-        } else if (currentRound && currentRound.choice.hasMadeChoice) {
-            return (
-                <View>
-                    <Text>You have made your choice for this week.</Text>
-                </View>
-            )
-        } else {
-            return (
-                <View>
-                    <Text>You didn't select a team in time and are unfortunately now out of this game.</Text>
-                </View>
-            )
-        }
-    }
+export const CurrentGame = ({ loaded }: any) => {
+    const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
 
     const setListOfExpandedPreviousHelper = (index: number) => {
         if (listOfExpandedPrevious.includes(index)) {
@@ -135,27 +19,18 @@ export const CurrentGame = ({
 
     if (loaded === 'league-found') {
         return (
-            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
-                <SafeAreaView style={{ backgroundColor: 'transparent' }}>
-                    <Container>
-                        <Wrapper>
-                            <CurrentRoundSelectionWrapper>
-                                <CurrentRoundView
-                                    currentGame={currentGame}
-                                    currentUserId={currentUserId}
-                                    gamesInLeague={gamesInLeague}
-                                    listOfExpandedPrevious={listOfExpandedPrevious}
-                                    setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                                />
-                            </CurrentRoundSelectionWrapper>
-                            <SelectionWrapper>
-                                <H2>Team Selection</H2>
-                                <TeamSelectionText>{showTeamSelectionPage()}</TeamSelectionText>
-                            </SelectionWrapper>
-                        </Wrapper>
-                    </Container>
-                </SafeAreaView>
-            </ScrollView>
+            <SafeAreaView>
+                <Container>
+                    <View style={styles.wrapper}>
+                        <View style={[styles.currentRoundSelectionWrapper, styles.section]}>
+                            <CurrentRoundView
+                                listOfExpandedPrevious={listOfExpandedPrevious}
+                                setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                            />
+                        </View>
+                    </View>
+                </Container>
+            </SafeAreaView>
         )
     }
 
@@ -164,9 +39,34 @@ export const CurrentGame = ({
     }
 
     return (
-        <Container style={{ marginTop: 100 }}>
+        <Container style={styles.loading}>
             <ActivityIndicator size="large" color="#827ee6" />
-            <Text style={{ fontSize: 20 }}>Retrieving League information...</Text>
+            <Text style={styles.loadingText}>Retrieving League information...</Text>
         </Container>
     )
 }
+
+const styles = StyleSheet.create({
+    wrapper: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    loading: {
+        marginTop: 100,
+    },
+    loadingText: {
+        fontSize: 20,
+    },
+    section: {
+        backgroundColor: 'transparent',
+        borderRadius: 5,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 10,
+    },
+
+    currentRoundSelectionWrapper: {
+        backgroundColor: 'transparent',
+        padding: 0,
+    },
+})

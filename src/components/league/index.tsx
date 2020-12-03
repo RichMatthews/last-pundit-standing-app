@@ -1,140 +1,132 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { Text, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Image, ScrollView, StyleSheet, RefreshControl, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { LeagueInfo } from 'src/components/league/screen-views/info'
 import { CurrentGame } from 'src/components/league/screen-views/current'
 import { PreviousGames } from 'src/components/league/screen-views/previous'
+import { TeamSelection } from 'src/components/league/screen-views/team-selection'
 import { ScreenSelection } from 'src/components/league/screen-selection'
-
-import { firebaseApp } from 'src/config.js'
-import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
-
-import { H2 } from 'src/ui-components/headings'
+import { pullLeagueData } from 'src/firebase-helpers'
 import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
+import { setViewedLeague } from 'src/redux/reducer/league'
+import { H2 } from 'src/ui-components/headings'
 
-const LeagueNameAndLeagueTypeImage = styled.View`
-    background: #827ee6;
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-top: 15px;
-    width: 100%;
-`
+interface LeagueData {
+    games: {}
+}
 
-const LeagueTypeImage = styled.Image`
-    resize-mode: contain;
-    height: 30px;
-    width: 100px;
-`
-
-export const League = ({ leagueId }: any) => {
+export const League = ({ leagueId }: string) => {
     const [currentScreenView, setCurrentScreenView] = useState('game')
-    const [currentGame, setCurrentGame] = useState<any>({})
-    const [currentGameweek, setCurrentGameweek] = useState<any>({})
-    const [league, setLeague] = useState<any>({ name: '', games: [] })
-    const [gamesInLeague, setAllGamesInCurrentLeague] = useState<any>({})
-    const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
-    const [loaded, setLoaded] = useState<any>(false)
-    const [refreshing, setRefreshing] = useState(false)
+    const [loaded, setLoaded] = useState<string>('')
+    const [refreshing, setRefreshing] = useState<boolean>(false)
+
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
+    const league = useSelector((store: { league: any }) => store.league)
+    const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
-    const pullLatestLeagueData = () => {
-        return firebaseApp
-            .database()
-            .ref(`leagues/${leagueId}`)
-            .once('value')
-            .then((snapshot) => {
-                if (snapshot.val()) {
-                    if (snapshot.val().games) {
-                        const transformPayloadIntoUsableObject = {
-                            ...snapshot.val(),
-                            games: Object.values(snapshot.val().games),
-                        }
-                        const currentGame: any = Object.values(snapshot.val().games).find((game: any) => !game.complete)
-                        const players = Object.values(currentGame.players)
-                        const currentPlayer = players.find((player: any) => player.id === currentUser.id)
+    const pullLatestLeagueData = async () => {
+        const leagueData: LeagueData = await pullLeagueData({ leagueId })
+        const { games }: any = leagueData
+        const gamesConvertedToArray = Object.values(games)
+        const currentGame: any = gamesConvertedToArray.find((game: any) => !game.complete)
+        const players: Array<{ id: string }> = Object.values(currentGame.players)
+        const currentPlayer = players.find((player: { id: string }) => player.id === currentUser.id)
 
-                        dispatch(getCurrentGame({ currentGame }))
-                        setAllGamesInCurrentLeague(transformPayloadIntoUsableObject.games)
-                        setLeague(transformPayloadIntoUsableObject)
-                        console.log('CURRENTPLAYER:::', currentPlayer)
-                        if (!currentPlayer) {
-                            // return history.push('/home')
-                            return
-                        }
-                        dispatch(setCurrentPlayer({ currentPlayer }))
-                        setLoaded('league-found')
-                    } else {
-                        setLeague(snapshot.val())
-                        setLoaded('league-found')
-                    }
-                } else {
-                    setLoaded('no-league-found')
-                    return null
-                }
-            })
-            .catch((e) => {
-                console.log(e)
-                console.log('error somewhere pulling')
-            })
+        dispatch(getCurrentGame({ currentGame }))
+        dispatch(setViewedLeague({ ...leagueData, games: gamesConvertedToArray }))
+
+        if (currentPlayer) {
+            dispatch(setCurrentPlayer({ currentPlayer }))
+        }
+
+        if (leagueData) {
+            setLoaded('league-found')
+        } else {
+            setLoaded('no-league-found')
+        }
     }
 
     useEffect(() => {
         pullLatestLeagueData()
     }, [])
 
+    const wait = (timeout: any) => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, timeout)
+        })
+    }
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        pullLatestLeagueData()
+        wait(2000).then(() => setRefreshing(false))
+    }, [])
+
     const determineScreenToRender = () => {
         if (currentScreenView === 'info') {
-            return <LeagueInfo league={league} />
+            return <LeagueInfo />
         } else if (currentScreenView === 'previous') {
             return <PreviousGames />
+        } else if (currentScreenView === 'selection') {
+            return <TeamSelection />
         }
-        return (
-            <CurrentGame
-                league={league}
-                listOfExpandedPrevious={listOfExpandedPrevious}
-                setListOfExpandedPrevious={setListOfExpandedPrevious}
-                pullLatestLeagueData={pullLatestLeagueData}
-                //props to grab from redux instead
-                currentGame={currentGame}
-                currentGameweek={currentGameweek}
-                gamesInLeague={gamesInLeague}
-                loaded={loaded}
-                currentScreenView={currentScreenView}
-                refreshing={refreshing}
-                setRefreshing={setRefreshing}
-                setCurrentScreenView={setCurrentScreenView}
-            />
-        )
+        return <CurrentGame loaded={loaded} pullLatestLeagueData={pullLatestLeagueData} refreshing={refreshing} />
     }
-    return (
-        <View>
-            <LeagueNameAndLeagueTypeImage>
-                <H2 style={{ color: '#fff', fontSize: 30, marginBottom: 5 }}>{league.name}</H2>
-                <LeagueTypeImage
-                    source={require('../../images/other/premier-league.png')}
-                    style={{ marginBottom: 20 }}
-                />
-            </LeagueNameAndLeagueTypeImage>
 
-            <View
-                style={{
-                    borderColor: '#ccc',
-                    padding: 10,
-                    width: '100%',
-                }}
-            >
-                <Text style={{ fontSize: 17, fontWeight: '700', textAlign: 'center' }}>
-                    <Text style={{ fontWeight: '400' }}>Round closes: </Text>
-                    {currentGameweek.endsReadable}
-                </Text>
+    return (
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+            <View>
+                <View style={styles.leagueNameAndImage}>
+                    <H2 style={styles.mainheading}>{league.name}</H2>
+                    <Image source={require('../../images/other/premier-league.png')} style={styles.image} />
+                </View>
+                <View style={styles.subheading}>
+                    <Text style={styles.maintext}>
+                        <Text style={styles.subtext}>Round closes: </Text>
+                        {currentGameweek.ends}
+                    </Text>
+                </View>
+                <ScreenSelection currentScreenView={currentScreenView} setCurrentScreenView={setCurrentScreenView} />
+                <View>{determineScreenToRender()}</View>
             </View>
-            <ScreenSelection currentScreenView={currentScreenView} setCurrentScreenView={setCurrentScreenView} />
-            <View>{determineScreenToRender()}</View>
-        </View>
+        </ScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    leagueNameAndImage: {
+        backgroundColor: '#827ee6',
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: 15,
+        paddingTop: 15,
+        width: '100%',
+    },
+    image: {
+        resizeMode: 'contain',
+        height: 30,
+        width: 100,
+        marginBottom: 20,
+    },
+    mainheading: {
+        color: '#fff',
+        fontSize: 30,
+        marginBottom: 5,
+    },
+    subheading: {
+        borderColor: '#ccc',
+        padding: 10,
+        width: '100%',
+    },
+    maintext: {
+        fontSize: 17,
+        fontWeight: '700',
+        textAlign: 'center',
+    },
+    subtext: {
+        fontWeight: '400',
+    },
+})

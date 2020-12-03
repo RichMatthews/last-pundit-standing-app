@@ -1,31 +1,21 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { createStore, compose } from 'redux'
-import devToolsEnhancer from 'remote-redux-devtools'
-import { composeWithDevTools } from 'redux-devtools-extension'
-import leaguesReducer from '../reducer/leagues'
-import userReducer from '../reducer/user'
+
+import currentGameweekReducer from '../reducer/current-gameweek'
 import currentGameReducer from '../reducer/current-game'
 import currentPlayerReducer from '../reducer/current-player'
-
-// import { createDebugger } from 'react-native-debugger'
-
-// const store = configureStore({
-//     reducer: {
-//         leagues: leaguesReducer,
-//     },
-//     devTools: true,
-//     enhancers: [devToolsEnhancer({ realtime: true })],
-// })
-
-const enhancers = composeWithDevTools(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+import userLeaguesReducer from '../reducer/leagues'
+import userReducer from '../reducer/user'
+import viewingLeagueReducer from '../reducer/league'
 
 const store = configureStore({
     reducer: {
         currentGame: currentGameReducer,
+        currentGameweek: currentGameweekReducer,
         currentPlayer: currentPlayerReducer,
-        leagues: leaguesReducer,
+        league: viewingLeagueReducer,
         user: userReducer,
+        userLeagues: userLeaguesReducer,
     },
 })
-// const store = configureStore({leagues: leaguesReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+
 export default store

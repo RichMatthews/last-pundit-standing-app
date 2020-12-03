@@ -22,7 +22,6 @@ const LeagueContainer = styled.View`
 `
 
 const LeagueItem = styled.View`
-    border-bottom-width: 1px;
     border-bottom-color: #ccc;
     display: flex;
     flex-direction: row;
@@ -35,7 +34,7 @@ const LeagueItem = styled.View`
 
 const LeagueName = styled.Text`
     color: #827ee6;
-    font-size: 25px;
+    font-size: 22px;
     margin-right: 10px;
 `
 const NoLeagueText = styled(LeagueName)`
@@ -43,7 +42,7 @@ const NoLeagueText = styled(LeagueName)`
 `
 
 export const MyLeagues = ({ navigation, userLeaguesFetchComplete }: any) => {
-    const userLeagues = useSelector((store: { leagues: any }) => store.leagues)
+    const userLeagues = useSelector((store: { userLeagues: any }) => store.userLeagues)
 
     return (
         <SafeAreaView>
@@ -53,31 +52,31 @@ export const MyLeagues = ({ navigation, userLeaguesFetchComplete }: any) => {
                     {userLeaguesFetchComplete ? (
                         userLeagues.length ? (
                             userLeagues.map((league: LeagueState) => (
-                                <TouchableOpacity
-                                    onPress={() => navigation.navigate('League', { leagueId: league.id })}
-                                >
-                                    <LeagueItem key={league.id}>
-                                        <View>
-                                            <LeagueName>{league.name}</LeagueName>
-                                        </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                            <Text
-                                                style={{
-                                                    borderWidth: 1,
-                                                    padding: 3,
-                                                    borderColor: '#474444',
-                                                    borderRadius: 5,
-                                                    color: '#474444',
-                                                    marginRight: 10,
-                                                    textAlign: 'center',
-                                                }}
-                                            >
-                                                {league.isPrivate ? 'Private' : 'Public'}{' '}
-                                            </Text>
+                                <LeagueItem key={league.id}>
+                                    <View>
+                                        <LeagueName>{league.name}</LeagueName>
+                                    </View>
+                                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <Text
+                                            style={{
+                                                borderWidth: 1,
+                                                padding: 3,
+                                                borderColor: '#474444',
+                                                borderRadius: 5,
+                                                color: '#474444',
+                                                marginRight: 10,
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            {league.isPrivate ? 'Private' : 'Public'}{' '}
+                                        </Text>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate('League', { leagueId: league.id })}
+                                        >
                                             <SimpleLineIcon name="arrow-right-circle" size={20} color={'#827ee6'} />
-                                        </View>
-                                    </LeagueItem>
-                                </TouchableOpacity>
+                                        </TouchableOpacity>
+                                    </View>
+                                </LeagueItem>
                             ))
                         ) : (
                             <View>

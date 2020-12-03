@@ -1,10 +1,8 @@
 import React from 'react'
+import { View, Text } from 'react-native'
 import styled from 'styled-components'
-import AntDesignIcon from 'react-native-vector-icons/AntDesign'
-import EntypoIcon from 'react-native-vector-icons/Entypo'
 
 import * as Images from '../../../images'
-
 import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
 
 interface ImageStyled {
@@ -20,6 +18,17 @@ const Image = styled.Image<ImageStyled>`
     height: 25px;
     margin-right: 10px;
     width: 25px;
+`
+
+const Label = styled.View`
+    background-color: ${({ bgColor }) => bgColor};
+    border-radius: 5px;
+`
+
+const LabelText = styled.Text`
+    color: ${({ color }) => color};
+    font-size: 10px;
+    padding: 5px;
 `
 
 export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer, player }: any) => {
@@ -44,7 +53,9 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
     if (ALL_OTHER_PLAYERS_ELIMINATED) {
         return (
             <GameStatusIndicator>
-                <EntypoIcon name={'trophy'} size={25} color={'gold'} />
+                <Label bgColor="#ff6b6b">
+                    <LabelText color="#6b0707">CHAMPION</LabelText>
+                </Label>
             </GameStatusIndicator>
         )
     }
@@ -52,7 +63,9 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
     if (PLAYER_OUT_OF_CURRENT_GAME.length) {
         return (
             <GameStatusIndicator>
-                <EntypoIcon name={'cross'} size={25} color={'red'} />
+                <Label bgColor="#F8D7DA">
+                    <LabelText color="#721C25">Eliminated</LabelText>
+                </Label>
             </GameStatusIndicator>
         )
     }
@@ -68,7 +81,9 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
         } else {
             return (
                 <GameStatusIndicator>
-                    <EntypoIcon name={'time-slot'} size={25} color={'orange'} />
+                    <Label bgColor="#ff6b6b">
+                        <LabelText color="#6b0707">Pending</LabelText>
+                    </Label>
                 </GameStatusIndicator>
             )
         }
@@ -85,7 +100,9 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
         } else {
             return (
                 <GameStatusIndicator>
-                    <AntDesignIcon name={'checkcircleo'} size={25} color={'green'} />
+                    <Label bgColor="#D4EDDA">
+                        <LabelText color="#155725">Submitted</LabelText>
+                    </Label>
                 </GameStatusIndicator>
             )
         }
@@ -94,14 +111,18 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
     if (gameweekSelectionTimeEnded()) {
         return (
             <GameStatusIndicator>
-                <EntypoIcon name={'time-slot'} size={25} color={'orange'} />
+                <Label bgColor="#FFF3CD">
+                    <LabelText color="#856404">Pending</LabelText>
+                </Label>
             </GameStatusIndicator>
         )
     }
 
     return (
         <GameStatusIndicator>
-            <EntypoIcon name={'cross'} size={25} color={'red'} />
+            <View>
+                <Text>Eliminated</Text>
+            </View>
         </GameStatusIndicator>
     )
 }

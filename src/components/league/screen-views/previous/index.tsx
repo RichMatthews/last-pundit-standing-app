@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native'
 export const PreviousGames = () => {
     return (
         <View>
-            <Text>Screen placeholder</Text>
+            <Text>Coming soon...</Text>
         </View>
     )
 }

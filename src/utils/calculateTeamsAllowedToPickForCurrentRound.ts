@@ -9,6 +9,12 @@ export const calculateTeamsAllowedToPickForCurrentRound = ({ currentGame, curren
                 teamsAlreadyChosen.push(round.choice.value)
             }
         })
-        return allTeamsForThisLeague.filter((team) => !teamsAlreadyChosen.includes(team.value))
+        return allTeamsForThisLeague.map((team: any) => {
+            if (teamsAlreadyChosen.includes(team.value)) {
+                return { ...team, chosen: true }
+            } else {
+                return { ...team, chosen: false }
+            }
+        })
     }
 }

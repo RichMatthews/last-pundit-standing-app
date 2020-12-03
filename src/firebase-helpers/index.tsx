@@ -15,12 +15,12 @@ export const getCurrentGameweekFixtures = () => {
 }
 
 export const getCurrentGameweekEndTime = () => {
-    firebaseApp
+    return firebaseApp
         .database()
         .ref(`information/gameweek/current`)
         .once('value')
         .then((snapshot) => {
-            return snapshot.val().ends
+            return snapshot.val().endsReadable
         })
 }
 
@@ -34,22 +34,13 @@ export const getUserInformation = ({ userId }) => {
         })
 }
 
-export const updateUserGamweekChoice = ({
-    choice,
-    currentRound,
-    currentUser,
-    game,
-    league,
-    pullLatestLeagueData,
-}: any) => {
-    firebaseApp
+export const updateUserGamweekChoice = ({ choice, currentRound, currentGame, league, userId }: any) => {
+    return firebaseApp
         .database()
-        .ref(`leagues/${league.id}/games/${game.id}/players/${currentUser.id}/rounds/${currentRound}`)
+        .ref(`leagues/${league.id}/games/${currentGame.id}/players/${userId}/rounds/${currentRound}`)
         .update({ choice }, (error) => {
             if (error) {
                 alert('Oops something went wrong. Please try again or contact admin')
-            } else {
-                pullLatestLeagueData()
             }
         })
 }
@@ -195,5 +186,19 @@ export const attemptToJoinLeaugeIfItExists = ({ currentUserId, leaguePin }: any)
                         alert('League not found, please try again or contact league admin')
                     }
                 })
+        })
+}
+
+export const pullLeagueData = ({ leagueId }) => {
+    return firebaseApp
+        .database()
+        .ref(`leagues/${leagueId}`)
+        .once('value')
+        .then((snapshot) => {
+            return snapshot.val()
+        })
+        .catch((e) => {
+            console.log(e)
+            console.log('error somewhere pulling', e)
         })
 }

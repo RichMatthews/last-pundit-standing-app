@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Image, Share, Text, TouchableOpacity, View } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { Fixtures } from '../../../fixtures'
 import { LeagueRules } from '../../league-rules'
@@ -32,13 +33,8 @@ const sharePin = () => {
     Share.share(shareOptions)
 }
 
-interface LeagueInfoProps {
-    league: {
-        joinPin: string
-    }
-}
-
-export const LeagueInfo = ({ league }: any) => {
+export const LeagueInfo = () => {
+    const league = useSelector((store: { league: any }) => store.league)
     return (
         <View>
             <SelectionWrapper>

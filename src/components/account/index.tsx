@@ -5,6 +5,7 @@ import AntIcon from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import LinearGradient from 'react-native-linear-gradient'
+import { useSelector } from 'react-redux'
 
 import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
@@ -21,7 +22,9 @@ const Section = styled.View`
     width: 350px;
 `
 
-export const Account = ({ navigation, setUserExists, user }) => {
+export const Account = ({ navigation, setUserExists }) => {
+    const user = useSelector((store: { user: any }) => store.user)
+
     const closeModalHelper = () => {
         navigation.goBack()
     }

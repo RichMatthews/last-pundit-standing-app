@@ -20,6 +20,8 @@ import { AuthenticateUserScreen } from '../components/authenticate-user'
 import { ResetPassword } from '../components/reset-password'
 import { UpdateEmail } from '../components/update-email'
 import { logUserInToApplication, signUserUpToApplication } from '../firebase-helpers'
+import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
+
 import { getLeagues } from 'src/redux/reducer/leagues'
 import { getCurrentUser } from 'src/redux/reducer/user'
 
@@ -255,10 +257,9 @@ export const Routing = () => {
     useEffect(() => {
         async function getUser() {
             if (currentUser) {
-                console.log('we have a user')
                 const userInfo = await dispatch(getCurrentUser({ userId: currentUser.uid }))
-                console.log('happening afteR??????????')
                 await dispatch(getLeagues({ setUserLeaguesFetchComplete, userId: currentUser.uid }))
+                await dispatch(getCurrentGameWeekInfo())
                 setUserExists(true)
                 setUser(userInfo)
                 SplashScreen.hide()

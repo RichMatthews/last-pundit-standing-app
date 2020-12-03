@@ -1,25 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { Dimensions, TouchableOpacity, Text, View } from 'react-native'
-import Modal from 'react-native-modal'
+import { Dimensions, TouchableOpacity, Text } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 
 import { PreviousRound } from '../../previous-round'
 import { ShowImageForPlayerChoice } from '../show-image-for-player-choice'
-import { H2 } from '../../../ui-components/headings'
-import { Button, ButtonText } from '../../../ui-components/button'
 
 const Section = styled.View`
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     width: 350px;
-`
-
-const CurrentRoundContainer = styled(Section)`
-    border-bottom-width: 5px;
-    border-bottom-color: #ccc;
 `
 
 const CurrentRound = styled.View`
@@ -30,9 +22,10 @@ const CurrentRound = styled.View`
 `
 
 const PlayerRow = styled.View<any>`
-    border-bottom-width: 1px;
-    border-bottom-color: #ccc;
-    padding: 15px;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 10px;
+    margin: 10px;
 `
 
 const Container = styled.View`
@@ -58,24 +51,16 @@ const PlayerName = styled.Text`
     font-weight: 700;
 `
 
-const SelectContainer = styled.View`
-    display: flex;
-    justify-content: flex-end;
-`
-
 const PlayerAndDownArrow = styled.View`
     display: flex;
     flex-direction: row;
 `
 
-const windowHeight = Dimensions.get('window').height
-const windowWidth = Dimensions.get('window').width
-
 export const CurrentRoundView = ({ currentUserId, listOfExpandedPrevious, setListOfExpandedPreviousHelper }: any) => {
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
 
     return (
-        <CurrentRoundContainer>
+        <Section>
             <Container>
                 {Object.values(currentGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
@@ -119,6 +104,6 @@ export const CurrentRoundView = ({ currentUserId, listOfExpandedPrevious, setLis
                     </TouchableOpacity>
                 ))}
             </Container>
-        </CurrentRoundContainer>
+        </Section>
     )
 }

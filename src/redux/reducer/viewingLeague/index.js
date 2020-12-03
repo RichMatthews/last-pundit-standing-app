@@ -17,15 +17,12 @@ const viewingLeagueSlice = createSlice({
     reducers: {},
     extraReducers: {
         [getCurrentGame.pending]: (state, action) => {
-            console.log('pending!')
             state = state
         },
         [getCurrentGame.fulfilled]: (state, action) => {
-            console.log(action.payload, 'act?')
             state.push(...action.payload)
         },
         [getCurrentGame.rejected]: (state, action) => {
-            console.log('there was a rejection')
             return state
         },
     },
