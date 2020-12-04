@@ -56,7 +56,7 @@ const Stacks = ({
 }: any) => (
     <Stack.Navigator
         screenOptions={{
-            cardStyle: { backgroundColor: '#F2F1F7' },
+            cardStyle: { backgroundColor: '#F5F5F8' },
             headerShown: false,
             headerTitle: '',
             headerStyle: {

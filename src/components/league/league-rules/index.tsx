@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
+import { useExpander } from 'src/custom-hooks/expander'
 import { H2 } from '../../../ui-components/headings'
 
 const Container = styled.View`
@@ -33,7 +34,7 @@ export const LeagueRules = () => {
             <View>
                 <Container>
                     <H2>League Rules</H2>
-                    <ExpandImage expand={showRules} source={require('../../../images/other/down-arrow.png')} />
+                    <ExpandImage expand={showRules} source={require('src/images/other/down-arrow.png')} />
                 </Container>
                 <View>
                     <Inner expand={showRules}>

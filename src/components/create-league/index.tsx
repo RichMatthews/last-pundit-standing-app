@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 import uid from 'uid'
@@ -161,52 +161,59 @@ export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) =
             <Text>Creating League...</Text>
         </Container>
     ) : (
-        <SafeAreaView>
-            <Container>
-                <H1 style={{ marginBottom: 30 }}>Create League</H1>
-                <View>
-                    <SectionDivider style={{ marginTop: 0 }}>
-                        {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
-                        <Input autoCorrect={false} onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
-                    </SectionDivider>
-                    <SectionDivider>
-                        <QuestionWithToggleOption>
-                            <Text>Private League?</Text>
-                            {/* <ReactToggle onChange={() => setPrivateLeague(!privateLeague)} /> */}
-                        </QuestionWithToggleOption>
-                    </SectionDivider>
-                    <SectionDivider>
+        <Fragment>
+            <SafeAreaView style={{ flex: 0, height: 100, backgroundColor: '#827ee6' }} />
+            <SafeAreaView>
+                <H1 style={{ backgroundColor: '#827ee6', color: '#fff', padding: 20, width: '100%' }}>Create League</H1>
+                <Container>
+                    <View>
                         <SectionDivider>
-                            <EntryFeeContainer>
-                                {entryFrees.map((fee: { key: number; amount: string }) => (
-                                    <TouchableOpacity onPress={() => setSelectedFee(fee.key)}>
-                                        <LeagueAmountValue amount={selectedFee === fee.key} key={fee.key}>
-                                            <Text>{fee.amount}</Text>
-                                        </LeagueAmountValue>
-                                    </TouchableOpacity>
-                                ))}
-                            </EntryFeeContainer>
+                            {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
+                            <Input
+                                autoCorrect={false}
+                                onChange={(e) => setLeagueNameHelper(e)}
+                                placeholder="League name"
+                            />
                         </SectionDivider>
-                    </SectionDivider>
-                    <SectionDivider>
-                        {/* <Select
+                        <SectionDivider>
+                            <QuestionWithToggleOption>
+                                <Text>Private League?</Text>
+                                {/* <ReactToggle onChange={() => setPrivateLeague(!privateLeague)} /> */}
+                            </QuestionWithToggleOption>
+                        </SectionDivider>
+                        <SectionDivider>
+                            <SectionDivider>
+                                <EntryFeeContainer>
+                                    {entryFrees.map((fee: { key: number; amount: string }) => (
+                                        <TouchableOpacity onPress={() => setSelectedFee(fee.key)}>
+                                            <LeagueAmountValue amount={selectedFee === fee.key} key={fee.key}>
+                                                <Text>{fee.amount}</Text>
+                                            </LeagueAmountValue>
+                                        </TouchableOpacity>
+                                    ))}
+                                </EntryFeeContainer>
+                            </SectionDivider>
+                        </SectionDivider>
+                        <SectionDivider>
+                            {/* <Select
                         options={[{ value: 'Premier League', label: 'Premier League' }]}
                         placeholder="Select a competition"
                     /> */}
-                    </SectionDivider>
-                    <SectionDivider>
-                        <TouchableOpacity
-                            onPress={
-                                leagueName.length === 0 ? null : () => getLeagueCreatorInformationThenCreateLeague()
-                            }
-                        >
-                            <Button disabled={leagueName.length === 0 || leagueName.length > 20}>
-                                <ButtonText>Create and join league</ButtonText>
-                            </Button>
-                        </TouchableOpacity>
-                    </SectionDivider>
-                </View>
-            </Container>
-        </SafeAreaView>
+                        </SectionDivider>
+                        <SectionDivider>
+                            <TouchableOpacity
+                                onPress={
+                                    leagueName.length === 0 ? null : () => getLeagueCreatorInformationThenCreateLeague()
+                                }
+                            >
+                                <Button disabled={leagueName.length === 0 || leagueName.length > 20}>
+                                    <ButtonText>Create and join league</ButtonText>
+                                </Button>
+                            </TouchableOpacity>
+                        </SectionDivider>
+                    </View>
+                </Container>
+            </SafeAreaView>
+        </Fragment>
     )
 }

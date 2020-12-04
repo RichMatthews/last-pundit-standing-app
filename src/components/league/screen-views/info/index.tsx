@@ -13,8 +13,6 @@ const TextContainer = styled.View`
 
 const SelectionWrapper = styled.View`
     background: transparent;
-    border-bottom-width: 2px;
-    border-bottom-color: #ccc;
     display: flex;
     flex-direction: column;
     align-self: center;
@@ -51,7 +49,7 @@ export const LeagueInfo = () => {
                         </Text>
                         <TouchableOpacity onPress={() => sharePin()}>
                             <Image
-                                source={require('../../../../images/other/whatsapp.png')}
+                                source={require('src/images/other/whatsapp.png')}
                                 style={{ width: 40, height: 40 }}
                             />
                         </TouchableOpacity>

@@ -4,11 +4,11 @@ import styled from 'styled-components'
 
 import * as Images from '../../images'
 import { H2 } from '../../ui-components/headings'
-// import { Container } from '../../ui-components/containers'
 
 import { getCurrentGameweekFixtures } from '../../firebase-helpers'
 
 const Container = styled.View`
+    background: #fff;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -56,9 +56,12 @@ const TeamBadge = styled.Image`
 `
 
 const LeagueNameAndLeagueTypeImage = styled.View`
+    align-items: center;
+    background: #fff;
+    border-radius: 5px;
+    padding: 15px;
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
 `
 
@@ -83,11 +86,25 @@ export const Fixtures = () => {
 
     return (
         <TouchableOpacity onPress={() => setShowFixtures(!showFixtures)} activeOpacity={1}>
-            <LeagueNameAndLeagueTypeImage>
+            <LeagueNameAndLeagueTypeImage
+                style={{
+                    shadowOpacity: 1,
+                    shadowRadius: 3.5,
+                    shadowColor: '#ccc',
+                    shadowOffset: { height: 2, width: 0 },
+                }}
+            >
                 <H2>Gameweek Fixtures</H2>
                 <ExpandImage expand={showFixtures} source={require('../../images/other/down-arrow.png')} />
             </LeagueNameAndLeagueTypeImage>
-            <Container>
+            <Container
+                style={{
+                    shadowOpacity: 1,
+                    shadowRadius: 3.5,
+                    shadowColor: '#ccc',
+                    shadowOffset: { height: 2, width: 0 },
+                }}
+            >
                 <Inner expand={showFixtures}>
                     {gameweekFixtures.map((match: any) => (
                         <Match key={match.home}>

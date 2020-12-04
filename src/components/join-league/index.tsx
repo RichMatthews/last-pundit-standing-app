@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { SafeAreaView, TextInput, Text, TouchableOpacity, View } from 'react-native'
+import React, { Fragment, useState } from 'react'
+import { SafeAreaView, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
 import { Button, ButtonText } from '../../ui-components/button'
@@ -63,18 +63,21 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
     }
 
     return (
-        <SafeAreaView>
-            <Container>
-                <H1 style={{ marginBottom: 30 }}>Join a League</H1>
-                <View>
-                    <Input onChange={(e) => setLeaguePin(e.nativeEvent.text)} placeholder="Enter league pin" />
-                    <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>
-                        <Button disabled={leaguePin === ''}>
-                            <ButtonText>Join League</ButtonText>
-                        </Button>
-                    </TouchableOpacity>
-                </View>
-            </Container>
-        </SafeAreaView>
+        <Fragment>
+            <SafeAreaView style={{ flex: 0, height: 100, backgroundColor: '#827ee6' }} />
+            <SafeAreaView>
+                <H1 style={{ backgroundColor: '#827ee6', color: '#fff', padding: 20, width: '100%' }}>Join League</H1>
+                <Container style={{ marginTop: 30 }}>
+                    <View>
+                        <Input onChange={(e) => setLeaguePin(e.nativeEvent.text)} placeholder="Enter league pin" />
+                        <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>
+                            <Button disabled={leaguePin === ''}>
+                                <ButtonText>Join League</ButtonText>
+                            </Button>
+                        </TouchableOpacity>
+                    </View>
+                </Container>
+            </SafeAreaView>
+        </Fragment>
     )
 }
