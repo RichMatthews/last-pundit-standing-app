@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
 
@@ -57,9 +57,6 @@ const TeamBadge = styled.Image`
 
 const LeagueNameAndLeagueTypeImage = styled.View`
     align-items: center;
-    background: #fff;
-    border-radius: 5px;
-    padding: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -86,43 +83,40 @@ export const Fixtures = () => {
 
     return (
         <TouchableOpacity onPress={() => setShowFixtures(!showFixtures)} activeOpacity={1}>
-            <LeagueNameAndLeagueTypeImage
+            <View
                 style={{
+                    backgroundColor: '#fff',
+                    padding: 15,
                     shadowOpacity: 1,
                     shadowRadius: 3.5,
                     shadowColor: '#ccc',
                     shadowOffset: { height: 2, width: 0 },
                 }}
             >
-                <H2>Gameweek Fixtures</H2>
-                <ExpandImage expand={showFixtures} source={require('../../images/other/down-arrow.png')} />
-            </LeagueNameAndLeagueTypeImage>
-            <Container
-                style={{
-                    shadowOpacity: 1,
-                    shadowRadius: 3.5,
-                    shadowColor: '#ccc',
-                    shadowOffset: { height: 2, width: 0 },
-                }}
-            >
-                <Inner expand={showFixtures}>
-                    {gameweekFixtures.map((match: any) => (
-                        <Match key={match.home}>
-                            <HomeTeam homeTeam={true}>
-                                <Text>{match.home}</Text>
-                            </HomeTeam>
-                            <Center>
-                                <TeamBadge source={Images[match.home.replace(/\s/g, '').toLowerCase()]} />
-                                <Text style={{ marginLeft: 10, marginRight: 10 }}> vs </Text>
-                                <TeamBadge source={Images[match.away.replace(/\s/g, '').toLowerCase()]} />
-                            </Center>
-                            <AwayTeam homeTeam={false}>
-                                <Text>{match.away}</Text>
-                            </AwayTeam>
-                        </Match>
-                    ))}
-                </Inner>
-            </Container>
+                <LeagueNameAndLeagueTypeImage>
+                    <H2>Gameweek Fixtures</H2>
+                    <ExpandImage expand={showFixtures} source={require('../../images/other/down-arrow.png')} />
+                </LeagueNameAndLeagueTypeImage>
+                <Container>
+                    <Inner expand={showFixtures}>
+                        {gameweekFixtures.map((match: any) => (
+                            <Match key={match.home}>
+                                <HomeTeam homeTeam={true}>
+                                    <Text>{match.home}</Text>
+                                </HomeTeam>
+                                <Center>
+                                    <TeamBadge source={Images[match.home.replace(/\s/g, '').toLowerCase()]} />
+                                    <Text style={{ marginLeft: 10, marginRight: 10 }}> vs </Text>
+                                    <TeamBadge source={Images[match.away.replace(/\s/g, '').toLowerCase()]} />
+                                </Center>
+                                <AwayTeam homeTeam={false}>
+                                    <Text>{match.away}</Text>
+                                </AwayTeam>
+                            </Match>
+                        ))}
+                    </Inner>
+                </Container>
+            </View>
         </TouchableOpacity>
     )
 }

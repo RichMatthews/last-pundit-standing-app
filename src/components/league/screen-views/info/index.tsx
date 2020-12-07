@@ -16,8 +16,7 @@ const SelectionWrapper = styled.View`
     display: flex;
     flex-direction: column;
     align-self: center;
-    padding: 5px;
-    margin: 15px;
+    margin: 10px;
     width: 90%;
 `
 
@@ -41,8 +40,13 @@ export const LeagueInfo = () => {
             <SelectionWrapper>
                 <LeagueRules />
             </SelectionWrapper>
-            <SelectionWrapper>
-                <TextContainer>
+            <SelectionWrapper></SelectionWrapper>
+        </View>
+    )
+}
+
+{
+    /* <TextContainer>
                     <View>
                         <Text style={{ marginBottom: 20 }}>
                             Share this pin {league.joinPin} or simply click one of the apps below
@@ -54,8 +58,5 @@ export const LeagueInfo = () => {
                             />
                         </TouchableOpacity>
                     </View>
-                </TextContainer>
-            </SelectionWrapper>
-        </View>
-    )
+                </TextContainer> */
 }

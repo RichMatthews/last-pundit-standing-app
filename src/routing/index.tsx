@@ -6,8 +6,6 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
-import * as LocalAuthentication from 'expo-local-authentication'
-import SecureStorage from 'react-native-secure-storage'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Account } from '../components/account'
@@ -19,14 +17,14 @@ import { League } from '../components/league'
 import { AuthenticateUserScreen } from '../components/authenticate-user'
 import { ResetPassword } from '../components/reset-password'
 import { UpdateEmail } from '../components/update-email'
-import { logUserInToApplication, signUserUpToApplication } from '../firebase-helpers'
+import { logUserInToApplication, signUserUpToApplication } from 'src/firebase-helpers'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 
 import { getLeagues } from 'src/redux/reducer/leagues'
 import { getCurrentUser } from 'src/redux/reducer/user'
-
-import { getUserInformation } from '../firebase-helpers'
 import { firebaseApp } from '../config.js'
+
+import { canLoginWithFaceId, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -47,7 +45,6 @@ const AuthStack = () => (
 )
 
 const Stacks = ({
-    callBiometricAuth,
     isSignedIn,
     setUserExists,
     // userLeagues,
@@ -56,7 +53,7 @@ const Stacks = ({
 }: any) => (
     <Stack.Navigator
         screenOptions={{
-            cardStyle: { backgroundColor: '#F5F5F8' },
+            cardStyle: { backgroundColor: '#fff' },
             headerShown: false,
             headerTitle: '',
             headerStyle: {
@@ -99,11 +96,7 @@ const Stacks = ({
             <>
                 <Stack.Screen name="Sign In">
                     {(props: any) => (
-                        <AuthenticateUserScreen
-                            callBiometricAuth={callBiometricAuth}
-                            navigation={props.navigation}
-                            setUserExists={setUserExists}
-                        />
+                        <AuthenticateUserScreen navigation={props.navigation} setUserExists={setUserExists} />
                     )}
                 </Stack.Screen>
                 <Stack.Screen name="Sign Up">
@@ -119,7 +112,7 @@ const Stacks = ({
 const CreateStack = ({ isSignedIn, setUserExists, userId }) => (
     <Stack.Navigator
         screenOptions={{
-            cardStyle: { backgroundColor: '#F2F1F7' },
+            cardStyle: { backgroundColor: '#fff' },
             headerShown: false,
             headerTitle: '',
         }}
@@ -153,7 +146,6 @@ const ModalStacks = ({ setUserExists, user }) => (
 )
 
 const TabNavigation = ({
-    callBiometricAuth,
     setUserExists,
     userExists,
     // userLeagues,
@@ -190,7 +182,6 @@ const TabNavigation = ({
                 {(props: any) => {
                     return (
                         <Stacks
-                            callBiometricAuth={callBiometricAuth}
                             isSignedIn={userExists}
                             userLeaguesFetchComplete={userLeaguesFetchComplete}
                             // userLeagues={userLeagues}
@@ -213,37 +204,33 @@ const TabNavigation = ({
                     return <AuthStack />
                 }}
             </Tab.Screen>
-            {userExists && (
-                <Tab.Screen name="Create">
-                    {(props: any) => {
-                        return <CreateStack isSignedIn={userExists} setUserExists={setUserExists} userId={userId} />
-                    }}
-                </Tab.Screen>
-            )}
-            {userExists && (
-                <Tab.Screen name="Join">
-                    {(props: any) => {
-                        return <JoinLeague navigation={props.navigation} currentUserId={userId} />
-                    }}
-                </Tab.Screen>
-            )}
 
-            {userExists && (
-                <Tab.Screen
-                    name="My Account"
-                    listeners={({ navigation }) => ({
-                        tabPress: (event) => {
-                            event.preventDefault()
-                            console.log(userExists)
-                            navigation.navigate('Account')
-                        },
-                    })}
-                >
-                    {(props: any) => {
-                        return <Account />
-                    }}
-                </Tab.Screen>
-            )}
+            <Tab.Screen name="Create">
+                {(props: any) => {
+                    return <CreateStack isSignedIn={userExists} setUserExists={setUserExists} userId={userId} />
+                }}
+            </Tab.Screen>
+
+            <Tab.Screen name="Join">
+                {(props: any) => {
+                    return <JoinLeague navigation={props.navigation} currentUserId={userId} />
+                }}
+            </Tab.Screen>
+
+            <Tab.Screen
+                name="My Account"
+                listeners={({ navigation }) => ({
+                    tabPress: (event) => {
+                        event.preventDefault()
+                        console.log(userExists)
+                        navigation.navigate('Account')
+                    },
+                })}
+            >
+                {(props: any) => {
+                    return <Account />
+                }}
+            </Tab.Screen>
         </Tab.Navigator>
     )
 }
@@ -254,6 +241,7 @@ export const Routing = () => {
     const [userLeaguesFetchComplete, setUserLeaguesFetchComplete] = useState(false)
     const currentUser = firebaseApp.auth().currentUser
     const dispatch = useDispatch()
+
     useEffect(() => {
         async function getUser() {
             if (currentUser) {
@@ -264,79 +252,36 @@ export const Routing = () => {
                 setUser(userInfo)
                 SplashScreen.hide()
             } else {
-                console.log('calling bio auth')
-                callBiometricAuth()
-            }
-        }
-
-        getUser()
-    }, [currentUser])
-
-    const callBiometricAuth = async () => {
-        const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
-        console.log('calling bio auth function')
-        if (!emailFromSecureStorage || !passwordFromSecureStorage) {
-            console.log('no thing here?')
-            SplashScreen.hide()
-            return
-        }
-        const compatible = await LocalAuthentication.hasHardwareAsync()
-        if (compatible) {
-            let biometricRecords = await LocalAuthentication.isEnrolledAsync()
-            if (!biometricRecords) {
-                console.log('no bio records')
-                SplashScreen.hide()
-                return
-            } else {
-                let result = await LocalAuthentication.authenticateAsync()
-                if (result.success) {
+                const x = await canLoginWithFaceId()
+                if (x) {
                     const {
                         emailFromSecureStorage,
                         passwordFromSecureStorage,
                     } = await retrieveCredentialsToSecureStorage()
-                    console.log('before')
-                    logUserInToApplication({
+
+                    await logUserInToApplication({
                         email: emailFromSecureStorage,
                         password: passwordFromSecureStorage,
                         navigation: null,
                         setError: () => false,
                         setLoaded: () => true,
                         setUserExists,
-                        splash: SplashScreen,
                     })
-                } else {
-                    console.log('in else??')
-                    setUserExists(false)
+
                     SplashScreen.hide()
                 }
             }
-        } else {
-            SplashScreen.hide()
         }
-    }
 
-    const retrieveCredentialsToSecureStorage: any = async () => {
-        const secureEmail = await SecureStorage.getItem('secureEmail')
-        const securePassword = await SecureStorage.getItem('securePassword')
+        getUser()
+    }, [currentUser])
 
-        return {
-            emailFromSecureStorage: secureEmail,
-            passwordFromSecureStorage: securePassword,
-        }
-    }
-
-    // const fetchUserLeagues = async (userId: any) => {
-    //     const userLeagues: any = await getUserLeagues({ setUserLeaguesFetchComplete, userId })
-    //     setUserLeagues(userLeagues)
-    // }
-
-    return (
+    return userExists ? (
         <NavigationContainer>
             <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
                 <Stack.Screen name="TabScreen">
                     {(props: any) => (
                         <TabNavigation
-                            callBiometricAuth={callBiometricAuth}
                             setUserExists={setUserExists}
                             userExists={userExists}
                             // userLeagues={userLeagues}
@@ -350,5 +295,7 @@ export const Routing = () => {
                 </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
+    ) : (
+        <AuthenticateUserScreen setUserExists={setUserExists} />
     )
 }
