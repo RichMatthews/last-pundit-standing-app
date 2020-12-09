@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { getUserInformation } from 'src/firebase-helpers'
+import { getUserInformation, logUserInToApplication } from 'src/firebase-helpers'
+
+import { signUserOut } from '../leagues'
 
 export const getCurrentUser = createAsyncThunk('getCurrentUser', async ({ userId }) => {
     try {
@@ -19,6 +21,10 @@ const userSlice = createSlice({
         [getCurrentUser.fulfilled]: (state, action) => {
             state = { ...state, ...action.payload }
             return state
+        },
+
+        [signUserOut.fulfilled]: (state, action) => {
+            return {}
         },
     },
 })

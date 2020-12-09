@@ -1,3 +1,4 @@
+import * as RootNavigation from 'src/root-navigation'
 import { firebaseApp } from '../config.js'
 
 export const getCurrentGameweekFixtures = () => {
@@ -60,18 +61,13 @@ export const getUserLeagues = ({ setUserLeaguesFetchComplete, userId }: any) => 
         .catch((e) => console.log('ERROR:', e))
 }
 
-export const logUserInToApplication = ({ email, password, setError, setLoaded, setUserExists }: any) => {
-    return firebaseApp
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((res) => {
-            setUserExists(true)
-            setLoaded(true)
-        })
-        .catch((error) => {
-            setError(error.message)
-            setLoaded(true)
-        })
+export const logUserInToApplication = async ({ email, password }: any) => {
+    try {
+        const res = await firebaseApp.auth().signInWithEmailAndPassword(email, password)
+        return res
+    } catch (error) {
+        return error
+    }
 }
 
 export const signUserUpToApplication = (
@@ -102,22 +98,17 @@ export const signUserUpToApplication = (
         })
 }
 
-export const signUserOutOfApplication = ({ navigation, setUserExists }) => {
+export const signUserOutOfApplication = () => {
+    console.log('calling....')
     return firebaseApp
         .auth()
         .signOut()
         .then(() => {
-            setUserExists(false)
-            navigation.navigate('Leagues', { previous_screen: 'CURRENT_SCREEN' })
-            // const a = NavigationActions.navigate({
-            //     routeName: 'Account',
-            //     params: { previous_screen: 'SIGN_OUT' },
-            //     action: NavigationActions.navigate({ routeName: 'Leagues' }),
-            // })
-
-            // navigation.dispatch(a)
+            console.log('in the then')
+            console.log(RootNavigation, 'root?')
+            RootNavigation.navigate('Leagues')
         })
-        .catch((e) => console.log(e))
+        .catch((e) => e)
 }
 
 export const getLeagueCreatorInformation = (userId: string) => {

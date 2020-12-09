@@ -44,13 +44,7 @@ const AuthStack = () => (
     </Stack.Navigator>
 )
 
-const Stacks = ({
-    isSignedIn,
-    setUserExists,
-    // userLeagues,
-    userLeaguesFetchComplete,
-    userId,
-}: any) => (
+const Stacks = ({ isSignedIn, userLeaguesFetchComplete }: any) => (
     <Stack.Navigator
         screenOptions={{
             cardStyle: { backgroundColor: '#fff' },
@@ -67,11 +61,7 @@ const Stacks = ({
             <>
                 <Stack.Screen name="My Leagues">
                     {(props: any) => (
-                        <MyLeagues
-                            navigation={props.navigation}
-                            // userLeagues={userLeagues}
-                            userLeaguesFetchComplete={userLeaguesFetchComplete}
-                        />
+                        <MyLeagues navigation={props.navigation} userLeaguesFetchComplete={userLeaguesFetchComplete} />
                     )}
                 </Stack.Screen>
                 <Stack.Screen
@@ -83,33 +73,23 @@ const Stacks = ({
                         headerStyle: { backgroundColor: '#827ee6', elevation: 0, shadowOpacity: 0 },
                     }}
                 >
-                    {(props: any) => (
-                        <League
-                            currentUserId={userId}
-                            leagueId={props.route.params.leagueId}
-                            navigation={props.navigation}
-                        />
-                    )}
+                    {(props: any) => <League leagueId={props.route.params.leagueId} />}
                 </Stack.Screen>
             </>
         ) : (
             <>
                 <Stack.Screen name="Sign In">
-                    {(props: any) => (
-                        <AuthenticateUserScreen navigation={props.navigation} setUserExists={setUserExists} />
-                    )}
+                    {(props: any) => <AuthenticateUserScreen navigation={props.navigation} />}
                 </Stack.Screen>
                 <Stack.Screen name="Sign Up">
-                    {(props: any) => (
-                        <AuthenticateUserScreen navigation={props.navigation} setUserExists={setUserExists} />
-                    )}
+                    {(props: any) => <AuthenticateUserScreen navigation={props.navigation} />}
                 </Stack.Screen>
             </>
         )}
     </Stack.Navigator>
 )
 
-const CreateStack = ({ isSignedIn, setUserExists, userId }) => (
+const CreateStack = ({ isSignedIn }: any) => (
     <Stack.Navigator
         screenOptions={{
             cardStyle: { backgroundColor: '#fff' },
@@ -120,38 +100,30 @@ const CreateStack = ({ isSignedIn, setUserExists, userId }) => (
         {isSignedIn ? (
             <>
                 <Stack.Screen name="My Leagues">
-                    {(props: any) => <CreateLeague navigation={props.navigation} currentUserId={userId} />}
+                    {(props: any) => <CreateLeague navigation={props.navigation} />}
                 </Stack.Screen>
             </>
         ) : (
             <>
                 <Stack.Screen name="Sign In">
-                    {(props: any) => (
-                        <AuthenticateUserScreen navigation={props.navigation} setUserExists={setUserExists} />
-                    )}
+                    {(props: any) => <AuthenticateUserScreen navigation={props.navigation} />}
                 </Stack.Screen>
             </>
         )}
     </Stack.Navigator>
 )
 
-const ModalStacks = ({ setUserExists, user }) => (
+const ModalStacks = () => (
     <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
         <Stack.Screen name="Account" options={{ animationEnabled: true }}>
             {(props: any) => {
-                return <Account navigation={props.navigation} setUserExists={setUserExists} user={user} />
+                return <Account navigation={props.navigation} />
             }}
         </Stack.Screen>
     </Stack.Navigator>
 )
 
-const TabNavigation = ({
-    setUserExists,
-    userExists,
-    // userLeagues,
-    userLeaguesFetchComplete,
-    userId,
-}: any) => {
+const TabNavigation = ({ userLeaguesFetchComplete, user }: any) => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -182,11 +154,9 @@ const TabNavigation = ({
                 {(props: any) => {
                     return (
                         <Stacks
-                            isSignedIn={userExists}
+                            isSignedIn={user}
                             userLeaguesFetchComplete={userLeaguesFetchComplete}
-                            // userLeagues={userLeagues}
-                            userId={userId}
-                            setUserExists={setUserExists}
+                            userId={user.id}
                         />
                     )
                 }}
@@ -207,13 +177,13 @@ const TabNavigation = ({
 
             <Tab.Screen name="Create">
                 {(props: any) => {
-                    return <CreateStack isSignedIn={userExists} setUserExists={setUserExists} userId={userId} />
+                    return <CreateStack isSignedIn={user} userId={user.id} />
                 }}
             </Tab.Screen>
 
             <Tab.Screen name="Join">
                 {(props: any) => {
-                    return <JoinLeague navigation={props.navigation} currentUserId={userId} />
+                    return <JoinLeague navigation={props.navigation} currentUserId={user.id} />
                 }}
             </Tab.Screen>
 
@@ -222,7 +192,6 @@ const TabNavigation = ({
                 listeners={({ navigation }) => ({
                     tabPress: (event) => {
                         event.preventDefault()
-                        console.log(userExists)
                         navigation.navigate('Account')
                     },
                 })}
@@ -236,24 +205,21 @@ const TabNavigation = ({
 }
 
 export const Routing = () => {
-    const [userExists, setUserExists] = useState(false)
-    const [user, setUser] = useState({ name: '' })
     const [userLeaguesFetchComplete, setUserLeaguesFetchComplete] = useState(false)
     const currentUser = firebaseApp.auth().currentUser
     const dispatch = useDispatch()
+    const userFromRedux = useSelector((store: { user: any }) => store.user)
 
     useEffect(() => {
         async function getUser() {
             if (currentUser) {
-                const userInfo = await dispatch(getCurrentUser({ userId: currentUser.uid }))
+                await dispatch(getCurrentUser({ userId: currentUser.uid }))
                 await dispatch(getLeagues({ setUserLeaguesFetchComplete, userId: currentUser.uid }))
                 await dispatch(getCurrentGameWeekInfo())
-                setUserExists(true)
-                setUser(userInfo)
                 SplashScreen.hide()
             } else {
-                const x = await canLoginWithFaceId()
-                if (x) {
+                const faceIdAvailable = await canLoginWithFaceId()
+                if (faceIdAvailable) {
                     const {
                         emailFromSecureStorage,
                         passwordFromSecureStorage,
@@ -262,10 +228,6 @@ export const Routing = () => {
                     await logUserInToApplication({
                         email: emailFromSecureStorage,
                         password: passwordFromSecureStorage,
-                        navigation: null,
-                        setError: () => false,
-                        setLoaded: () => true,
-                        setUserExists,
                     })
 
                     SplashScreen.hide()
@@ -276,26 +238,18 @@ export const Routing = () => {
         getUser()
     }, [currentUser])
 
-    return userExists ? (
+    return userFromRedux && Object.values(userFromRedux).length ? (
         <NavigationContainer>
             <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
                 <Stack.Screen name="TabScreen">
                     {(props: any) => (
-                        <TabNavigation
-                            setUserExists={setUserExists}
-                            userExists={userExists}
-                            // userLeagues={userLeagues}
-                            userLeaguesFetchComplete={userLeaguesFetchComplete}
-                            userId={user && user.id}
-                        />
+                        <TabNavigation userLeaguesFetchComplete={userLeaguesFetchComplete} user={userFromRedux} />
                     )}
                 </Stack.Screen>
-                <Stack.Screen name="Account">
-                    {(props: any) => <ModalStacks setUserExists={setUserExists} user={user} />}
-                </Stack.Screen>
+                <Stack.Screen name="Account">{(props: any) => <ModalStacks />}</Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     ) : (
-        <AuthenticateUserScreen setUserExists={setUserExists} />
+        <AuthenticateUserScreen />
     )
 }

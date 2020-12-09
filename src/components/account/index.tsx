@@ -5,11 +5,11 @@ import AntIcon from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import LinearGradient from 'react-native-linear-gradient'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
-import { signUserOutOfApplication } from '../../firebase-helpers'
+import { signUserOut } from 'src/redux/reducer/leagues'
 
 const Section = styled.View`
     border-bottom-color: #ccc;
@@ -22,8 +22,9 @@ const Section = styled.View`
     width: 350px;
 `
 
-export const Account = ({ navigation, setUserExists }) => {
+export const Account = ({ navigation }: any) => {
     const user = useSelector((store: { user: any }) => store.user)
+    const dispatch = useDispatch()
 
     const closeModalHelper = () => {
         navigation.goBack()
@@ -89,7 +90,7 @@ export const Account = ({ navigation, setUserExists }) => {
                         <Text style={{ fontSize: 20, marginBottom: 5 }}>Change Password</Text>
                     </Section>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => signUserOutOfApplication({ navigation, setUserExists })}>
+                <TouchableOpacity onPress={() => dispatch(signUserOut({ navigation }))}>
                     <Section
                         style={{
                             position: 'absolute',

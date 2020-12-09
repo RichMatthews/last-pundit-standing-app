@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from 'react'
 import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import uid from 'uid'
 
@@ -8,11 +9,6 @@ import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
 import { getLeagueCreatorInformation } from '../../firebase-helpers'
 import { firebaseApp } from '../../config.js'
-
-interface CreateLeagueProps {
-    currentUserId: string
-}
-
 interface HeadingStyled {
     amount: boolean
 }
@@ -55,16 +51,17 @@ const SectionDivider = styled.View`
     margin: 15px 0 0 0;
 `
 
-export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) => {
+export const CreateLeague = ({ navigation }: any) => {
     const [privateLeague, setPrivateLeague] = useState(false)
     const [leagueName, setLeagueName] = useState('')
     const [selectedFee, setSelectedFee] = useState(10)
     const [leagueNameTooLong, setLeagueNameTooLong] = useState(false)
     const [loading, setLoading] = useState(false)
+    const user = useSelector((store: { user: any }) => store.user)
 
     const getLeagueCreatorInformationThenCreateLeague = async () => {
         setLoading(true)
-        const playerInfo: any = await getLeagueCreatorInformation(currentUserId)
+        const playerInfo: any = await getLeagueCreatorInformation(user.id)
         createLeague(playerInfo)
     }
 
@@ -96,7 +93,7 @@ export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) =
             [`/leagues/${leagueId}`]: {
                 admin: {
                     name: playerInfo.name,
-                    id: currentUserId,
+                    id: user.id,
                 },
                 currentRound: 0,
                 entryFee: selectedFee,
@@ -107,8 +104,8 @@ export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) =
                         currentGameRound: 0,
                         id: newGameId,
                         players: {
-                            [currentUserId]: {
-                                id: currentUserId,
+                            [user.id]: {
+                                id: user.id,
                                 name: playerInfo.name,
                                 rounds: [{ choice: { hasMadeChoice: false } }],
                             },
@@ -120,7 +117,7 @@ export const CreateLeague = ({ currentUserId, navigation }: CreateLeagueProps) =
                 joinPin: leagueJoinPin,
                 name: leagueName,
             },
-            [`/users/${currentUserId}/leagues/${leagueId}`]: {
+            [`/users/${user.id}/leagues/${leagueId}`]: {
                 id: leagueId,
                 isPrivate: privateLeague,
                 name: leagueName,

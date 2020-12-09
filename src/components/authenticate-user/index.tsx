@@ -13,11 +13,13 @@ import { Button, ButtonText, InvertedButton, InvertedButtonText } from 'src/ui-c
 import { Container } from 'src/ui-components/containers'
 import { H1 } from 'src/ui-components/headings'
 import SecureStorage from 'react-native-secure-storage'
+import { useDispatch } from 'react-redux'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
-import { canLoginWithFaceId } from 'src/utils/canLoginWithFaceId'
+import { canLoginWithFaceId, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import { getCurrentUser } from 'src/redux/reducer/user'
 
-export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
+export const AuthenticateUserScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
@@ -25,6 +27,7 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
     const [error, setError] = useState<any>(null)
     const [loaded, setLoaded] = useState(true)
     const [loginOption, setLoginOption] = useState('signin')
+    const dispatch = useDispatch()
 
     const saveCredentialsToSecureStorage: any = async () => {
         await SecureStorage.setItem('secureEmail', email)
@@ -32,6 +35,7 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
     }
 
     const logUserIn = () => {
+        console.log('called this?')
         if (email === '' || password === '') {
             setError('Email or password cannot be blank')
             return
@@ -39,16 +43,29 @@ export const AuthenticateUserScreen = ({ navigation, setUserExists }: any) => {
         setLoaded(false)
         if (loginOption === 'signin') {
             saveCredentialsToSecureStorage()
-            logUserInToApplication({ email, password, navigation, setError, setLoaded, setUserExists })
+            logUserInToApplication({ email, password, navigation, setError, setLoaded })
         } else {
             signUserUpToApplication(email, password, name, setError, surname)
         }
     }
 
     const logUserInWithFaceId = async () => {
-        const x = await canLoginWithFaceId()
-        if (x) {
-            logUserInToApplication({ email, password, navigation, setError, setLoaded, setUserExists })
+        setLoaded(true)
+        const faceIdOk = await canLoginWithFaceId()
+
+        const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
+
+        if (faceIdOk) {
+            const res = await logUserInToApplication({
+                email: emailFromSecureStorage,
+                password: passwordFromSecureStorage,
+            })
+            console.log('res,', res, 'RESS')
+            if (res.user) {
+                console.log('in here')
+                console.log('with id???', res.user.uid)
+                dispatch(getCurrentUser(res.user.uid))
+            }
         }
     }
 
