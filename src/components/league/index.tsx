@@ -83,13 +83,26 @@ export const League = ({ leagueId }: string) => {
                     <H2 style={styles.mainheading}>{league.name}</H2>
                     <Image source={require('../../images/other/premier-league.png')} style={styles.image} />
                 </View>
-                <View style={styles.subheading}>
-                    <Text style={styles.maintext}>
-                        <Text style={styles.subtext}>Round closes: </Text>
-                        {currentGameweek.ends}
-                    </Text>
+                <View
+                    style={{
+                        backgroundColor: '#fff',
+                        shadowOpacity: 1,
+                        shadowRadius: 3.5,
+                        shadowColor: '#ccc',
+                        shadowOffset: { height: 2, width: 0 },
+                    }}
+                >
+                    <View style={styles.subheading}>
+                        <Text style={styles.maintext}>
+                            <Text style={styles.subtext}>Round closes: </Text>
+                            {currentGameweek.ends}
+                        </Text>
+                    </View>
+                    <ScreenSelection
+                        currentScreenView={currentScreenView}
+                        setCurrentScreenView={setCurrentScreenView}
+                    />
                 </View>
-                <ScreenSelection currentScreenView={currentScreenView} setCurrentScreenView={setCurrentScreenView} />
                 <View>{determineScreenToRender()}</View>
             </View>
         </ScrollView>
@@ -101,7 +114,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#827ee6',
         display: 'flex',
         alignItems: 'center',
-        marginBottom: 15,
+        paddingBottom: 15,
         paddingTop: 15,
         width: '100%',
     },

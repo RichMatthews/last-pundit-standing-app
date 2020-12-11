@@ -46,13 +46,12 @@ export const updateUserGamweekChoice = ({ choice, currentRound, currentGame, lea
         })
 }
 
-export const getUserLeagues = ({ setUserLeaguesFetchComplete, userId }: any) => {
+export const getUserLeagues = ({ userId }: any) => {
     return firebaseApp
         .database()
         .ref(`users/${userId}/leagues`)
         .once('value')
         .then((snapshot) => {
-            setUserLeaguesFetchComplete(true)
             if (snapshot.val()) {
                 return Object.values(snapshot.val())
             }
@@ -99,14 +98,11 @@ export const signUserUpToApplication = (
 }
 
 export const signUserOutOfApplication = () => {
-    console.log('calling....')
     return firebaseApp
         .auth()
         .signOut()
         .then(() => {
-            console.log('in the then')
-            console.log(RootNavigation, 'root?')
-            RootNavigation.navigate('Leagues')
+            RootNavigation.navigate('Leagues', { userInitiatedSignOut: true })
         })
         .catch((e) => e)
 }

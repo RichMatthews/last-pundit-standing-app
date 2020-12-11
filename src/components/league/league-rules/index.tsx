@@ -33,16 +33,18 @@ export const LeagueRules = () => {
         <TouchableOpacity onPress={() => setShowRules(!showRules)} activeOpacity={1}>
             <View
                 style={{
-                    backgroundColor: '#fff',
-                    padding: 15,
+                    borderRadius: 5,
+                    backgroundColor: '#f7f7ff',
+                    padding: 10,
+                    margin: 5,
                     shadowOpacity: 1,
-                    shadowRadius: 3.5,
-                    shadowColor: '#ccc',
+                    shadowRadius: 2,
+                    shadowColor: '#ddd',
                     shadowOffset: { height: 2, width: 0 },
                 }}
             >
                 <Container>
-                    <H2>League Rules</H2>
+                    <Text style={{ fontSize: 17 }}>League Rules</Text>
                     <ExpandImage expand={showRules} source={require('src/images/other/down-arrow.png')} />
                 </Container>
                 <View>

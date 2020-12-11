@@ -8,6 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { useDispatch, useSelector } from 'react-redux'
 
+import * as RootNavigation from 'src/root-navigation'
 import { Account } from '../components/account'
 import { CreateLeague } from '../components/create-league'
 import { Home } from '../components/home'
@@ -206,37 +207,49 @@ const TabNavigation = ({ userLeaguesFetchComplete, user }: any) => {
 
 export const Routing = () => {
     const [userLeaguesFetchComplete, setUserLeaguesFetchComplete] = useState(false)
+
     const currentUser = firebaseApp.auth().currentUser
     const dispatch = useDispatch()
     const userFromRedux = useSelector((store: { user: any }) => store.user)
+    const lastLogin = 4
 
     useEffect(() => {
+        console.log(SplashScreen)
         async function getUser() {
             if (currentUser) {
                 await dispatch(getCurrentUser({ userId: currentUser.uid }))
-                await dispatch(getLeagues({ setUserLeaguesFetchComplete, userId: currentUser.uid }))
+                await dispatch(getLeagues({ userId: currentUser.uid }))
                 await dispatch(getCurrentGameWeekInfo())
                 SplashScreen.hide()
+
+                setUserLeaguesFetchComplete(true)
+            } else if (lastLogin > 3) {
+                logUserInAndSetUserInRedux()
             } else {
-                const faceIdAvailable = await canLoginWithFaceId()
-                if (faceIdAvailable) {
-                    const {
-                        emailFromSecureStorage,
-                        passwordFromSecureStorage,
-                    } = await retrieveCredentialsToSecureStorage()
-
-                    await logUserInToApplication({
-                        email: emailFromSecureStorage,
-                        password: passwordFromSecureStorage,
-                    })
-
-                    SplashScreen.hide()
+                const successfullyAuthenticatedWithFaceId = await canLoginWithFaceId()
+                if (successfullyAuthenticatedWithFaceId) {
+                    logUserInAndSetUserInRedux()
                 }
             }
         }
-
         getUser()
     }, [currentUser])
+
+    const logUserInAndSetUserInRedux = async () => {
+        const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
+        const user = await logUserInToApplication({
+            email: emailFromSecureStorage,
+            password: passwordFromSecureStorage,
+        })
+
+        if (user && user.user) {
+            await dispatch(getCurrentUser(user.user.uid))
+        }
+
+        SplashScreen.hide()
+
+        setUserLeaguesFetchComplete(true)
+    }
 
     return userFromRedux && Object.values(userFromRedux).length ? (
         <NavigationContainer>

@@ -8,7 +8,6 @@ import { H2 } from '../../ui-components/headings'
 import { getCurrentGameweekFixtures } from '../../firebase-helpers'
 
 const Container = styled.View`
-    background: #fff;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -42,7 +41,6 @@ const HomeTeam = styled.View<any>`
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-
     width: 120px;
 `
 
@@ -85,16 +83,18 @@ export const Fixtures = () => {
         <TouchableOpacity onPress={() => setShowFixtures(!showFixtures)} activeOpacity={1}>
             <View
                 style={{
-                    backgroundColor: '#fff',
-                    padding: 15,
+                    borderRadius: 5,
+                    backgroundColor: '#f7f7ff',
+                    padding: 10,
+                    margin: 5,
                     shadowOpacity: 1,
-                    shadowRadius: 3.5,
-                    shadowColor: '#ccc',
+                    shadowRadius: 2,
+                    shadowColor: '#ddd',
                     shadowOffset: { height: 2, width: 0 },
                 }}
             >
                 <LeagueNameAndLeagueTypeImage>
-                    <H2>Gameweek Fixtures</H2>
+                    <Text style={{ fontSize: 17 }}>Gameweek Fixtures</Text>
                     <ExpandImage expand={showFixtures} source={require('../../images/other/down-arrow.png')} />
                 </LeagueNameAndLeagueTypeImage>
                 <Container>

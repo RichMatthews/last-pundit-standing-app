@@ -15,6 +15,10 @@ target 'LastPunditStanding' do
 
 
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+  pod 'RNSecureStorage', :path => '../node_modules/react-native-secure-storage'
+
   target 'LastPunditStandingTests' do
     inherit! :complete
     # Pods for testing

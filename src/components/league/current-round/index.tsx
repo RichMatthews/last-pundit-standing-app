@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Dimensions, TouchableOpacity, Text } from 'react-native'
+import { TouchableOpacity, Text } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 
@@ -23,7 +23,7 @@ const CurrentRound = styled.View`
 
 const PlayerRow = styled.View<any>`
     border-radius: 5px;
-    background-color: #fff;
+    background-color: #f7f7ff;
     padding: 10px;
     margin: 10px;
 `
@@ -56,23 +56,31 @@ const PlayerAndDownArrow = styled.View`
     flex-direction: row;
 `
 
-export const CurrentRoundView = ({ currentUserId, listOfExpandedPrevious, setListOfExpandedPreviousHelper }: any) => {
+export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPreviousHelper }: any) => {
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
+    const user = useSelector((store: { user: any }) => store.user)
 
     return (
         <Section>
             <Container>
                 {Object.values(currentGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        <PlayerRow key={player.id} value="Current Round">
+                        <PlayerRow
+                            key={player.id}
+                            value="Current Round"
+                            style={{
+                                shadowOpacity: 1,
+                                shadowRadius: 2,
+                                shadowColor: '#ddd',
+                                shadowOffset: { height: 2, width: 0 },
+                            }}
+                        >
                             <CurrentRound>
-                                <PlayerName isCurrentLoggedInPlayer={player.id === currentUserId}>
-                                    {player.name}
-                                </PlayerName>
+                                <PlayerName isCurrentLoggedInPlayer={player.id === user.id}>{player.name}</PlayerName>
                                 <PlayerAndDownArrow>
                                     <ShowImageForPlayerChoice
                                         currentGame={currentGame}
-                                        isCurrentLoggedInPlayer={player.id === currentUserId}
+                                        isCurrentLoggedInPlayer={player.id === user.id}
                                         player={player}
                                     />
 
@@ -82,7 +90,7 @@ export const CurrentRoundView = ({ currentUserId, listOfExpandedPrevious, setLis
                                     />
                                 </PlayerAndDownArrow>
                             </CurrentRound>
-                            <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={500}>
+                            <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
                                 <HistoricalRounds>
                                     {player.rounds.length > 0 ? (
                                         <>

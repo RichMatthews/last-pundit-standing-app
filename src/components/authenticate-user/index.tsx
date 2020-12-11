@@ -34,8 +34,7 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
         await SecureStorage.setItem('securePassword', password)
     }
 
-    const logUserIn = () => {
-        console.log('called this?')
+    const logUserIn = async () => {
         if (email === '' || password === '') {
             setError('Email or password cannot be blank')
             return
@@ -43,7 +42,9 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
         setLoaded(false)
         if (loginOption === 'signin') {
             saveCredentialsToSecureStorage()
-            logUserInToApplication({ email, password, navigation, setError, setLoaded })
+            const user = await logUserInToApplication({ email, password })
+            await SecureStorage.setItem('secureUid', user.user.uid)
+            setLoaded(true)
         } else {
             signUserUpToApplication(email, password, name, setError, surname)
         }
@@ -62,8 +63,6 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
             })
             console.log('res,', res, 'RESS')
             if (res.user) {
-                console.log('in here')
-                console.log('with id???', res.user.uid)
                 dispatch(getCurrentUser(res.user.uid))
             }
         }
@@ -89,7 +88,7 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
 
     return loaded ? (
         <Fragment>
-            <SafeAreaView style={{ flex: 0, height: 200, backgroundColor: '#827ee6' }} />
+            <SafeAreaView style={{ flex: 0, height: Platform.OS === 'ios' ? 200 : 100, backgroundColor: '#827ee6' }} />
             <SafeAreaView>
                 <H1 style={styles.heading}>Login</H1>
                 <Container style={{ marginTop: 50 }}>
@@ -161,7 +160,7 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
                                 </TouchableOpacity>
                             </View>
                         )}
-                        <View style={{ bottom: 400, position: 'absolute' }}>
+                        <View style={{ bottom: Platform.OS === 'ios' ? 400 : 300, position: 'absolute' }}>
                             <TouchableOpacity onPress={authenticateUserHelper}>
                                 <InvertedButton>
                                     <InvertedButtonText>
@@ -228,14 +227,14 @@ const styles = StyleSheet.create({
     inputContainer: {
         display: 'flex',
         flexDirection: 'row',
-        padding: 10,
+        padding: Platform.OS === 'ios' ? 10 : 0,
         margin: 10,
     },
     input: {
         borderBottomWidth: 1,
         borderColor: '#ccc',
         fontSize: 15,
-        paddingBottom: 10,
+        paddingBottom: Platform.OS === 'ios' ? 10 : 0,
         width: '80%',
     },
     inputSection: {

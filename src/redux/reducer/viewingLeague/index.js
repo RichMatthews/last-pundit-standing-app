@@ -2,9 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { getUserLeagues } from 'src/firebase-helpers'
 
-export const getCurrentGame = createAsyncThunk('getCurrentGame', async ({ setUserLeaguesFetchComplete, userId }) => {
+export const getCurrentGame = createAsyncThunk('getCurrentGame', async ({ userId }) => {
     try {
-        const leagues = await getUserLeagues({ setUserLeaguesFetchComplete, userId })
+        const leagues = await getUserLeagues({ userId })
         return leagues
     } catch (e) {
         console.log('errored getting user')
