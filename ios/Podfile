@@ -12,12 +12,7 @@ target 'LastPunditStanding' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
-
-
-
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-
-  pod 'RNSecureStorage', :path => '../node_modules/react-native-secure-storage'
 
   target 'LastPunditStandingTests' do
     inherit! :complete

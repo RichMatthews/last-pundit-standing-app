@@ -8,7 +8,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { useDispatch, useSelector } from 'react-redux'
 
-import * as RootNavigation from 'src/root-navigation'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { Account } from '../components/account'
 import { CreateLeague } from '../components/create-league'
 import { Home } from '../components/home'
@@ -20,12 +21,11 @@ import { ResetPassword } from '../components/reset-password'
 import { UpdateEmail } from '../components/update-email'
 import { logUserInToApplication, signUserUpToApplication } from 'src/firebase-helpers'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
-
 import { getLeagues } from 'src/redux/reducer/leagues'
 import { getCurrentUser } from 'src/redux/reducer/user'
 import { firebaseApp } from '../config.js'
 
-import { canLoginWithFaceId, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import { faceIdAuthenticationSuccessful, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -214,11 +214,14 @@ export const Routing = () => {
     const lastLogin = 4
 
     useEffect(() => {
-        console.log(SplashScreen)
         async function getUser() {
+            if (await userJustSignedOut()) {
+                return
+            }
+            console.log('here?')
             if (currentUser) {
-                await dispatch(getCurrentUser({ userId: currentUser.uid }))
-                await dispatch(getLeagues({ userId: currentUser.uid }))
+                await dispatch(getCurrentUser(currentUser.uid))
+                await dispatch(getLeagues(currentUser.uid))
                 await dispatch(getCurrentGameWeekInfo())
                 SplashScreen.hide()
 
@@ -226,7 +229,7 @@ export const Routing = () => {
             } else if (lastLogin > 3) {
                 logUserInAndSetUserInRedux()
             } else {
-                const successfullyAuthenticatedWithFaceId = await canLoginWithFaceId()
+                const successfullyAuthenticatedWithFaceId = await faceIdAuthenticationSuccessful()
                 if (successfullyAuthenticatedWithFaceId) {
                     logUserInAndSetUserInRedux()
                 }
@@ -235,8 +238,21 @@ export const Routing = () => {
         getUser()
     }, [currentUser])
 
+    const userJustSignedOut = async () => {
+        const timeOfSignOut = await AsyncStorage.getItem('signOutTimeStamp')
+        const currentTime = Date.now()
+        console.log(currentTime, timeOfSignOut, 'the times')
+        if (Number(currentTime) > Number(timeOfSignOut) + 10000) {
+            console.log('false')
+            return false
+        }
+        console.log('true')
+        return true
+    }
+
     const logUserInAndSetUserInRedux = async () => {
         const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
+        console.log(emailFromSecureStorage, passwordFromSecureStorage, 'credys')
         const user = await logUserInToApplication({
             email: emailFromSecureStorage,
             password: passwordFromSecureStorage,

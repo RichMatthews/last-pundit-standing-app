@@ -4,7 +4,8 @@ import { getUserInformation, logUserInToApplication } from 'src/firebase-helpers
 
 import { signUserOut } from '../leagues'
 
-export const getCurrentUser = createAsyncThunk('getCurrentUser', async ({ userId }) => {
+export const getCurrentUser = createAsyncThunk('getCurrentUser', async (userId) => {
+    console.log(userId, 'uid')
     try {
         const userInfo = await getUserInformation({ userId })
         return userInfo

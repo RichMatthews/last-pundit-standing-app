@@ -9,17 +9,21 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button, ButtonText, InvertedButton, InvertedButtonText } from 'src/ui-components/button'
 import { Container } from 'src/ui-components/containers'
 import { H1 } from 'src/ui-components/headings'
-import SecureStorage from 'react-native-secure-storage'
+import * as Keychain from 'react-native-keychain'
 import { useDispatch } from 'react-redux'
+import * as RootNavigation from 'src/root-navigation'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
-import { canLoginWithFaceId, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import { faceIdAuthenticationSuccessful, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
 import { getCurrentUser } from 'src/redux/reducer/user'
+import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
+import { getLeagues } from 'src/redux/reducer/leagues'
 
-export const AuthenticateUserScreen = ({ navigation }: any) => {
+export const AuthenticateUserScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
@@ -30,11 +34,11 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
     const dispatch = useDispatch()
 
     const saveCredentialsToSecureStorage: any = async () => {
-        await SecureStorage.setItem('secureEmail', email)
-        await SecureStorage.setItem('securePassword', password)
+        await Keychain.setGenericPassword(email, password)
     }
 
     const logUserIn = async () => {
+        console.log(email, password, 'local state')
         if (email === '' || password === '') {
             setError('Email or password cannot be blank')
             return
@@ -43,7 +47,8 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
         if (loginOption === 'signin') {
             saveCredentialsToSecureStorage()
             const user = await logUserInToApplication({ email, password })
-            await SecureStorage.setItem('secureUid', user.user.uid)
+            await AsyncStorage.setItem('secureUid', user.user.uid)
+            await dispatch(getCurrentUser(user.user.uid))
             setLoaded(true)
         } else {
             signUserUpToApplication(email, password, name, setError, surname)
@@ -51,9 +56,8 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
     }
 
     const logUserInWithFaceId = async () => {
-        setLoaded(true)
-        const faceIdOk = await canLoginWithFaceId()
-
+        setLoaded(false)
+        const faceIdOk = await faceIdAuthenticationSuccessful()
         const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
 
         if (faceIdOk) {
@@ -61,9 +65,14 @@ export const AuthenticateUserScreen = ({ navigation }: any) => {
                 email: emailFromSecureStorage,
                 password: passwordFromSecureStorage,
             })
-            console.log('res,', res, 'RESS')
+            console.log('RESULT:', res)
+            console.log('id here:', res.user.uid)
             if (res.user) {
-                dispatch(getCurrentUser(res.user.uid))
+                await dispatch(getCurrentUser(res.user.uid))
+                await dispatch(getLeagues(res.user.uid))
+                await dispatch(getCurrentGameWeekInfo())
+                RootNavigation.navigate('My Leagues')
+                setLoaded(true)
             }
         }
     }

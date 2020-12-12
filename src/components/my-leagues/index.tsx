@@ -51,7 +51,6 @@ export const MyLeagues = ({ navigation, userLeaguesFetchComplete }: any) => {
             <SafeAreaView>
                 <H1 style={{ backgroundColor: '#827ee6', color: '#fff', padding: 20, width: '100%' }}>My Leagues</H1>
                 <Container>
-                    {console.log('YO:', userLeaguesFetchComplete)}
                     <LeagueContainer>
                         {userLeaguesFetchComplete ? (
                             userLeagues.length ? (

@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Platform, Text, TouchableOpacity, TouchableNativeFeedback, View } from 'react-native'
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import LinearGradient from 'react-native-linear-gradient'
 import { useDispatch, useSelector } from 'react-redux'
+import { canLoginWithFaceIdAndUpdateKeyChain } from 'src/utils/canLoginWithFaceId'
 
 import { Container } from '../../ui-components/containers'
 import { H1 } from '../../ui-components/headings'
@@ -45,8 +46,8 @@ export const Account = ({ navigation }: any) => {
                 style={{
                     backgroundColor: '#B972FE',
                     borderBottomRightRadius: 250,
-                    height: 300,
-                    paddingTop: 150,
+                    height: Platform.OS === 'ios' ? 300 : 200,
+                    paddingTop: Platform.OS === 'ios' ? 150 : 100,
                 }}
             >
                 <View>
@@ -80,30 +81,57 @@ export const Account = ({ navigation }: any) => {
             <Container>
                 <TouchableOpacity onPress={() => updateEmailHelper()}>
                     <Section>
-                        <MaterialCommIcon name="email-edit-outline" size={30} style={{ marginRight: 10 }} />
-                        <Text style={{ fontSize: 20, marginBottom: 5 }}>Update Email</Text>
+                        <MaterialCommIcon
+                            name="email-edit-outline"
+                            size={Platform.OS === 'ios' ? 30 : 20}
+                            style={{ marginRight: 10 }}
+                        />
+                        <Text style={{ fontSize: Platform.OS === 'ios' ? 20 : 15, marginBottom: 5 }}>Update Email</Text>
                     </Section>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => changePasswordHelper()}>
                     <Section>
-                        <MaterialCommIcon name="lock-outline" size={30} style={{ marginRight: 10 }} />
-                        <Text style={{ fontSize: 20, marginBottom: 5 }}>Change Password</Text>
+                        <MaterialCommIcon
+                            name="lock-outline"
+                            size={Platform.OS === 'ios' ? 30 : 20}
+                            style={{ marginRight: 10 }}
+                        />
+                        <Text style={{ fontSize: Platform.OS === 'ios' ? 20 : 15, marginBottom: 5 }}>
+                            Change Password
+                        </Text>
                     </Section>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => dispatch(signUserOut({ navigation }))}>
+                <TouchableOpacity onPress={async () => await canLoginWithFaceIdAndUpdateKeyChain()}>
+                    <Section>
+                        <MaterialCommIcon
+                            name="lock-outline"
+                            size={Platform.OS === 'ios' ? 30 : 20}
+                            style={{ marginRight: 10 }}
+                        />
+                        <Text style={{ fontSize: Platform.OS === 'ios' ? 20 : 15, marginBottom: 5 }}>
+                            Authenticate with FaceID
+                        </Text>
+                    </Section>
+                </TouchableOpacity>
+                <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>
                     <Section
                         style={{
+                            // borderBottomWidth: 0,
                             position: 'absolute',
-                            bottom: -300,
+                            bottom: Platform.OS === 'ios' ? 450 : -150,
                             display: 'flex',
-                            // justifyContent: 'center',
                             alignSelf: 'center',
+                            zIndex: 1,
                         }}
                     >
-                        <MaterialIcon name="exit-to-app" size={30} style={{ marginRight: 10 }} />
-                        <Text style={{ fontSize: 20, marginBottom: 5 }}>Sign out</Text>
+                        <MaterialIcon
+                            name="exit-to-app"
+                            size={Platform.OS === 'ios' ? 30 : 20}
+                            style={{ marginRight: 10 }}
+                        />
+                        <Text style={{ fontSize: Platform.OS === 'ios' ? 20 : 15, marginBottom: 5 }}>Sign out</Text>
                     </Section>
-                </TouchableOpacity>
+                </TouchableNativeFeedback>
             </Container>
         </View>
     )
