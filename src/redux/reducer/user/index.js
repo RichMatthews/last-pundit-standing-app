@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { getUserInformation, logUserInToApplication } from 'src/firebase-helpers'
+import { getUserInformation } from 'src/firebase-helpers'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { signUserOut } from '../leagues'
 
-export const getCurrentUser = createAsyncThunk('getCurrentUser', async (userId) => {
-    console.log(userId, 'uid')
+export const getCurrentUser = createAsyncThunk('getCurrentUser', async (user) => {
     try {
-        const userInfo = await getUserInformation({ userId })
+        const userInfo = await getUserInformation({ userId: user.uid })
+        await AsyncStorage.setItem('lastLogin', Date.now().toString())
         return userInfo
     } catch (e) {
         console.log('errored getting user')

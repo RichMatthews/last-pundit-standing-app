@@ -25,7 +25,7 @@ import { getLeagues } from 'src/redux/reducer/leagues'
 import { getCurrentUser } from 'src/redux/reducer/user'
 import { firebaseApp } from '../config.js'
 
-import { faceIdAuthenticationSuccessful, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import { attemptFaceIDAuthentication, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -45,7 +45,7 @@ const AuthStack = () => (
     </Stack.Navigator>
 )
 
-const Stacks = ({ isSignedIn, userLeaguesFetchComplete }: any) => (
+const Stacks = ({ isSignedIn }: any) => (
     <Stack.Navigator
         screenOptions={{
             cardStyle: { backgroundColor: '#fff' },
@@ -61,9 +61,7 @@ const Stacks = ({ isSignedIn, userLeaguesFetchComplete }: any) => (
         {isSignedIn ? (
             <>
                 <Stack.Screen name="My Leagues">
-                    {(props: any) => (
-                        <MyLeagues navigation={props.navigation} userLeaguesFetchComplete={userLeaguesFetchComplete} />
-                    )}
+                    {(props: any) => <MyLeagues navigation={props.navigation} />}
                 </Stack.Screen>
                 <Stack.Screen
                     name="League"
@@ -124,7 +122,7 @@ const ModalStacks = () => (
     </Stack.Navigator>
 )
 
-const TabNavigation = ({ userLeaguesFetchComplete, user }: any) => {
+const TabNavigation = ({ user }: any) => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -153,13 +151,7 @@ const TabNavigation = ({ userLeaguesFetchComplete, user }: any) => {
         >
             <Tab.Screen name="Leagues">
                 {(props: any) => {
-                    return (
-                        <Stacks
-                            isSignedIn={user}
-                            userLeaguesFetchComplete={userLeaguesFetchComplete}
-                            userId={user.id}
-                        />
-                    )
+                    return <Stacks isSignedIn={user} userId={user.id} />
                 }}
             </Tab.Screen>
             <Tab.Screen
@@ -206,75 +198,91 @@ const TabNavigation = ({ userLeaguesFetchComplete, user }: any) => {
 }
 
 export const Routing = () => {
-    const [userLeaguesFetchComplete, setUserLeaguesFetchComplete] = useState(false)
-
     const currentUser = firebaseApp.auth().currentUser
     const dispatch = useDispatch()
     const userFromRedux = useSelector((store: { user: any }) => store.user)
-    const lastLogin = 4
 
     useEffect(() => {
         async function getUser() {
             if (await userJustSignedOut()) {
                 return
             }
-            console.log('here?')
-            if (currentUser) {
-                await dispatch(getCurrentUser(currentUser.uid))
-                await dispatch(getLeagues(currentUser.uid))
-                await dispatch(getCurrentGameWeekInfo())
-                SplashScreen.hide()
+            const lastLogin = await checkIfNeedToReauthenticateUser()
 
-                setUserLeaguesFetchComplete(true)
-            } else if (lastLogin > 3) {
-                logUserInAndSetUserInRedux()
-            } else {
-                const successfullyAuthenticatedWithFaceId = await faceIdAuthenticationSuccessful()
-                if (successfullyAuthenticatedWithFaceId) {
-                    logUserInAndSetUserInRedux()
+            if (currentUser) {
+                try {
+                    await dispatch(getCurrentUser(currentUser))
+                    await dispatch(getLeagues(currentUser.uid))
+                    await dispatch(getCurrentGameWeekInfo())
+                    SplashScreen.hide()
+                } catch (e) {
+                    console.log(e)
                 }
+            } else if (lastLogin) {
+                const faceIdAuthSuccessful = await attemptFaceIDAuthentication()
+                if (faceIdAuthSuccessful) {
+                    logUserInAndSetUserInRedux()
+                } else {
+                    SplashScreen.hide()
+                }
+            } else {
+                logUserInAndSetUserInRedux()
             }
         }
         getUser()
-    }, [currentUser])
+    }, [])
+
+    const checkIfNeedToReauthenticateUser = async () => {
+        const lastLogin = await AsyncStorage.getItem('lastLogin')
+        const currentTime = Date.now()
+        const oneday = 60 * 60 * 24
+        const threeDays = oneday * 3
+        const threeDaysSince = Number(lastLogin) + threeDays
+
+        if (threeDaysSince > 2607937909295) {
+            return false
+        }
+        return true
+    }
 
     const userJustSignedOut = async () => {
         const timeOfSignOut = await AsyncStorage.getItem('signOutTimeStamp')
         const currentTime = Date.now()
-        console.log(currentTime, timeOfSignOut, 'the times')
         if (Number(currentTime) > Number(timeOfSignOut) + 10000) {
-            console.log('false')
             return false
         }
-        console.log('true')
         return true
     }
 
     const logUserInAndSetUserInRedux = async () => {
+        console.log('CALLING: logUserInAndSetUserInRedux')
         const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
-        console.log(emailFromSecureStorage, passwordFromSecureStorage, 'credys')
-        const user = await logUserInToApplication({
-            email: emailFromSecureStorage,
-            password: passwordFromSecureStorage,
-        })
+        if (!emailFromSecureStorage || !passwordFromSecureStorage) {
+            console.log('1:::')
+            SplashScreen.hide()
+            return
+        }
+        try {
+            console.log('2:::')
+            const { user } = await logUserInToApplication({
+                email: emailFromSecureStorage,
+                password: passwordFromSecureStorage,
+            })
 
-        if (user && user.user) {
-            await dispatch(getCurrentUser(user.user.uid))
+            console.log(user)
+            await dispatch(getCurrentUser(user))
+            await dispatch(getLeagues(user.uid))
+        } catch (e) {
+            console.log(e, 'error in routing')
         }
 
         SplashScreen.hide()
-
-        setUserLeaguesFetchComplete(true)
     }
 
     return userFromRedux && Object.values(userFromRedux).length ? (
         <NavigationContainer>
             <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
-                <Stack.Screen name="TabScreen">
-                    {(props: any) => (
-                        <TabNavigation userLeaguesFetchComplete={userLeaguesFetchComplete} user={userFromRedux} />
-                    )}
-                </Stack.Screen>
+                <Stack.Screen name="TabScreen">{(props: any) => <TabNavigation user={userFromRedux} />}</Stack.Screen>
                 <Stack.Screen name="Account">{(props: any) => <ModalStacks />}</Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>

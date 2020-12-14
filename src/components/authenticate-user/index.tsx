@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
     TextInput,
@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux'
 import * as RootNavigation from 'src/root-navigation'
 
 import { logUserInToApplication, signUserUpToApplication } from '../../firebase-helpers'
-import { faceIdAuthenticationSuccessful, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import { attemptFaceIDAuthentication, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
 import { getCurrentUser } from 'src/redux/reducer/user'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { getLeagues } from 'src/redux/reducer/leagues'
@@ -31,14 +31,18 @@ export const AuthenticateUserScreen = () => {
     const [error, setError] = useState<any>(null)
     const [loaded, setLoaded] = useState(true)
     const [loginOption, setLoginOption] = useState('signin')
+    const [showFaceIDButton, setShowFaceIDButton] = useState(false)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        checkIfFaceIDAvailable()
+    }, [])
 
     const saveCredentialsToSecureStorage: any = async () => {
         await Keychain.setGenericPassword(email, password)
     }
 
     const logUserIn = async () => {
-        console.log(email, password, 'local state')
         if (email === '' || password === '') {
             setError('Email or password cannot be blank')
             return
@@ -46,10 +50,18 @@ export const AuthenticateUserScreen = () => {
         setLoaded(false)
         if (loginOption === 'signin') {
             saveCredentialsToSecureStorage()
-            const user = await logUserInToApplication({ email, password })
-            await AsyncStorage.setItem('secureUid', user.user.uid)
-            await dispatch(getCurrentUser(user.user.uid))
-            setLoaded(true)
+            try {
+                console.log(email, 'em')
+                const { user } = await logUserInToApplication({ email, password })
+
+                await AsyncStorage.setItem('secureUid', user.uid)
+                await getUserAndLeaguesAndGameWeekInfo(user)
+                setLoaded(true)
+            } catch (e) {
+                setPassword('')
+                setError(e.message)
+                setLoaded(true)
+            }
         } else {
             signUserUpToApplication(email, password, name, setError, surname)
         }
@@ -57,24 +69,34 @@ export const AuthenticateUserScreen = () => {
 
     const logUserInWithFaceId = async () => {
         setLoaded(false)
-        const faceIdOk = await faceIdAuthenticationSuccessful()
+        const faceIdAuthSuccessful = await attemptFaceIDAuthentication()
         const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
 
-        if (faceIdOk) {
-            const res = await logUserInToApplication({
-                email: emailFromSecureStorage,
-                password: passwordFromSecureStorage,
-            })
-            console.log('RESULT:', res)
-            console.log('id here:', res.user.uid)
-            if (res.user) {
-                await dispatch(getCurrentUser(res.user.uid))
-                await dispatch(getLeagues(res.user.uid))
-                await dispatch(getCurrentGameWeekInfo())
-                RootNavigation.navigate('My Leagues')
+        if (faceIdAuthSuccessful) {
+            try {
+                const { user } = await logUserInToApplication({
+                    email: emailFromSecureStorage,
+                    password: passwordFromSecureStorage,
+                })
+
+                if (user) {
+                    await getUserAndLeaguesAndGameWeekInfo(user)
+                    RootNavigation.navigate('My Leagues')
+                    setLoaded(true)
+                }
+            } catch (e) {
+                setError('Failed Face Id')
                 setLoaded(true)
             }
+        } else {
+            setLoaded(true)
         }
+    }
+
+    const getUserAndLeaguesAndGameWeekInfo = async (user: any) => {
+        await dispatch(getCurrentUser(user))
+        await dispatch(getLeagues(user.uid))
+        await dispatch(getCurrentGameWeekInfo())
     }
 
     const authenticateUserHelper = () => {
@@ -93,6 +115,17 @@ export const AuthenticateUserScreen = () => {
     const setPasswordHelper = (e: any) => {
         setError(null)
         setPassword(e.nativeEvent.text)
+    }
+
+    const checkIfFaceIDAvailable = async () => {
+        const x = await AsyncStorage.getItem('faceIdStatus')
+        const userNameIsSet = await Keychain.getGenericPassword()
+
+        if (x === 'active' && userNameIsSet) {
+            setShowFaceIDButton(true)
+        } else {
+            setShowFaceIDButton(false)
+        }
     }
 
     return loaded ? (
@@ -140,6 +173,7 @@ export const AuthenticateUserScreen = () => {
                                     placeholder="email"
                                     placeholderTextColor="#666464"
                                     onChange={(e: any) => setEmailHelper(e)}
+                                    value={email}
                                 />
                             </View>
                             <View style={styles.inputContainer}>
@@ -149,6 +183,7 @@ export const AuthenticateUserScreen = () => {
                                     placeholderTextColor="#666464"
                                     secureTextEntry={true}
                                     onChange={(e: any) => setPasswordHelper(e)}
+                                    value={password}
                                 />
                             </View>
                         </>
@@ -160,7 +195,7 @@ export const AuthenticateUserScreen = () => {
                                 <ButtonText>{loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}</ButtonText>
                             </Button>
                         </TouchableOpacity>
-                        {loginOption === 'signin' && (
+                        {loginOption === 'signin' && showFaceIDButton && (
                             <View style={{ marginTop: 10 }}>
                                 <TouchableOpacity onPress={logUserInWithFaceId}>
                                     <Button>

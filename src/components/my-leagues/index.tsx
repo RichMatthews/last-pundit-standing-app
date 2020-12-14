@@ -42,9 +42,10 @@ const NoLeagueText = styled(LeagueName)`
     color: #000;
 `
 
-export const MyLeagues = ({ navigation, userLeaguesFetchComplete }: any) => {
+export const MyLeagues = ({ navigation }: any) => {
     const userLeagues = useSelector((store: { userLeagues: any }) => store.userLeagues)
 
+    console.log(userLeagues, 'ulul')
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, height: 100, backgroundColor: '#827ee6' }} />
@@ -52,39 +53,37 @@ export const MyLeagues = ({ navigation, userLeaguesFetchComplete }: any) => {
                 <H1 style={{ backgroundColor: '#827ee6', color: '#fff', padding: 20, width: '100%' }}>My Leagues</H1>
                 <Container>
                     <LeagueContainer>
-                        {userLeaguesFetchComplete ? (
-                            userLeagues.length ? (
-                                userLeagues.map((league: LeagueState) => (
-                                    <LeagueItem
-                                        key={league.id}
-                                        style={{
-                                            shadowOpacity: 1,
-                                            shadowRadius: 3.5,
-                                            shadowColor: '#ccc',
-                                            shadowOffset: { height: 2, width: 0 },
-                                        }}
-                                    >
-                                        <View>
-                                            <LeagueName>{league.name}</LeagueName>
-                                        </View>
-                                        <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                            <TouchableOpacity
-                                                onPress={() => navigation.navigate('League', { leagueId: league.id })}
-                                            >
-                                                <SimpleLineIcon name="arrow-right-circle" size={20} color={'#827ee6'} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </LeagueItem>
-                                ))
-                            ) : (
-                                <View>
-                                    <LeagueItem>
-                                        <NoLeagueText>You have not entered any public leagues yet</NoLeagueText>
-                                    </LeagueItem>
-                                </View>
-                            )
-                        ) : (
+                        {userLeagues.loading ? (
                             <ActivityIndicator size="large" color="#827ee6" />
+                        ) : userLeagues.leagues.length ? (
+                            userLeagues.leagues.map((league: LeagueState) => (
+                                <LeagueItem
+                                    key={league.id}
+                                    style={{
+                                        shadowOpacity: 1,
+                                        shadowRadius: 3.5,
+                                        shadowColor: '#ccc',
+                                        shadowOffset: { height: 2, width: 0 },
+                                    }}
+                                >
+                                    <View>
+                                        <LeagueName>{league.name}</LeagueName>
+                                    </View>
+                                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate('League', { leagueId: league.id })}
+                                        >
+                                            <SimpleLineIcon name="arrow-right-circle" size={20} color={'#827ee6'} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </LeagueItem>
+                            ))
+                        ) : (
+                            <View>
+                                <LeagueItem>
+                                    <NoLeagueText>You have not entered any public leagues yet</NoLeagueText>
+                                </LeagueItem>
+                            </View>
                         )}
                     </LeagueContainer>
 

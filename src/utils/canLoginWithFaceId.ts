@@ -1,6 +1,6 @@
-import SplashScreen from 'react-native-splash-screen'
-import * as LocalAuthentication from 'expo-local-authentication'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Keychain from 'react-native-keychain'
+import * as LocalAuthentication from 'expo-local-authentication'
 
 export const retrieveCredentialsToSecureStorage: any = async () => {
     const credentials: any = await Keychain.getGenericPassword()
@@ -13,17 +13,21 @@ export const retrieveCredentialsToSecureStorage: any = async () => {
 
 export const canLoginWithFaceIdAndUpdateKeyChain = async () => {
     console.log('CALLING biometricAuth func')
+    const faceIdTurnedOn = await AsyncStorage.getItem('faceIdStatus')
+    console.log(faceIdTurnedOn, 'turned on!')
+    if (faceIdTurnedOn !== 'active') {
+        return
+    }
     const creds = await retrieveCredentialsToSecureStorage()
     Keychain.getSupportedBiometryType().then((bioType) => {
         switch (bioType) {
             case 'FaceID':
-                setFaceId(creds.emailFromSecureStorage, creds.passwordFromSecureStorage)
+                setCredentialsInKeyChain(creds.emailFromSecureStorage, creds.passwordFromSecureStorage)
         }
     })
 }
 
-const setFaceId = (email: string, password: string) => {
-    console.log('hi?')
+const setCredentialsInKeyChain = (email: string, password: string) => {
     Keychain.setGenericPassword(email, password, {
         service: 'org.reactjs.native.example.LastPunditStanding',
         accessControl: 'BiometryAny' as any,
@@ -33,19 +37,31 @@ const setFaceId = (email: string, password: string) => {
         .catch((e) => console.log(e))
 }
 
-export const faceIdAuthenticationSuccessful = async () => {
+export const attemptFaceIDAuthentication = async () => {
+    const faceIdTurnedOn = await AsyncStorage.getItem('faceIdStatus')
+    console.log(faceIdTurnedOn, 'turned on!')
+    if (faceIdTurnedOn !== 'active') {
+        return
+    }
     try {
         const result = await Keychain.getGenericPassword({
             service: 'org.reactjs.native.example.LastPunditStanding',
         })
         if (!result) {
             console.log('bio auth failed')
+            return false
         } else {
             console.log('bio auth passed')
-            return true
+            let res = await LocalAuthentication.authenticateAsync()
+            console.log(res, 'what happed?')
+            if (res.success) {
+                return true
+            }
+            return false
         }
     } catch (e) {
         console.log('ERRORED:', e)
+        return false
     }
 }
 

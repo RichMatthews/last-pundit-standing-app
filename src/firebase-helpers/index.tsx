@@ -61,12 +61,8 @@ export const getUserLeagues = ({ userId }: any) => {
 }
 
 export const logUserInToApplication = async ({ email, password }: any) => {
-    try {
-        const res = await firebaseApp.auth().signInWithEmailAndPassword(email, password)
-        return res
-    } catch (error) {
-        return error
-    }
+    const res = await firebaseApp.auth().signInWithEmailAndPassword(email, password)
+    return res
 }
 
 export const signUserUpToApplication = (
