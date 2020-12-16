@@ -3,14 +3,13 @@ import { Dimensions, Text, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { ChooseTeam } from 'src/components/league/choose-team'
-import { H2 } from 'src/ui-components/headings'
 
 const width = Dimensions.get('window').width
-export const TeamSelection = () => {
+
+export const TeamSelection = ({ pullLatestLeagueData, setCurrentScreenView }) => {
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
 
-    // add this below: <Text>You have made your choice for this week.</Text>
     const showTeamSelectionPage = () => {
         const currentGameRound = currentGame.currentGameRound
         const currentRound = currentPlayer.rounds[currentGameRound]
@@ -23,7 +22,13 @@ export const TeamSelection = () => {
                 </View>
             )
         } else if (currentRound && currentRound.choice.hasMadeChoice === false) {
-            return <ChooseTeam currentRound={currentGameRound} />
+            return (
+                <ChooseTeam
+                    currentRound={currentGameRound}
+                    pullLatestLeagueData={pullLatestLeagueData}
+                    setCurrentScreenView={setCurrentScreenView}
+                />
+            )
         } else if (currentRound && currentRound.choice.hasMadeChoice) {
             return (
                 <View>

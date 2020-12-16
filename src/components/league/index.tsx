@@ -71,7 +71,12 @@ export const League = ({ leagueId }: string) => {
         } else if (currentScreenView === 'previous') {
             return <PreviousGames />
         } else if (currentScreenView === 'selection') {
-            return <TeamSelection />
+            return (
+                <TeamSelection
+                    pullLatestLeagueData={pullLatestLeagueData}
+                    setCurrentScreenView={setCurrentScreenView}
+                />
+            )
         }
         return <CurrentGame loaded={loaded} pullLatestLeagueData={pullLatestLeagueData} refreshing={refreshing} />
     }

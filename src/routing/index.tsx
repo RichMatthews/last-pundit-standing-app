@@ -1,12 +1,15 @@
 import 'react-native-gesture-handler'
 import React, { useEffect, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
+import { Header } from 'react-navigation-stack'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { useDispatch, useSelector } from 'react-redux'
+import LinearGradient from 'react-native-linear-gradient'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -29,6 +32,20 @@ import { attemptFaceIDAuthentication, retrieveCredentialsToSecureStorage } from 
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
+
+const getHeaderTitle = (route) => {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Test'
+    console.log('ROUTE:', routeName)
+
+    switch (routeName) {
+        case 'Create':
+            return 'Create League'
+        case 'Join':
+            return 'Join League'
+        case 'Leagues':
+            return 'My Leagues'
+    }
+}
 
 const AuthStack = () => (
     <Stack.Navigator
@@ -113,7 +130,14 @@ const CreateStack = ({ isSignedIn }: any) => (
 )
 
 const ModalStacks = () => (
-    <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
+    <Stack.Navigator
+        headerMode="none"
+        screenOptions={{
+            animationEnabled: true,
+            cardStyle: { backgroundColor: '#f7f7f7' },
+        }}
+        mode="modal"
+    >
         <Stack.Screen name="Account" options={{ animationEnabled: true }}>
             {(props: any) => {
                 return <Account navigation={props.navigation} />
@@ -239,7 +263,7 @@ export const Routing = () => {
         const threeDays = oneday * 3
         const threeDaysSince = Number(lastLogin) + threeDays
 
-        if (threeDaysSince > 2607937909295) {
+        if (threeDaysSince > currentTime) {
             return false
         }
         return true
@@ -263,7 +287,6 @@ export const Routing = () => {
             return
         }
         try {
-            console.log('2:::')
             const { user } = await logUserInToApplication({
                 email: emailFromSecureStorage,
                 password: passwordFromSecureStorage,
@@ -281,8 +304,37 @@ export const Routing = () => {
 
     return userFromRedux && Object.values(userFromRedux).length ? (
         <NavigationContainer>
-            <Stack.Navigator headerMode="none" screenOptions={{ animationEnabled: true }} mode="modal">
-                <Stack.Screen name="TabScreen">{(props: any) => <TabNavigation user={userFromRedux} />}</Stack.Screen>
+            <Stack.Navigator
+                screenOptions={{
+                    animationEnabled: true,
+                    headerTitleStyle: {
+                        color: '#000',
+                        fontSize: 25,
+                    },
+                    headerStyle: {
+                        elevation: 0,
+                        shadowOpacity: 0,
+                    },
+                    // headerStyle: {
+                    //     backgroundColor: 'transparent',
+                    //     position: 'absolute',
+                    //     top: 0,
+                    //     left: 0,
+                    //     right: 0,
+                    //     bottom: 0,
+                    // },
+                    // header: (props) => <Gradient {...props} />,
+                }}
+                mode="modal"
+            >
+                <Stack.Screen
+                    name="Home"
+                    options={({ route }) => ({
+                        headerTitle: getHeaderTitle(route),
+                    })}
+                >
+                    {(props: any) => <TabNavigation user={userFromRedux} />}
+                </Stack.Screen>
                 <Stack.Screen name="Account">{(props: any) => <ModalStacks />}</Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
@@ -290,3 +342,15 @@ export const Routing = () => {
         <AuthenticateUserScreen />
     )
 }
+
+const Gradient = (props) => (
+    <View style={{ backgroundColor: '#ccc' }}>
+        <LinearGradient
+            colors={['red', 'blue']}
+            start={{ x: 0, y: 1 }}
+            end={{ x: 1, y: 0 }}
+            style={StyleSheet.absoluteFill}
+        />
+        <Header {...props} />
+    </View>
+)

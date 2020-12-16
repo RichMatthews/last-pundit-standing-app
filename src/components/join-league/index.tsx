@@ -1,12 +1,13 @@
 import React, { Fragment, useState } from 'react'
-import { SafeAreaView, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, TouchableOpacity, Text, View } from 'react-native'
 import styled from 'styled-components'
 
 import { Button, ButtonText } from '../../ui-components/button'
 import { Container } from '../../ui-components/containers'
-import { H1 } from '../../ui-components/headings'
-
+import LinearGradient from 'react-native-linear-gradient'
+import { SvgBackground } from 'src/components/svg-background'
 import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from '../../firebase-helpers'
+import { H1, ScreenHeading } from '../../ui-components/headings'
 
 interface JoinLeagueProps {
     currentUserId: string
@@ -16,12 +17,13 @@ interface JoinLeagueProps {
 }
 
 const Input = styled.TextInput`
-    border-color: #ccc;
-    border-width: 1px;
+    background: #f7f7f7;
+    align-self: center;
     font-size: 15px;
-    margin-bottom: 20px;
     padding: 10px;
-    width: 300px;
+    margin-bottom: 20px;
+    margin: 10px;
+    width: 100%;
 `
 
 export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
@@ -64,20 +66,43 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
 
     return (
         <Fragment>
-            <SafeAreaView style={{ flex: 0, height: 100, backgroundColor: '#827ee6' }} />
-            <SafeAreaView>
-                <H1 style={{ backgroundColor: '#827ee6', color: '#fff', padding: 20, width: '100%' }}>Join League</H1>
-                <Container style={{ marginTop: 30 }}>
-                    <View>
-                        <Input onChange={(e) => setLeaguePin(e.nativeEvent.text)} placeholder="Enter league pin" />
+            {/* <ScreenHeading title={'Join League'} /> */}
+
+            <Container style={{ backgroundColor: '#fff' }}>
+                <Text>Please enter a pin to join a league</Text>
+                <View>
+                    <View style={{ marginTop: 20, width: 400 }}>
+                        <Input
+                            autoFocus={true}
+                            onChange={(e) => setLeaguePin(e.nativeEvent.text)}
+                            placeholder="League pin"
+                        />
                         <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>
-                            <Button disabled={leaguePin === ''}>
-                                <ButtonText>Join League</ButtonText>
-                            </Button>
+                            <View style={{ display: 'flex', alignSelf: 'flex-start' }}>
+                                <Button disabled={leaguePin === ''}>
+                                    <ButtonText>Join League</ButtonText>
+                                </Button>
+                            </View>
                         </TouchableOpacity>
                     </View>
-                </Container>
-            </SafeAreaView>
+                </View>
+            </Container>
         </Fragment>
     )
+}
+
+{
+    /* <SafeAreaView style={{ backgroundColor: '#fff' }}>
+<View
+    style={{
+        backgroundColor: '#827ee6',
+
+        padding: 20,
+        width: '100%',
+        borderBottomRightRadius: 40,
+        borderBottomLeftRadius: 40,
+    }}
+>
+    <H1 style={{ color: '#fff' }}>Join League</H1>
+</View> */
 }

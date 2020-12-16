@@ -65,32 +65,14 @@ export const logUserInToApplication = async ({ email, password }: any) => {
     return res
 }
 
-export const signUserUpToApplication = (
-    email: string,
-    password: string,
-    name: string,
-    setError: any,
-    surname: string,
-) => {
-    firebaseApp
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then((res: any) => {
-            localStorage.setItem('authUser', JSON.stringify(res))
-            firebaseApp
-                .database()
-                .ref(`users/${res.user.uid}`)
-                .update({ name, surname, id: res.user.uid }, (error) => {
-                    if (error) {
-                        alert('Failed to sign up, please try again.')
-                    } else {
-                        window.location.reload()
-                    }
-                })
-        })
-        .catch((error) => {
-            setError(error.message)
-        })
+export const signUserUpToApplication = async ({ email, password, name, surname }: any) => {
+    const r = await firebaseApp.auth().createUserWithEmailAndPassword(email, password)
+    return r
+}
+
+export const writeUserToDatabase = async ({ name, surname, user }) => {
+    const result = await firebaseApp.database().ref(`users/${user.uid}`).update({ name, surname, id: user.uid })
+    return result
 }
 
 export const signUserOutOfApplication = () => {

@@ -81,8 +81,8 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
         } else {
             return (
                 <GameStatusIndicator>
-                    <Label bgColor="#ff6b6b">
-                        <LabelText color="#6b0707">Pending</LabelText>
+                    <Label bgColor="#FFF3CD">
+                        <LabelText color="#856404">Pending</LabelText>
                     </Label>
                 </GameStatusIndicator>
             )
@@ -111,8 +111,8 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
     if (gameweekSelectionTimeEnded()) {
         return (
             <GameStatusIndicator>
-                <Label bgColor="#FFF3CD">
-                    <LabelText color="#856404">Pending</LabelText>
+                <Label bgColor="#F8D7DA">
+                    <LabelText color="#721C25">Eliminated</LabelText>
                 </Label>
             </GameStatusIndicator>
         )

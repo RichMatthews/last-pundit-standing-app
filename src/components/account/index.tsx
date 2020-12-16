@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { Platform, Text, TouchableOpacity, TouchableNativeFeedback, StyleSheet, Switch, View } from 'react-native'
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -50,7 +49,7 @@ export const Account = ({ navigation }: any) => {
         navigation.goBack()
     }
 
-    const changePasswordHelper = () => {
+    const resetPasswordHelper = () => {
         navigation.navigate('Home', { screen: 'Reset Password', resetPassword: true })
     }
 
@@ -67,7 +66,7 @@ export const Account = ({ navigation }: any) => {
                         {user.surname.split('')[0]}
                     </Text>
                 </View>
-                <TouchableOpacity onPressIn={() => console.log('hi')}>
+                <TouchableOpacity onPressIn={() => closeModalHelper()}>
                     <AntIcon
                         name="close"
                         color="#fff"
@@ -84,9 +83,9 @@ export const Account = ({ navigation }: any) => {
                         <MaterialCommIcon name="email-edit-outline" size={iconSize} style={{ marginRight: 10 }} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => changePasswordHelper()}>
+                <TouchableOpacity onPress={() => resetPasswordHelper()}>
                     <View style={styles.section}>
-                        <Text style={styles.text}>Change Password</Text>
+                        <Text style={styles.text}>Reset Password</Text>
                         <MaterialCommIcon name="lock-outline" size={iconSize} style={{ marginRight: 10 }} />
                     </View>
                 </TouchableOpacity>

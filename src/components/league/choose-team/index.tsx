@@ -30,7 +30,7 @@ const Image = styled.Image`
     width: 40px;
 `
 
-export const ChooseTeam = React.memo(({ currentRound }: any) => {
+export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setCurrentScreenView }: any) => {
     const [selectedTeam, setSelectedTeam] = useState<any>(null)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
@@ -100,6 +100,9 @@ export const ChooseTeam = React.memo(({ currentRound }: any) => {
         }
 
         await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
+        await pullLatestLeagueData()
+
+        setCurrentScreenView('game')
     }
 
     return (

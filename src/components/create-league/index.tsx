@@ -1,25 +1,25 @@
 import React, { Fragment, useState } from 'react'
-import { ActivityIndicator, Alert, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Dimensions, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import uid from 'uid'
 
 import { Button, ButtonText } from '../../ui-components/button'
 import { Container } from '../../ui-components/containers'
-import { H1 } from '../../ui-components/headings'
+import { ScreenHeading } from '../../ui-components/headings'
 import { getLeagueCreatorInformation } from '../../firebase-helpers'
 import { firebaseApp } from '../../config.js'
+
+const width = Dimensions.get('window').width
 interface HeadingStyled {
     amount: boolean
 }
 
 const Input = styled.TextInput`
-    border-color: #ccc;
-    border-width: 1px;
+    background: #f7f7f7;
     font-size: 15px;
-    margin-bottom: 20px;
     padding: 10px;
-    width: 300px;
+    width: 100%;
 `
 
 const LeagueAmountValue = styled.View<HeadingStyled>`
@@ -30,18 +30,23 @@ const LeagueAmountValue = styled.View<HeadingStyled>`
     border-radius: 20px;
     display: flex;
     justify-content: center;
-    height: 40px;
-    padding: 3px;
-    width: 40px;
+    height: 50px;
+    width: 70px;
 `
 
 const EntryFeeContainer = styled.View`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 300px;
 `
 
 const QuestionWithToggleOption = styled.View`
+    border-radius: 3px;
+    border-width: 1px;
+    height: 50px;
+    margin: 5px;
+    width: 100px;
     align-items: center;
     display: flex;
     justify-content: space-between;
@@ -49,6 +54,7 @@ const QuestionWithToggleOption = styled.View`
 
 const SectionDivider = styled.View`
     margin: 15px 0 0 0;
+    width: 100%;
 `
 
 export const CreateLeague = ({ navigation }: any) => {
@@ -145,7 +151,7 @@ export const CreateLeague = ({ navigation }: any) => {
         setLeagueName(e.nativeEvent.text)
     }
 
-    const entryFrees = [
+    const entryFees = [
         { amount: 'Free', key: 0 },
         { amount: '£5', key: 5 },
         { amount: '£10', key: 10 },
@@ -159,58 +165,106 @@ export const CreateLeague = ({ navigation }: any) => {
         </Container>
     ) : (
         <Fragment>
-            <SafeAreaView style={{ flex: 0, height: 100, backgroundColor: '#827ee6' }} />
-            <SafeAreaView>
-                <H1 style={{ backgroundColor: '#827ee6', color: '#fff', padding: 20, width: '100%' }}>Create League</H1>
-                <Container>
-                    <View>
-                        <SectionDivider>
-                            {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
-                            <Input
-                                autoCorrect={false}
-                                onChange={(e) => setLeagueNameHelper(e)}
-                                placeholder="League name"
-                            />
-                        </SectionDivider>
-                        <SectionDivider>
-                            <QuestionWithToggleOption>
-                                <Text>Private League?</Text>
-                                {/* <ReactToggle onChange={() => setPrivateLeague(!privateLeague)} /> */}
-                            </QuestionWithToggleOption>
-                        </SectionDivider>
-                        <SectionDivider>
-                            <SectionDivider>
-                                <EntryFeeContainer>
-                                    {entryFrees.map((fee: { key: number; amount: string }) => (
-                                        <TouchableOpacity onPress={() => setSelectedFee(fee.key)}>
-                                            <LeagueAmountValue amount={selectedFee === fee.key} key={fee.key}>
-                                                <Text>{fee.amount}</Text>
-                                            </LeagueAmountValue>
-                                        </TouchableOpacity>
-                                    ))}
-                                </EntryFeeContainer>
-                            </SectionDivider>
-                        </SectionDivider>
-                        <SectionDivider>
-                            {/* <Select
-                        options={[{ value: 'Premier League', label: 'Premier League' }]}
-                        placeholder="Select a competition"
-                    /> */}
-                        </SectionDivider>
-                        <SectionDivider>
-                            <TouchableOpacity
-                                onPress={
-                                    leagueName.length === 0 ? null : () => getLeagueCreatorInformationThenCreateLeague()
-                                }
-                            >
-                                <Button disabled={leagueName.length === 0 || leagueName.length > 20}>
-                                    <ButtonText>Create and join league</ButtonText>
-                                </Button>
-                            </TouchableOpacity>
-                        </SectionDivider>
-                    </View>
-                </Container>
-            </SafeAreaView>
+            <Container style={{ alignSelf: 'center', width: 400 }}>
+                <SectionDivider>
+                    {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
+                    <Input autoCorrect={false} onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
+                </SectionDivider>
+                <SectionDivider
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-around',
+                        width: 200,
+                    }}
+                >
+                    <QuestionWithToggleOption
+                        style={{
+                            borderWidth: 0,
+                            backgroundColor: '#fff',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            borderRadius: 10,
+                            height: 60,
+                            width: 60,
+                            shadowOpacity: 1,
+                            shadowRadius: 5,
+                            shadowColor: '#aaa',
+                            shadowOffset: { height: 4, width: 0 },
+                        }}
+                    >
+                        <Text>Private</Text>
+                    </QuestionWithToggleOption>
+                    <QuestionWithToggleOption
+                        style={{
+                            borderWidth: 0,
+                            backgroundColor: '#fff',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            borderRadius: 10,
+                            height: 60,
+                            width: 60,
+                            shadowOpacity: 1,
+                            shadowRadius: 5,
+                            shadowColor: '#aaa',
+                            shadowOffset: { height: 4, width: 0 },
+                        }}
+                    >
+                        <Text>Public</Text>
+                    </QuestionWithToggleOption>
+                </SectionDivider>
+                <SectionDivider>
+                    <SectionDivider
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            marginBottom: 10,
+                        }}
+                    >
+                        <EntryFeeContainer>
+                            {entryFees.map((fee: { key: number; amount: string }) => (
+                                <TouchableOpacity onPress={() => setSelectedFee(fee.key)}>
+                                    <LeagueAmountValue
+                                        amount={selectedFee === fee.key}
+                                        key={fee.key}
+                                        style={{
+                                            borderWidth: 0,
+                                            backgroundColor: '#fff',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            textAlign: 'center',
+                                            borderRadius: 10,
+                                            height: 60,
+                                            width: 60,
+                                            shadowOpacity: 1,
+                                            shadowRadius: 5,
+                                            shadowColor: '#aaa',
+                                            shadowOffset: { height: 4, width: 0 },
+                                        }}
+                                    >
+                                        <Text>{fee.amount}</Text>
+                                    </LeagueAmountValue>
+                                </TouchableOpacity>
+                            ))}
+                        </EntryFeeContainer>
+                    </SectionDivider>
+                </SectionDivider>
+                <SectionDivider>
+                    <TouchableOpacity
+                        onPress={leagueName.length === 0 ? null : () => getLeagueCreatorInformationThenCreateLeague()}
+                    >
+                        <Button disabled={leagueName.length === 0 || leagueName.length > 20}>
+                            <ButtonText>Create and join league</ButtonText>
+                        </Button>
+                    </TouchableOpacity>
+                </SectionDivider>
+            </Container>
         </Fragment>
     )
 }
