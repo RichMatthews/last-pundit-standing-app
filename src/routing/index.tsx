@@ -35,7 +35,6 @@ const Stack = createStackNavigator()
 
 const getHeaderTitle = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Test'
-    console.log('ROUTE:', routeName)
 
     switch (routeName) {
         case 'Create':

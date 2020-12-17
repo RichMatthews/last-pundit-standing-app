@@ -100,7 +100,7 @@ export const League = ({ leagueId }: string) => {
                     <View style={styles.subheading}>
                         <Text style={styles.maintext}>
                             <Text style={styles.subtext}>Round closes: </Text>
-                            {currentGameweek.ends}
+                            {currentGameweek.endsReadable}
                         </Text>
                     </View>
                     <ScreenSelection

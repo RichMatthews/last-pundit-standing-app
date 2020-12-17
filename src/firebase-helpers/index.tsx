@@ -21,7 +21,10 @@ export const getCurrentGameweekEndTime = () => {
         .ref(`information/gameweek/current`)
         .once('value')
         .then((snapshot) => {
-            return snapshot.val().endsReadable
+            return {
+                endsReadable: snapshot.val().endsReadable,
+                ends: snapshot.val().ends,
+            }
         })
 }
 

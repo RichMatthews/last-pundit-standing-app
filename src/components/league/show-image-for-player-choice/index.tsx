@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import styled from 'styled-components'
 
@@ -31,7 +31,49 @@ const LabelText = styled.Text`
     padding: 5px;
 `
 
+const playerStatus = {
+    eliminated: {
+        bgColor: '#F8D7DA',
+        color: '#721C25',
+        text: 'Eliminated',
+    },
+    pending: {
+        bgColor: '#FFF3CD',
+        color: '#856404',
+        text: 'Pending',
+    },
+    submitted: {
+        bgColor: '#D4EDDA',
+        color: '#155725',
+        text: ' Submitted',
+    },
+    currentPending: {
+        bgColor: '#FFF3CD',
+        color: '#856404',
+        text: 'Awaiting your prediction',
+    },
+    champion: {},
+}
+
+const GameStatusIndicatorComponent = (status: string) => (
+    <GameStatusIndicator>
+        <Label bgColor={playerStatus[status].bgColor}>
+            <LabelText color={playerStatus[status].color}>{playerStatus[status].text}</LabelText>
+        </Label>
+    </GameStatusIndicator>
+)
+
 export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer, player }: any) => {
+    const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
+
+    useEffect(() => {
+        checkIfTimeEnded()
+    }, [])
+
+    const checkIfTimeEnded = async () => {
+        const time = await gameweekSelectionTimeEnded()
+        setGameSelectionTimeEnded(time)
+    }
     const PLAYER_OUT_OF_CURRENT_GAME = player.rounds.filter((round: any) => round.choice.result === 'lost')
     const ALL_PLAYERS_IN_CURRENT_GAME = Object.values(currentGame.players)
     const CURRENT_ROUND_WITHIN_CURRENT_GAME = currentGame.currentGameRound
@@ -51,23 +93,11 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
     )
 
     if (ALL_OTHER_PLAYERS_ELIMINATED) {
-        return (
-            <GameStatusIndicator>
-                <Label bgColor="#ff6b6b">
-                    <LabelText color="#6b0707">CHAMPION</LabelText>
-                </Label>
-            </GameStatusIndicator>
-        )
+        return GameStatusIndicatorComponent('champion')
     }
 
-    if (PLAYER_OUT_OF_CURRENT_GAME.length) {
-        return (
-            <GameStatusIndicator>
-                <Label bgColor="#F8D7DA">
-                    <LabelText color="#721C25">Eliminated</LabelText>
-                </Label>
-            </GameStatusIndicator>
-        )
+    if (gameSelectionTimeEnded || PLAYER_OUT_OF_CURRENT_GAME.length) {
+        return GameStatusIndicatorComponent('eliminated')
     }
 
     if (isCurrentLoggedInPlayer) {
@@ -79,16 +109,9 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
                 />
             )
         } else {
-            return (
-                <GameStatusIndicator>
-                    <Label bgColor="#FFF3CD">
-                        <LabelText color="#856404">Pending</LabelText>
-                    </Label>
-                </GameStatusIndicator>
-            )
+            return GameStatusIndicatorComponent('currentPending')
         }
     }
-
     if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
         if (ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE) {
             return (
@@ -98,31 +121,9 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
                 />
             )
         } else {
-            return (
-                <GameStatusIndicator>
-                    <Label bgColor="#D4EDDA">
-                        <LabelText color="#155725">Submitted</LabelText>
-                    </Label>
-                </GameStatusIndicator>
-            )
+            return GameStatusIndicatorComponent('submitted')
         }
+    } else {
+        return GameStatusIndicatorComponent('pending')
     }
-
-    if (gameweekSelectionTimeEnded()) {
-        return (
-            <GameStatusIndicator>
-                <Label bgColor="#F8D7DA">
-                    <LabelText color="#721C25">Eliminated</LabelText>
-                </Label>
-            </GameStatusIndicator>
-        )
-    }
-
-    return (
-        <GameStatusIndicator>
-            <View>
-                <Text>Eliminated</Text>
-            </View>
-        </GameStatusIndicator>
-    )
 }
