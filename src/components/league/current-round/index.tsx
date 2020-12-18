@@ -85,7 +85,7 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
                                     />
 
                                     <ExpandImage
-                                        source={require('../../../images/other/down-arrow.png')}
+                                        source={require('src/images/other/down-arrow.png')}
                                         expand={listOfExpandedPrevious.includes(index)}
                                     />
                                 </PlayerAndDownArrow>
@@ -104,7 +104,9 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
                                                 ))}
                                         </>
                                     ) : (
-                                        <Text>Previous results will show here</Text>
+                                        <Text style={{ marginLeft: -15 }}>
+                                            Previous results will show here after Round 1
+                                        </Text>
                                     )}
                                 </HistoricalRounds>
                             </Collapsible>

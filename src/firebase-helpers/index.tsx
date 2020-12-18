@@ -60,7 +60,7 @@ export const getUserLeagues = ({ userId }: any) => {
             }
             return []
         })
-        .catch((e) => console.log('ERROR:', e))
+        .catch((e) => console.error('ERROR:', e))
 }
 
 export const logUserInToApplication = async ({ email, password }: any) => {
@@ -155,7 +155,6 @@ export const pullLeagueData = ({ leagueId }) => {
             return snapshot.val()
         })
         .catch((e) => {
-            console.log(e)
-            console.log('error somewhere pulling', e)
+            console.error(e)
         })
 }

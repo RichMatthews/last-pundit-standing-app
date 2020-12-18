@@ -21,11 +21,10 @@ export const UpdateEmail = ({ currentUser }) => {
         var user = firebase.auth().currentUser
         user.updateEmail(email)
             .then(() => {
-                console.log('success')
                 // Update successful.
             })
             .catch((error) => {
-                console.log('error updating email', error)
+                console.error('error updating email', error)
             })
     }
 

@@ -34,15 +34,16 @@ const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
 const getHeaderTitle = (route) => {
-    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Test'
-
+    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Leagues'
     switch (routeName) {
         case 'Create':
             return 'Create League'
         case 'Join':
             return 'Join League'
+        case 'Home':
+            return 'Home'
         case 'Leagues':
-            return 'My Leagues'
+            return 'Leagues'
     }
 }
 
@@ -84,8 +85,8 @@ const Stacks = ({ isSignedIn }: any) => (
                     options={{
                         headerTintColor: '#fff',
                         headerBackTitle: 'Back to leagues',
-                        headerShown: true,
-                        headerStyle: { backgroundColor: '#827ee6', elevation: 0, shadowOpacity: 0 },
+                        headerShown: false,
+                        headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 },
                     }}
                 >
                     {(props: any) => <League leagueId={props.route.params.leagueId} />}
@@ -239,7 +240,7 @@ export const Routing = () => {
                     await dispatch(getCurrentGameWeekInfo())
                     SplashScreen.hide()
                 } catch (e) {
-                    console.log(e)
+                    console.error(e)
                 }
             } else if (lastLogin) {
                 const faceIdAuthSuccessful = await attemptFaceIDAuthentication()
@@ -278,10 +279,8 @@ export const Routing = () => {
     }
 
     const logUserInAndSetUserInRedux = async () => {
-        console.log('CALLING: logUserInAndSetUserInRedux')
         const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
         if (!emailFromSecureStorage || !passwordFromSecureStorage) {
-            console.log('1:::')
             SplashScreen.hide()
             return
         }
@@ -291,11 +290,10 @@ export const Routing = () => {
                 password: passwordFromSecureStorage,
             })
 
-            console.log(user)
             await dispatch(getCurrentUser(user))
             await dispatch(getLeagues(user.uid))
         } catch (e) {
-            console.log(e, 'error in routing')
+            console.error(e, 'error in routing')
         }
 
         SplashScreen.hide()
@@ -304,7 +302,7 @@ export const Routing = () => {
     return userFromRedux && Object.values(userFromRedux).length ? (
         <NavigationContainer>
             <Stack.Navigator
-                screenOptions={{
+                screenOptions={({ route }) => ({
                     animationEnabled: true,
                     headerTitleStyle: {
                         color: '#000',
@@ -314,42 +312,30 @@ export const Routing = () => {
                         elevation: 0,
                         shadowOpacity: 0,
                     },
-                    // headerStyle: {
-                    //     backgroundColor: 'transparent',
-                    //     position: 'absolute',
-                    //     top: 0,
-                    //     left: 0,
-                    //     right: 0,
-                    //     bottom: 0,
-                    // },
-                    // header: (props) => <Gradient {...props} />,
-                }}
+                })}
                 mode="modal"
             >
                 <Stack.Screen
                     name="Home"
                     options={({ route }) => ({
                         headerTitle: getHeaderTitle(route),
+                        headerShown:
+                            getHeaderTitle(route) === 'Leagues' || getHeaderTitle(route) === 'Home' ? false : true,
                     })}
                 >
                     {(props: any) => <TabNavigation user={userFromRedux} />}
                 </Stack.Screen>
-                <Stack.Screen name="Account">{(props: any) => <ModalStacks />}</Stack.Screen>
+                <Stack.Screen
+                    name="Account"
+                    options={({ route }) => ({
+                        headerShown: false,
+                    })}
+                >
+                    {(props: any) => <ModalStacks />}
+                </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     ) : (
         <AuthenticateUserScreen />
     )
 }
-
-const Gradient = (props) => (
-    <View style={{ backgroundColor: '#ccc' }}>
-        <LinearGradient
-            colors={['red', 'blue']}
-            start={{ x: 0, y: 1 }}
-            end={{ x: 1, y: 0 }}
-            style={StyleSheet.absoluteFill}
-        />
-        <Header {...props} />
-    </View>
-)

@@ -10,19 +10,7 @@ const currentGameSlice = createSlice({
             return { ...state, ...action.payload.currentGame }
         },
     },
-    extraReducers: {
-        // [getCurrentGame.pending]: (state, action) => {
-        //     console.log('pending!')
-        //     state = state
-        // },
-        // [getCurrentGame.fulfilled]: (state, action) => {
-        //     state.push(...action.payload)
-        // },
-        // [getCurrentGame.rejected]: (state, action) => {
-        //     console.log('there was a rejection')
-        //     return state
-        // },
-    },
+    extraReducers: {},
 })
 
 const { actions, reducer } = currentGameSlice

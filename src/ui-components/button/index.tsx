@@ -23,7 +23,12 @@ export const InvertedButtonText = styled(ButtonText)`
 `
 
 export const Button = ({ children, disabled }) => (
-    <LinearGradient colors={['#a103fc', '#5055b3']} start={[0, 1]} end={[1, 0]} style={{ borderRadius: 5 }}>
+    <LinearGradient
+        colors={['#a103fc', '#5055b3']}
+        start={{ x: 0, y: 1 }}
+        end={{ x: 1, y: 0 }}
+        style={{ borderRadius: 25 }}
+    >
         <View
             style={{
                 alignSelf: 'center',

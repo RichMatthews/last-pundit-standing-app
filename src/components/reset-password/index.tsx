@@ -32,7 +32,7 @@ export const ResetPassword = ({ setShowResetScreen }: any) => {
     return (
         <Fragment>
             <SafeAreaView>
-                <Container style={{ display: 'flex', alignSelf: 'center', width: '80%' }}>
+                <Container style={{ display: 'flex', alignSelf: 'center', width: 300 }}>
                     <View style={{ marginBottom: 20 }}>
                         <Text style={{ fontSize: 17 }}>
                             Enter your email and we will send you a link to reset your password{' '}
@@ -44,11 +44,13 @@ export const ResetPassword = ({ setShowResetScreen }: any) => {
                             onChange={(e) => setEmail(e.nativeEvent.text)}
                         />
                     </View>
-                    <TouchableOpacity onPress={resetPassword}>
-                        <Button>
-                            <ButtonText>Send password reset link</ButtonText>
-                        </Button>
-                    </TouchableOpacity>
+                    <View style={{ width: 300 }}>
+                        <TouchableOpacity onPress={resetPassword}>
+                            <Button>
+                                <ButtonText>Send password reset link</ButtonText>
+                            </Button>
+                        </TouchableOpacity>
+                    </View>
                     <TouchableOpacity onPress={() => setShowResetScreen(false)}>
                         <View style={{ marginTop: 20 }}>
                             <InvertedButton>

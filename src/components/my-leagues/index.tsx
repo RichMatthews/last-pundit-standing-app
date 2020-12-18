@@ -1,11 +1,10 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
-import { ActivityIndicator, SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons'
+import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 import { ButtonText } from '../../ui-components/button'
-import { ScreenHeading } from '../../ui-components/headings'
 import { Container } from '../../ui-components/containers'
 
 interface LeagueState {
@@ -15,28 +14,18 @@ interface LeagueState {
 
 const LeagueContainer = styled.View`
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    margin-top: 20px;
+    align-items: center;
 `
 
 const LeagueItem = styled.View`
     background-color: #fff;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    margin: 10px;
-    width: 350px;
+    align-self: center;
 `
 
 const LeagueName = styled.Text`
     color: #827ee6;
     font-size: 22px;
-    margin-right: 10px;
+    font-weight: 700;
 `
 const NoLeagueText = styled(LeagueName)`
     color: #000;
@@ -47,32 +36,54 @@ export const MyLeagues = ({ navigation }: any) => {
 
     return (
         <Fragment>
-            <Container>
+            <Container style={{ backgroundColor: '#fff', marginTop: 100, width: '100%' }}>
+                <Text style={{ alignSelf: 'center', fontSize: 25, marginBottom: 20 }}>My Leagues</Text>
                 <LeagueContainer>
                     {userLeagues.loading ? (
                         <ActivityIndicator size="large" color="#827ee6" />
                     ) : userLeagues.leagues.length ? (
                         userLeagues.leagues.map((league: LeagueState) => (
-                            <LeagueItem
-                                key={league.id}
-                                style={{
-                                    shadowOpacity: 1,
-                                    shadowRadius: 3,
-                                    shadowColor: '#ccc',
-                                    shadowOffset: { height: 1, width: 0 },
-                                }}
-                            >
-                                <View>
-                                    <LeagueName>{league.name}</LeagueName>
-                                </View>
-                                <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <TouchableOpacity
-                                        onPress={() => navigation.navigate('League', { leagueId: league.id })}
+                            <TouchableOpacity onPress={() => navigation.navigate('League', { leagueId: league.id })}>
+                                <LeagueItem
+                                    key={league.id}
+                                    style={{
+                                        backgroundColor: '#fff',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        flexDirection: 'row',
+                                        shadowOpacity: 1,
+                                        shadowRadius: 4,
+                                        shadowColor: '#ccc',
+                                        shadowOffset: { height: 1, width: 0 },
+                                        margin: 10,
+                                        width: 350,
+                                        padding: 5,
+                                        borderRadius: 10,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'flex-start',
+                                        }}
                                     >
-                                        <SimpleLineIcon name="arrow-right-circle" size={20} color={'#827ee6'} />
-                                    </TouchableOpacity>
-                                </View>
-                            </LeagueItem>
+                                        <LeagueName>{league.name}</LeagueName>
+                                        <View style={{ width: 50, height: 30 }}>
+                                            <Image
+                                                source={require('../../images/other/premier-league.png')}
+                                                style={{
+                                                    resizeMode: 'contain',
+                                                    flex: 1,
+                                                    height: undefined,
+                                                    width: undefined,
+                                                }}
+                                            />
+                                        </View>
+                                    </View>
+                                    <Entypo name="chevron-small-right" size={30} />
+                                </LeagueItem>
+                            </TouchableOpacity>
                         ))
                     ) : (
                         <View>

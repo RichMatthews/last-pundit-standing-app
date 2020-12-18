@@ -81,7 +81,7 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
             [
                 {
                     text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
+                    onPress: () => console.warn('Cancel Pressed'),
                     style: 'cancel',
                 },
                 { text: 'Confirm', onPress: () => updateUserGamweekChoiceHelper() },

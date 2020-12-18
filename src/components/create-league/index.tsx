@@ -41,24 +41,13 @@ const EntryFeeContainer = styled.View`
     width: 300px;
 `
 
-const QuestionWithToggleOption = styled.View`
-    border-radius: 3px;
-    border-width: 1px;
-    height: 50px;
-    margin: 5px;
-    width: 100px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-`
-
 const SectionDivider = styled.View`
     margin: 15px 0 0 0;
     width: 100%;
 `
 
 export const CreateLeague = ({ navigation }: any) => {
-    const [privateLeague, setPrivateLeague] = useState(false)
+    const [privateLeague, setPrivateLeague] = useState(true)
     const [leagueName, setLeagueName] = useState('')
     const [selectedFee, setSelectedFee] = useState(10)
     const [leagueNameTooLong, setLeagueNameTooLong] = useState(false)
@@ -66,6 +55,9 @@ export const CreateLeague = ({ navigation }: any) => {
     const user = useSelector((store: { user: any }) => store.user)
 
     const getLeagueCreatorInformationThenCreateLeague = async () => {
+        if (leagueNameTooLong) {
+            return
+        }
         setLoading(true)
         const playerInfo: any = await getLeagueCreatorInformation(user.id)
         createLeague(playerInfo)
@@ -165,7 +157,7 @@ export const CreateLeague = ({ navigation }: any) => {
         </Container>
     ) : (
         <Fragment>
-            <Container style={{ alignSelf: 'center', width: 400 }}>
+            <Container style={{ alignSelf: 'center', width: 300 }}>
                 <SectionDivider>
                     {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
                     <Input autoCorrect={false} onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
@@ -178,44 +170,46 @@ export const CreateLeague = ({ navigation }: any) => {
                         width: 200,
                     }}
                 >
-                    <QuestionWithToggleOption
-                        style={{
-                            borderWidth: 0,
-                            backgroundColor: '#fff',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            borderRadius: 10,
-                            height: 60,
-                            width: 60,
-                            shadowOpacity: 1,
-                            shadowRadius: 5,
-                            shadowColor: '#aaa',
-                            shadowOffset: { height: 4, width: 0 },
-                        }}
-                    >
-                        <Text>Private</Text>
-                    </QuestionWithToggleOption>
-                    <QuestionWithToggleOption
-                        style={{
-                            borderWidth: 0,
-                            backgroundColor: '#fff',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            borderRadius: 10,
-                            height: 60,
-                            width: 60,
-                            shadowOpacity: 1,
-                            shadowRadius: 5,
-                            shadowColor: '#aaa',
-                            shadowOffset: { height: 4, width: 0 },
-                        }}
-                    >
-                        <Text>Public</Text>
-                    </QuestionWithToggleOption>
+                    <TouchableOpacity onPress={() => setPrivateLeague(true)}>
+                        <View
+                            style={{
+                                borderWidth: 0,
+                                backgroundColor: privateLeague ? 'purple' : '#fff',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 40,
+                                height: 30,
+                                width: 80,
+                                shadowOpacity: 1,
+                                shadowRadius: 3,
+                                shadowColor: '#aaa',
+                                shadowOffset: { height: 2, width: 0 },
+                            }}
+                        >
+                            <Text style={{ color: !privateLeague ? 'purple' : '#fff' }}>Private</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setPrivateLeague(false)}>
+                        <View
+                            style={{
+                                borderWidth: 0,
+                                backgroundColor: !privateLeague ? 'purple' : '#fff',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 40,
+                                height: 30,
+                                width: 80,
+                                shadowOpacity: 1,
+                                shadowRadius: 3,
+                                shadowColor: '#aaa',
+                                shadowOffset: { height: 2, width: 0 },
+                            }}
+                        >
+                            <Text style={{ color: privateLeague ? 'purple' : '#fff' }}>Public</Text>
+                        </View>
+                    </TouchableOpacity>
                 </SectionDivider>
                 <SectionDivider>
                     <SectionDivider
@@ -234,21 +228,23 @@ export const CreateLeague = ({ navigation }: any) => {
                                         key={fee.key}
                                         style={{
                                             borderWidth: 0,
-                                            backgroundColor: '#fff',
+                                            backgroundColor: selectedFee === fee.key ? 'purple' : '#fff',
                                             display: 'flex',
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                             textAlign: 'center',
-                                            borderRadius: 10,
-                                            height: 60,
+                                            borderRadius: 40,
+                                            height: 30,
                                             width: 60,
                                             shadowOpacity: 1,
-                                            shadowRadius: 5,
+                                            shadowRadius: 3,
                                             shadowColor: '#aaa',
-                                            shadowOffset: { height: 4, width: 0 },
+                                            shadowOffset: { height: 2, width: 0 },
                                         }}
                                     >
-                                        <Text>{fee.amount}</Text>
+                                        <Text style={{ color: selectedFee === fee.key ? '#fff' : 'purple' }}>
+                                            {fee.amount}
+                                        </Text>
                                     </LeagueAmountValue>
                                 </TouchableOpacity>
                             ))}

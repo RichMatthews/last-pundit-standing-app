@@ -52,7 +52,11 @@ const playerStatus = {
         color: '#856404',
         text: 'Awaiting your prediction',
     },
-    champion: {},
+    champion: {
+        bgColor: '#FFF3CD',
+        color: '#856404',
+        text: 'Champion',
+    },
 }
 
 const GameStatusIndicatorComponent = (status: string) => (
@@ -92,7 +96,7 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
         (playa: any) => playa.rounds[CURRENT_ROUND_WITHIN_CURRENT_GAME].choice.hasMadeChoice,
     )
 
-    if (ALL_OTHER_PLAYERS_ELIMINATED) {
+    if (ALL_OTHER_PLAYERS_ELIMINATED && ALL_PLAYERS_IN_CURRENT_GAME.length > 1) {
         return GameStatusIndicatorComponent('champion')
     }
 
@@ -112,6 +116,7 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
             return GameStatusIndicatorComponent('currentPending')
         }
     }
+
     if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
         if (ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE) {
             return (

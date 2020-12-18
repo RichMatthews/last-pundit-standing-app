@@ -38,8 +38,9 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
             if (playerAlreadyInLeague) {
                 alert('You have already entered this league!')
             } else {
+                console.log('DATA:', league, currentGame[0], currentUserId)
                 const leagueAndUserData = {
-                    [`/leagues/${league.id}/games/${currentGame[0].game.id}/players/${currentUserId}`]: {
+                    [`/leagues/${league.id}/games/${currentGame[0].id}/players/${currentUserId}`]: {
                         id: currentUserId,
                         name: name + surname,
                         rounds: [{ choice: { hasMadeChoice: false } }],

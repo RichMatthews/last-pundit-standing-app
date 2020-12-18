@@ -7,10 +7,9 @@ import { getUserLeagues, signUserOutOfApplication } from 'src/firebase-helpers'
 export const getLeagues = createAsyncThunk('getLeagues', async (userId) => {
     try {
         const leagues = await getUserLeagues({ userId })
-        console.log('hiya')
         return leagues
     } catch (e) {
-        console.log('errored getting user')
+        console.error('errored getting user')
     }
 })
 
@@ -21,8 +20,7 @@ export const signUserOut = createAsyncThunk('signUserOut', async () => {
         const user = await signUserOutOfApplication()
         return user
     } catch (e) {
-        console.log(e, 'e')
-        console.log('errored logging out')
+        console.error('errored logging out')
     }
 })
 
@@ -49,7 +47,6 @@ const leagueSlice = createSlice({
             return state
         },
         [getLeagues.rejected]: (state, action) => {
-            console.log('there was a rejection')
             return state
         },
 
@@ -67,7 +64,6 @@ const leagueSlice = createSlice({
             return state
         },
         [signUserOut.rejected]: (state, action) => {
-            console.log('there was a rejection')
             return state
         },
     },

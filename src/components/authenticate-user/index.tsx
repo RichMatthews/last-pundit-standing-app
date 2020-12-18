@@ -16,6 +16,7 @@ import { H1 } from 'src/ui-components/headings'
 import * as Keychain from 'react-native-keychain'
 import { useDispatch } from 'react-redux'
 import * as RootNavigation from 'src/root-navigation'
+import LinearGradient from 'react-native-linear-gradient'
 
 import { ResetPassword } from 'src/components/reset-password'
 import { logUserInToApplication, signUserUpToApplication, writeUserToDatabase } from '../../firebase-helpers'
@@ -66,14 +67,13 @@ export const AuthenticateUserScreen = () => {
         } else {
             try {
                 const { user } = await signUserUpToApplication({ email, password, name, surname })
-                console.log(user, 'da user')
                 await writeUserToDatabase({ user, name, surname })
                 await AsyncStorage.setItem('secureUid', user.uid)
                 await getUserAndLeaguesAndGameWeekInfo(user)
 
                 setLoaded(true)
             } catch (e) {
-                console.log('error')
+                console.error('error')
                 setLoaded(true)
             }
         }
@@ -142,10 +142,16 @@ export const AuthenticateUserScreen = () => {
 
     return loaded ? (
         <Fragment>
-            <SafeAreaView style={{ flex: 0, height: Platform.OS === 'ios' ? 200 : 100, backgroundColor: '#827ee6' }} />
-            <SafeAreaView>
+            <LinearGradient
+                colors={['#a103fc', '#5055b3']}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 0 }}
+                style={{ height: Platform.OS === 'ios' ? 300 : 100, borderBottomRightRadius: 250 }}
+            >
                 <H1 style={styles.heading}>{showResetScreen ? 'Reset Password' : 'Login'}</H1>
-                <Container style={{ marginTop: 50 }}>
+            </LinearGradient>
+            <SafeAreaView>
+                <Container style={{ marginTop: 50, width: 350, alignSelf: 'center' }}>
                     {showResetScreen ? (
                         <ResetPassword setShowResetScreen={setShowResetScreen} />
                     ) : (
@@ -221,13 +227,15 @@ export const AuthenticateUserScreen = () => {
                                             </View>
                                         )}
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={logUserIn}>
-                                        <Button>
-                                            <ButtonText style={{ fontSize: 16 }}>
-                                                {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
-                                            </ButtonText>
-                                        </Button>
-                                    </TouchableOpacity>
+                                    <View style={{ width: 300 }}>
+                                        <TouchableOpacity onPress={logUserIn}>
+                                            <Button>
+                                                <ButtonText style={{ fontSize: 16 }}>
+                                                    {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
+                                                </ButtonText>
+                                            </Button>
+                                        </TouchableOpacity>
+                                    </View>
                                     {loginOption === 'signin' && showFaceIDButton && (
                                         <View style={{ marginTop: 10 }}>
                                             <TouchableOpacity onPress={logUserInWithFaceId}>
@@ -280,7 +288,6 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         shadowColor: '#ccc',
         shadowOffset: { height: 2, width: 0 },
-        width: 200,
     },
     authText: {
         fontSize: 12,
@@ -292,19 +299,22 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     error: {
-        backgroundColor: '#ff0033',
+        backgroundColor: '#fff',
         borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ff0033',
         padding: 10,
         width: 300,
     },
     errorText: {
-        color: '#fff',
+        color: '#ff0033',
         fontWeight: '700',
     },
     heading: {
-        backgroundColor: '#827ee6',
         color: '#fff',
-        padding: 20,
+        position: 'absolute',
+        bottom: 0,
+        padding: 30,
     },
     inputContainer: {
         display: 'flex',
@@ -317,7 +327,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         fontSize: 15,
         paddingBottom: Platform.OS === 'ios' ? 10 : 0,
-        width: '80%',
+        width: 300,
     },
     inputSection: {
         marginTop: 50,

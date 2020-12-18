@@ -34,7 +34,6 @@ export const Account = ({ navigation }: any) => {
     }
 
     const toggleFaceIdActivated = async (activated: boolean) => {
-        console.log(activated, 'act')
         if (activated) {
             await AsyncStorage.setItem('faceIdStatus', 'active')
             setFaceIdActivated(true)
@@ -45,7 +44,6 @@ export const Account = ({ navigation }: any) => {
     }
 
     const closeModalHelper = () => {
-        console.log(navigation, 'da nav')
         navigation.goBack()
     }
 
@@ -59,7 +57,12 @@ export const Account = ({ navigation }: any) => {
 
     return (
         <View>
-            <LinearGradient colors={['#827ee6', '#b4b3e8']} style={styles.topSection}>
+            <LinearGradient
+                colors={['#a103fc', '#5055b3']}
+                start={{ x: 0, y: 1 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.topSection}
+            >
                 <View>
                     <Text style={styles.username}>
                         {user.name.split('')[0]}
