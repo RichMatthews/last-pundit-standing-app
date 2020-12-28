@@ -1,31 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import { TouchableOpacity, Text } from 'react-native'
+import { TouchableOpacity, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 
 import { PreviousRound } from '../../previous-round'
 import { ShowImageForPlayerChoice } from '../show-image-for-player-choice'
 
-const Section = styled.View`
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    width: 350px;
-`
-
 const CurrentRound = styled.View`
     align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-`
-
-const PlayerRow = styled.View<any>`
-    border-radius: 5px;
-    background-color: #f7f7ff;
-    padding: 10px;
-    margin: 10px;
 `
 
 const Container = styled.View`
@@ -39,16 +25,14 @@ const ExpandImage = styled.Image<any>`
     width: 10px;
 `
 
-// display: ${({ expand }) => (expand ? 'flex' : 'none')};
 const HistoricalRounds = styled.View<any>`
     display: flex;
     margin: 15px;
 `
 
 const PlayerName = styled.Text`
-    color: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#827ee6' : 'black')};
+    color: ${({ isCurrentLoggedInPlayer }: any) => (isCurrentLoggedInPlayer ? '#827ee6' : '#2C3E50')};
     font-size: 15px;
-    font-weight: 700;
 `
 
 const PlayerAndDownArrow = styled.View`
@@ -61,23 +45,40 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
     const user = useSelector((store: { user: any }) => store.user)
 
     return (
-        <Section>
+        <View>
             <Container>
                 {Object.values(currentGame.players).map((player: any, index: any) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        <PlayerRow
+                        <View
                             key={player.id}
                             value="Current Round"
                             style={{
-                                shadowOpacity: 1,
-                                shadowRadius: 2,
-                                shadowColor: '#ddd',
-                                shadowOffset: { height: 2, width: 0 },
+                                borderBottomWidth: 1,
+                                borderColor: '#ccc',
+                                padding: 10,
+                                paddingLeft: 0,
+                                paddingRight: 0,
+                                margin: 10,
                             }}
                         >
-                            <CurrentRound>
-                                <PlayerName isCurrentLoggedInPlayer={player.id === user.id}>{player.name}</PlayerName>
-                                <PlayerAndDownArrow>
+                            <CurrentRound style={{ width: 380 }}>
+                                <PlayerName
+                                    isCurrentLoggedInPlayer={player.id === user.id}
+                                    style={{
+                                        fontSize: 18,
+                                    }}
+                                >
+                                    {player.name}
+                                </PlayerName>
+                                <PlayerAndDownArrow
+                                    style={{
+                                        borderRadius: 5,
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    }}
+                                >
                                     <ShowImageForPlayerChoice
                                         currentGame={currentGame}
                                         isCurrentLoggedInPlayer={player.id === user.id}
@@ -110,10 +111,10 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
                                     )}
                                 </HistoricalRounds>
                             </Collapsible>
-                        </PlayerRow>
+                        </View>
                     </TouchableOpacity>
                 ))}
             </Container>
-        </Section>
+        </View>
     )
 }

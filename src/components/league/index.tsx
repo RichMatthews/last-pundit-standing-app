@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, RefreshControl, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient'
-import { LinearTextGradient } from 'react-native-text-gradient'
 
 import { LeagueInfo } from 'src/components/league/screen-views/info'
 import { CurrentGame } from 'src/components/league/screen-views/current'
@@ -28,7 +27,6 @@ export const League = ({ leagueId }: string) => {
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
     const league = useSelector((store: { league: any }) => store.league)
-    const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
     const pullLatestLeagueData = async () => {
         const leagueData: LeagueData = await pullLeagueData({ leagueId })
@@ -92,40 +90,32 @@ export const League = ({ leagueId }: string) => {
                 colors={['#a103fc', '#5055b3']}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 0 }}
-                style={{ height: Platform.OS === 'ios' ? 300 : 100, borderBottomRightRadius: 259 }}
+                style={{ height: Platform.OS === 'ios' ? 300 : 100 }}
             >
                 <View style={styles.leagueNameAndImage}>
                     <H2 style={styles.mainheading}>{league.name}</H2>
 
                     <Image source={require('../../images/other/premier-league.png')} style={styles.image} />
                 </View>
-            </LinearGradient>
-            <ScrollView
-                contentContainerStyle={{ flex: 1 }}
-                style={{ backgroundColor: '#fff' }}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            >
-                <View
-                    style={{
-                        backgroundColor: '#fff',
-                        shadowOpacity: 1,
-                        shadowRadius: 3.5,
-                        shadowColor: '#ccc',
-                        shadowOffset: { height: 2, width: 0 },
-                    }}
-                >
-                    <View style={styles.subheading}>
-                        <Text style={styles.maintext}>
-                            <Text style={styles.subtext}>Round closes: </Text>
-                            <Text>{currentGameweek.endsReadable}</Text>
-                        </Text>
-                    </View>
+                <View>
                     <ScreenSelection
                         currentScreenView={currentScreenView}
                         setCurrentScreenView={setCurrentScreenView}
                     />
                 </View>
-                <View style={{ backgroundColor: '#fff' }}>{determineScreenToRender()}</View>
+            </LinearGradient>
+            <ScrollView
+                contentContainerStyle={{ flex: 1 }}
+                // style={{ backgroundColor: '#fff' }}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            >
+                <View
+                    style={{
+                        backgroundColor: '#fff',
+                    }}
+                >
+                    {determineScreenToRender()}
+                </View>
             </ScrollView>
         </>
     )

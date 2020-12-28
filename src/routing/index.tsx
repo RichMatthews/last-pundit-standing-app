@@ -69,7 +69,7 @@ const Stacks = ({ isSignedIn }: any) => (
             headerShown: false,
             headerTitle: '',
             headerStyle: {
-                elevation: 0,
+                elevation: 5,
                 shadowOpacity: 0,
             },
             animationEnabled: false,
@@ -307,10 +307,6 @@ export const Routing = () => {
                     headerTitleStyle: {
                         color: '#000',
                         fontSize: 25,
-                    },
-                    headerStyle: {
-                        elevation: 0,
-                        shadowOpacity: 0,
                     },
                 })}
                 mode="modal"

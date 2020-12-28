@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { useSelector } from 'react-redux'
 
 import { CurrentRoundView } from '../../current-round'
 import { PageNotFound } from '../../../404'
@@ -8,6 +9,7 @@ import { Container } from '../../../../ui-components/containers'
 
 export const CurrentGame = ({ loaded }: any) => {
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
+    const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
     const setListOfExpandedPreviousHelper = (index: number) => {
         if (listOfExpandedPrevious.includes(index)) {
@@ -21,8 +23,14 @@ export const CurrentGame = ({ loaded }: any) => {
         return (
             <SafeAreaView>
                 <Container>
+                    <View style={styles.subheading}>
+                        <Text style={styles.maintext}>
+                            <Text style={styles.subtext}>Round closes: </Text>
+                            <Text>{currentGameweek.endsReadable}</Text>
+                        </Text>
+                    </View>
                     <View style={styles.wrapper}>
-                        <View style={[styles.currentRoundSelectionWrapper, styles.section]}>
+                        <View style={[styles.section]}>
                             <CurrentRoundView
                                 listOfExpandedPrevious={listOfExpandedPrevious}
                                 setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
@@ -58,15 +66,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     section: {
-        backgroundColor: '#fff',
-        borderRadius: 5,
         display: 'flex',
-        flexDirection: 'column',
-        padding: 10,
     },
 
-    currentRoundSelectionWrapper: {
-        backgroundColor: 'transparent',
-        padding: 0,
+    subheading: {
+        borderColor: '#ccc',
+        padding: 10,
+        width: '100%',
+    },
+    maintext: {
+        fontSize: 17,
+        fontWeight: '700',
+        textAlign: 'center',
+    },
+    subtext: {
+        fontWeight: '400',
     },
 })

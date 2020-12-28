@@ -13,7 +13,7 @@ export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }: Scr
             <TouchableOpacity onPress={() => setCurrentScreenView('game')} activeOpacity={1}>
                 <View style={[styles.innerContainer, currentScreenView === 'game' ? styles.viewed : styles.notViewed]}>
                     <Text style={[styles.text, currentScreenView === 'game' ? styles.viewed : styles.notViewed]}>
-                        Current Game
+                        LEAGUE
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -25,14 +25,14 @@ export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }: Scr
                     ]}
                 >
                     <Text style={[styles.text, currentScreenView === 'selection' ? styles.viewed : styles.notViewed]}>
-                        Team selection
+                        SELECTION
                     </Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setCurrentScreenView('info')} activeOpacity={1}>
                 <View style={[styles.innerContainer, currentScreenView === 'info' ? styles.viewed : styles.notViewed]}>
                     <Text style={[styles.text, currentScreenView === 'info' ? styles.viewed : styles.notViewed]}>
-                        League Info
+                        INFORMATION
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -41,7 +41,7 @@ export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }: Scr
                     style={[styles.innerContainer, currentScreenView === 'previous' ? styles.viewed : styles.notViewed]}
                 >
                     <Text style={[styles.text, currentScreenView === 'previous' ? styles.viewed : styles.notViewed]}>
-                        Previous Games
+                        PREVIOUS
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignSelf: 'center',
-        width: width,
+        width: width * 0.95,
     },
     innerContainer: {
         borderColor: '#827ee6',
@@ -66,13 +66,16 @@ const styles = StyleSheet.create({
     },
     viewed: {
         borderBottomWidth: 3,
-        borderColor: '#827ee6',
-        color: '#827ee6',
+        borderColor: '#fff',
+        color: '#fff',
     },
-    notViewed: {},
+    notViewed: {
+        color: '#fff',
+        opacity: 0.8,
+    },
     text: {
         padding: 10,
         paddingBottom: 0,
-        fontSize: 12,
+        fontSize: 13,
     },
 })
