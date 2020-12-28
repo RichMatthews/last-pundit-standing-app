@@ -2,11 +2,13 @@ import React, { Fragment, useEffect, useState } from 'react'
 import {
     ActivityIndicator,
     TextInput,
+    Keyboard,
     Platform,
     SafeAreaView,
     StyleSheet,
     Text,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     View,
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -150,118 +152,120 @@ export const AuthenticateUserScreen = () => {
             >
                 <H1 style={styles.heading}>{showResetScreen ? 'Reset Password' : 'Login'}</H1>
             </LinearGradient>
-            <SafeAreaView>
-                <Container style={{ marginTop: 50, width: 350, alignSelf: 'center' }}>
-                    {showResetScreen ? (
-                        <ResetPassword setShowResetScreen={setShowResetScreen} />
-                    ) : (
-                        <Fragment>
-                            <View>
-                                {error ? (
-                                    <View style={styles.error}>
-                                        <Text style={styles.errorText}>{error}</Text>
-                                    </View>
-                                ) : null}
-                            </View>
-
-                            {loginOption === 'signup' && (
-                                <Fragment>
-                                    <View style={styles.inputContainer}>
-                                        <TextInput
-                                            style={styles.input}
-                                            autoCapitalize="none"
-                                            placeholder="name"
-                                            placeholderTextColor="#666464"
-                                            onChange={(e: any) => setName(e.nativeEvent.text)}
-                                        />
-                                    </View>
-                                    <View style={styles.inputContainer}>
-                                        <TextInput
-                                            style={styles.input}
-                                            autoCapitalize="none"
-                                            placeholder="surname"
-                                            placeholderTextColor="#666464"
-                                            onChange={(e: any) => setSurname(e.nativeEvent.text)}
-                                        />
-                                    </View>
-                                </Fragment>
-                            )}
-                            {(loginOption === 'signup' || loginOption === 'signin') && (
-                                <Fragment>
-                                    <View style={styles.inputContainer}>
-                                        <TextInput
-                                            style={styles.input}
-                                            autoCapitalize="none"
-                                            placeholder="email"
-                                            placeholderTextColor="#666464"
-                                            onChange={(e: any) => setEmailHelper(e)}
-                                            value={email}
-                                        />
-                                    </View>
-                                    <View style={styles.inputContainer}>
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="password"
-                                            placeholderTextColor="#666464"
-                                            secureTextEntry={true}
-                                            onChange={(e: any) => setPasswordHelper(e)}
-                                            value={password}
-                                        />
-                                    </View>
-                                </Fragment>
-                            )}
-
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <SafeAreaView>
+                    <Container style={{ marginTop: 50, width: 350, alignSelf: 'center' }}>
+                        {showResetScreen ? (
+                            <ResetPassword setShowResetScreen={setShowResetScreen} />
+                        ) : (
                             <Fragment>
                                 <View>
-                                    <TouchableOpacity onPress={() => setShowResetScreen(true)}>
-                                        {loginOption === 'signin' && (
-                                            <View
-                                                style={{
-                                                    marginBottom: 15,
-                                                    alignSelf: 'flex-end',
-                                                }}
-                                            >
-                                                <Text style={{ color: '#827ee6', fontSize: 12 }}>
-                                                    Forgotten password?
-                                                </Text>
-                                            </View>
-                                        )}
-                                    </TouchableOpacity>
-                                    <View style={{ width: 300 }}>
-                                        <TouchableOpacity onPress={logUserIn}>
-                                            <Button>
-                                                <ButtonText style={{ fontSize: 16 }}>
-                                                    {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
-                                                </ButtonText>
-                                            </Button>
+                                    {error ? (
+                                        <View style={styles.error}>
+                                            <Text style={styles.errorText}>{error}</Text>
+                                        </View>
+                                    ) : null}
+                                </View>
+
+                                {loginOption === 'signup' && (
+                                    <Fragment>
+                                        <View style={styles.inputContainer}>
+                                            <TextInput
+                                                style={styles.input}
+                                                autoCapitalize="none"
+                                                placeholder="name"
+                                                placeholderTextColor="#666464"
+                                                onChange={(e: any) => setName(e.nativeEvent.text)}
+                                            />
+                                        </View>
+                                        <View style={styles.inputContainer}>
+                                            <TextInput
+                                                style={styles.input}
+                                                autoCapitalize="none"
+                                                placeholder="surname"
+                                                placeholderTextColor="#666464"
+                                                onChange={(e: any) => setSurname(e.nativeEvent.text)}
+                                            />
+                                        </View>
+                                    </Fragment>
+                                )}
+                                {(loginOption === 'signup' || loginOption === 'signin') && (
+                                    <Fragment>
+                                        <View style={styles.inputContainer}>
+                                            <TextInput
+                                                style={styles.input}
+                                                autoCapitalize="none"
+                                                placeholder="email"
+                                                placeholderTextColor="#666464"
+                                                onChange={(e: any) => setEmailHelper(e)}
+                                                value={email}
+                                            />
+                                        </View>
+                                        <View style={styles.inputContainer}>
+                                            <TextInput
+                                                style={styles.input}
+                                                placeholder="password"
+                                                placeholderTextColor="#666464"
+                                                secureTextEntry={true}
+                                                onChange={(e: any) => setPasswordHelper(e)}
+                                                value={password}
+                                            />
+                                        </View>
+                                    </Fragment>
+                                )}
+
+                                <Fragment>
+                                    <View>
+                                        <TouchableOpacity onPress={() => setShowResetScreen(true)}>
+                                            {loginOption === 'signin' && (
+                                                <View
+                                                    style={{
+                                                        marginBottom: 15,
+                                                        alignSelf: 'flex-end',
+                                                    }}
+                                                >
+                                                    <Text style={{ color: '#827ee6', fontSize: 12 }}>
+                                                        Forgotten password?
+                                                    </Text>
+                                                </View>
+                                            )}
                                         </TouchableOpacity>
-                                    </View>
-                                    {loginOption === 'signin' && showFaceIDButton && (
-                                        <View style={{ marginTop: 10 }}>
-                                            <TouchableOpacity onPress={logUserInWithFaceId}>
+                                        <View style={{ width: 300 }}>
+                                            <TouchableOpacity onPress={logUserIn}>
                                                 <Button>
-                                                    <ButtonText>USE FACE ID</ButtonText>
+                                                    <ButtonText style={{ fontSize: 16 }}>
+                                                        {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
+                                                    </ButtonText>
                                                 </Button>
                                             </TouchableOpacity>
                                         </View>
-                                    )}
-                                </View>
-                                <View style={{ bottom: Platform.OS === 'ios' ? 400 : 300, position: 'absolute' }}>
-                                    <TouchableOpacity onPress={authenticateUserHelper}>
-                                        <InvertedButton>
-                                            <InvertedButtonText>
-                                                {loginOption === 'signup'
-                                                    ? 'HAVE AN ACCOUNT? SIGN IN'
-                                                    : 'NO ACCOUNT? SIGN UP'}
-                                            </InvertedButtonText>
-                                        </InvertedButton>
-                                    </TouchableOpacity>
-                                </View>
+                                        {loginOption === 'signin' && showFaceIDButton && (
+                                            <View style={{ marginTop: 10 }}>
+                                                <TouchableOpacity onPress={logUserInWithFaceId}>
+                                                    <Button>
+                                                        <ButtonText>USE FACE ID</ButtonText>
+                                                    </Button>
+                                                </TouchableOpacity>
+                                            </View>
+                                        )}
+                                    </View>
+                                    <View style={{ bottom: Platform.OS === 'ios' ? 400 : 300, position: 'absolute' }}>
+                                        <TouchableOpacity onPress={authenticateUserHelper}>
+                                            <InvertedButton>
+                                                <InvertedButtonText>
+                                                    {loginOption === 'signup'
+                                                        ? 'HAVE AN ACCOUNT? SIGN IN'
+                                                        : 'NO ACCOUNT? SIGN UP'}
+                                                </InvertedButtonText>
+                                            </InvertedButton>
+                                        </TouchableOpacity>
+                                    </View>
+                                </Fragment>
                             </Fragment>
-                        </Fragment>
-                    )}
-                </Container>
-            </SafeAreaView>
+                        )}
+                    </Container>
+                </SafeAreaView>
+            </TouchableWithoutFeedback>
         </Fragment>
     ) : (
         <Container style={{ marginTop: 200 }}>

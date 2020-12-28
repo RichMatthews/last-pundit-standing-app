@@ -72,11 +72,15 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
 
     useEffect(() => {
         checkIfTimeEnded()
-    }, [])
+    }, [currentGame])
 
     const checkIfTimeEnded = async () => {
-        const time = await gameweekSelectionTimeEnded()
-        setGameSelectionTimeEnded(time)
+        const timeHasEnded = await gameweekSelectionTimeEnded()
+        console.log(timeHasEnded, 'timeHasEnded')
+        if (timeHasEnded) {
+            console.log('in her?')
+            setGameSelectionTimeEnded(true)
+        }
     }
     const PLAYER_OUT_OF_CURRENT_GAME = player.rounds.filter((round: any) => round.choice.result === 'lost')
     const ALL_PLAYERS_IN_CURRENT_GAME = Object.values(currentGame.players)
@@ -99,8 +103,12 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
     if (ALL_OTHER_PLAYERS_ELIMINATED && ALL_PLAYERS_IN_CURRENT_GAME.length > 1) {
         return GameStatusIndicatorComponent('champion')
     }
-
-    if (gameSelectionTimeEnded || PLAYER_OUT_OF_CURRENT_GAME.length) {
+    console.log('GAME ENDED:', gameSelectionTimeEnded)
+    if (
+        (gameSelectionTimeEnded && !PLAYER_CURRENT_ROUND.choice.hasMadeChoice) ||
+        (!gameSelectionTimeEnded && PLAYER_OUT_OF_CURRENT_GAME.length)
+    ) {
+        console.log('??')
         return GameStatusIndicatorComponent('eliminated')
     }
 

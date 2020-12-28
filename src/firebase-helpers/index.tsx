@@ -114,7 +114,7 @@ export const joinLeagueAndAddLeagueToListOfUserLeagues = ({ league, leagueAndUse
             if (error) {
                 alert('Failed to join league, please try again.')
             } else {
-                navigation.navigate('My Leagues', { id: league.id })
+                navigation.navigate('League', { leagueId: league.id })
             }
         })
 }

@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     section: {
-        backgroundColor: 'transparent',
+        backgroundColor: '#fff',
         borderRadius: 5,
         display: 'flex',
         flexDirection: 'column',

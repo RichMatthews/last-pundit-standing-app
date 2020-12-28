@@ -29,7 +29,7 @@ const PlayerRow = styled.View<any>`
 `
 
 const Container = styled.View`
-    background: transparent;
+    background: #fff;
 `
 
 const ExpandImage = styled.Image<any>`

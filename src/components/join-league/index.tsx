@@ -1,13 +1,10 @@
 import React, { Fragment, useState } from 'react'
-import { SafeAreaView, TouchableOpacity, Text, View } from 'react-native'
+import { ActivityIndicator, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text, View } from 'react-native'
 import styled from 'styled-components'
 
 import { Button, ButtonText } from '../../ui-components/button'
 import { Container } from '../../ui-components/containers'
-import LinearGradient from 'react-native-linear-gradient'
-import { SvgBackground } from 'src/components/svg-background'
 import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from '../../firebase-helpers'
-import { H1, ScreenHeading } from '../../ui-components/headings'
 
 interface JoinLeagueProps {
     currentUserId: string
@@ -28,6 +25,7 @@ const Input = styled.TextInput`
 
 export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
     const [leaguePin, setLeaguePin] = useState<string>('')
+    const [loading, setLoading] = useState(false)
 
     const attemptToJoinLeague = (league: any, name: string, surname: string) => {
         const games = Object.values(league.games)
@@ -37,8 +35,8 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
             const playerAlreadyInLeague = currentPlayers.find((player: any) => player.id === currentUserId)
             if (playerAlreadyInLeague) {
                 alert('You have already entered this league!')
+                setLoading(false)
             } else {
-                console.log('DATA:', league, currentGame[0], currentUserId)
                 const leagueAndUserData = {
                     [`/leagues/${league.id}/games/${currentGame[0].id}/players/${currentUserId}`]: {
                         id: currentUserId,
@@ -52,23 +50,30 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
                     },
                 }
                 joinLeagueAndAddLeagueToListOfUserLeagues({ leagueAndUserData, league, navigation })
+                setLoading(false)
             }
         }
     }
 
     const joinLeague = async () => {
+        setLoading(true)
         const foundLeague: any = await attemptToJoinLeaugeIfItExists({ currentUserId, leaguePin })
 
         if (foundLeague) {
             const { league, name, surname } = foundLeague
             attemptToJoinLeague(league, name, surname)
+        } else {
+            setLoading(false)
         }
     }
 
-    return (
-        <Fragment>
-            {/* <ScreenHeading title={'Join League'} /> */}
-
+    return loading ? (
+        <Container style={{ backgroundColor: '#fff' }}>
+            <ActivityIndicator size="large" color="#827ee6" />
+            <Text>Joining League...</Text>
+        </Container>
+    ) : (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container style={{ backgroundColor: '#fff' }}>
                 <Text>Please enter a pin to join a league</Text>
                 <View>
@@ -78,6 +83,7 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
                             onChange={(e) => setLeaguePin(e.nativeEvent.text)}
                             placeholder="League pin"
                         />
+
                         <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>
                             <View style={{ display: 'flex', alignSelf: 'flex-start' }}>
                                 <Button disabled={leaguePin === ''}>
@@ -88,22 +94,6 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
                     </View>
                 </View>
             </Container>
-        </Fragment>
+        </TouchableWithoutFeedback>
     )
-}
-
-{
-    /* <SafeAreaView style={{ backgroundColor: '#fff' }}>
-<View
-    style={{
-        backgroundColor: '#827ee6',
-
-        padding: 20,
-        width: '100%',
-        borderBottomRightRadius: 40,
-        borderBottomLeftRadius: 40,
-    }}
->
-    <H1 style={{ color: '#fff' }}>Join League</H1>
-</View> */
 }
