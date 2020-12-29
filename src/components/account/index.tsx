@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     },
     signOut: {
         position: 'absolute',
-        bottom: Platform.OS === 'ios' ? 550 : 350,
+        bottom: Platform.OS === 'ios' ? 450 : 350,
         display: 'flex',
         alignSelf: 'center',
         zIndex: 1,

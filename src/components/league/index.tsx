@@ -52,7 +52,7 @@ export const League = ({ leagueId }: string) => {
 
     useEffect(() => {
         pullLatestLeagueData()
-    }, [])
+    }, [leagueId])
 
     const wait = (timeout: any) => {
         return new Promise((resolve) => {

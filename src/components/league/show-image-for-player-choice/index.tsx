@@ -76,9 +76,8 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
 
     const checkIfTimeEnded = async () => {
         const timeHasEnded = await gameweekSelectionTimeEnded()
-        console.log(timeHasEnded, 'timeHasEnded')
+
         if (timeHasEnded) {
-            console.log('in her?')
             setGameSelectionTimeEnded(true)
         }
     }
@@ -103,12 +102,12 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
     if (ALL_OTHER_PLAYERS_ELIMINATED && ALL_PLAYERS_IN_CURRENT_GAME.length > 1) {
         return GameStatusIndicatorComponent('champion')
     }
-    console.log('GAME ENDED:', gameSelectionTimeEnded)
+
     if (
+        PLAYER_CURRENT_ROUND === undefined ||
         (gameSelectionTimeEnded && !PLAYER_CURRENT_ROUND.choice.hasMadeChoice) ||
         (!gameSelectionTimeEnded && PLAYER_OUT_OF_CURRENT_GAME.length)
     ) {
-        console.log('??')
         return GameStatusIndicatorComponent('eliminated')
     }
 

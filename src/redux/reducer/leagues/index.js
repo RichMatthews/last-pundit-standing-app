@@ -42,7 +42,7 @@ const leagueSlice = createSlice({
         [getLeagues.fulfilled]: (state, action) => {
             state = {
                 loading: false,
-                leagues: state.leagues.concat(...action.payload),
+                leagues: action.payload,
             }
             return state
         },

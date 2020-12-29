@@ -1,11 +1,12 @@
 import React, { Fragment, useState } from 'react'
 import { ActivityIndicator, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text, View } from 'react-native'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { Button, ButtonText } from '../../ui-components/button'
-import { Container } from '../../ui-components/containers'
-import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from '../../firebase-helpers'
-
+import { Button, ButtonText } from 'src/ui-components/button'
+import { Container } from 'src/ui-components/containers'
+import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from 'src/firebase-helpers'
+import { getLeagues } from 'src/redux/reducer/leagues'
 interface JoinLeagueProps {
     currentUserId: string
     navigation: {
@@ -26,8 +27,10 @@ const Input = styled.TextInput`
 export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
     const [leaguePin, setLeaguePin] = useState<string>('')
     const [loading, setLoading] = useState(false)
+    const dispatch = useDispatch()
+    const userFromRedux = useSelector((store: { user: any }) => store.user)
 
-    const attemptToJoinLeague = (league: any, name: string, surname: string) => {
+    const attemptToJoinLeague = async (league: any, name: string, surname: string) => {
         const games = Object.values(league.games)
         const currentGame: any = games.filter((game: any) => game !== game.complete)
         if (currentGame) {
@@ -49,7 +52,8 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
                         name: league.name,
                     },
                 }
-                joinLeagueAndAddLeagueToListOfUserLeagues({ leagueAndUserData, league, navigation })
+                await joinLeagueAndAddLeagueToListOfUserLeagues({ leagueAndUserData, league, navigation })
+                await dispatch(getLeagues(userFromRedux.id))
                 setLoading(false)
             }
         }

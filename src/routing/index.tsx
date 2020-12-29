@@ -9,7 +9,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { useDispatch, useSelector } from 'react-redux'
-import LinearGradient from 'react-native-linear-gradient'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -317,6 +316,10 @@ export const Routing = () => {
                         headerTitle: getHeaderTitle(route),
                         headerShown:
                             getHeaderTitle(route) === 'Leagues' || getHeaderTitle(route) === 'Home' ? false : true,
+                        headerStyle: {
+                            elevation: 5,
+                            shadowOpacity: 0,
+                        },
                     })}
                 >
                     {(props: any) => <TabNavigation user={userFromRedux} />}
