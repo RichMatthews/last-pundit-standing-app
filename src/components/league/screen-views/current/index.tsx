@@ -7,7 +7,8 @@ import { PageNotFound } from '../../../404'
 
 import { Container } from '../../../../ui-components/containers'
 
-export const CurrentGame = ({ loaded }: any) => {
+export const CurrentGame = ({ loaded, theme }: any) => {
+    console.log(theme, ' them1')
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
@@ -23,20 +24,17 @@ export const CurrentGame = ({ loaded }: any) => {
         return (
             <SafeAreaView>
                 <Container>
-                    <View style={styles.subheading}>
-                        <Text style={styles.maintext}>
-                            <Text style={styles.subtext}>Round closes: </Text>
-                            <Text>{currentGameweek.endsReadable}</Text>
+                    <View style={styles(theme).subheading}>
+                        <Text style={styles(theme).maintext}>
+                            <Text style={styles(theme).subtext}>Round closes: </Text>
+                            <Text style={{ color: theme.text.primaryTextColor }}>{currentGameweek.endsReadable}</Text>
                         </Text>
                     </View>
-                    <View style={styles.wrapper}>
-                        <View style={[styles.section]}>
-                            <CurrentRoundView
-                                listOfExpandedPrevious={listOfExpandedPrevious}
-                                setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                            />
-                        </View>
-                    </View>
+                    <CurrentRoundView
+                        listOfExpandedPrevious={listOfExpandedPrevious}
+                        setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                        theme={theme}
+                    />
                 </Container>
             </SafeAreaView>
         )
@@ -47,39 +45,31 @@ export const CurrentGame = ({ loaded }: any) => {
     }
 
     return (
-        <Container style={styles.loading}>
-            <ActivityIndicator size="large" color="#827ee6" />
-            <Text style={styles.loadingText}>Retrieving League information...</Text>
+        <Container style={styles(theme).loading}>
+            <ActivityIndicator size="large" color="#2C3E50" />
+            <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
         </Container>
     )
 }
 
-const styles = StyleSheet.create({
-    wrapper: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    loading: {
-        marginTop: 100,
-    },
-    loadingText: {
-        fontSize: 20,
-    },
-    section: {
-        display: 'flex',
-    },
-
-    subheading: {
-        borderColor: '#ccc',
-        padding: 10,
-        width: '100%',
-    },
-    maintext: {
-        fontSize: 17,
-        fontWeight: '700',
-        textAlign: 'center',
-    },
-    subtext: {
-        fontWeight: '400',
-    },
-})
+const styles = (theme) =>
+    StyleSheet.create({
+        loading: {
+            marginTop: 100,
+        },
+        loadingText: {
+            fontSize: 20,
+        },
+        subheading: {
+            padding: 10,
+        },
+        maintext: {
+            fontSize: theme.text.mediumTextSize,
+            fontWeight: '700',
+            textAlign: 'center',
+        },
+        subtext: {
+            color: theme.text.primaryTextColor,
+            fontWeight: '400',
+        },
+    })

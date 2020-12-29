@@ -21,12 +21,12 @@ import { League } from '../components/league'
 import { AuthenticateUserScreen } from '../components/authenticate-user'
 import { ResetPassword } from '../components/reset-password'
 import { UpdateEmail } from '../components/update-email'
-import { logUserInToApplication, signUserUpToApplication } from 'src/firebase-helpers'
+import { logUserInToApplication } from 'src/firebase-helpers'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { getLeagues } from 'src/redux/reducer/leagues'
 import { getCurrentUser } from 'src/redux/reducer/user'
 import { firebaseApp } from '../config.js'
-
+import { DARK_THEME, LIGHT_THEME } from 'src/theme'
 import { attemptFaceIDAuthentication, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
 
 const Tab = createBottomTabNavigator()
@@ -61,10 +61,9 @@ const AuthStack = () => (
     </Stack.Navigator>
 )
 
-const Stacks = ({ isSignedIn }: any) => (
+const Stacks = ({ isSignedIn, theme }: any) => (
     <Stack.Navigator
         screenOptions={{
-            cardStyle: { backgroundColor: '#fff' },
             headerShown: false,
             headerTitle: '',
             headerStyle: {
@@ -88,7 +87,7 @@ const Stacks = ({ isSignedIn }: any) => (
                         headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 },
                     }}
                 >
-                    {(props: any) => <League leagueId={props.route.params.leagueId} />}
+                    {(props: any) => <League leagueId={props.route.params.leagueId} theme={theme} />}
                 </Stack.Screen>
             </>
         ) : (
@@ -128,24 +127,24 @@ const CreateStack = ({ isSignedIn }: any) => (
     </Stack.Navigator>
 )
 
-const ModalStacks = () => (
+const ModalStacks = ({ theme }) => (
     <Stack.Navigator
         headerMode="none"
         screenOptions={{
             animationEnabled: true,
-            cardStyle: { backgroundColor: '#f7f7f7' },
+            cardStyle: { backgroundColor: '#212020' },
         }}
         mode="modal"
     >
         <Stack.Screen name="Account" options={{ animationEnabled: true }}>
             {(props: any) => {
-                return <Account navigation={props.navigation} />
+                return <Account navigation={props.navigation} theme={theme} />
             }}
         </Stack.Screen>
     </Stack.Navigator>
 )
 
-const TabNavigation = ({ user }: any) => {
+const TabNavigation = ({ theme, user }: any) => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -168,13 +167,13 @@ const TabNavigation = ({ user }: any) => {
                 },
             })}
             tabBarOptions={{
-                activeTintColor: '#827ee6',
+                activeTintColor: '#2C3E50',
                 labelStyle: { fontSize: 13 },
             }}
         >
             <Tab.Screen name="Leagues">
                 {(props: any) => {
-                    return <Stacks isSignedIn={user} userId={user.id} />
+                    return <Stacks isSignedIn={user} theme={theme} userId={user.id} />
                 }}
             </Tab.Screen>
             <Tab.Screen
@@ -299,7 +298,7 @@ export const Routing = () => {
     }
 
     return userFromRedux && Object.values(userFromRedux).length ? (
-        <NavigationContainer>
+        <NavigationContainer theme={DARK_THEME}>
             <Stack.Navigator
                 screenOptions={({ route }) => ({
                     animationEnabled: true,
@@ -320,9 +319,13 @@ export const Routing = () => {
                             elevation: 5,
                             shadowOpacity: 0,
                         },
+                        headerTitleStyle: {
+                            color: '#2C3E50',
+                            fontSize: 23,
+                        },
                     })}
                 >
-                    {(props: any) => <TabNavigation user={userFromRedux} />}
+                    {(props: any) => <TabNavigation theme={DARK_THEME} user={userFromRedux} />}
                 </Stack.Screen>
                 <Stack.Screen
                     name="Account"
@@ -330,7 +333,7 @@ export const Routing = () => {
                         headerShown: false,
                     })}
                 >
-                    {(props: any) => <ModalStacks />}
+                    {(props: any) => <ModalStacks theme={LIGHT_THEME} />}
                 </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>

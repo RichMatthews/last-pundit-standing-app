@@ -19,7 +19,7 @@ interface LeagueData {
     games: {}
 }
 
-export const League = ({ leagueId }: string) => {
+export const League = ({ leagueId, theme }: string) => {
     const [currentScreenView, setCurrentScreenView] = useState('game')
     const [loaded, setLoaded] = useState<string>('')
     const [refreshing, setRefreshing] = useState<boolean>(false)
@@ -81,7 +81,7 @@ export const League = ({ leagueId }: string) => {
                 />
             )
         }
-        return <CurrentGame loaded={loaded} pullLatestLeagueData={pullLatestLeagueData} refreshing={refreshing} />
+        return <CurrentGame loaded={loaded} theme={theme} />
     }
 
     return (
@@ -92,10 +92,10 @@ export const League = ({ leagueId }: string) => {
                 end={{ x: 1, y: 0 }}
                 style={{ height: Platform.OS === 'ios' ? 300 : 100 }}
             >
-                <View style={styles.leagueNameAndImage}>
-                    <H2 style={styles.mainheading}>{league.name}</H2>
+                <View style={styles(theme).leagueNameAndImage}>
+                    <H2 style={styles(theme).mainheading}>{league.name}</H2>
 
-                    <Image source={require('../../images/other/premier-league.png')} style={styles.image} />
+                    <Image source={require('../../images/other/premier-league.png')} style={styles(theme).image} />
                 </View>
                 <View>
                     <ScreenSelection
@@ -106,12 +106,11 @@ export const League = ({ leagueId }: string) => {
             </LinearGradient>
             <ScrollView
                 contentContainerStyle={{ flex: 1 }}
-                // style={{ backgroundColor: '#fff' }}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             >
                 <View
                     style={{
-                        backgroundColor: '#fff',
+                        backgroundColor: theme.colors.backgroundColor,
                     }}
                 >
                     {determineScreenToRender()}
@@ -121,38 +120,39 @@ export const League = ({ leagueId }: string) => {
     )
 }
 
-const styles = StyleSheet.create({
-    leagueNameAndImage: {
-        display: 'flex',
-        alignItems: 'center',
-        paddingBottom: 15,
-        paddingTop: 15,
-        width: '100%',
-    },
-    image: {
-        resizeMode: 'contain',
-        height: 30,
-        width: 100,
-        marginBottom: 20,
-    },
-    mainheading: {
-        color: '#fff',
-        fontSize: 30,
-        marginTop: 100,
-        marginBottom: 5,
-        padding: 10,
-    },
-    subheading: {
-        borderColor: '#ccc',
-        padding: 10,
-        width: '100%',
-    },
-    maintext: {
-        fontSize: 17,
-        fontWeight: '700',
-        textAlign: 'center',
-    },
-    subtext: {
-        fontWeight: '400',
-    },
-})
+const styles = (theme) =>
+    StyleSheet.create({
+        leagueNameAndImage: {
+            display: 'flex',
+            alignItems: 'center',
+            paddingBottom: 15,
+            paddingTop: 15,
+            width: '100%',
+        },
+        image: {
+            resizeMode: 'contain',
+            height: 30,
+            width: 100,
+            marginBottom: 20,
+        },
+        mainheading: {
+            color: '#fff',
+            fontSize: 30,
+            marginTop: 100,
+            marginBottom: 5,
+            padding: 10,
+        },
+        subheading: {
+            borderColor: '#ccc',
+            padding: 10,
+            width: '100%',
+        },
+        maintext: {
+            fontSize: 17,
+            fontWeight: '700',
+            textAlign: 'center',
+        },
+        subtext: {
+            fontWeight: '400',
+        },
+    })

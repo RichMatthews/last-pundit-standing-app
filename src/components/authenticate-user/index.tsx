@@ -224,7 +224,7 @@ export const AuthenticateUserScreen = () => {
                                                         alignSelf: 'flex-end',
                                                     }}
                                                 >
-                                                    <Text style={{ color: '#827ee6', fontSize: 12 }}>
+                                                    <Text style={{ color: '#2C3E50', fontSize: 12 }}>
                                                         Forgotten password?
                                                     </Text>
                                                 </View>
@@ -269,7 +269,7 @@ export const AuthenticateUserScreen = () => {
         </Fragment>
     ) : (
         <Container style={{ marginTop: 200 }}>
-            <ActivityIndicator size="large" color="#827ee6" />
+            <ActivityIndicator size="large" color="#2C3E50" />
         </Container>
     )
 }

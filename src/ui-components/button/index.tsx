@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { View } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
-const APP_BRAND_COLOR = '#827ee6'
+const APP_BRAND_COLOR = '#2C3E50'
 const APP_BACKGROUND_COLOR = '#F2F1F7'
 
 export const ButtonText = styled.Text`
@@ -17,7 +17,7 @@ export const ButtonText = styled.Text`
 `
 
 export const InvertedButtonText = styled(ButtonText)`
-    color: #827ee6;
+    color: #2c3e50;
 `
 
 export const Button = ({ children, disabled }) => (
@@ -43,7 +43,7 @@ export const InvertedButton = ({ children, disabled }) => (
     <View
         style={{
             backgroundColor: disabled ? '#ccc' : '#fff',
-            borderColor: '#827ee6',
+            borderColor: '#2C3E50',
             borderWidth: 1,
             borderRadius: 5,
             justifyContent: 'center',

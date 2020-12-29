@@ -9,17 +9,16 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import uid from 'uid'
 
-import { Button, ButtonText } from '../../ui-components/button'
-import { Container } from '../../ui-components/containers'
-import { ScreenHeading } from '../../ui-components/headings'
-import { getLeagueCreatorInformation } from '../../firebase-helpers'
-import { firebaseApp } from '../../config.js'
+import { Button, ButtonText } from 'src/ui-components/button'
+import { Container } from 'src/ui-components/containers'
+import { getLeagueCreatorInformation } from 'src/firebase-helpers'
+import { firebaseApp } from 'src/config.js'
+import { getLeagues } from 'src/redux/reducer/leagues'
 
-const width = Dimensions.get('window').width
 interface HeadingStyled {
     amount: boolean
 }
@@ -62,6 +61,7 @@ export const CreateLeague = ({ navigation }: any) => {
     const [leagueNameTooLong, setLeagueNameTooLong] = useState(false)
     const [loading, setLoading] = useState(false)
     const user = useSelector((store: { user: any }) => store.user)
+    const dispatch = useDispatch()
 
     const getLeagueCreatorInformationThenCreateLeague = async () => {
         if (leagueNameTooLong) {
@@ -133,11 +133,12 @@ export const CreateLeague = ({ navigation }: any) => {
         return firebaseApp
             .database()
             .ref()
-            .update(updateMultipleLeaguesAndUsersJoinedLeagues, (error) => {
+            .update(updateMultipleLeaguesAndUsersJoinedLeagues, async (error) => {
                 if (error) {
                     alert('Failed to create league, please try again.')
                 } else {
                     setLoading(false)
+                    await dispatch(getLeagues(user.id))
                     navigation.navigate('League', { leagueId: leagueId })
                 }
             })
@@ -161,7 +162,7 @@ export const CreateLeague = ({ navigation }: any) => {
 
     return loading ? (
         <Container>
-            <ActivityIndicator size="large" color="#827ee6" />
+            <ActivityIndicator size="large" color="#2C3E50" />
             <Text>Creating League...</Text>
         </Container>
     ) : (

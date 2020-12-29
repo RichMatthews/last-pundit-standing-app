@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, Text, TouchableOpacity, TouchableNativeFeedback, StyleSheet, Switch, View } from 'react-native'
+import { Platform, Text, TouchableOpacity, TouchableNativeFeedback, Switch, View } from 'react-native'
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import LinearGradient from 'react-native-linear-gradient'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-// import { TouchableOpacity } from 'react-native-gesture-handler'
 
-import { Container } from '../../ui-components/containers'
-import { H1 } from '../../ui-components/headings'
+import { Container } from 'src/ui-components/containers'
+import { H1 } from 'src/ui-components/headings'
 import { signUserOut } from 'src/redux/reducer/leagues'
 
+import { styles } from './styles'
 const iconSize = Platform.OS === 'ios' ? 20 : 20
 
-export const Account = ({ navigation }: any) => {
+export const Account = ({ navigation, theme }: any) => {
     const user = useSelector((store: { user: any }) => store.user)
     const [faceIdActivated, setFaceIdActivated] = useState(false)
+    const [darkModeActivated, setDarkModeActivated] = useState(false)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -56,15 +57,15 @@ export const Account = ({ navigation }: any) => {
     }
 
     return (
-        <View>
+        <View style={{ backgroundColor: theme.colors.background }}>
             <LinearGradient
                 colors={['#a103fc', '#5055b3']}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 0 }}
-                style={styles.topSection}
+                style={styles(theme).topSection}
             >
                 <View>
-                    <Text style={styles.username}>
+                    <Text style={styles(theme).username}>
                         {user.name.split('')[0]}
                         {user.surname.split('')[0]}
                     </Text>
@@ -72,97 +73,57 @@ export const Account = ({ navigation }: any) => {
                 <TouchableOpacity onPressIn={() => closeModalHelper()}>
                     <AntIcon
                         name="close"
-                        color="#fff"
+                        color={theme.colors.inverseTextColor}
                         size={30}
                         style={{ position: 'absolute', right: 30, top: -150 }}
                     />
                 </TouchableOpacity>
             </LinearGradient>
-            <H1 style={styles.heading}> Your Account </H1>
+            <H1 style={styles(theme).heading}> Your Account </H1>
             <Container>
                 <TouchableOpacity onPress={() => updateEmailHelper()}>
-                    <View style={styles.section}>
-                        <Text style={styles.text}>Update Email</Text>
-                        <MaterialCommIcon name="email-edit-outline" size={iconSize} style={{ marginRight: 10 }} />
+                    <View style={styles(theme).section}>
+                        <Text style={styles(theme).text}>Update Email</Text>
+                        <MaterialCommIcon name="email-edit-outline" size={iconSize} color={theme.colors.iconColor} />
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => resetPasswordHelper()}>
-                    <View style={styles.section}>
-                        <Text style={styles.text}>Reset Password</Text>
-                        <MaterialCommIcon name="lock-outline" size={iconSize} style={{ marginRight: 10 }} />
+                    <View style={styles(theme).section}>
+                        <Text style={styles(theme).text}>Reset Password</Text>
+                        <MaterialCommIcon name="lock-outline" size={iconSize} color={theme.colors.iconColor} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => toggleFaceIdActivated(!faceIdActivated)}>
-                    <View style={styles.section}>
-                        <Text style={styles.text}>Authenticate with FaceID</Text>
 
-                        <Switch
-                            style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
-                            trackColor={{ false: '#767577', true: '#81b0ff' }}
-                            thumbColor={faceIdActivated ? '#f5dd4b' : '#f4f3f4'}
-                            ios_backgroundColor="#3e3e3e"
-                            onValueChange={() => toggleFaceIdActivated(!faceIdActivated)}
-                            value={faceIdActivated}
-                        />
-                    </View>
-                </TouchableOpacity>
+                <View style={styles(theme).section}>
+                    <Text style={styles(theme).text}>Authenticate with FaceID</Text>
+                    <Switch
+                        style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
+                        trackColor={{ false: '#767577', true: '#FFCFFF' }}
+                        thumbColor={faceIdActivated ? '#a103fc' : '#f4f3f4'}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={() => toggleFaceIdActivated(!faceIdActivated)}
+                        value={faceIdActivated}
+                    />
+                </View>
+
+                <View style={styles(theme).section}>
+                    <Text style={styles(theme).text}>Dark Mode</Text>
+                    <Switch
+                        style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
+                        trackColor={{ false: 'red', true: '#FFCFFF' }}
+                        thumbColor={darkModeActivated ? '#a103fc' : '#f4f3f4'}
+                        ios_backgroundColor="#3e3e3e"
+                        onValueChange={() => setDarkModeActivated(!darkModeActivated)}
+                        value={darkModeActivated}
+                    />
+                </View>
                 <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>
-                    <View style={[styles.section, styles.signOut]}>
-                        <Text style={styles.text}>Sign out</Text>
-                        <MaterialIcon name="exit-to-app" size={iconSize} style={{ marginRight: 10 }} />
+                    <View style={[styles(theme).section, styles(theme).signOut]}>
+                        <Text style={styles(theme).text}>Sign out</Text>
+                        <MaterialIcon name="exit-to-app" size={iconSize} color={theme.colors.iconColor} />
                     </View>
                 </TouchableNativeFeedback>
             </Container>
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    heading: {
-        marginTop: 50,
-        marginBottom: 50,
-        textAlign: 'center',
-    },
-    icon: {},
-    section: {
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-        maxHeight: 40,
-        padding: 10,
-        width: 350,
-    },
-    signOut: {
-        position: 'absolute',
-        bottom: Platform.OS === 'ios' ? 450 : 350,
-        display: 'flex',
-        alignSelf: 'center',
-        zIndex: 1,
-    },
-    text: {
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: Platform.OS === 'ios' ? 15 : 15,
-    },
-    topSection: {
-        backgroundColor: '#B972FE',
-        borderBottomRightRadius: 250,
-        height: Platform.OS === 'ios' ? 300 : 200,
-        paddingTop: Platform.OS === 'ios' ? 150 : 100,
-    },
-    username: {
-        borderColor: '#fff',
-        borderWidth: 4,
-        borderRadius: 85 / 2,
-        alignSelf: 'center',
-        lineHeight: 80,
-        height: 85,
-        fontSize: 40,
-        textAlign: 'center',
-        width: 85,
-    },
-})

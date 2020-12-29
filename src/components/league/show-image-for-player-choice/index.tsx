@@ -72,7 +72,7 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
 
     useEffect(() => {
         checkIfTimeEnded()
-    }, [currentGame])
+    }, [])
 
     const checkIfTimeEnded = async () => {
         const timeHasEnded = await gameweekSelectionTimeEnded()
@@ -139,3 +139,5 @@ export const ShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer,
         return GameStatusIndicatorComponent('pending')
     }
 }
+
+export const MemoizedShowImageForPlayerChoice = React.memo(ShowImageForPlayerChoice)

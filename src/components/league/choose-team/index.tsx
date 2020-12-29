@@ -18,7 +18,7 @@ const SectionDivider = styled.View`
 
 const Team = styled.View`
     border-radius: ${({ selected }) => (selected ? '50px' : '0')};
-    border-color: ${({ selected }) => (selected ? '#827ee6' : 'transparent')};
+    border-color: ${({ selected }) => (selected ? '#2C3E50' : 'transparent')};
     border-width: 1px;
     padding: 10px;
     margin: 5px;

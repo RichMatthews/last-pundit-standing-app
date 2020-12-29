@@ -43,7 +43,7 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
                 const leagueAndUserData = {
                     [`/leagues/${league.id}/games/${currentGame[0].id}/players/${currentUserId}`]: {
                         id: currentUserId,
-                        name: name + surname,
+                        name: name + ' ' + surname,
                         rounds: [{ choice: { hasMadeChoice: false } }],
                     },
                     [`/users/${currentUserId}/leagues/${league.id}`]: {
@@ -73,13 +73,13 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
 
     return loading ? (
         <Container style={{ backgroundColor: '#fff' }}>
-            <ActivityIndicator size="large" color="#827ee6" />
+            <ActivityIndicator size="large" color="#2C3E50" />
             <Text>Joining League...</Text>
         </Container>
     ) : (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <Container style={{ backgroundColor: '#fff' }}>
-                <Text>Please enter a pin to join a league</Text>
+                <Text style={{ color: '#2C3E50' }}>Please enter a pin to join a league</Text>
                 <View>
                     <View style={{ marginTop: 20, width: 400 }}>
                         <Input
