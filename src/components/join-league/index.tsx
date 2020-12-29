@@ -16,6 +16,7 @@ interface JoinLeagueProps {
 
 const Input = styled.TextInput`
     background: #f7f7f7;
+    border-radius: 5px;
     align-self: center;
     font-size: 15px;
     padding: 10px;
@@ -24,7 +25,7 @@ const Input = styled.TextInput`
     width: 100%;
 `
 
-export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
+export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps) => {
     const [leaguePin, setLeaguePin] = useState<string>('')
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
@@ -72,14 +73,14 @@ export const JoinLeague = ({ currentUserId, navigation }: JoinLeagueProps) => {
     }
 
     return loading ? (
-        <Container style={{ backgroundColor: '#fff' }}>
+        <Container style={{ backgroundColor: theme.colors.backgroundColor }}>
             <ActivityIndicator size="large" color="#2C3E50" />
             <Text>Joining League...</Text>
         </Container>
     ) : (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Container style={{ backgroundColor: '#fff' }}>
-                <Text style={{ color: '#2C3E50' }}>Please enter a pin to join a league</Text>
+            <Container style={{ backgroundColor: theme.colors.backgroundColor }}>
+                <Text style={{ color: theme.colors.primaryColor }}>Please enter a pin to join a league</Text>
                 <View>
                     <View style={{ marginTop: 20, width: 400 }}>
                         <Input

@@ -3,6 +3,7 @@ const DEFAULT_THEME = {
         radius: 5,
     },
     text: {
+        heading: 25,
         largeTextSize: 18,
         mediumTextSize: 15,
         smallTextSize: 12,
@@ -13,7 +14,10 @@ export const DARK_THEME = {
     ...DEFAULT_THEME,
     dark: true,
     colors: {
-        accountButtonBackgroundColor: '#454343',
+        activitySpinner: '#fff',
+        buttonBackgroundColor: '#454343',
+        activeTintBottomColor: 'purple',
+        inactiveTintBottomColor: '#f7f7f7',
         background: '#212020',
         backgroundColor: '#212020',
         borderColor: 'red',
@@ -22,6 +26,7 @@ export const DARK_THEME = {
         primaryColor: '#fff',
     },
     text: {
+        ...DEFAULT_THEME.text,
         primaryTextColor: '#fff',
         inverseTextColor: '#000',
     },
@@ -31,7 +36,10 @@ export const LIGHT_THEME = {
     ...DEFAULT_THEME,
     dark: false,
     colors: {
-        accountButtonBackgroundColor: '#eee',
+        activitySpinner: '#000',
+        buttonBackgroundColor: '#eee',
+        activeTintBottomColor: '#2C3E50',
+        inactiveTintBottomColor: '#000',
         background: '#fff',
         backgroundColor: '#fff',
         borderColor: 'red',
@@ -40,6 +48,7 @@ export const LIGHT_THEME = {
         primaryColor: '#000',
     },
     text: {
+        ...DEFAULT_THEME.text,
         primaryTextColor: '#000',
         inverseTextColor: '#fff',
     },

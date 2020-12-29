@@ -76,7 +76,7 @@ const Stacks = ({ isSignedIn, theme }: any) => (
         {isSignedIn ? (
             <>
                 <Stack.Screen name="My Leagues">
-                    {(props: any) => <MyLeagues navigation={props.navigation} />}
+                    {(props: any) => <MyLeagues navigation={props.navigation} theme={theme} />}
                 </Stack.Screen>
                 <Stack.Screen
                     name="League"
@@ -103,7 +103,7 @@ const Stacks = ({ isSignedIn, theme }: any) => (
     </Stack.Navigator>
 )
 
-const CreateStack = ({ isSignedIn }: any) => (
+const CreateStack = ({ isSignedIn, theme }: any) => (
     <Stack.Navigator
         screenOptions={{
             cardStyle: { backgroundColor: '#fff' },
@@ -114,7 +114,7 @@ const CreateStack = ({ isSignedIn }: any) => (
         {isSignedIn ? (
             <>
                 <Stack.Screen name="My Leagues">
-                    {(props: any) => <CreateLeague navigation={props.navigation} />}
+                    {(props: any) => <CreateLeague navigation={props.navigation} theme={theme} />}
                 </Stack.Screen>
             </>
         ) : (
@@ -160,14 +160,29 @@ const TabNavigation = ({ theme, user }: any) => {
                     } else if (route.name === 'Leagues') {
                         iconName = 'ios-trophy-outline'
                     } else if (route.name === 'My Account') {
-                        return <MaterialIcons name={'account-circle-outline'} size={size} color={color} />
+                        return (
+                            <MaterialIcons
+                                name={'account-circle-outline'}
+                                size={size}
+                                color={
+                                    focused ? theme.colors.activeTintBottomColor : theme.colors.inactiveTintBottomColor
+                                }
+                            />
+                        )
                     }
 
-                    return <Ionicons name={iconName} size={size} color={color} />
+                    return (
+                        <Ionicons
+                            name={iconName}
+                            size={size}
+                            color={focused ? theme.colors.activeTintBottomColor : theme.colors.inactiveTintBottomColor}
+                        />
+                    )
                 },
             })}
             tabBarOptions={{
-                activeTintColor: '#2C3E50',
+                activeTintColor: theme.colors.activeTintBottomColor,
+                inactiveTintColor: theme.colors.inactiveTintBottomColor,
                 labelStyle: { fontSize: 13 },
             }}
         >
@@ -192,13 +207,13 @@ const TabNavigation = ({ theme, user }: any) => {
 
             <Tab.Screen name="Create">
                 {(props: any) => {
-                    return <CreateStack isSignedIn={user} userId={user.id} />
+                    return <CreateStack isSignedIn={user} theme={theme} userId={user.id} />
                 }}
             </Tab.Screen>
 
             <Tab.Screen name="Join">
                 {(props: any) => {
-                    return <JoinLeague navigation={props.navigation} currentUserId={user.id} />
+                    return <JoinLeague currentUserId={user.id} navigation={props.navigation} theme={theme} />
                 }}
             </Tab.Screen>
 
@@ -322,7 +337,7 @@ export const Routing = () => {
                             shadowOpacity: 0,
                         },
                         headerTitleStyle: {
-                            color: '#2C3E50',
+                            color: theme.colors.primaryColor,
                             fontSize: 23,
                         },
                     })}

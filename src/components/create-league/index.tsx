@@ -5,6 +5,7 @@ import {
     Dimensions,
     Keyboard,
     Text,
+    TextInput,
     TouchableWithoutFeedback,
     TouchableOpacity,
     View,
@@ -23,13 +24,6 @@ interface HeadingStyled {
     amount: boolean
 }
 
-const Input = styled.TextInput`
-    background: #f7f7f7;
-    font-size: 15px;
-    padding: 10px;
-    width: 100%;
-`
-
 const LeagueAmountValue = styled.View<HeadingStyled>`
     align-items: center;
     background: ${({ amount }) => (amount ? '#ccc' : 'transparent')};
@@ -46,15 +40,10 @@ const EntryFeeContainer = styled.View`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 300px;
+    width: 350px;
 `
 
-const SectionDivider = styled.View`
-    margin: 15px 0 0 0;
-    width: 100%;
-`
-
-export const CreateLeague = ({ navigation }: any) => {
+export const CreateLeague = ({ navigation, theme }: any) => {
     const [privateLeague, setPrivateLeague] = useState(true)
     const [leagueName, setLeagueName] = useState('')
     const [selectedFee, setSelectedFee] = useState(10)
@@ -166,19 +155,31 @@ export const CreateLeague = ({ navigation }: any) => {
             <Text>Creating League...</Text>
         </Container>
     ) : (
-        <Fragment>
+        <View style={{ backgroundColor: theme.colors.backgroundColor }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <Container style={{ alignSelf: 'center', width: 300 }}>
-                    <SectionDivider>
-                        {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
-                        <Input autoCorrect={false} onChange={(e) => setLeagueNameHelper(e)} placeholder="League name" />
-                    </SectionDivider>
-                    <SectionDivider
+                <Container style={{ alignSelf: 'center', width: 400 }}>
+                    {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
+                    <TextInput
+                        autoCorrect={false}
+                        onChange={(e) => setLeagueNameHelper(e)}
+                        placeholder="League name"
+                        style={{
+                            backgroundColor: '#f7f7f7',
+                            borderRadius: 5,
+                            fontSize: 15,
+                            padding: 10,
+                            margin: 10,
+                            width: '100%',
+                        }}
+                    />
+
+                    <View
                         style={{
                             display: 'flex',
                             flexDirection: 'row',
                             justifyContent: 'space-around',
-                            width: 200,
+                            margin: 10,
+                            width: '100%',
                         }}
                     >
                         <TouchableOpacity onPress={() => setPrivateLeague(true)}>
@@ -221,14 +222,14 @@ export const CreateLeague = ({ navigation }: any) => {
                                 <Text style={{ color: privateLeague ? 'purple' : '#fff' }}>Public</Text>
                             </View>
                         </TouchableOpacity>
-                    </SectionDivider>
-                    <SectionDivider>
-                        <SectionDivider
+                    </View>
+                    <View>
+                        <View
                             style={{
                                 display: 'flex',
                                 flexDirection: 'row',
                                 justifyContent: 'space-around',
-                                marginBottom: 10,
+                                margin: 10,
                             }}
                         >
                             <EntryFeeContainer>
@@ -260,9 +261,9 @@ export const CreateLeague = ({ navigation }: any) => {
                                     </TouchableOpacity>
                                 ))}
                             </EntryFeeContainer>
-                        </SectionDivider>
-                    </SectionDivider>
-                    <SectionDivider>
+                        </View>
+                    </View>
+                    <View>
                         <TouchableOpacity
                             onPress={
                                 leagueName.length === 0 ? null : () => getLeagueCreatorInformationThenCreateLeague()
@@ -272,9 +273,9 @@ export const CreateLeague = ({ navigation }: any) => {
                                 <ButtonText>Create and join league</ButtonText>
                             </Button>
                         </TouchableOpacity>
-                    </SectionDivider>
+                    </View>
                 </Container>
             </TouchableWithoutFeedback>
-        </Fragment>
+        </View>
     )
 }

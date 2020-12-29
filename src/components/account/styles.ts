@@ -12,7 +12,7 @@ export const styles = (theme) =>
         icon: {},
         section: {
             alignItems: 'center',
-            backgroundColor: theme.colors.accountButtonBackgroundColor,
+            backgroundColor: theme.colors.buttonBackgroundColor,
             borderRadius: theme.borders.radius,
             flexDirection: 'row',
             justifyContent: 'space-between',

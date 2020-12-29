@@ -95,7 +95,7 @@ export const League = ({ leagueId, theme }: string) => {
                 <View style={styles(theme).leagueNameAndImage}>
                     <H2 style={styles(theme).mainheading}>{league.name}</H2>
 
-                    <Image source={require('../../images/other/premier-league.png')} style={styles(theme).image} />
+                    <Image source={require('src/images/other/premier-league.png')} style={styles(theme).image} />
                 </View>
                 <View>
                     <ScreenSelection
