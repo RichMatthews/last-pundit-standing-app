@@ -10,14 +10,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Container } from 'src/ui-components/containers'
 import { H1 } from 'src/ui-components/headings'
 import { signUserOut } from 'src/redux/reducer/leagues'
+import { setTheme } from 'src/redux/reducer/theme'
 
 import { styles } from './styles'
 const iconSize = Platform.OS === 'ios' ? 20 : 20
 
 export const Account = ({ navigation, theme }: any) => {
-    const user = useSelector((store: { user: any }) => store.user)
     const [faceIdActivated, setFaceIdActivated] = useState(false)
     const [darkModeActivated, setDarkModeActivated] = useState(false)
+    const mode = useSelector((store: { theme: any }) => store.theme)
+    const user = useSelector((store: { user: any }) => store.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -111,10 +113,10 @@ export const Account = ({ navigation, theme }: any) => {
                     <Switch
                         style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
                         trackColor={{ false: 'red', true: '#FFCFFF' }}
-                        thumbColor={darkModeActivated ? '#a103fc' : '#f4f3f4'}
+                        thumbColor={mode ? '#a103fc' : '#f4f3f4'}
                         ios_backgroundColor="#3e3e3e"
-                        onValueChange={() => setDarkModeActivated(!darkModeActivated)}
-                        value={darkModeActivated}
+                        onValueChange={() => dispatch(setTheme(mode === 'light' ? 'dark' : 'light'))}
+                        value={mode === 'dark'}
                     />
                 </View>
                 <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>

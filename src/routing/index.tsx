@@ -223,6 +223,8 @@ export const Routing = () => {
     const currentUser = firebaseApp.auth().currentUser
     const dispatch = useDispatch()
     const userFromRedux = useSelector((store: { user: any }) => store.user)
+    const mode = useSelector((store: { theme: any }) => store.theme)
+    const theme = mode === 'dark' ? DARK_THEME : LIGHT_THEME
 
     useEffect(() => {
         async function getUser() {
@@ -298,7 +300,7 @@ export const Routing = () => {
     }
 
     return userFromRedux && Object.values(userFromRedux).length ? (
-        <NavigationContainer theme={DARK_THEME}>
+        <NavigationContainer theme={theme}>
             <Stack.Navigator
                 screenOptions={({ route }) => ({
                     animationEnabled: true,
@@ -325,7 +327,7 @@ export const Routing = () => {
                         },
                     })}
                 >
-                    {(props: any) => <TabNavigation theme={DARK_THEME} user={userFromRedux} />}
+                    {(props: any) => <TabNavigation theme={theme} user={userFromRedux} />}
                 </Stack.Screen>
                 <Stack.Screen
                     name="Account"
@@ -333,7 +335,7 @@ export const Routing = () => {
                         headerShown: false,
                     })}
                 >
-                    {(props: any) => <ModalStacks theme={LIGHT_THEME} />}
+                    {(props: any) => <ModalStacks theme={theme} />}
                 </Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
