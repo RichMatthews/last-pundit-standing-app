@@ -24,14 +24,14 @@ const LeagueItem = styled.View`
 
 export const MyLeagues = ({ navigation, theme }: any) => {
     const userLeagues = useSelector((store: { userLeagues: any }) => store.userLeagues)
-    console.log(theme)
+
     return (
         <Fragment>
-            <Container style={{ backgroundColor: theme.colors.backgroundColor, marginTop: 100, width: '100%' }}>
+            <Container style={{ backgroundColor: theme.background.primary, marginTop: 100, width: '100%' }}>
                 <Text
                     style={{
                         alignSelf: 'center',
-                        color: theme.text.primaryTextColor,
+                        color: theme.text.primary,
                         fontSize: theme.text.heading,
                         fontWeight: '700',
                         marginBottom: 20,
@@ -41,16 +41,16 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                 </Text>
                 <LeagueContainer>
                     {userLeagues.loading ? (
-                        <ActivityIndicator size="large" color="#2C3E50" />
+                        <ActivityIndicator size="large" color="red" />
                     ) : userLeagues.leagues.length ? (
                         userLeagues.leagues.map((league: LeagueState) => (
                             <TouchableOpacity onPress={() => navigation.navigate('League', { leagueId: league.id })}>
                                 <LeagueItem
                                     key={league.id}
                                     style={{
-                                        backgroundColor: theme.colors.buttonBackgroundColor,
-                                        display: 'flex',
                                         alignItems: 'center',
+                                        backgroundColor: theme.button.backgroundColor,
+                                        display: 'flex',
                                         justifyContent: 'space-between',
                                         flexDirection: 'row',
                                         margin: 10,
@@ -67,8 +67,8 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                                     >
                                         <Text
                                             style={{
-                                                color: theme.colors.primaryColor,
-                                                fontSize: theme.text.largeTextSize,
+                                                color: theme.text.primary,
+                                                fontSize: theme.text.large,
                                                 fontWeight: '700',
                                             }}
                                         >
@@ -86,7 +86,7 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                                             />
                                         </View>
                                     </View>
-                                    <Entypo name="chevron-small-right" size={30} color={'#2C3E50'} />
+                                    <Entypo name="chevron-small-right" size={30} color={theme.icons.primary} />
                                 </LeagueItem>
                             </TouchableOpacity>
                         ))

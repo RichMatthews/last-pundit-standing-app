@@ -3,44 +3,58 @@ import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 interface ScreenSelection {
     currentScreenView: string
     setCurrentScreenView: (screen: string) => void
+    theme: any
 }
 
 var width = Dimensions.get('window').width
 
-export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }: ScreenSelection) => {
+export const ScreenSelection = ({ currentScreenView, setCurrentScreenView, theme }: ScreenSelection) => {
     return (
-        <View style={styles.container}>
+        <View style={styles(theme).container}>
             <TouchableOpacity onPress={() => setCurrentScreenView('game')} activeOpacity={1}>
-                <View style={[styles.innerContainer, currentScreenView === 'game' ? styles.viewed : styles.notViewed]}>
-                    <Text style={[styles.text, currentScreenView === 'game' ? styles.viewed : styles.notViewed]}>
+                <View style={[currentScreenView === 'game' ? styles(theme).viewed : styles(theme).notViewed]}>
+                    <Text
+                        style={[
+                            styles(theme).text,
+                            currentScreenView === 'game' ? styles(theme).viewed : styles(theme).notViewed,
+                        ]}
+                    >
                         LEAGUE
                     </Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setCurrentScreenView('selection')} activeOpacity={1}>
-                <View
-                    style={[
-                        styles.innerContainer,
-                        currentScreenView === 'selection' ? styles.viewed : styles.notViewed,
-                    ]}
-                >
-                    <Text style={[styles.text, currentScreenView === 'selection' ? styles.viewed : styles.notViewed]}>
+                <View style={[currentScreenView === 'selection' ? styles(theme).viewed : styles(theme).notViewed]}>
+                    <Text
+                        style={[
+                            styles(theme).text,
+                            currentScreenView === 'selection' ? styles(theme).viewed : styles(theme).notViewed,
+                        ]}
+                    >
                         SELECTION
                     </Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setCurrentScreenView('info')} activeOpacity={1}>
-                <View style={[styles.innerContainer, currentScreenView === 'info' ? styles.viewed : styles.notViewed]}>
-                    <Text style={[styles.text, currentScreenView === 'info' ? styles.viewed : styles.notViewed]}>
+                <View style={[currentScreenView === 'info' ? styles(theme).viewed : styles(theme).notViewed]}>
+                    <Text
+                        style={[
+                            styles(theme).text,
+                            currentScreenView === 'info' ? styles(theme).viewed : styles(theme).notViewed,
+                        ]}
+                    >
                         INFORMATION
                     </Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setCurrentScreenView('previous')} activeOpacity={1}>
-                <View
-                    style={[styles.innerContainer, currentScreenView === 'previous' ? styles.viewed : styles.notViewed]}
-                >
-                    <Text style={[styles.text, currentScreenView === 'previous' ? styles.viewed : styles.notViewed]}>
+                <View style={[currentScreenView === 'previous' ? styles(theme).viewed : styles(theme).notViewed]}>
+                    <Text
+                        style={[
+                            styles(theme).text,
+                            currentScreenView === 'previous' ? styles(theme).viewed : styles(theme).notViewed,
+                        ]}
+                    >
                         PREVIOUS
                     </Text>
                 </View>
@@ -49,33 +63,28 @@ export const ScreenSelection = ({ currentScreenView, setCurrentScreenView }: Scr
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignSelf: 'center',
-        width: width * 0.95,
-    },
-    innerContainer: {
-        borderColor: '#2C3E50',
-        paddingLeft: 0,
-        paddingRight: 0,
-        paddingTop: 10,
-        paddingBottom: 0,
-    },
-    viewed: {
-        borderBottomWidth: 3,
-        borderColor: '#fff',
-        color: '#fff',
-    },
-    notViewed: {
-        color: '#fff',
-        opacity: 0.8,
-    },
-    text: {
-        padding: 10,
-        paddingBottom: 0,
-        fontSize: 13,
-    },
-})
+const styles = (theme) =>
+    StyleSheet.create({
+        container: {
+            backgroundColor: theme.button.backgroundColor,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignSelf: 'center',
+            width: width,
+        },
+        viewed: {
+            borderBottomWidth: 3,
+            borderColor: theme.borders.primaryColor,
+            color: theme.tint.active,
+            fontWeight: '700',
+        },
+        notViewed: {
+            color: theme.text.primary,
+        },
+        text: {
+            padding: 10,
+            paddingBottom: 0,
+            fontSize: 13,
+        },
+    })

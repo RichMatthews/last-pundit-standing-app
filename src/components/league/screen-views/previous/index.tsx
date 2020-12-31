@@ -1,18 +1,16 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-export const PreviousGames = ({ games }) => {
+export const PreviousGames = ({ games, theme }) => {
     return games.length ? (
-        <View>
+        <View style={{ height: '100%' }}>
             {games.map((game) => (
                 <View
                     style={{
-                        backgroundColor: '#fff',
+                        backgroundColor: theme.button.backgroundColor,
                         borderRadius: 5,
                         padding: 10,
-                        margin: 5,
-                        borderBottomWidth: 1,
-                        borderColor: '#ccc',
+                        margin: 10,
                         display: 'flex',
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -20,16 +18,18 @@ export const PreviousGames = ({ games }) => {
                     }}
                 >
                     <View>
-                        <Text style={{ color: '#2C3E50', fontSize: 20 }}>
+                        <Text style={{ color: theme.text.primary, fontSize: theme.text.large }}>
                             {Object.values(game.players).find((player) => !player.hasBeenEliminated).name}
                         </Text>
                         <Text style={{ color: '#aaa' }}>Winner</Text>
                     </View>
                     <View style={{ display: 'flex' }}>
-                        <Text style={{ fontSize: 25, textAlign: 'center' }}>
+                        <Text style={{ color: theme.text.primary, fontSize: theme.text.xlarge, textAlign: 'center' }}>
                             {Object.values(game.players).find((player) => !player.hasBeenEliminated).rounds.length}
                         </Text>
-                        <Text style={{ fontSize: 10, textAlign: 'center' }}>Correct</Text>
+                        <Text style={{ color: theme.text.primary, fontSize: theme.text.xsmall, textAlign: 'center' }}>
+                            Correct
+                        </Text>
                     </View>
                 </View>
             ))}

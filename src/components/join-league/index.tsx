@@ -1,6 +1,13 @@
 import React, { Fragment, useState } from 'react'
-import { ActivityIndicator, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text, View } from 'react-native'
-import styled from 'styled-components'
+import {
+    ActivityIndicator,
+    Keyboard,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+    Text,
+    TextInput,
+    View,
+} from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, ButtonText } from 'src/ui-components/button'
@@ -13,17 +20,6 @@ interface JoinLeagueProps {
         navigate: () => void
     }
 }
-
-const Input = styled.TextInput`
-    background: #f7f7f7;
-    border-radius: 5px;
-    align-self: center;
-    font-size: 15px;
-    padding: 10px;
-    margin-bottom: 20px;
-    margin: 10px;
-    width: 100%;
-`
 
 export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps) => {
     const [leaguePin, setLeaguePin] = useState<string>('')
@@ -73,20 +69,32 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
     }
 
     return loading ? (
-        <Container style={{ backgroundColor: theme.colors.backgroundColor }}>
+        <Container style={{ backgroundColor: theme.background.primary }}>
             <ActivityIndicator size="large" color="#2C3E50" />
             <Text>Joining League...</Text>
         </Container>
     ) : (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Container style={{ backgroundColor: theme.colors.backgroundColor }}>
+            <Container style={{ backgroundColor: theme.background.primary }}>
                 <Text style={{ color: theme.colors.primaryColor }}>Please enter a pin to join a league</Text>
                 <View>
                     <View style={{ marginTop: 20, width: 400 }}>
-                        <Input
+                        <TextInput
                             autoFocus={true}
                             onChange={(e) => setLeaguePin(e.nativeEvent.text)}
                             placeholder="League pin"
+                            placeholderTextColor={theme.text.primary}
+                            style={{
+                                alignSelf: 'center',
+                                backgroundColor: theme.input.backgroundColor,
+                                borderRadius: 5,
+                                color: theme.text.primary,
+                                fontSize: 15,
+                                marginBottom: 20,
+                                margin: 10,
+                                padding: 10,
+                                width: '100%',
+                            }}
                         />
 
                         <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>

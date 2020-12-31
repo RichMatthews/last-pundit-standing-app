@@ -4,7 +4,7 @@ const width = Dimensions.get('window').width
 export const styles = (theme) =>
     StyleSheet.create({
         heading: {
-            color: theme.text.primaryTextColor,
+            color: theme.text.primary,
             marginBottom: 50,
             marginTop: 50,
             textAlign: 'center',
@@ -12,7 +12,7 @@ export const styles = (theme) =>
         icon: {},
         section: {
             alignItems: 'center',
-            backgroundColor: theme.colors.buttonBackgroundColor,
+            backgroundColor: theme.button.backgroundColor,
             borderRadius: theme.borders.radius,
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -28,7 +28,7 @@ export const styles = (theme) =>
             zIndex: 1,
         },
         text: {
-            color: theme.text.primaryTextColor,
+            color: theme.text.primary,
             fontSize: Platform.OS === 'ios' ? 18 : 15,
         },
         topSection: {
@@ -37,7 +37,7 @@ export const styles = (theme) =>
         },
         username: {
             alignSelf: 'center',
-            borderColor: theme.colors.inverseTextColor,
+            borderColor: theme.text.inverse,
             borderWidth: 4,
             borderRadius: 85 / 2,
             lineHeight: 80,

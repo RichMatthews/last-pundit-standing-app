@@ -72,16 +72,36 @@ export const League = ({ leagueId, theme }: string) => {
         if (currentScreenView === 'info') {
             return <LeagueInfo />
         } else if (currentScreenView === 'previous') {
-            return <PreviousGames games={Object.values(league.games).filter((game: any) => game.complete)} />
+            return (
+                <PreviousGames games={Object.values(league.games).filter((game: any) => game.complete)} theme={theme} />
+            )
         } else if (currentScreenView === 'selection') {
             return (
                 <TeamSelection
                     pullLatestLeagueData={pullLatestLeagueData}
                     setCurrentScreenView={setCurrentScreenView}
+                    theme={theme}
                 />
             )
         }
-        return <CurrentGame loaded={loaded} theme={theme} />
+        return (
+            <ScrollView
+                style={{
+                    backgroundColor: theme.background.primary,
+                }}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        title="Pull to refresh"
+                        tintColor={theme.text.primary}
+                        titleColor={theme.text.primary}
+                    />
+                }
+            >
+                <CurrentGame loaded={loaded} theme={theme} />
+            </ScrollView>
+        )
     }
 
     return (
@@ -97,25 +117,22 @@ export const League = ({ leagueId, theme }: string) => {
 
                     <Image source={require('src/images/other/premier-league.png')} style={styles(theme).image} />
                 </View>
-                <View>
+                <View style={{ position: 'absolute', bottom: 0 }}>
                     <ScreenSelection
                         currentScreenView={currentScreenView}
                         setCurrentScreenView={setCurrentScreenView}
+                        theme={theme}
                     />
                 </View>
             </LinearGradient>
-            <ScrollView
-                contentContainerStyle={{ flex: 1 }}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+
+            <View
+                style={{
+                    backgroundColor: theme.background.primary,
+                }}
             >
-                <View
-                    style={{
-                        backgroundColor: theme.colors.backgroundColor,
-                    }}
-                >
-                    {determineScreenToRender()}
-                </View>
-            </ScrollView>
+                {determineScreenToRender()}
+            </View>
         </>
     )
 }
@@ -136,7 +153,7 @@ const styles = (theme) =>
             marginBottom: 20,
         },
         mainheading: {
-            color: '#fff',
+            color: theme.text.primaryColor,
             fontSize: 30,
             marginTop: 100,
             marginBottom: 5,

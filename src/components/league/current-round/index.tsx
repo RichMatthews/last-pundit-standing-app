@@ -42,19 +42,17 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
                     <View
                         key={player.id}
                         style={{
-                            borderBottomWidth: 1,
-                            borderColor: '#aaa',
+                            backgroundColor: theme.button.backgroundColor,
+                            borderRadius: theme.borders.radius,
                             padding: 10,
-                            paddingLeft: 0,
-                            paddingRight: 0,
                             margin: 10,
                         }}
                     >
                         <CurrentRound style={{ width: 380 }}>
                             <Text
                                 style={{
-                                    color: player.id === user.id ? '#fff' : theme.text.primaryTextColor,
-                                    fontSize: 18,
+                                    color: player.id === user.id ? theme.tint.active : theme.text.primary,
+                                    fontSize: theme.text.large,
                                 }}
                             >
                                 {player.name}
@@ -89,7 +87,7 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
                                                 (round: any) => round.choice.value && round.choice.result !== 'pending',
                                             )
                                             .map((round: any) => (
-                                                <PreviousRound choice={round.choice} />
+                                                <PreviousRound choice={round.choice} theme={theme} />
                                             ))}
                                     </>
                                 ) : (

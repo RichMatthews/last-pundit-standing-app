@@ -26,7 +26,7 @@ const SelectionWrapper = styled.View`
 
 export const LeagueInfo = () => {
     return (
-        <View>
+        <View style={{ height: '100%' }}>
             <SelectionWrapper>
                 <Fixtures />
             </SelectionWrapper>

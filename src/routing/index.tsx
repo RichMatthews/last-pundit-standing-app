@@ -28,6 +28,7 @@ import { getCurrentUser } from 'src/redux/reducer/user'
 import { firebaseApp } from '../config.js'
 import { DARK_THEME, LIGHT_THEME } from 'src/theme'
 import { attemptFaceIDAuthentication, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import { setTheme } from 'src/redux/reducer/theme'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -164,9 +165,7 @@ const TabNavigation = ({ theme, user }: any) => {
                             <MaterialIcons
                                 name={'account-circle-outline'}
                                 size={size}
-                                color={
-                                    focused ? theme.colors.activeTintBottomColor : theme.colors.inactiveTintBottomColor
-                                }
+                                color={focused ? theme.tint.active : theme.tint.inactive}
                             />
                         )
                     }
@@ -175,15 +174,18 @@ const TabNavigation = ({ theme, user }: any) => {
                         <Ionicons
                             name={iconName}
                             size={size}
-                            color={focused ? theme.colors.activeTintBottomColor : theme.colors.inactiveTintBottomColor}
+                            color={focused ? theme.tint.active : theme.tint.inactive}
                         />
                     )
                 },
             })}
             tabBarOptions={{
-                activeTintColor: theme.colors.activeTintBottomColor,
-                inactiveTintColor: theme.colors.inactiveTintBottomColor,
+                activeTintColor: theme.tint.active,
+                inactiveTintColor: theme.tint.inactive,
                 labelStyle: { fontSize: 13 },
+                style: {
+                    backgroundColor: theme.background.primary,
+                },
             }}
         >
             <Tab.Screen name="Leagues">
@@ -246,6 +248,7 @@ export const Routing = () => {
             if (await userJustSignedOut()) {
                 return
             }
+            await setThemeMode()
             const lastLogin = await checkIfNeedToReauthenticateUser()
 
             if (currentUser) {
@@ -253,6 +256,7 @@ export const Routing = () => {
                     await dispatch(getCurrentUser(currentUser))
                     await dispatch(getLeagues(currentUser.uid))
                     await dispatch(getCurrentGameWeekInfo())
+                    console.log('here, taking ages')
                     SplashScreen.hide()
                 } catch (e) {
                     console.error(e)
@@ -270,6 +274,13 @@ export const Routing = () => {
         }
         getUser()
     }, [])
+
+    const setThemeMode = async () => {
+        const theme = await AsyncStorage.getItem('theme')
+        if (theme) {
+            dispatch(setTheme(theme))
+        }
+    }
 
     const checkIfNeedToReauthenticateUser = async () => {
         const lastLogin = await AsyncStorage.getItem('lastLogin')
@@ -335,10 +346,11 @@ export const Routing = () => {
                         headerStyle: {
                             elevation: 5,
                             shadowOpacity: 0,
+                            backgroundColor: theme.background.primary,
                         },
                         headerTitleStyle: {
-                            color: theme.colors.primaryColor,
-                            fontSize: 23,
+                            color: theme.headings.primary,
+                            fontSize: theme.text.xlarge,
                         },
                     })}
                 >

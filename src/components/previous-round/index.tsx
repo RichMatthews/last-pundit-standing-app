@@ -23,26 +23,33 @@ const TeamBadge = styled.Image<ImageStyled>`
     width: 30px;
 `
 
-export const PreviousRound = ({ choice }: any) => {
+export const PreviousRound = ({ choice, theme }: any) => {
     const opponentTeamName: any = choice.opponent.name.replace(/\s/g, '').toLowerCase()
     const userTeamName: any = choice.value.replace(/\s/g, '').toLowerCase()
 
     return choice.teamPlayingAtHome ? (
         <Container>
             <TeamBadge source={Images[userTeamName]} lost={false} />
-            <Text style={{fontSize: 20, fontWeight: '600'}}>{choice.goals}</Text>
-            <Text style={{fontSize: 20, fontWeight: '600'}}>-</Text>
-            <Text style={{fontSize: 20, fontWeight: '600'}}>{choice.opponent.goals}</Text>
+            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
+                {choice.goals}
+            </Text>
+            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>-</Text>
+            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
+                {choice.opponent.goals}
+            </Text>
             <TeamBadge source={Images[opponentTeamName]} lost={true} />
         </Container>
     ) : (
         <Container>
             <TeamBadge source={Images[opponentTeamName]} lost={true} />
-            <Text style={{fontSize: 20, fontWeight: '600'}}>{choice.opponent.goals}</Text>
-            <Text style={{fontSize: 20, fontWeight: '600'}}>-</Text>
-            <Text style={{fontSize: 20, fontWeight: '600'}}>{choice.goals}</Text>
+            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
+                {choice.opponent.goals}
+            </Text>
+            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>-</Text>
+            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
+                {choice.goals}
+            </Text>
             <TeamBadge source={Images[userTeamName]} lost={false} />
         </Container>
     )
 }
-//

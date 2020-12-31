@@ -58,8 +58,14 @@ export const Account = ({ navigation, theme }: any) => {
         navigation.navigate('Home', { screen: 'Update Email', resetPassword: false, updateEmail: true })
     }
 
+    const setModeAndAppendToStorage = async () => {
+        const newMode = mode === 'light' ? 'dark' : 'light'
+        dispatch(setTheme(newMode))
+        await AsyncStorage.setItem('theme', newMode)
+    }
+
     return (
-        <View style={{ backgroundColor: theme.colors.background }}>
+        <View style={{ backgroundColor: theme.background.primary }}>
             <LinearGradient
                 colors={['#a103fc', '#5055b3']}
                 start={{ x: 0, y: 1 }}
@@ -75,7 +81,7 @@ export const Account = ({ navigation, theme }: any) => {
                 <TouchableOpacity onPressIn={() => closeModalHelper()}>
                     <AntIcon
                         name="close"
-                        color={theme.colors.inverseTextColor}
+                        color={theme.text.inverse}
                         size={30}
                         style={{ position: 'absolute', right: 30, top: -150 }}
                     />
@@ -86,13 +92,13 @@ export const Account = ({ navigation, theme }: any) => {
                 <TouchableOpacity onPress={() => updateEmailHelper()}>
                     <View style={styles(theme).section}>
                         <Text style={styles(theme).text}>Update Email</Text>
-                        <MaterialCommIcon name="email-edit-outline" size={iconSize} color={theme.colors.iconColor} />
+                        <MaterialCommIcon name="email-edit-outline" size={iconSize} color={theme.icons.primary} />
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => resetPasswordHelper()}>
                     <View style={styles(theme).section}>
                         <Text style={styles(theme).text}>Reset Password</Text>
-                        <MaterialCommIcon name="lock-outline" size={iconSize} color={theme.colors.iconColor} />
+                        <MaterialCommIcon name="lock-outline" size={iconSize} color={theme.icons.primary} />
                     </View>
                 </TouchableOpacity>
 
@@ -115,14 +121,14 @@ export const Account = ({ navigation, theme }: any) => {
                         trackColor={{ false: 'red', true: '#FFCFFF' }}
                         thumbColor={mode ? '#a103fc' : '#f4f3f4'}
                         ios_backgroundColor="#3e3e3e"
-                        onValueChange={() => dispatch(setTheme(mode === 'light' ? 'dark' : 'light'))}
+                        onValueChange={setModeAndAppendToStorage}
                         value={mode === 'dark'}
                     />
                 </View>
                 <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>
                     <View style={[styles(theme).section, styles(theme).signOut]}>
                         <Text style={styles(theme).text}>Sign out</Text>
-                        <MaterialIcon name="exit-to-app" size={iconSize} color={theme.colors.iconColor} />
+                        <MaterialIcon name="exit-to-app" size={iconSize} color={theme.icons.primary} />
                     </View>
                 </TouchableNativeFeedback>
             </Container>

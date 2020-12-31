@@ -155,7 +155,7 @@ export const CreateLeague = ({ navigation, theme }: any) => {
             <Text>Creating League...</Text>
         </Container>
     ) : (
-        <View style={{ backgroundColor: theme.colors.backgroundColor }}>
+        <View style={{ backgroundColor: theme.background.primary }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <Container style={{ alignSelf: 'center', width: 400 }}>
                     {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}

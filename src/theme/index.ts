@@ -1,55 +1,103 @@
+const COLOURS = {
+    WHITE: '#fff',
+    BLACK: '#000',
+    PRIMARY_WHITE: '#f7f7f7',
+    PRIMARY_BLACK: '#1d1d1d',
+}
+
 const DEFAULT_THEME = {
     borders: {
         radius: 5,
     },
     text: {
         heading: 25,
-        largeTextSize: 18,
-        mediumTextSize: 15,
-        smallTextSize: 12,
+        xlarge: 21,
+        large: 18,
+        medium: 15,
+        small: 12,
+        xsmall: 9,
     },
 }
 
 export const DARK_THEME = {
     ...DEFAULT_THEME,
     dark: true,
+    background: {
+        primary: '#111111',
+    },
+    borders: {
+        ...DEFAULT_THEME.borders,
+        primaryColor: COLOURS.PRIMARY_BLACK,
+    },
+    button: {
+        backgroundColor: COLOURS.PRIMARY_BLACK,
+    },
     colors: {
-        activitySpinner: '#fff',
-        buttonBackgroundColor: '#454343',
-        activeTintBottomColor: 'purple',
-        inactiveTintBottomColor: '#f7f7f7',
-        background: '#212020',
-        backgroundColor: '#212020',
-        borderColor: 'red',
-        iconColor: '#fff',
-        iconColorInverse: '#212020',
-        primaryColor: '#fff',
+        primaryColor: COLOURS.PRIMARY_BLACK,
+    },
+    headings: {
+        primary: COLOURS.PRIMARY_WHITE,
+        inverse: '',
+    },
+    icons: {
+        primary: COLOURS.PRIMARY_WHITE,
+        inverse: '#212020',
+    },
+    input: {
+        backgroundColor: COLOURS.PRIMARY_BLACK,
+        color: COLOURS.PRIMARY_WHITE,
+    },
+    spinner: {
+        primary: COLOURS.PRIMARY_WHITE,
     },
     text: {
         ...DEFAULT_THEME.text,
-        primaryTextColor: '#fff',
-        inverseTextColor: '#000',
+        primary: COLOURS.PRIMARY_WHITE,
+        inverse: COLOURS.PRIMARY_BLACK,
+    },
+    tint: {
+        active: '#e3a4f5',
+        inactive: COLOURS.PRIMARY_WHITE,
     },
 }
 
 export const LIGHT_THEME = {
     ...DEFAULT_THEME,
     dark: false,
+    background: {
+        primary: '#fff',
+    },
+    borders: {
+        ...DEFAULT_THEME.borders,
+        primaryColor: COLOURS.PRIMARY_WHITE,
+    },
+    button: {
+        backgroundColor: COLOURS.PRIMARY_WHITE,
+    },
     colors: {
-        activitySpinner: '#000',
-        buttonBackgroundColor: '#eee',
-        activeTintBottomColor: '#2C3E50',
-        inactiveTintBottomColor: '#000',
-        background: '#fff',
-        backgroundColor: '#fff',
-        borderColor: 'red',
-        iconColor: '#000',
-        iconColorInverse: '#212020',
-        primaryColor: '#000',
+        primaryColor: COLOURS.PRIMARY_WHITE,
+    },
+    headings: {
+        primary: COLOURS.PRIMARY_BLACK,
+    },
+    icons: {
+        primary: COLOURS.PRIMARY_BLACK,
+        inverse: '#212020',
+    },
+    input: {
+        backgroundColor: COLOURS.PRIMARY_WHITE,
+        color: COLOURS.PRIMARY_WHITE,
+    },
+    spinner: {
+        primary: COLOURS.PRIMARY_BLACK,
     },
     text: {
         ...DEFAULT_THEME.text,
-        primaryTextColor: '#000',
-        inverseTextColor: '#fff',
+        primary: COLOURS.PRIMARY_BLACK,
+        inverse: COLOURS.PRIMARY_WHITE,
+    },
+    tint: {
+        active: '#e3a4f5',
+        inactive: COLOURS.PRIMARY_BLACK,
     },
 }

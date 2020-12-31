@@ -27,7 +27,7 @@ export const CurrentGame = ({ loaded, theme }: any) => {
                     <View style={styles(theme).subheading}>
                         <Text style={styles(theme).maintext}>
                             <Text style={styles(theme).subtext}>Round closes: </Text>
-                            <Text style={{ color: theme.text.primaryTextColor }}>{currentGameweek.endsReadable}</Text>
+                            <Text style={{ color: theme.text.primary }}>{currentGameweek.endsReadable}</Text>
                         </Text>
                     </View>
                     <CurrentRoundView
@@ -46,7 +46,7 @@ export const CurrentGame = ({ loaded, theme }: any) => {
 
     return (
         <Container style={styles(theme).loading}>
-            <ActivityIndicator size="large" color={theme.colors.activitySpinner} />
+            <ActivityIndicator size="large" color={'red'} />
             <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
         </Container>
     )
@@ -65,12 +65,12 @@ const styles = (theme) =>
             padding: 10,
         },
         maintext: {
-            fontSize: theme.text.mediumTextSize,
+            fontSize: theme.text.medium,
             fontWeight: '700',
             textAlign: 'center',
         },
         subtext: {
-            color: theme.text.primaryTextColor,
+            color: theme.text.primary,
             fontWeight: '400',
         },
     })

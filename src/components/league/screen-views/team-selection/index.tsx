@@ -6,7 +6,7 @@ import { ChooseTeam } from 'src/components/league/choose-team'
 
 const width = Dimensions.get('window').width
 
-export const TeamSelection = ({ pullLatestLeagueData, setCurrentScreenView }) => {
+export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenView }) => {
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
 
@@ -32,7 +32,9 @@ export const TeamSelection = ({ pullLatestLeagueData, setCurrentScreenView }) =>
         } else if (currentRound && currentRound.choice.hasMadeChoice) {
             return (
                 <View>
-                    <Text style={{ alignSelf: 'center', fontSize: 18 }}>You have made your choice for this week</Text>
+                    <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
+                        You have made your choice for this week
+                    </Text>
                 </View>
             )
         } else {
@@ -44,18 +46,14 @@ export const TeamSelection = ({ pullLatestLeagueData, setCurrentScreenView }) =>
         }
     }
 
-    return (
-        <View>
-            <View style={styles.section}>
-                <View style={{ marginTop: 20 }}>{showTeamSelectionPage()}</View>
-            </View>
-        </View>
-    )
+    return <View style={styles.section}>{showTeamSelectionPage()}</View>
 }
 
 const styles = StyleSheet.create({
     section: {
         alignSelf: 'center',
+        height: '100%',
+        marginTop: 30,
         width: width * 0.8,
     },
 })
