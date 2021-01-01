@@ -46,7 +46,7 @@ export const CurrentGame = ({ loaded, theme }: any) => {
 
     return (
         <Container style={styles(theme).loading}>
-            <ActivityIndicator size="large" color={'red'} />
+            <ActivityIndicator size="large" color={theme.spinner.primary} />
             <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
         </Container>
     )
@@ -58,7 +58,7 @@ const styles = (theme) =>
             marginTop: 100,
         },
         loadingText: {
-            color: theme.colors.primaryColor,
+            color: theme.text.primary,
             fontSize: 20,
         },
         subheading: {

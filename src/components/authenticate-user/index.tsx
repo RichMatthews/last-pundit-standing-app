@@ -27,7 +27,7 @@ import { getCurrentUser } from 'src/redux/reducer/user'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { getLeagues } from 'src/redux/reducer/leagues'
 
-export const AuthenticateUserScreen = () => {
+export const AuthenticateUserScreen = ({ theme }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
@@ -148,42 +148,42 @@ export const AuthenticateUserScreen = () => {
                 colors={['#a103fc', '#5055b3']}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 0 }}
-                style={{ height: Platform.OS === 'ios' ? 300 : 100, borderBottomRightRadius: 250 }}
+                style={{ height: Platform.OS === 'ios' ? 300 : 100 }}
             >
-                <H1 style={styles.heading}>{showResetScreen ? 'Reset Password' : 'Login'}</H1>
+                <H1 style={styles(theme).heading}>{showResetScreen ? 'Reset Password' : 'Login'}</H1>
             </LinearGradient>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <SafeAreaView>
+                <SafeAreaView style={{ backgroundColor: theme.background.primary }}>
                     <Container style={{ marginTop: 50, width: 350, alignSelf: 'center' }}>
                         {showResetScreen ? (
-                            <ResetPassword setShowResetScreen={setShowResetScreen} />
+                            <ResetPassword setShowResetScreen={setShowResetScreen} theme={theme} />
                         ) : (
                             <Fragment>
                                 <View>
                                     {error ? (
-                                        <View style={styles.error}>
-                                            <Text style={styles.errorText}>{error}</Text>
+                                        <View style={styles(theme).error}>
+                                            <Text style={styles(theme).errorText}>{error}</Text>
                                         </View>
                                     ) : null}
                                 </View>
 
                                 {loginOption === 'signup' && (
                                     <Fragment>
-                                        <View style={styles.inputContainer}>
+                                        <View style={styles(theme).inputContainer}>
                                             <TextInput
-                                                style={styles.input}
+                                                style={styles(theme).input}
                                                 autoCapitalize="none"
                                                 placeholder="name"
-                                                placeholderTextColor="#666464"
+                                                placeholderTextColor={theme.text.primary}
                                                 onChange={(e: any) => setName(e.nativeEvent.text)}
                                             />
                                         </View>
-                                        <View style={styles.inputContainer}>
+                                        <View style={styles(theme).inputContainer}>
                                             <TextInput
-                                                style={styles.input}
+                                                style={styles(theme).input}
                                                 autoCapitalize="none"
                                                 placeholder="surname"
-                                                placeholderTextColor="#666464"
+                                                placeholderTextColor={theme.text.primary}
                                                 onChange={(e: any) => setSurname(e.nativeEvent.text)}
                                             />
                                         </View>
@@ -191,21 +191,21 @@ export const AuthenticateUserScreen = () => {
                                 )}
                                 {(loginOption === 'signup' || loginOption === 'signin') && (
                                     <Fragment>
-                                        <View style={styles.inputContainer}>
+                                        <View style={styles(theme).inputContainer}>
                                             <TextInput
-                                                style={styles.input}
+                                                style={styles(theme).input}
                                                 autoCapitalize="none"
                                                 placeholder="email"
-                                                placeholderTextColor="#666464"
+                                                placeholderTextColor={theme.text.primary}
                                                 onChange={(e: any) => setEmailHelper(e)}
                                                 value={email}
                                             />
                                         </View>
-                                        <View style={styles.inputContainer}>
+                                        <View style={styles(theme).inputContainer}>
                                             <TextInput
-                                                style={styles.input}
+                                                style={styles(theme).input}
                                                 placeholder="password"
-                                                placeholderTextColor="#666464"
+                                                placeholderTextColor={theme.text.primary}
                                                 secureTextEntry={true}
                                                 onChange={(e: any) => setPasswordHelper(e)}
                                                 value={password}
@@ -224,7 +224,7 @@ export const AuthenticateUserScreen = () => {
                                                         alignSelf: 'flex-end',
                                                     }}
                                                 >
-                                                    <Text style={{ color: '#2C3E50', fontSize: 12 }}>
+                                                    <Text style={{ color: theme.text.primary, fontSize: 12 }}>
                                                         Forgotten password?
                                                     </Text>
                                                 </View>
@@ -249,14 +249,25 @@ export const AuthenticateUserScreen = () => {
                                             </View>
                                         )}
                                     </View>
-                                    <View style={{ bottom: Platform.OS === 'ios' ? 400 : 300, position: 'absolute' }}>
+                                    <View
+                                        style={{
+                                            bottom: Platform.OS === 'ios' ? 400 : 300,
+                                            position: 'absolute',
+                                        }}
+                                    >
                                         <TouchableOpacity onPress={authenticateUserHelper}>
-                                            <InvertedButton>
-                                                <InvertedButtonText>
+                                            <InvertedButton background={theme.button.backgroundColor}>
+                                                <Text
+                                                    style={{
+                                                        color: theme.text.primary,
+                                                        fontWeight: '700',
+                                                        textAlign: 'center',
+                                                    }}
+                                                >
                                                     {loginOption === 'signup'
                                                         ? 'HAVE AN ACCOUNT? SIGN IN'
                                                         : 'NO ACCOUNT? SIGN UP'}
-                                                </InvertedButtonText>
+                                                </Text>
                                             </InvertedButton>
                                         </TouchableOpacity>
                                     </View>
@@ -274,71 +285,56 @@ export const AuthenticateUserScreen = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    auth: {
-        bottom: 300,
-        display: 'flex',
-        position: 'absolute',
-        alignSelf: 'center',
-    },
-    authContainer: {
-        backgroundColor: '#fafafa',
-        borderRadius: 50,
-        display: 'flex',
-        justifyContent: 'center',
-        padding: 10,
-        margin: 15,
-        shadowOpacity: 1,
-        shadowRadius: 5,
-        shadowColor: '#ccc',
-        shadowOffset: { height: 2, width: 0 },
-    },
-    authText: {
-        fontSize: 12,
-        textAlign: 'center',
-    },
-    buttonText: {
-        color: '#fff',
-        alignItems: 'center',
-        textAlign: 'center',
-    },
-    error: {
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: '#ff0033',
-        padding: 10,
-        width: 300,
-    },
-    errorText: {
-        color: '#ff0033',
-        fontWeight: '700',
-    },
-    heading: {
-        color: '#fff',
-        position: 'absolute',
-        bottom: 0,
-        padding: 30,
-    },
-    inputContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: Platform.OS === 'ios' ? 10 : 0,
-        margin: 10,
-    },
-    input: {
-        borderBottomWidth: 1,
-        borderColor: '#ccc',
-        fontSize: 15,
-        paddingBottom: Platform.OS === 'ios' ? 10 : 0,
-        width: 300,
-    },
-    inputSection: {
-        marginTop: 50,
-    },
-    image: {
-        alignSelf: 'center',
-        marginRight: 5,
-        textAlign: 'center',
-    },
-})
+const styles = (theme) =>
+    StyleSheet.create({
+        auth: {
+            bottom: 300,
+            display: 'flex',
+            position: 'absolute',
+            alignSelf: 'center',
+        },
+        authText: {
+            fontSize: theme.text.small,
+            textAlign: 'center',
+        },
+        error: {
+            backgroundColor: theme.button.backgroundColor,
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: '#ff0033',
+            padding: 10,
+            width: 300,
+        },
+        errorText: {
+            color: '#ff0033',
+            fontWeight: '700',
+        },
+        heading: {
+            color: theme.headings.inverse,
+            position: 'absolute',
+            bottom: 0,
+            padding: 30,
+        },
+        inputContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            padding: Platform.OS === 'ios' ? 10 : 0,
+            margin: 10,
+        },
+        input: {
+            borderBottomWidth: 1,
+            borderColor: '#ccc',
+            color: theme.text.primary,
+            fontSize: 15,
+            paddingBottom: Platform.OS === 'ios' ? 10 : 0,
+            width: 300,
+        },
+        inputSection: {
+            marginTop: 50,
+        },
+        image: {
+            alignSelf: 'center',
+            marginRight: 5,
+            textAlign: 'center',
+        },
+    })

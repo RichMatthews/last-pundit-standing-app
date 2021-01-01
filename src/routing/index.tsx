@@ -47,7 +47,7 @@ const getHeaderTitle = (route) => {
     }
 }
 
-const AuthStack = () => (
+const AuthStack = ({ theme }) => (
     <Stack.Navigator
         screenOptions={{
             animationEnabled: false,
@@ -56,9 +56,9 @@ const AuthStack = () => (
             headerTitle: '',
         }}
     >
-        <Stack.Screen name="Home">{(props: any) => <Home />}</Stack.Screen>
-        <Stack.Screen name="Reset Password">{(props: any) => <ResetPassword />}</Stack.Screen>
-        <Stack.Screen name="Update Email">{(props: any) => <UpdateEmail />}</Stack.Screen>
+        <Stack.Screen name="Home">{(props: any) => <Home theme={theme} />}</Stack.Screen>
+        <Stack.Screen name="Reset Password">{(props: any) => <ResetPassword theme={theme} />}</Stack.Screen>
+        <Stack.Screen name="Update Email">{(props: any) => <UpdateEmail theme={theme} />}</Stack.Screen>
     </Stack.Navigator>
 )
 
@@ -203,7 +203,7 @@ const TabNavigation = ({ theme, user }: any) => {
                 })}
             >
                 {(props: any) => {
-                    return <AuthStack />
+                    return <AuthStack theme={theme} />
                 }}
             </Tab.Screen>
 
@@ -367,6 +367,6 @@ export const Routing = () => {
             </Stack.Navigator>
         </NavigationContainer>
     ) : (
-        <AuthenticateUserScreen />
+        <AuthenticateUserScreen theme={theme} />
     )
 }

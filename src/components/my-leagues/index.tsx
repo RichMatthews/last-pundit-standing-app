@@ -26,8 +26,8 @@ export const MyLeagues = ({ navigation, theme }: any) => {
     const userLeagues = useSelector((store: { userLeagues: any }) => store.userLeagues)
 
     return (
-        <Fragment>
-            <Container style={{ backgroundColor: theme.background.primary, marginTop: 100, width: '100%' }}>
+        <View style={{ backgroundColor: theme.background.primary }}>
+            <Container style={{ marginTop: 100 }}>
                 <Text
                     style={{
                         alignSelf: 'center',
@@ -41,7 +41,7 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                 </Text>
                 <LeagueContainer>
                     {userLeagues.loading ? (
-                        <ActivityIndicator size="large" color="red" />
+                        <ActivityIndicator size="large" color={theme.spinner.primary} />
                     ) : userLeagues.leagues.length ? (
                         userLeagues.leagues.map((league: LeagueState) => (
                             <TouchableOpacity onPress={() => navigation.navigate('League', { leagueId: league.id })}>
@@ -99,12 +99,12 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                     )}
                 </LeagueContainer>
 
-                <View style={{ position: 'absolute', bottom: 100 }}>
+                <View style={{ position: 'absolute', bottom: 250 }}>
                     <TouchableOpacity onPress={() => navigation.navigate('Join')}>
-                        <ButtonText style={{ color: '#2C3E50' }}>Click here to join a league</ButtonText>
+                        <ButtonText style={{ color: theme.text.primary }}>Click here to join a league</ButtonText>
                     </TouchableOpacity>
                 </View>
             </Container>
-        </Fragment>
+        </View>
     )
 }

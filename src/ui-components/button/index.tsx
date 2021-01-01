@@ -39,10 +39,10 @@ export const Button = ({ children, disabled }) => (
     </LinearGradient>
 )
 
-export const InvertedButton = ({ children, disabled }) => (
+export const InvertedButton = ({ background, children, disabled }) => (
     <View
         style={{
-            backgroundColor: disabled ? '#ccc' : '#fff',
+            backgroundColor: background,
             borderColor: '#2C3E50',
             borderWidth: 1,
             borderRadius: 5,

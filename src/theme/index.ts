@@ -37,7 +37,7 @@ export const DARK_THEME = {
     },
     headings: {
         primary: COLOURS.PRIMARY_WHITE,
-        inverse: '',
+        inverse: COLOURS.PRIMARY_BLACK,
     },
     icons: {
         primary: COLOURS.PRIMARY_WHITE,
