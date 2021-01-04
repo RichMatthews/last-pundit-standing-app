@@ -27,7 +27,11 @@ import { getLeagues } from 'src/redux/reducer/leagues'
 import { getCurrentUser } from 'src/redux/reducer/user'
 import { firebaseApp } from '../config.js'
 import { DARK_THEME, LIGHT_THEME } from 'src/theme'
-import { attemptFaceIDAuthentication, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import {
+    attemptFaceIDAuthentication,
+    checkFaceIDEnabled,
+    getInternetCredentialsForFirebase,
+} from 'src/utils/canLoginWithFaceId'
 import { setTheme } from 'src/redux/reducer/theme'
 
 const Tab = createBottomTabNavigator()
@@ -107,7 +111,7 @@ const Stacks = ({ isSignedIn, theme }: any) => (
 const CreateStack = ({ isSignedIn, theme }: any) => (
     <Stack.Navigator
         screenOptions={{
-            cardStyle: { backgroundColor: '#fff' },
+            cardStyle: { backgroundColor: theme.background.primary },
             headerShown: false,
             headerTitle: '',
         }}
@@ -256,15 +260,20 @@ export const Routing = () => {
                     await dispatch(getCurrentUser(currentUser))
                     await dispatch(getLeagues(currentUser.uid))
                     await dispatch(getCurrentGameWeekInfo())
-                    console.log('here, taking ages')
+
                     SplashScreen.hide()
                 } catch (e) {
                     console.error(e)
                 }
             } else if (lastLogin) {
-                const faceIdAuthSuccessful = await attemptFaceIDAuthentication()
-                if (faceIdAuthSuccessful) {
-                    logUserInAndSetUserInRedux()
+                const faceIdTurnedOn = await checkFaceIDEnabled()
+                if (faceIdTurnedOn) {
+                    const faceIdAuthSuccessful = await attemptFaceIDAuthentication()
+                    if (faceIdAuthSuccessful) {
+                        logUserInAndSetUserInRedux()
+                    } else {
+                        SplashScreen.hide()
+                    }
                 } else {
                     SplashScreen.hide()
                 }
@@ -285,13 +294,9 @@ export const Routing = () => {
     const checkIfNeedToReauthenticateUser = async () => {
         const lastLogin = await AsyncStorage.getItem('lastLogin')
         const currentTime = Date.now()
-        const oneday = 60 * 60 * 24
-        const threeDays = oneday * 3
-        const threeDaysSince = Number(lastLogin) + threeDays
+        const date = new Date()
+        const tomorrow = date.setDate(date.getDate() + 1) / 1000
 
-        if (threeDaysSince > currentTime) {
-            return false
-        }
         return true
     }
 
@@ -305,15 +310,15 @@ export const Routing = () => {
     }
 
     const logUserInAndSetUserInRedux = async () => {
-        const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
-        if (!emailFromSecureStorage || !passwordFromSecureStorage) {
+        const { username, password } = await getInternetCredentialsForFirebase()
+        if (!username || !password) {
             SplashScreen.hide()
             return
         }
         try {
             const { user } = await logUserInToApplication({
-                email: emailFromSecureStorage,
-                password: passwordFromSecureStorage,
+                email: username,
+                password: password,
             })
 
             await dispatch(getCurrentUser(user))

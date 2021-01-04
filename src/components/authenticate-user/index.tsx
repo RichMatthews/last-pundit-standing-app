@@ -22,7 +22,11 @@ import LinearGradient from 'react-native-linear-gradient'
 
 import { ResetPassword } from 'src/components/reset-password'
 import { logUserInToApplication, signUserUpToApplication, writeUserToDatabase } from '../../firebase-helpers'
-import { attemptFaceIDAuthentication, retrieveCredentialsToSecureStorage } from 'src/utils/canLoginWithFaceId'
+import {
+    attemptFaceIDAuthentication,
+    checkFaceIDEnabled,
+    getInternetCredentialsForFirebase,
+} from 'src/utils/canLoginWithFaceId'
 import { getCurrentUser } from 'src/redux/reducer/user'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { getLeagues } from 'src/redux/reducer/leagues'
@@ -44,7 +48,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
     }, [])
 
     const saveCredentialsToSecureStorage: any = async () => {
-        await Keychain.setGenericPassword(email, password)
+        await Keychain.setInternetCredentials('firebase', email, password)
     }
 
     const logUserIn = async () => {
@@ -84,13 +88,13 @@ export const AuthenticateUserScreen = ({ theme }) => {
     const logUserInWithFaceId = async () => {
         setLoaded(false)
         const faceIdAuthSuccessful = await attemptFaceIDAuthentication()
-        const { emailFromSecureStorage, passwordFromSecureStorage } = await retrieveCredentialsToSecureStorage()
 
         if (faceIdAuthSuccessful) {
             try {
+                const { username, password } = await getInternetCredentialsForFirebase()
                 const { user } = await logUserInToApplication({
-                    email: emailFromSecureStorage,
-                    password: passwordFromSecureStorage,
+                    email: username,
+                    password,
                 })
 
                 if (user) {
@@ -132,10 +136,9 @@ export const AuthenticateUserScreen = ({ theme }) => {
     }
 
     const checkIfFaceIDAvailable = async () => {
-        const x = await AsyncStorage.getItem('faceIdStatus')
-        const userNameIsSet = await Keychain.getGenericPassword()
+        const faceIdEnabled = await checkFaceIDEnabled()
 
-        if (x === 'active' && userNameIsSet) {
+        if (faceIdEnabled === 'active') {
             setShowFaceIDButton(true)
         } else {
             setShowFaceIDButton(false)
@@ -240,7 +243,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                             </TouchableOpacity>
                                         </View>
                                         {loginOption === 'signin' && showFaceIDButton && (
-                                            <View style={{ marginTop: 10 }}>
+                                            <View style={{ marginTop: 10, width: 300 }}>
                                                 <TouchableOpacity onPress={logUserInWithFaceId}>
                                                     <Button>
                                                         <ButtonText>USE FACE ID</ButtonText>
@@ -279,8 +282,8 @@ export const AuthenticateUserScreen = ({ theme }) => {
             </TouchableWithoutFeedback>
         </Fragment>
     ) : (
-        <Container style={{ marginTop: 200 }}>
-            <ActivityIndicator size="large" color="#2C3E50" />
+        <Container style={{ backgroundColor: theme.background.primary, paddingTop: 200 }}>
+            <ActivityIndicator size="large" color={theme.spinner.primary} />
         </Container>
     )
 }
@@ -310,7 +313,7 @@ const styles = (theme) =>
             fontWeight: '700',
         },
         heading: {
-            color: theme.headings.inverse,
+            color: '#fff',
             position: 'absolute',
             bottom: 0,
             padding: 30,

@@ -11,13 +11,12 @@ import { Container } from 'src/ui-components/containers'
 import { H1 } from 'src/ui-components/headings'
 import { signUserOut } from 'src/redux/reducer/leagues'
 import { setTheme } from 'src/redux/reducer/theme'
-
 import { styles } from './styles'
+import { checkFaceIDEnabled, turnOnFaceIDAuthentication } from 'src/utils/canLoginWithFaceId'
 const iconSize = Platform.OS === 'ios' ? 20 : 20
 
 export const Account = ({ navigation, theme }: any) => {
     const [faceIdActivated, setFaceIdActivated] = useState(false)
-    const [darkModeActivated, setDarkModeActivated] = useState(false)
     const mode = useSelector((store: { theme: any }) => store.theme)
     const user = useSelector((store: { user: any }) => store.user)
     const dispatch = useDispatch()
@@ -27,9 +26,9 @@ export const Account = ({ navigation, theme }: any) => {
     }, [])
 
     const getFaceIdStatus = async () => {
-        const x = await AsyncStorage.getItem('faceIdStatus')
+        const faceIDEnabled = await checkFaceIDEnabled()
 
-        if (x === 'active') {
+        if (faceIDEnabled) {
             setFaceIdActivated(true)
         } else {
             setFaceIdActivated(false)
@@ -38,8 +37,12 @@ export const Account = ({ navigation, theme }: any) => {
 
     const toggleFaceIdActivated = async (activated: boolean) => {
         if (activated) {
-            await AsyncStorage.setItem('faceIdStatus', 'active')
-            setFaceIdActivated(true)
+            const success = await turnOnFaceIDAuthentication()
+
+            if (success) {
+                await AsyncStorage.setItem('faceIdStatus', 'active')
+                setFaceIdActivated(true)
+            }
         } else {
             await AsyncStorage.setItem('faceIdStatus', '')
             setFaceIdActivated(false)

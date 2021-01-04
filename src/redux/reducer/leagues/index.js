@@ -16,7 +16,8 @@ export const getLeagues = createAsyncThunk('getLeagues', async (userId) => {
 export const signUserOut = createAsyncThunk('signUserOut', async () => {
     try {
         await AsyncStorage.setItem('signOutTimeStamp', Date.now().toString())
-        await Keychain.resetGenericPassword([{ service: 'org.reactjs.native.example.LastPunditStanding' }])
+        await AsyncStorage.setItem('faceIdStatus', '')
+        await Keychain.resetInternetCredentials('firebase')
         const user = await signUserOutOfApplication()
         return user
     } catch (e) {

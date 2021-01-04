@@ -1,66 +1,69 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Keychain from 'react-native-keychain'
-import * as LocalAuthentication from 'expo-local-authentication'
 
-export const retrieveCredentialsToSecureStorage: any = async () => {
-    const credentials: any = await Keychain.getGenericPassword()
-
-    return {
-        emailFromSecureStorage: credentials.username,
-        passwordFromSecureStorage: credentials.password,
+const checkIfUserDeviceSupportsFaceID = async () => {
+    const bioType = await Keychain.getSupportedBiometryType()
+    if (bioType === 'FaceID') {
+        return true
     }
+    return false
 }
 
-export const canLoginWithFaceIdAndUpdateKeyChain = async () => {
-    console.log('CALLING biometricAuth func')
-    const faceIdTurnedOn = await AsyncStorage.getItem('faceIdStatus')
-    console.log(faceIdTurnedOn, 'turned on!')
-    if (faceIdTurnedOn !== 'active') {
-        return
+export const checkFaceIDEnabled = async () => {
+    const faceIdEnabled = await AsyncStorage.getItem('faceIdStatus')
+
+    if (faceIdEnabled === 'active') {
+        return true
     }
-    const creds = await retrieveCredentialsToSecureStorage()
-    Keychain.getSupportedBiometryType().then((bioType) => {
-        switch (bioType) {
-            case 'FaceID':
-                setCredentialsInKeyChain(creds.emailFromSecureStorage, creds.passwordFromSecureStorage)
-        }
-    })
+
+    return false
 }
 
-const setCredentialsInKeyChain = (email: string, password: string) => {
-    Keychain.setGenericPassword(email, password, {
-        service: 'org.reactjs.native.example.LastPunditStanding',
+export const turnOnFaceIDAuthentication = async () => {
+    const canUseFaceID = await checkIfUserDeviceSupportsFaceID()
+
+    if (!canUseFaceID) {
+        return false
+    }
+
+    const username = 'random'
+    const password = 'random'
+
+    await Keychain.setGenericPassword(username, password, {
+        service: 'com.live.lastpunditstanding',
         accessControl: 'BiometryAny' as any,
         accessible: 'AccessibleWhenPasscodeSetThisDeviceOnly' as any,
     })
-        .then((res) => console.log(res))
-        .catch((e) => console.log(e))
+
+    try {
+        const credentials = await Keychain.getGenericPassword()
+        if (credentials) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+export const getInternetCredentialsForFirebase = async () => {
+    const credentials = await Keychain.getInternetCredentials('firebase')
+    return credentials
 }
 
 export const attemptFaceIDAuthentication = async () => {
-    const faceIdTurnedOn = await AsyncStorage.getItem('faceIdStatus')
-    console.log(faceIdTurnedOn, 'turned on!')
-    if (faceIdTurnedOn !== 'active') {
-        return
-    }
     try {
         const result = await Keychain.getGenericPassword({
-            service: 'org.reactjs.native.example.LastPunditStanding',
+            service: 'com.live.lastpunditstanding',
         })
-        if (!result) {
-            console.log('bio auth failed')
-            return false
+
+        if (result) {
+            return true
         } else {
-            console.log('bio auth passed')
-            let res = await LocalAuthentication.authenticateAsync()
-            console.log(res, 'what happed?')
-            if (res.success) {
-                return true
-            }
             return false
         }
     } catch (e) {
-        console.log('ERRORED:', e)
         return false
     }
 }
