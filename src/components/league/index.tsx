@@ -136,6 +136,7 @@ export const League = ({ leagueId, theme }: string) => {
                 style={{
                     backgroundColor: theme.background.primary,
                     paddingTop: 15,
+                    height: '100%',
                 }}
             >
                 {determineScreenToRender()}

@@ -14,7 +14,7 @@ export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenVie
         const currentGameRound = currentGame.currentGameRound
         const currentRound = currentPlayer.rounds[currentGameRound]
         const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
-        const playerOutOfTime = true
+        const playerOutOfTime = false
 
         if (playerOutOfGame.length) {
             return (
@@ -30,7 +30,7 @@ export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenVie
                     </Text>
                 </View>
             )
-        } else if (currentRound && currentRound.choice.hasMadeChoice === false) {
+        } else if (currentRound && currentRound.choice.hasMadeChoice === true) {
             return (
                 <ChooseTeam
                     currentRound={currentGameRound}

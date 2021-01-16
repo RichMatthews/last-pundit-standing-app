@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import styled from 'styled-components'
 import FastImage from 'react-native-fast-image'
+import { useSelector } from 'react-redux'
 
 import * as Images from '../../../images'
 
@@ -70,15 +71,15 @@ const GameStatusIndicatorComponent = (status: string) => (
 )
 
 export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer, player }: any) => {
-    console.log('called on every RENDER')
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
+    const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
     useEffect(() => {
         checkIfTimeEnded()
     }, [])
 
     const checkIfTimeEnded = async () => {
-        const timeHasEnded = await gameweekSelectionTimeEnded()
+        const timeHasEnded = await gameweekSelectionTimeEnded(currentGameweek.ends)
 
         if (timeHasEnded) {
             setGameSelectionTimeEnded(true)

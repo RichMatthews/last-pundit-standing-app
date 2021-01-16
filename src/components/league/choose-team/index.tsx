@@ -1,46 +1,31 @@
 import React, { useState } from 'react'
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
-import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+import FastImage from 'react-native-fast-image'
 
 import * as Images from 'src/images'
-import { CURRENT_GAMEWEEK } from 'src/admin/current-week'
 import { Button, ButtonText } from 'src/ui-components/button'
-import { useSelector } from 'react-redux'
-
 import { getCurrentGameweekFixtures, updateUserGamweekChoice } from 'src/firebase-helpers'
-
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
 
-const SectionDivider = styled.View`
-    margin-top: 15px;
-`
+interface Props {
+    currentRound: any
+    pullLatestLeagueData: () => void
+    setCurrentScreenView: (screen: string) => void
+}
 
-const Team = styled.View`
-    border-radius: ${({ selected }) => (selected ? '50px' : '0')};
-    border-color: ${({ selected }) => (selected ? '#2C3E50' : 'transparent')};
-    border-width: 1px;
-    padding: 10px;
-    margin: 5px;
-`
-
-const Image = styled.Image`
-    height: 40px;
-    opacity: ${({ chosen }) => (chosen ? 0.2 : 1)};
-    width: 40px;
-`
-
-export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setCurrentScreenView }: any) => {
-    const [selectedTeam, setSelectedTeam] = useState<any>(null)
+export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setCurrentScreenView }: Props) => {
+    const [selectedTeam, setSelectedTeam] = useState<string>('')
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const league = useSelector((store: { league: any }) => store.league)
     const user = useSelector((store: { user: any }) => store.user)
     const findOpponent = async () => {
         const fixtures = await getCurrentGameweekFixtures()
-
         const selectedTeamFixture: any = fixtures.find(
-            (team) => team.home === selectedTeam || team.away === selectedTeam,
+            (team: { home: string; away: string; result: string }) =>
+                team.home === selectedTeam || team.away === selectedTeam,
         )
         const homeTeam = selectedTeamFixture['home']
         const awayTeam = selectedTeamFixture['away']
@@ -63,7 +48,7 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
         }
     }
 
-    const setSelectedTeamHelper = (value: any) => {
+    const setSelectedTeamHelper = (value: string) => {
         if (value !== '0') {
             setSelectedTeam(value)
         }
@@ -74,7 +59,7 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
             alert('No team selected!')
             return
         }
-        const confirmationMsg: any = `You are picking ${selectedTeam}. Are you sure? Once you confirm you are locked in for this gameweek.`
+        const confirmationMsg: string = `You are picking ${selectedTeam}. Are you sure? Once you confirm you are locked in for this gameweek.`
 
         Alert.alert(
             'Confirm team selection',
@@ -82,7 +67,6 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
             [
                 {
                     text: 'Cancel',
-                    onPress: () => console.warn('Cancel Pressed'),
                     style: 'cancel',
                 },
                 { text: 'Confirm', onPress: () => updateUserGamweekChoiceHelper() },
@@ -95,7 +79,6 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
         const opponent = await findOpponent()
         const choice = {
             hasMadeChoice: true,
-            // id: selectedTeam.id,
             ...opponent,
             result: 'pending',
             value: selectedTeam,
@@ -109,47 +92,66 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
 
     return (
         <View>
-            <View style={styles.innerContainer}>
+            <View style={styles(undefined).innerContainer}>
                 {calculateTeamsAllowedToPickForCurrentRound({
                     currentGame,
                     currentPlayer,
                     leagueTeams: PREMIER_LEAGUE_TEAMS,
-                }).map((item) => {
+                }).map((item: { value: string; label: string; id: number; chosen: boolean }) => {
                     return item.chosen ? (
                         <TouchableOpacity onPress={null} activeOpacity={1}>
-                            <Team selected={false}>
-                                <Image source={Images[item.value.replace(/\s/g, '').toLowerCase()]} chosen={true} />
-                            </Team>
+                            <View selected={false} style={[styles(undefined).teamLogo]}>
+                                <FastImage
+                                    source={Images[item.value.replace(/\s/g, '').toLowerCase()]}
+                                    style={[styles(undefined).image, styles(undefined).alreadySelectedTeam]}
+                                />
+                            </View>
                         </TouchableOpacity>
                     ) : (
-                        <TouchableOpacity onPress={() => setSelectedTeamHelper(item.value)} activeOpacity={0.5}>
-                            <Team selected={item.value === selectedTeam}>
-                                <Image source={Images[item.value.replace(/\s/g, '').toLowerCase()]} chosen={false} />
-                            </Team>
+                        <TouchableOpacity onPress={() => setSelectedTeamHelper(item.value)} activeOpacity={1}>
+                            <View style={styles(item.value === selectedTeam).teamLogo}>
+                                <FastImage
+                                    source={Images[item.value.replace(/\s/g, '').toLowerCase()]}
+                                    style={styles(undefined).image}
+                                />
+                            </View>
                         </TouchableOpacity>
                     )
                 })}
             </View>
-            <SectionDivider>
-                <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice}>
+            <View style={styles(undefined).button}>
+                <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
                     <Button disabled={selectedTeam === null}>
                         <ButtonText>Confirm selection</ButtonText>
                     </Button>
                 </TouchableOpacity>
-            </SectionDivider>
+            </View>
         </View>
     )
 })
 
-const styles = StyleSheet.create({
-    modalContent: {
-        margin: 0,
-    },
-    innerContainer: {
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-    },
-})
+const styles = (selected: boolean | undefined) =>
+    StyleSheet.create({
+        alreadySelectedTeam: {
+            opacity: 0.1,
+        },
+        button: {
+            marginTop: 30,
+        },
+        image: {
+            height: 40,
+            width: 40,
+        },
+        innerContainer: {
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+        },
+        teamLogo: {
+            backgroundColor: selected ? '#eee' : 0,
+            borderRadius: selected ? 5 : 0,
+            padding: 5,
+            margin: 10,
+        },
+    })
