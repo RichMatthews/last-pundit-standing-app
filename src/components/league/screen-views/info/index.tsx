@@ -24,11 +24,11 @@ const SelectionWrapper = styled.View`
 //     Share.share(shareOptions)
 // }
 
-export const LeagueInfo = () => {
+export const LeagueInfo = ({ fixtures }) => {
     return (
         <View style={{ height: '100%' }}>
             <SelectionWrapper>
-                <Fixtures />
+                <Fixtures fixtures={fixtures} />
             </SelectionWrapper>
             <SelectionWrapper>
                 <LeagueRules />

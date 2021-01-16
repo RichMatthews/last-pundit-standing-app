@@ -8,7 +8,7 @@ import { CurrentGame } from 'src/components/league/screen-views/current'
 import { PreviousGames } from 'src/components/league/screen-views/previous'
 import { TeamSelection } from 'src/components/league/screen-views/team-selection'
 import { ScreenSelection } from 'src/components/league/screen-selection'
-import { pullLeagueData } from 'src/firebase-helpers'
+import { pullLeagueData, getCurrentGameweekFixtures } from 'src/firebase-helpers'
 import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
@@ -23,7 +23,7 @@ export const League = ({ leagueId, theme }: string) => {
     const [currentScreenView, setCurrentScreenView] = useState('game')
     const [loaded, setLoaded] = useState<string>('')
     const [refreshing, setRefreshing] = useState<boolean>(false)
-
+    const [gameweekFixtures, setGameweekFixtures] = useState([])
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
     const league = useSelector((store: { league: any }) => store.league)
@@ -51,6 +51,14 @@ export const League = ({ leagueId, theme }: string) => {
     }
 
     useEffect(() => {
+        async function fetchFixtures() {
+            const fixtures: any = await getCurrentGameweekFixtures()
+            setGameweekFixtures(fixtures)
+        }
+        fetchFixtures()
+    }, [])
+
+    useEffect(() => {
         pullLatestLeagueData()
     }, [leagueId])
 
@@ -70,7 +78,7 @@ export const League = ({ leagueId, theme }: string) => {
 
     const determineScreenToRender = () => {
         if (currentScreenView === 'info') {
-            return <LeagueInfo />
+            return <LeagueInfo fixtures={gameweekFixtures} />
         } else if (currentScreenView === 'previous') {
             return (
                 <PreviousGames games={Object.values(league.games).filter((game: any) => game.complete)} theme={theme} />

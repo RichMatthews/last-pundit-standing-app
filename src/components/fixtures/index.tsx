@@ -1,41 +1,9 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import { Image, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Image, Text, StyleSheet, TouchableOpacity, View } from 'react-native'
 import styled from 'styled-components'
+import FastImage from 'react-native-fast-image'
 
 import * as Images from '../../images'
-import { H2 } from '../../ui-components/headings'
-
-import { getCurrentGameweekFixtures } from '../../firebase-helpers'
-
-const Container = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-`
-
-const Inner = styled.View`
-    display: ${({ expand }) => (expand ? 'flex' : 'none')};
-    margin-top: 20px;
-    justify-content: center;
-    width: 300px;
-`
-
-const Center = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin: 5px;
-    width: 100px;
-`
-
-const Match = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-`
 
 const HomeTeam = styled.View<any>`
     display: flex;
@@ -46,11 +14,6 @@ const HomeTeam = styled.View<any>`
 
 const AwayTeam = styled(HomeTeam)`
     align-items: flex-start;
-`
-
-const TeamBadge = styled.Image`
-    height: 30px;
-    width: 30px;
 `
 
 const LeagueNameAndLeagueTypeImage = styled.View`
@@ -67,56 +30,74 @@ const ExpandImage = styled.Image<any>`
     width: 15px;
 `
 
-export const Fixtures = () => {
-    const [gameweekFixtures, setGameweekFixtures] = useState([])
-    const [showFixtures, setShowFixtures] = useState(false)
-
-    useEffect(() => {
-        async function fetchFixtures() {
-            const fixtures: any = await getCurrentGameweekFixtures()
-            setGameweekFixtures(fixtures)
-        }
-        fetchFixtures()
-    }, [])
-
-    return (
-        <TouchableOpacity onPress={() => setShowFixtures(!showFixtures)} activeOpacity={1}>
-            <View
-                style={{
-                    borderRadius: 5,
-                    backgroundColor: '#f7f7ff',
-                    padding: 10,
-                    margin: 5,
-                    shadowOpacity: 1,
-                    shadowRadius: 2,
-                    shadowColor: '#ddd',
-                    shadowOffset: { height: 2, width: 0 },
-                }}
-            >
-                <LeagueNameAndLeagueTypeImage>
-                    <Text style={{ fontSize: 17 }}>Gameweek Fixtures</Text>
-                    <ExpandImage expand={showFixtures} source={require('../../images/other/down-arrow.png')} />
-                </LeagueNameAndLeagueTypeImage>
-                <Container>
-                    <Inner expand={showFixtures}>
-                        {gameweekFixtures.map((match: any) => (
-                            <Match key={match.home}>
-                                <HomeTeam homeTeam={true}>
-                                    <Text>{match.home}</Text>
-                                </HomeTeam>
-                                <Center>
-                                    <TeamBadge source={Images[match.home.replace(/\s/g, '').toLowerCase()]} />
-                                    <Text style={{ marginLeft: 10, marginRight: 10 }}> vs </Text>
-                                    <TeamBadge source={Images[match.away.replace(/\s/g, '').toLowerCase()]} />
-                                </Center>
+export const Fixtures = React.memo(
+    ({ fixtures }) => {
+        console.log('rendering again')
+        return (
+            <View>
+                <Text style={{ fontSize: 17, alignSelf: 'center', fontWeight: '700', marginBottom: 10 }}>
+                    Gameweek Fixtures
+                </Text>
+                <View style={styles.container}>
+                    <View>
+                        {fixtures.map((match: any) => (
+                            <View key={match.home} style={styles.match}>
+                                <HomeTeam homeTeam={true}>{<Text style={styles.teamName}>{match.home}</Text>}</HomeTeam>
+                                <View style={styles.center}>
+                                    <FastImage
+                                        style={{ width: 30, height: 30 }}
+                                        source={Images[match.home.replace(/\s/g, '').toLowerCase()]}
+                                        // resizeMode={FastImage.resizeMode.contain}
+                                    />
+                                    <Text style={styles.vs}> VS </Text>
+                                    <FastImage
+                                        style={{ width: 30, height: 30 }}
+                                        source={Images[match.away.replace(/\s/g, '').toLowerCase()]}
+                                        // resizeMode={FastImage.resizeMode.contain}
+                                    />
+                                </View>
                                 <AwayTeam homeTeam={false}>
-                                    <Text>{match.away}</Text>
+                                    {<Text style={styles.teamName}>{match.away}</Text>}
                                 </AwayTeam>
-                            </Match>
+                            </View>
                         ))}
-                    </Inner>
-                </Container>
+                    </View>
+                </View>
             </View>
-        </TouchableOpacity>
-    )
-}
+        )
+    },
+    (prevProps, nextProps) => {
+        console.log(prevProps, nextProps, 'please show the props')
+        return true // props are not equal -> update the component)
+    },
+)
+
+const styles = StyleSheet.create({
+    center: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        margin: 5,
+        width: 100,
+    },
+    container: {
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+    match: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    teamName: {
+        fontSize: 11,
+        fontWeight: '600',
+        margin: 5,
+    },
+    vs: {
+        marginLeft: 10,
+        marginRight: 10,
+        fontSize: 11,
+    },
+})

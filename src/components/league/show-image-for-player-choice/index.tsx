@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
 import styled from 'styled-components'
+import FastImage from 'react-native-fast-image'
 
 import * as Images from '../../../images'
+
 import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
 
 interface ImageStyled {
@@ -115,9 +117,9 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
     if (isCurrentLoggedInPlayer) {
         if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
             return (
-                <Image
+                <FastImage
+                    style={{ width: 25, height: 25, marginRight: 10 }}
                     source={Images[PLAYER_CURRENT_ROUND.choice.value.replace(/\s/g, '').toLowerCase()]}
-                    lost={false}
                 />
             )
         } else {
@@ -128,9 +130,9 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
     if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
         if (ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE) {
             return (
-                <Image
+                <FastImage
+                    style={{ width: 25, height: 25, marginRight: 10 }}
                     source={Images[PLAYER_CURRENT_ROUND.choice.value.replace(/\s/g, '').toLowerCase()]}
-                    lost={false}
                 />
             )
         } else {

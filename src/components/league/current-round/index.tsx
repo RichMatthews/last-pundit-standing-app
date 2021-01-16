@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { TouchableOpacity, Text, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
+import FastImage from 'react-native-fast-image'
 
 import { PreviousRound } from '../../previous-round'
 import { MemoizedShowImageForPlayerChoice } from '../show-image-for-player-choice'
@@ -12,13 +13,6 @@ const CurrentRound = styled.View`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-`
-
-const ExpandImage = styled.Image<any>`
-    align-self: center;
-    height: 10px;
-    transform: ${({ expand }: any) => (expand ? 'rotate(180deg)' : 'rotate(0deg)')};
-    width: 10px;
 `
 
 const HistoricalRounds = styled.View<any>`
@@ -77,10 +71,17 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
                                     player={player}
                                 />
 
-                                <ExpandImage
-                                    source={require('src/images/other/down-arrow.png')}
-                                    expand={listOfExpandedPrevious.includes(index)}
-                                />
+                                {listOfExpandedPrevious.includes(index) ? (
+                                    <FastImage
+                                        source={require('src/images/other/down-arrow.png')}
+                                        style={{ width: 10, height: 10 }}
+                                    />
+                                ) : (
+                                    <FastImage
+                                        source={require('src/images/other/down-arrow.png')}
+                                        style={{ width: 10, height: 10 }}
+                                    />
+                                )}
                             </PlayerAndDownArrow>
                         </CurrentRound>
                         <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>

@@ -77,17 +77,17 @@ const styles = (theme) =>
             width,
         },
         viewed: {
-            borderBottomWidth: 3,
-            borderColor: theme.borders.primaryColor,
+            borderBottomWidth: 4,
+            borderColor: theme.tint.active,
             color: theme.tint.active,
-            fontWeight: '700',
         },
         notViewed: {
             color: theme.text.primary,
         },
         text: {
             padding: 10,
-            paddingBottom: 0,
+            paddingBottom: 2,
+            fontWeight: '700',
             fontSize: 13,
         },
     })
