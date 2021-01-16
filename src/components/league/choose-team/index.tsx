@@ -5,9 +5,9 @@ import styled from 'styled-components'
 import * as Images from 'src/images'
 import { CURRENT_GAMEWEEK } from 'src/admin/current-week'
 import { Button, ButtonText } from 'src/ui-components/button'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import { updateUserGamweekChoice } from 'src/firebase-helpers'
+import { getCurrentGameweekFixtures, updateUserGamweekChoice } from 'src/firebase-helpers'
 
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
@@ -36,9 +36,10 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const league = useSelector((store: { league: any }) => store.league)
     const user = useSelector((store: { user: any }) => store.user)
+    const findOpponent = async () => {
+        const fixtures = await getCurrentGameweekFixtures()
 
-    const findOpponent = () => {
-        const selectedTeamFixture: any = CURRENT_GAMEWEEK.fixtures.find(
+        const selectedTeamFixture: any = fixtures.find(
             (team) => team.home === selectedTeam || team.away === selectedTeam,
         )
         const homeTeam = selectedTeamFixture['home']
@@ -91,10 +92,11 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData, setC
     }
 
     const updateUserGamweekChoiceHelper = async () => {
+        const opponent = await findOpponent()
         const choice = {
             hasMadeChoice: true,
             // id: selectedTeam.id,
-            ...findOpponent(),
+            ...opponent,
             result: 'pending',
             value: selectedTeam,
         }

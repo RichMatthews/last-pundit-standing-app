@@ -110,25 +110,24 @@ export const League = ({ leagueId, theme }: string) => {
                 colors={['#a103fc', '#5055b3']}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 0 }}
-                style={{ height: Platform.OS === 'ios' ? 300 : 100 }}
+                style={{ height: Platform.OS === 'ios' ? 250 : 100 }}
             >
                 <View style={styles(theme).leagueNameAndImage}>
                     <H2 style={styles(theme).mainheading}>{league.name}</H2>
-
                     <Image source={require('src/images/other/premier-league.png')} style={styles(theme).image} />
                 </View>
-                <View style={{ position: 'absolute', bottom: 0 }}>
-                    <ScreenSelection
-                        currentScreenView={currentScreenView}
-                        setCurrentScreenView={setCurrentScreenView}
-                        theme={theme}
-                    />
-                </View>
             </LinearGradient>
-
+            <View style={{ zIndex: 5 }}>
+                <ScreenSelection
+                    currentScreenView={currentScreenView}
+                    setCurrentScreenView={setCurrentScreenView}
+                    theme={theme}
+                />
+            </View>
             <View
                 style={{
                     backgroundColor: theme.background.primary,
+                    paddingTop: 15,
                 }}
             >
                 {determineScreenToRender()}
@@ -140,11 +139,8 @@ export const League = ({ leagueId, theme }: string) => {
 const styles = (theme) =>
     StyleSheet.create({
         leagueNameAndImage: {
-            display: 'flex',
             alignItems: 'center',
             paddingBottom: 15,
-            paddingTop: 15,
-            width: '100%',
         },
         image: {
             resizeMode: 'contain',

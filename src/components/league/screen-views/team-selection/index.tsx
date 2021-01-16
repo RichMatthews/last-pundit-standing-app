@@ -14,11 +14,20 @@ export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenVie
         const currentGameRound = currentGame.currentGameRound
         const currentRound = currentPlayer.rounds[currentGameRound]
         const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
+        const playerOutOfTime = true
 
         if (playerOutOfGame.length) {
             return (
                 <View>
                     <Text>You are no longer in this game</Text>
+                </View>
+            )
+        } else if (playerOutOfTime) {
+            return (
+                <View>
+                    <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
+                        The deadline has passed and you are out of this game
+                    </Text>
                 </View>
             )
         } else if (currentRound && currentRound.choice.hasMadeChoice === false) {
@@ -40,7 +49,9 @@ export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenVie
         } else {
             return (
                 <View>
-                    <Text>You didn't select a team in time and are unfortunately now out of this game.</Text>
+                    <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
+                        You are no longer in this game
+                    </Text>
                 </View>
             )
         }

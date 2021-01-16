@@ -42,10 +42,15 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
                     <View
                         key={player.id}
                         style={{
-                            backgroundColor: theme.button.backgroundColor,
+                            backgroundColor: theme.background.primary,
                             borderRadius: theme.borders.radius,
                             padding: 10,
-                            margin: 10,
+                            margin: 12,
+                            shadowColor: 'black',
+                            shadowOffset: { width: 0, height: 3 },
+                            shadowRadius: 4,
+                            shadowOpacity: 0.09,
+                            elevation: 4,
                         }}
                     >
                         <CurrentRound style={{ width: 380 }}>

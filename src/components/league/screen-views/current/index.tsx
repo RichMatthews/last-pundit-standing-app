@@ -8,7 +8,6 @@ import { PageNotFound } from '../../../404'
 import { Container } from '../../../../ui-components/containers'
 
 export const CurrentGame = ({ loaded, theme }: any) => {
-    console.log(theme, ' them1')
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 

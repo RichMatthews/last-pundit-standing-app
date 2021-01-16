@@ -67,11 +67,14 @@ const styles = (theme) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.button.backgroundColor,
-            display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignSelf: 'center',
-            width: width,
+            shadowColor: '#aaa',
+            shadowOffset: { width: 0, height: 3 },
+            shadowOpacity: 4,
+            shadowRadius: 6,
+            width,
         },
         viewed: {
             borderBottomWidth: 3,
