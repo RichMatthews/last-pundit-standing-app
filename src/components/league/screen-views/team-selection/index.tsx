@@ -1,28 +1,48 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, Text, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { ChooseTeam } from 'src/components/league/choose-team'
+import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
 
 const width = Dimensions.get('window').width
 
+const NoLongerInGame = ({ theme }) => (
+    <View>
+        <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
+            You are no longer in this game
+        </Text>
+    </View>
+)
+
 export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenView }) => {
+    const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
+    const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
+
+    useEffect(() => {
+        checkIfTimeEnded()
+    }, [])
+
+    const checkIfTimeEnded = async () => {
+        const timeHasEnded = await gameweekSelectionTimeEnded(currentGameweek.ends)
+
+        if (timeHasEnded) {
+            setGameSelectionTimeEnded(true)
+        }
+    }
 
     const showTeamSelectionPage = () => {
         const currentGameRound = currentGame.currentGameRound
         const currentRound = currentPlayer.rounds[currentGameRound]
         const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
-        const playerOutOfTime = false
+        const playerHasMadeChoice = currentRound && currentRound.choice.hasMadeChoice
+        const playerHasNotMadeChoice = currentRound && !currentRound.choice.hasMadeChoice
 
         if (playerOutOfGame.length) {
-            return (
-                <View>
-                    <Text>You are no longer in this game</Text>
-                </View>
-            )
-        } else if (playerOutOfTime) {
+            return <NoLongerInGame theme={theme} />
+        } else if (gameSelectionTimeEnded && playerHasNotMadeChoice) {
             return (
                 <View>
                     <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
@@ -30,7 +50,7 @@ export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenVie
                     </Text>
                 </View>
             )
-        } else if (currentRound && currentRound.choice.hasMadeChoice === true) {
+        } else if (playerHasNotMadeChoice) {
             return (
                 <ChooseTeam
                     currentRound={currentGameRound}
@@ -38,7 +58,7 @@ export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenVie
                     setCurrentScreenView={setCurrentScreenView}
                 />
             )
-        } else if (currentRound && currentRound.choice.hasMadeChoice) {
+        } else if (playerHasMadeChoice) {
             return (
                 <View>
                     <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
@@ -47,13 +67,7 @@ export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenVie
                 </View>
             )
         } else {
-            return (
-                <View>
-                    <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
-                        You are no longer in this game
-                    </Text>
-                </View>
-            )
+            return <NoLongerInGame theme={theme} />
         }
     }
 
