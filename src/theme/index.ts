@@ -79,6 +79,7 @@ export const LIGHT_THEME = {
     },
     headings: {
         primary: COLOURS.PRIMARY_BLACK,
+        inverse: COLOURS.PRIMARY_WHITE,
     },
     icons: {
         primary: COLOURS.PRIMARY_BLACK,

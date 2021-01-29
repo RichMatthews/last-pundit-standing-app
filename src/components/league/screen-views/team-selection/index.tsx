@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, Text, StyleSheet, View } from 'react-native'
+import { Dimensions, Image, Text, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { ChooseTeam } from 'src/components/league/choose-team'
@@ -17,6 +17,7 @@ const NoLongerInGame = ({ theme }) => (
 
 export const TeamSelection = ({ pullLatestLeagueData, theme, setCurrentScreenView }) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
+    const [animatedImages] = useState([])
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)

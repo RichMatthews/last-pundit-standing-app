@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Image, Share, Text, TouchableOpacity, View } from 'react-native'
 
 import { Fixtures } from '../../../fixtures'
-import { LeagueRules } from '../../league-rules'
 
 const SelectionWrapper = styled.View`
     background: transparent;
@@ -26,14 +25,8 @@ const SelectionWrapper = styled.View`
 
 export const LeagueInfo = ({ fixtures }) => {
     return (
-        <View style={{ height: '100%' }}>
-            <SelectionWrapper>
-                <Fixtures fixtures={fixtures} />
-            </SelectionWrapper>
-            <SelectionWrapper>
-                <LeagueRules />
-            </SelectionWrapper>
-            <SelectionWrapper></SelectionWrapper>
+        <View style={{ marginTop: 10 }}>
+            <Fixtures fixtures={fixtures} />
         </View>
     )
 }

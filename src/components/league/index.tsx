@@ -8,6 +8,7 @@ import { CurrentGame } from 'src/components/league/screen-views/current'
 import { PreviousGames } from 'src/components/league/screen-views/previous'
 import { TeamSelection } from 'src/components/league/screen-views/team-selection'
 import { ScreenSelection } from 'src/components/league/screen-selection'
+import { LeagueRules } from 'src/components/league/screen-views/league-rules'
 import { pullLeagueData, getCurrentGameweekFixtures } from 'src/firebase-helpers'
 import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
@@ -91,6 +92,8 @@ export const League = ({ leagueId, theme }: string) => {
                     theme={theme}
                 />
             )
+        } else if (currentScreenView === 'rules') {
+            return <LeagueRules />
         }
         return (
             <ScrollView
@@ -115,23 +118,22 @@ export const League = ({ leagueId, theme }: string) => {
     return (
         <>
             <LinearGradient
-                colors={['#a103fc', '#5055b3']}
+                colors={['#a103fc', '#0009bf']}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 0 }}
-                style={{ height: Platform.OS === 'ios' ? 250 : 100 }}
+                // style={{ height: Platform.OS === 'ios' ? 280 : 100 }}
             >
                 <View style={styles(theme).leagueNameAndImage}>
                     <H2 style={styles(theme).mainheading}>{league.name}</H2>
                     <Image source={require('src/images/other/premier-league.png')} style={styles(theme).image} />
                 </View>
-            </LinearGradient>
-            <View style={{ zIndex: 5 }}>
+
                 <ScreenSelection
                     currentScreenView={currentScreenView}
                     setCurrentScreenView={setCurrentScreenView}
                     theme={theme}
                 />
-            </View>
+            </LinearGradient>
             <View
                 style={{
                     backgroundColor: theme.background.primary,
@@ -158,7 +160,7 @@ const styles = (theme) =>
             marginBottom: 20,
         },
         mainheading: {
-            color: theme.text.primaryColor,
+            color: theme.headings.inverse,
             fontSize: 30,
             marginTop: 100,
             marginBottom: 5,
