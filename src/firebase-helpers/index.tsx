@@ -18,7 +18,7 @@ export const getCurrentGameweekFixtures = () => {
 export const getCurrentGameweekEndTime = () => {
     return firebaseApp
         .database()
-        .ref(`information/gameweek/current`)
+        .ref('information/gameweek/current')
         .once('value')
         .then((snapshot) => {
             return {
