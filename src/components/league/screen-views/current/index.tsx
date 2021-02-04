@@ -21,21 +21,19 @@ export const CurrentGame = ({ loaded, theme }: any) => {
 
     if (loaded === 'league-found') {
         return (
-            <SafeAreaView>
-                <Container>
-                    <View style={styles(theme).subheading}>
-                        <Text style={styles(theme).maintext}>
-                            <Text style={styles(theme).subtext}>Round closes: </Text>
-                            <Text style={{ color: theme.text.primary }}>{currentGameweek.endsReadable}</Text>
-                        </Text>
-                    </View>
-                    <CurrentRoundView
-                        listOfExpandedPrevious={listOfExpandedPrevious}
-                        setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                        theme={theme}
-                    />
-                </Container>
-            </SafeAreaView>
+            <View>
+                <View style={styles(theme).subheading}>
+                    {/* <Text style={styles(theme).maintext}>
+                        <Text style={styles(theme).subtext}>Round closes: </Text>
+                        <Text style={{ color: theme.text.primary }}>{currentGameweek.endsReadable}</Text>
+                    </Text> */}
+                </View>
+                <CurrentRoundView
+                    listOfExpandedPrevious={listOfExpandedPrevious}
+                    setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                    theme={theme}
+                />
+            </View>
         )
     }
 

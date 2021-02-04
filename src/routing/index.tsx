@@ -1,14 +1,13 @@
 import 'react-native-gesture-handler'
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { getFocusedRouteNameFromRoute, NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { Header } from 'react-navigation-stack'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { useDispatch, useSelector } from 'react-redux'
+import { LeagueMenu } from 'src/components/league/menu/index.tsx'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -33,6 +32,7 @@ import {
     getInternetCredentialsForFirebase,
 } from 'src/utils/canLoginWithFaceId'
 import { setTheme } from 'src/redux/reducer/theme'
+import { Host } from 'react-native-portalize'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
@@ -67,21 +67,22 @@ const AuthStack = ({ theme }) => (
 )
 
 const Stacks = ({ isSignedIn, theme }: any) => (
-    <Stack.Navigator
-        screenOptions={{
-            headerShown: false,
-            headerTitle: '',
-            headerStyle: {
-                elevation: 5,
-                shadowOpacity: 0,
-            },
-            animationEnabled: false,
-        }}
-    >
+    <Stack.Navigator>
         {isSignedIn ? (
             <>
                 <Stack.Screen name="My Leagues">
                     {(props: any) => <MyLeagues navigation={props.navigation} theme={theme} />}
+                </Stack.Screen>
+                <Stack.Screen
+                    name="League Menu"
+                    options={{
+                        //     headerTintColor: 'red',
+                        //     headerBackTitle: 'Back to leagues',
+                        headerShown: false,
+                        //     headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 },
+                    }}
+                >
+                    {(props: any) => <LeagueMenu navigation={props.navigation} theme={theme} />}
                 </Stack.Screen>
                 <Stack.Screen
                     name="League"
@@ -331,47 +332,55 @@ export const Routing = () => {
     }
 
     return userFromRedux && Object.values(userFromRedux).length ? (
-        <NavigationContainer theme={theme}>
-            <Stack.Navigator
-                screenOptions={({ route }) => ({
-                    animationEnabled: true,
-                    headerTitleStyle: {
-                        color: '#000',
-                        fontSize: 25,
-                    },
-                })}
-                mode="modal"
-            >
-                <Stack.Screen
-                    name="Home"
-                    options={({ route }) => ({
-                        headerTitle: getHeaderTitle(route),
-                        headerShown:
-                            getHeaderTitle(route) === 'Leagues' || getHeaderTitle(route) === 'Home' ? false : true,
-                        headerStyle: {
-                            elevation: 5,
-                            shadowOpacity: 0,
-                            backgroundColor: theme.background.primary,
-                        },
+        <Host>
+            <NavigationContainer theme={theme}>
+                <Stack.Navigator
+                    screenOptions={({ route }) => ({
+                        animationEnabled: true,
                         headerTitleStyle: {
-                            color: theme.headings.primary,
-                            fontSize: theme.text.xlarge,
+                            color: '#000',
+                            fontSize: 25,
                         },
                     })}
+                    mode="modal"
                 >
-                    {(props: any) => <TabNavigation theme={theme} user={userFromRedux} />}
-                </Stack.Screen>
-                <Stack.Screen
-                    name="Account"
-                    options={({ route }) => ({
-                        headerShown: false,
-                    })}
-                >
-                    {(props: any) => <ModalStacks theme={theme} />}
-                </Stack.Screen>
-            </Stack.Navigator>
-        </NavigationContainer>
+                    <Stack.Screen
+                        name="Home"
+                        options={({ route }) => ({
+                            //         headerTitle: getHeaderTitle(route),
+                            headerShown: false,
+                            //             getHeaderTitle(route) === 'Leagues' || getHeaderTitle(route) === 'Home' ? false : true,
+                            //         headerStyle: {
+                            //             elevation: 5,
+                            //             shadowOpacity: 0,
+                            //             backgroundColor: theme.background.primary,
+                            //         },
+                            //         headerTitleStyle: {
+                            //             color: theme.headings.primary,
+                            //             fontSize: theme.text.xlarge,
+                            //         },
+                        })}
+                    >
+                        {(props: any) => <TabNavigation theme={theme} user={userFromRedux} />}
+                    </Stack.Screen>
+                    <Stack.Screen
+                        name="Account"
+                        options={({ route }) => ({
+                            headerShown: false,
+                        })}
+                    >
+                        {(props: any) => <ModalStacks theme={theme} />}
+                    </Stack.Screen>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Host>
     ) : (
         <AuthenticateUserScreen theme={theme} />
     )
 }
+
+// const LoggedInNavigator = () => (
+
+// )
+
+const LoggedOutNavigator = ({ theme }) => <AuthenticateUserScreen theme={theme} />

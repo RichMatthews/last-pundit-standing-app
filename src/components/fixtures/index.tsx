@@ -39,29 +39,23 @@ export const Fixtures = React.memo(
                     Gameweek Fixtures
                 </Text>
                 <View style={styles.container}>
-                    <View>
-                        {fixtures.map((match: any) => (
-                            <View key={match.home} style={styles.match}>
-                                <HomeTeam homeTeam={true}>{<Text style={styles.teamName}>{match.home}</Text>}</HomeTeam>
-                                <View style={styles.center}>
-                                    <FastImage
-                                        style={{ width: 30, height: 30 }}
-                                        source={Images[match.home.replace(/\s/g, '').toLowerCase()]}
-                                        // resizeMode={FastImage.resizeMode.contain}
-                                    />
-                                    <Text style={styles.vs}> VS </Text>
-                                    <FastImage
-                                        style={{ width: 30, height: 30 }}
-                                        source={Images[match.away.replace(/\s/g, '').toLowerCase()]}
-                                        // resizeMode={FastImage.resizeMode.contain}
-                                    />
-                                </View>
-                                <AwayTeam homeTeam={false}>
-                                    {<Text style={styles.teamName}>{match.away}</Text>}
-                                </AwayTeam>
+                    {fixtures.map((match: any) => (
+                        <View key={match.home}>
+                            <View style={styles.center}>
+                                <FastImage
+                                    style={{ width: 30, height: 30 }}
+                                    source={Images[match.home.replace(/\s/g, '').toLowerCase()]}
+                                    // resizeMode={FastImage.resizeMode.contain}
+                                />
+                                <Text style={styles.vs}> VS </Text>
+                                <FastImage
+                                    style={{ width: 30, height: 30 }}
+                                    source={Images[match.away.replace(/\s/g, '').toLowerCase()]}
+                                    // resizeMode={FastImage.resizeMode.contain}
+                                />
                             </View>
-                        ))}
-                    </View>
+                        </View>
+                    ))}
                 </View>
             </View>
         )
@@ -76,28 +70,23 @@ const styles = StyleSheet.create({
     center: {
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'center',
         margin: 5,
-        width: 100,
     },
     container: {
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
-    match: {
+        // backgroundColor: 'yellow',
+        marginTop: 15,
+        alignSelf: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    teamName: {
-        fontSize: 11,
-        fontWeight: '600',
-        margin: 5,
+        justifyContent: 'space-evenly',
+        flexWrap: 'wrap',
+        height: 200,
+        width: 300,
     },
     vs: {
         marginLeft: 10,
         marginRight: 10,
         fontSize: 11,
+        fontWeight: '700',
     },
 })

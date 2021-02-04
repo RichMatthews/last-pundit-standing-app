@@ -44,7 +44,7 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                         <ActivityIndicator size="large" color={theme.spinner.primary} />
                     ) : userLeagues.leagues.length ? (
                         userLeagues.leagues.map((league: LeagueState) => (
-                            <TouchableOpacity onPress={() => navigation.navigate('League', { leagueId: league.id })}>
+                            <TouchableOpacity onPress={() => navigation.push('League', { leagueId: league.id })}>
                                 <LeagueItem
                                     key={league.id}
                                     style={{

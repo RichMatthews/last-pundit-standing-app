@@ -18,6 +18,7 @@ export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPrev
 
     return (
         <View style={styles(theme).container}>
+            <Text style={{ fontSize: 25, fontWeight: '700', marginLeft: 10 }}>Current Round</Text>
             {Object.values(currentGame.players).map((player: any, index: number) => (
                 <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
                     <View key={player.id} style={styles(theme).playerContainer}>
@@ -82,13 +83,10 @@ const styles = (theme) =>
         playerContainer: {
             backgroundColor: theme.background.primary,
             borderRadius: theme.borders.radius,
+            borderBottomWidth: 1,
+            borderBottomColor: '#eee',
             padding: 10,
             margin: 12,
-            shadowColor: 'black',
-            shadowOffset: { width: 0, height: 3 },
-            shadowRadius: 4,
-            shadowOpacity: 0.09,
-            elevation: 4,
         },
         playerRow: {
             justifyContent: 'space-between',
