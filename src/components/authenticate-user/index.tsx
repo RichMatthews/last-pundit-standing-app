@@ -14,7 +14,6 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button, ButtonText, InvertedButton, InvertedButtonText } from 'src/ui-components/button'
 import { Container } from 'src/ui-components/containers'
-import { H1 } from 'src/ui-components/headings'
 import * as Keychain from 'react-native-keychain'
 import { useDispatch } from 'react-redux'
 import * as RootNavigation from 'src/root-navigation'
@@ -153,7 +152,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
                 end={{ x: 1, y: 0 }}
                 style={{ height: Platform.OS === 'ios' ? 300 : 100 }}
             >
-                <H1 style={styles(theme).heading}>{showResetScreen ? 'Reset Password' : 'Login'}</H1>
+                <Text style={styles(theme).heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
             </LinearGradient>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <SafeAreaView style={{ backgroundColor: theme.background.primary }}>

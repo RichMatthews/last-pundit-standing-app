@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { CurrentRoundView } from '../../current-round'
-import { PageNotFound } from '../../../404'
+import { CurrentRoundView } from '../current-round'
+import { PageNotFound } from '../../404'
 
-import { Container } from '../../../../ui-components/containers'
+import { Container } from '../../../ui-components/containers'
 
-export const CurrentGame = ({ loaded, theme }: any) => {
+export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
@@ -31,6 +31,8 @@ export const CurrentGame = ({ loaded, theme }: any) => {
                 <CurrentRoundView
                     listOfExpandedPrevious={listOfExpandedPrevious}
                     setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                    flip={flip}
+                    setFlip={setFlip}
                     theme={theme}
                 />
             </View>

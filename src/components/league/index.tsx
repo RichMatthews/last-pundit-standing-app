@@ -3,28 +3,23 @@ import { ScrollView, StyleSheet, RefreshControl, Text, View } from 'react-native
 import { useDispatch, useSelector } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient'
 
-import { LeagueInfo } from 'src/components/league/screen-views/info'
-import { CurrentGame } from 'src/components/league/screen-views/current'
-import { PreviousGames } from 'src/components/league/screen-views/previous'
-import { TeamSelection } from 'src/components/league/screen-views/team-selection'
-import { LeagueRules } from 'src/components/league/screen-views/league-rules'
+import { CurrentGame } from 'src/components/league/current'
+import { TeamSelection } from 'src/components/league/team-selection'
 import { pullLeagueData, getCurrentGameweekFixtures } from 'src/firebase-helpers'
 import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { setViewedLeague } from 'src/redux/reducer/league'
-import { H2 } from 'src/ui-components/headings'
 import FlipCard from 'react-native-flip-card'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
-
+import { Fixtures } from 'src/components/fixtures'
 interface LeagueData {
     games: {}
 }
 
 export const League = ({ leagueId, theme }: string) => {
-    const [currentScreenView, setCurrentScreenView] = useState('game')
     const [loaded, setLoaded] = useState<string>('')
     const [refreshing, setRefreshing] = useState<boolean>(false)
     const [gameweekFixtures, setGameweekFixtures] = useState([])
@@ -66,7 +61,7 @@ export const League = ({ leagueId, theme }: string) => {
 
     useEffect(() => {
         pullLatestLeagueData()
-    }, [leagueId])
+    }, [leagueId, pullLatestLeagueData])
 
     const wait = (timeout: any) => {
         return new Promise((resolve) => {
@@ -80,7 +75,7 @@ export const League = ({ leagueId, theme }: string) => {
         wait(500).then(() => {
             setRefreshing(false)
         })
-    }, [])
+    }, [pullLatestLeagueData])
 
     //<PreviousGames games={Object.values(league.games).filter((game: any) => game.complete)} theme={theme} />
     const onOpen = () => {
@@ -96,7 +91,7 @@ export const League = ({ leagueId, theme }: string) => {
                 style={{ borderBottomLeftRadius: 25, borderBottomRightRadius: 25, height: 450 }}
             >
                 <View style={styles(theme).leagueNameAndImage}>
-                    <H2 style={styles(theme).mainheading}>{league.name}</H2>
+                    <Text style={styles(theme).mainheading}>{league.name}</Text>
                 </View>
             </LinearGradient>
             <View
@@ -110,6 +105,7 @@ export const League = ({ leagueId, theme }: string) => {
                     clickable={false}
                     flip={flip}
                     style={{
+                        //theme.background.primary
                         backgroundColor: theme.background.primary,
                         shadowOffset: { width: 0, height: 1 },
                         shadowColor: '#ddd',
@@ -117,47 +113,46 @@ export const League = ({ leagueId, theme }: string) => {
                         borderRadius: 20,
                         margin: 20,
                         marginTop: -270,
-                        flex: 1,
                     }}
                 >
-                    <View>
-                        <ScrollView
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={refreshing}
-                                    onRefresh={onRefresh}
-                                    title="Pull to refresh"
-                                    tintColor={theme.text.primary}
-                                    titleColor={theme.text.primary}
-                                />
-                            }
-                        >
-                            <CurrentGame loaded={loaded} theme={theme} />
-                            <TouchableOpacity onPress={() => setFlip(!flip)}>
-                                <Text>Select team</Text>
-                            </TouchableOpacity>
-                        </ScrollView>
-                    </View>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                                title="Pull to refresh"
+                                tintColor={theme.text.primary}
+                                titleColor={theme.text.primary}
+                            />
+                        }
+                    >
+                        <CurrentGame loaded={loaded} theme={theme} flip={flip} setFlip={setFlip} />
+                    </ScrollView>
 
                     <View>
-                        <TouchableOpacity onPress={() => setFlip(!flip)}>
-                            <Text>View current game</Text>
-                        </TouchableOpacity>
+                        <View style={styles(theme).topContainer}>
+                            <TouchableOpacity onPress={() => setFlip(!flip)}>
+                                <View style={styles(theme).ctaContainer}>
+                                    <Text>Back</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={onOpen}>
+                                <View style={styles(theme).ctaContainer}>
+                                    <Text>Show fixtures</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
                         <TeamSelection
                             setFlip={setFlip}
                             flip={flip}
                             pullLatestLeagueData={pullLatestLeagueData}
-                            setCurrentScreenView={setCurrentScreenView}
                             theme={theme}
                         />
-                        <TouchableOpacity onPress={onOpen}>
-                            <Text>Open the modal</Text>
-                        </TouchableOpacity>
                     </View>
                 </FlipCard>
                 <Portal>
                     <Modalize ref={fixturesRef} modalHeight={300}>
-                        <LeagueInfo fixtures={gameweekFixtures} />
+                        <Fixtures fixtures={gameweekFixtures} />
                     </Modalize>
                 </Portal>
             </View>
@@ -197,5 +192,18 @@ const styles = (theme) =>
         },
         subtext: {
             fontWeight: '400',
+        },
+        topContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginHorizontal: 15,
+            marginVertical: 15,
+        },
+        ctaContainer: {
+            borderWidth: 1,
+            borderColor: '#ccc',
+            borderRadius: 3,
+            padding: 5,
         },
     })

@@ -4,26 +4,46 @@ import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 import FastImage from 'react-native-fast-image'
 
-import { PreviousRound } from '../../previous-round'
+import { PreviousRound } from 'src/components/previous-round/index.tsx'
 import { MemoizedShowImageForPlayerChoice } from '../show-image-for-player-choice'
 
-interface PlayerProps {
+interface Props {
     id: string
     name: string
 }
 
-export const CurrentRoundView = ({ listOfExpandedPrevious, setListOfExpandedPreviousHelper, theme }: any) => {
+export const CurrentRoundView = ({
+    listOfExpandedPrevious,
+    setListOfExpandedPreviousHelper,
+    setFlip,
+    flip,
+    theme,
+}: any) => {
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const user = useSelector((store: { user: any }) => store.user)
 
     return (
         <View style={styles(theme).container}>
-            <Text style={{ fontSize: 25, fontWeight: '700', marginLeft: 10 }}>Current Round</Text>
+            <View style={styles(theme).topContainer}>
+                <Text style={styles(theme).currentRoundHeading}>Current Round</Text>
+                <TouchableOpacity onPress={() => setFlip(!flip)}>
+                    <View style={styles(theme).selectTeamContainer}>
+                        <Text style={{ fontFamily: 'Nunito' }}>Select team</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
             {Object.values(currentGame.players).map((player: any, index: number) => (
                 <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
                     <View key={player.id} style={styles(theme).playerContainer}>
                         <View style={styles(theme).playerRow}>
-                            <Text style={styles(theme).playerName}>{player.name}</Text>
+                            <Text
+                                style={[
+                                    styles(theme).playerName,
+                                    { color: player.id === user.id ? theme.tint.active : theme.text.primary },
+                                ]}
+                            >
+                                {player.name}
+                            </Text>
                             <View style={styles(theme).playerChosenImageAndDownArrow}>
                                 <MemoizedShowImageForPlayerChoice
                                     currentGame={currentGame}
@@ -76,24 +96,29 @@ const styles = (theme) =>
             alignSelf: 'center',
             width: '100%',
         },
+        currentRoundHeading: {
+            fontFamily: 'Nunito',
+            fontSize: 22,
+            fontWeight: '700',
+        },
         image: {
             width: 10,
             height: 10,
         },
         playerContainer: {
-            backgroundColor: theme.background.primary,
             borderRadius: theme.borders.radius,
             borderBottomWidth: 1,
             borderBottomColor: '#eee',
-            padding: 10,
-            margin: 12,
+            paddingTop: 35,
+            paddingBottom: 10,
+            marginHorizontal: 20,
         },
         playerRow: {
             justifyContent: 'space-between',
             flexDirection: 'row',
         },
         playerName: {
-            // color: player.id === user.id ? theme.tint.active : theme.text.primary,
+            fontFamily: 'Nunito',
             fontSize: theme.text.large,
         },
         playerChosenImageAndDownArrow: {
@@ -102,5 +127,16 @@ const styles = (theme) =>
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
+        },
+        selectTeamContainer: {
+            borderWidth: 1,
+            borderRadius: 3,
+            padding: 5,
+        },
+        topContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginHorizontal: 15,
         },
     })

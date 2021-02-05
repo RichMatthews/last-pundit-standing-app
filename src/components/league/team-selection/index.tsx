@@ -15,7 +15,7 @@ const NoLongerInGame = ({ theme }) => (
     </View>
 )
 
-export const TeamSelection = ({ flip, setFlip, pullLatestLeagueData, theme, setCurrentScreenView }) => {
+export const TeamSelection = ({ flip, setFlip, pullLatestLeagueData, theme }) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
@@ -57,7 +57,6 @@ export const TeamSelection = ({ flip, setFlip, pullLatestLeagueData, theme, setC
                     flip={flip}
                     currentRound={currentGameRound}
                     pullLatestLeagueData={pullLatestLeagueData}
-                    setCurrentScreenView={setCurrentScreenView}
                 />
             )
         } else if (playerHasMadeChoice) {

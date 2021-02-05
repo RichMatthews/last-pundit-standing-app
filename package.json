@@ -1,4 +1,5 @@
 {
+    "name": "app",
     "version": "0.0.1",
     "private": true,
     "scripts": {
@@ -19,6 +20,7 @@
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
+        "@types/react-native": "^0.63.48",
         "@types/styled-components": "^5.1.3",
         "@typescript-eslint/eslint-plugin": "^4.0.1",
         "@typescript-eslint/parser": "^4.0.1",

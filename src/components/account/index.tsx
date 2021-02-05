@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Container } from 'src/ui-components/containers'
-import { H1 } from 'src/ui-components/headings'
 import { signUserOut } from 'src/redux/reducer/leagues'
 import { setTheme } from 'src/redux/reducer/theme'
 import { styles } from './styles'
@@ -90,7 +89,7 @@ export const Account = ({ navigation, theme }: any) => {
                     />
                 </TouchableOpacity>
             </LinearGradient>
-            <H1 style={styles(theme).heading}> Your Account </H1>
+            <Text style={styles(theme).heading}> Your Account </Text>
             <Container>
                 <TouchableOpacity onPress={() => updateEmailHelper()}>
                     <View style={styles(theme).section}>

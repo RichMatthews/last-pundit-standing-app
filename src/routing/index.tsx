@@ -7,7 +7,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import SplashScreen from 'react-native-splash-screen'
 import { useDispatch, useSelector } from 'react-redux'
-import { LeagueMenu } from 'src/components/league/menu/index.tsx'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -73,17 +72,7 @@ const Stacks = ({ isSignedIn, theme }: any) => (
                 <Stack.Screen name="My Leagues">
                     {(props: any) => <MyLeagues navigation={props.navigation} theme={theme} />}
                 </Stack.Screen>
-                <Stack.Screen
-                    name="League Menu"
-                    options={{
-                        //     headerTintColor: 'red',
-                        //     headerBackTitle: 'Back to leagues',
-                        headerShown: false,
-                        //     headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 },
-                    }}
-                >
-                    {(props: any) => <LeagueMenu navigation={props.navigation} theme={theme} />}
-                </Stack.Screen>
+
                 <Stack.Screen
                     name="League"
                     options={{
