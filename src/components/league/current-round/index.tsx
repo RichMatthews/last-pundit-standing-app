@@ -34,63 +34,62 @@ export const CurrentRoundView = ({
             </View>
             <ScrollView>
                 {Object.values(currentGame.players)
-                    .concat(Object.values(currentGame.players))
-                    .map((player: any, index: number) => (
-                        <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                            <View key={player.id} style={styles(theme).playerContainer}>
-                                <View style={styles(theme).playerRow}>
-                                    <Text
-                                        style={[
-                                            styles(theme).playerName,
-                                            { color: player.id === user.id ? theme.tint.active : theme.text.primary },
-                                        ]}
-                                    >
-                                        {player.name}
-                                    </Text>
-                                    <View style={styles(theme).playerChosenImageAndDownArrow}>
-                                        <MemoizedShowImageForPlayerChoice
-                                            currentGame={currentGame}
-                                            isCurrentLoggedInPlayer={player.id === user.id}
-                                            player={player}
+                .map((player: any, index: number) => (
+                    <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
+                        <View key={player.id} style={styles(theme).playerContainer}>
+                            <View style={styles(theme).playerRow}>
+                                <Text
+                                    style={[
+                                        styles(theme).playerName,
+                                        { color: player.id === user.id ? theme.tint.active : theme.text.primary },
+                                    ]}
+                                >
+                                    {player.name}
+                                </Text>
+                                <View style={styles(theme).playerChosenImageAndDownArrow}>
+                                    <MemoizedShowImageForPlayerChoice
+                                        currentGame={currentGame}
+                                        isCurrentLoggedInPlayer={player.id === user.id}
+                                        player={player}
+                                    />
+
+                                    {listOfExpandedPrevious.includes(index) ? (
+                                        <FastImage
+                                            source={require('src/images/other/down-arrow.png')}
+                                            style={styles(theme).image}
                                         />
-
-                                        {listOfExpandedPrevious.includes(index) ? (
-                                            <FastImage
-                                                source={require('src/images/other/down-arrow.png')}
-                                                style={styles(theme).image}
-                                            />
-                                        ) : (
-                                            <FastImage
-                                                source={require('src/images/other/down-arrow.png')}
-                                                style={styles(theme).image}
-                                            />
-                                        )}
-                                    </View>
+                                    ) : (
+                                        <FastImage
+                                            source={require('src/images/other/down-arrow.png')}
+                                            style={styles(theme).image}
+                                        />
+                                    )}
                                 </View>
-
-                                <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
-                                    <View>
-                                        {player.rounds.length > 0 ? (
-                                            <>
-                                                {player.rounds
-                                                    .filter(
-                                                        (round: any) =>
-                                                            round.choice.value && round.choice.result !== 'pending',
-                                                    )
-                                                    .map((round: any) => (
-                                                        <PreviousRound choice={round.choice} theme={theme} />
-                                                    ))}
-                                            </>
-                                        ) : (
-                                            <View>
-                                                <Text>Previous results will show here after Round 1</Text>
-                                            </View>
-                                        )}
-                                    </View>
-                                </Collapsible>
                             </View>
-                        </TouchableOpacity>
-                    ))}
+
+                            <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
+                                <View>
+                                    {player.rounds.length > 0 ? (
+                                        <>
+                                            {player.rounds
+                                                .filter(
+                                                    (round: any) =>
+                                                        round.choice.value && round.choice.result !== 'pending',
+                                                )
+                                                .map((round: any) => (
+                                                    <PreviousRound choice={round.choice} theme={theme} />
+                                                ))}
+                                        </>
+                                    ) : (
+                                        <View>
+                                            <Text>Previous results will show here after Round 1</Text>
+                                        </View>
+                                    )}
+                                </View>
+                            </Collapsible>
+                        </View>
+                    </TouchableOpacity>
+                ))}
             </ScrollView>
         </View>
     )
