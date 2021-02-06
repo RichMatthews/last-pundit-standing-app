@@ -1,5 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import FastImage from 'react-native-fast-image'
+import * as Images from 'src/images'
 
 interface Props {
     games: []
@@ -9,22 +11,32 @@ interface Props {
 export const PreviousGames = ({ games, theme }: Props) => {
     return games.length ? (
         <View style={styles(theme).container}>
-            {games.map((game) => (
-                <View style={styles(theme).previousGamesContainer}>
-                    <View>
-                        <Text style={styles(theme).playerNameText}>
-                            {Object.values(game.players).find((player) => !player.hasBeenEliminated).name}
-                        </Text>
-                        <Text style={styles(theme).winnerText}>Winner</Text>
+            {games.map((game) => {
+                const player = Object.values(game.players).find((player) => !player.hasBeenEliminated)
+                return (
+                    <View style={styles(theme).previousGamesContainer}>
+                        <View>
+                            <Text style={styles(theme).playerNameText}>{player.name}</Text>
+                            <Text style={styles(theme).winnerText}>Winner</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                {player.rounds.map((playa) => (
+                                    <>
+                                        {console.log(playa, 'p')}
+                                        <FastImage
+                                            source={Images[playa.choice.value.replace(/\s/g, '').toLowerCase()]}
+                                            style={{ width: 20, height: 20, marginRight: 5 }}
+                                        />
+                                    </>
+                                ))}
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
+                            <Text style={styles(theme).correctText}>Correct</Text>
+                        </View>
                     </View>
-                    <View>
-                        <Text style={styles(theme).amountCorrectText}>
-                            {Object.values(game.players).find((player) => !player.hasBeenEliminated).rounds.length}
-                        </Text>
-                        <Text style={styles(theme).correctText}>Correct</Text>
-                    </View>
-                </View>
-            ))}
+                )
+            })}
         </View>
     ) : (
         <View style={styles(theme).container}>
@@ -62,13 +74,9 @@ const styles = (theme: any) =>
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            shadowColor: 'black',
-            shadowOffset: { width: 0, height: 3 },
-            shadowRadius: 4,
-            shadowOpacity: 0.09,
-            elevation: 4,
         },
         winnerText: {
             color: '#aaa',
+            marginVertical: 5,
         },
     })

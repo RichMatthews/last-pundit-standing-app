@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { CurrentRoundView } from '../current-round'
+import { CurrentRoundView } from 'src/components/league/current-round'
 import { PageNotFound } from '../../404'
-
-import { Container } from '../../../ui-components/containers'
 
 export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
@@ -24,9 +22,9 @@ export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
             <View>
                 <View style={styles(theme).subheading}>
                     {/* <Text style={styles(theme).maintext}>
-                        <Text style={styles(theme).subtext}>Round closes: </Text>
-                        <Text style={{ color: theme.text.primary }}>{currentGameweek.endsReadable}</Text>
-                    </Text> */}
+                    <Text style={styles(theme).subtext}>Round closes: </Text>
+                    <Text style={{ color: theme.text.primary }}>{currentGameweek.endsReadable}</Text>
+                </Text> */}
                 </View>
                 <CurrentRoundView
                     listOfExpandedPrevious={listOfExpandedPrevious}
@@ -44,17 +42,19 @@ export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
     }
 
     return (
-        <Container style={styles(theme).loading}>
+        <View style={styles(theme).loading}>
             <ActivityIndicator size="large" color={theme.spinner.primary} />
             <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
-        </Container>
+        </View>
     )
 }
 
 const styles = (theme) =>
     StyleSheet.create({
         loading: {
+            alignSelf: 'center',
             marginTop: 100,
+            minHeight: 100,
         },
         loadingText: {
             color: theme.text.primary,

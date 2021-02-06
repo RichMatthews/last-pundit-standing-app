@@ -12,19 +12,14 @@ export const styles = (theme) =>
         icon: {},
         section: {
             alignItems: 'center',
-            backgroundColor: theme.button.backgroundColor,
-            borderRadius: theme.borders.radius,
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginBottom: 20,
-            maxHeight: 40,
             padding: 10,
             width: width * 0.9,
         },
         signOut: {
             alignSelf: 'center',
-            bottom: Platform.OS === 'ios' ? 450 : 350,
-            position: 'absolute',
             zIndex: 1,
         },
         text: {
@@ -37,13 +32,9 @@ export const styles = (theme) =>
         },
         username: {
             alignSelf: 'center',
-            borderColor: theme.text.inverse,
-            borderWidth: 4,
-            borderRadius: 85 / 2,
-            lineHeight: 80,
-            height: 85,
-            fontSize: 40,
+            color: 'purple',
+            fontFamily: 'Nunito',
+            fontSize: 20,
             textAlign: 'center',
-            width: 85,
         },
     })

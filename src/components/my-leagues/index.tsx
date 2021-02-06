@@ -1,56 +1,32 @@
-import React, { Fragment } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Entypo from 'react-native-vector-icons/Entypo'
 
 import { ButtonText } from '../../ui-components/button'
-import { Container } from '../../ui-components/containers'
 
 interface LeagueState {
     name?: string
     id?: string
 }
 
-const LeagueContainer = styled.View`
-    display: flex;
-    align-items: center;
-`
-
-const LeagueItem = styled.View`
-    background-color: #fff;
-    align-self: center;
-`
-
 export const MyLeagues = ({ navigation, theme }: any) => {
     const userLeagues = useSelector((store: { userLeagues: any }) => store.userLeagues)
 
     return (
         <View style={{ backgroundColor: theme.background.primary }}>
-            <Container style={{ marginTop: 100 }}>
-                <Text
-                    style={{
-                        alignSelf: 'center',
-                        color: theme.text.primary,
-                        fontSize: theme.text.heading,
-                        fontWeight: '700',
-                        marginBottom: 20,
-                    }}
-                >
-                    My Leagues
-                </Text>
-                <LeagueContainer>
+            <View style={{ paddingTop: 50 }}>
+                <View style={{ alignItems: 'center' }}>
                     {userLeagues.loading ? (
                         <ActivityIndicator size="large" color={theme.spinner.primary} />
                     ) : userLeagues.leagues.length ? (
                         userLeagues.leagues.map((league: LeagueState) => (
                             <TouchableOpacity onPress={() => navigation.push('League', { leagueId: league.id })}>
-                                <LeagueItem
+                                <View
                                     key={league.id}
                                     style={{
                                         alignItems: 'center',
                                         backgroundColor: theme.button.backgroundColor,
-                                        display: 'flex',
                                         justifyContent: 'space-between',
                                         flexDirection: 'row',
                                         margin: 10,
@@ -61,7 +37,6 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                                 >
                                     <View
                                         style={{
-                                            display: 'flex',
                                             justifyContent: 'flex-start',
                                         }}
                                     >
@@ -69,6 +44,7 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                                             style={{
                                                 color: theme.text.primary,
                                                 fontSize: theme.text.large,
+                                                fontFamily: 'Nunito',
                                                 fontWeight: '700',
                                             }}
                                         >
@@ -87,24 +63,31 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                                         </View>
                                     </View>
                                     <Entypo name="chevron-small-right" size={30} color={theme.icons.primary} />
-                                </LeagueItem>
+                                </View>
                             </TouchableOpacity>
                         ))
                     ) : (
                         <View>
-                            <LeagueItem>
-                                <Text>You have not entered any public leagues yet</Text>
-                            </LeagueItem>
+                            <Text style={{ fontFamily: 'Nunito' }}>You have not entered any public leagues yet</Text>
                         </View>
                     )}
-                </LeagueContainer>
+                </View>
 
-                <View style={{ position: 'absolute', bottom: 250 }}>
+                <View style={{ marginTop: 50 }}>
                     <TouchableOpacity onPress={() => navigation.navigate('Join')}>
-                        <ButtonText style={{ color: theme.text.primary }}>Click here to join a league</ButtonText>
+                        <Text
+                            style={{
+                                color: theme.text.primary,
+                                fontFamily: 'Nunito',
+                                alignSelf: 'center',
+                                fontSize: 15,
+                            }}
+                        >
+                            Tap here to join a league
+                        </Text>
                     </TouchableOpacity>
                 </View>
-            </Container>
+            </View>
         </View>
     )
 }

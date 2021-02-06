@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Platform, Text, TouchableOpacity, TouchableNativeFeedback, Switch, View } from 'react-native'
-import AntIcon from 'react-native-vector-icons/AntDesign'
+import { Image, Platform, Text, TouchableOpacity, TouchableNativeFeedback, Switch, View } from 'react-native'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
-import LinearGradient from 'react-native-linear-gradient'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { Container } from 'src/ui-components/containers'
 import { signUserOut } from 'src/redux/reducer/leagues'
 import { setTheme } from 'src/redux/reducer/theme'
 import { styles } from './styles'
@@ -48,10 +45,6 @@ export const Account = ({ navigation, theme }: any) => {
         }
     }
 
-    const closeModalHelper = () => {
-        navigation.goBack()
-    }
-
     const resetPasswordHelper = () => {
         navigation.navigate('Home', { screen: 'Reset Password', resetPassword: true })
     }
@@ -67,45 +60,44 @@ export const Account = ({ navigation, theme }: any) => {
     }
 
     return (
-        <View style={{ backgroundColor: theme.background.primary }}>
-            <LinearGradient
-                colors={['#a103fc', '#5055b3']}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                style={styles(theme).topSection}
-            >
-                <View>
-                    <Text style={styles(theme).username}>
-                        {user.name.split('')[0]}
-                        {user.surname.split('')[0]}
+        <View style={{ alignSelf: 'center', marginTop: 25 }}>
+            <Text style={{ color: 'purple', marginLeft: 10 }}>Name</Text>
+            <View style={styles(theme).section}>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles(theme).text}>
+                        {user.name + ''} {user.surname}
                     </Text>
                 </View>
-                <TouchableOpacity onPressIn={() => closeModalHelper()}>
-                    <AntIcon
-                        name="close"
-                        color={theme.text.inverse}
-                        size={30}
-                        style={{ position: 'absolute', right: 30, top: -150 }}
-                    />
-                </TouchableOpacity>
-            </LinearGradient>
-            <Text style={styles(theme).heading}> Your Account </Text>
-            <Container>
+            </View>
+            <View style={{ flex: 1 }}>
+                <Text style={{ color: 'purple', marginLeft: 10 }}>Security</Text>
                 <TouchableOpacity onPress={() => updateEmailHelper()}>
                     <View style={styles(theme).section}>
-                        <Text style={styles(theme).text}>Update Email</Text>
-                        <MaterialCommIcon name="email-edit-outline" size={iconSize} color={theme.icons.primary} />
+                        <View style={{ flexDirection: 'row' }}>
+                            <MaterialCommIcon name="email-edit-outline" size={iconSize} color={'grey'} />
+                            <Text style={[styles(theme).text, { marginLeft: 10 }]}>Update Email</Text>
+                        </View>
+                        <AntDesign name="right" size={iconSize * 0.75} color={'grey'} />
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => resetPasswordHelper()}>
                     <View style={styles(theme).section}>
-                        <Text style={styles(theme).text}>Reset Password</Text>
-                        <MaterialCommIcon name="lock-outline" size={iconSize} color={theme.icons.primary} />
+                        <View style={{ flexDirection: 'row' }}>
+                            <MaterialCommIcon name="lock-outline" size={iconSize} color={'grey'} />
+                            <Text style={[styles(theme).text, { marginLeft: 10 }]}>Reset Password</Text>
+                        </View>
+                        <AntDesign name="right" size={iconSize * 0.75} color={'grey'} />
                     </View>
                 </TouchableOpacity>
 
                 <View style={styles(theme).section}>
-                    <Text style={styles(theme).text}>Authenticate with FaceID</Text>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            source={require('./face-recognition.png')}
+                            style={{ width: iconSize, height: iconSize }}
+                        />
+                        <Text style={[styles(theme).text, { marginLeft: 10 }]}>Authenticate with FaceID</Text>
+                    </View>
                     <Switch
                         style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
                         trackColor={{ false: '#767577', true: '#FFCFFF' }}
@@ -116,6 +108,7 @@ export const Account = ({ navigation, theme }: any) => {
                     />
                 </View>
 
+                <Text style={{ color: 'purple', marginLeft: 10 }}>Theme</Text>
                 <View style={styles(theme).section}>
                     <Text style={styles(theme).text}>Dark Mode</Text>
                     <Switch
@@ -127,13 +120,12 @@ export const Account = ({ navigation, theme }: any) => {
                         value={mode === 'dark'}
                     />
                 </View>
-                <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>
-                    <View style={[styles(theme).section, styles(theme).signOut]}>
-                        <Text style={styles(theme).text}>Sign out</Text>
-                        <MaterialIcon name="exit-to-app" size={iconSize} color={theme.icons.primary} />
-                    </View>
-                </TouchableNativeFeedback>
-            </Container>
+            </View>
+            <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>
+                <Text style={[styles(theme).text, { color: 'red', textAlign: 'center', marginBottom: 50 }]}>
+                    Sign out
+                </Text>
+            </TouchableNativeFeedback>
         </View>
     )
 }

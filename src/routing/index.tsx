@@ -32,23 +32,24 @@ import {
 } from 'src/utils/canLoginWithFaceId'
 import { setTheme } from 'src/redux/reducer/theme'
 import { Host } from 'react-native-portalize'
+import AntIcon from 'react-native-vector-icons/AntDesign'
 
 const Tab = createBottomTabNavigator()
 const Stack = createStackNavigator()
 
-const getHeaderTitle = (route) => {
-    const routeName = getFocusedRouteNameFromRoute(route) ?? 'Leagues'
-    switch (routeName) {
-        case 'Create':
-            return 'Create League'
-        case 'Join':
-            return 'Join League'
-        case 'Home':
-            return 'Home'
-        case 'Leagues':
-            return 'Leagues'
-    }
-}
+// const getHeaderTitle = (route) => {
+//     const routeName = getFocusedRouteNameFromRoute(route) ?? 'Leagues'
+//     switch (routeName) {
+//         case 'Create':
+//             return 'Create League'
+//         case 'Join':
+//             return 'Join League'
+//         case 'Home':
+//             return 'Home'
+//         case 'Leagues':
+//             return 'Leagues'
+//     }
+// }
 
 const AuthStack = ({ theme }) => (
     <Stack.Navigator
@@ -124,10 +125,12 @@ const CreateStack = ({ isSignedIn, theme }: any) => (
 
 const ModalStacks = ({ theme }) => (
     <Stack.Navigator
-        headerMode="none"
         screenOptions={{
+            headerTitle: 'Settings',
+            headerBackImage: () => <AntIcon name="close" color={'#000'} size={20} style={{ marginLeft: 20 }} />,
+            headerBackTitleVisible: false,
             animationEnabled: true,
-            cardStyle: { backgroundColor: '#212020' },
+            cardStyle: { backgroundColor: '#fff' },
         }}
         mode="modal"
     >
@@ -236,6 +239,7 @@ export const Routing = () => {
     const userFromRedux = useSelector((store: { user: any }) => store.user)
     const mode = useSelector((store: { theme: any }) => store.theme)
     const theme = mode === 'dark' ? DARK_THEME : LIGHT_THEME
+    console.disableYellowBox = true
 
     useEffect(() => {
         async function getUser() {
@@ -336,18 +340,7 @@ export const Routing = () => {
                     <Stack.Screen
                         name="Home"
                         options={({ route }) => ({
-                            //         headerTitle: getHeaderTitle(route),
                             headerShown: false,
-                            //             getHeaderTitle(route) === 'Leagues' || getHeaderTitle(route) === 'Home' ? false : true,
-                            //         headerStyle: {
-                            //             elevation: 5,
-                            //             shadowOpacity: 0,
-                            //             backgroundColor: theme.background.primary,
-                            //         },
-                            //         headerTitleStyle: {
-                            //             color: theme.headings.primary,
-                            //             fontSize: theme.text.xlarge,
-                            //         },
                         })}
                     >
                         {(props: any) => <TabNavigation theme={theme} user={userFromRedux} />}

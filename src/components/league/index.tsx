@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { ScrollView, StyleSheet, RefreshControl, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, RefreshControl, Platform, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import LinearGradient from 'react-native-linear-gradient'
 
@@ -15,6 +15,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
 import { Fixtures } from 'src/components/fixtures'
+import { PreviousGames } from 'src/components/league/previous'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
 interface LeagueData {
     games: {}
 }
@@ -28,8 +31,9 @@ export const League = ({ leagueId, theme }: string) => {
     const league = useSelector((store: { league: any }) => store.league)
     const [flip, setFlip] = useState(false)
     const fixturesRef = useRef<Modalize>(null)
+    const previousGamesRef = useRef<Modalize>(null)
 
-    const pullLatestLeagueData = async () => {
+    const pullLatestLeagueData = useCallback(async () => {
         const leagueData: LeagueData = await pullLeagueData({ leagueId })
         const { games }: any = leagueData
         const gamesConvertedToArray = Object.values(games)
@@ -49,7 +53,7 @@ export const League = ({ leagueId, theme }: string) => {
         } else {
             setLoaded('no-league-found')
         }
-    }
+    }, [currentUser.id, dispatch, leagueId])
 
     useEffect(() => {
         async function fetchFixtures() {
@@ -61,7 +65,7 @@ export const League = ({ leagueId, theme }: string) => {
 
     useEffect(() => {
         pullLatestLeagueData()
-    }, [leagueId, pullLatestLeagueData])
+    }, [])
 
     const wait = (timeout: any) => {
         return new Promise((resolve) => {
@@ -77,10 +81,15 @@ export const League = ({ leagueId, theme }: string) => {
         })
     }, [pullLatestLeagueData])
 
-    //<PreviousGames games={Object.values(league.games).filter((game: any) => game.complete)} theme={theme} />
     const onOpen = () => {
         fixturesRef.current?.open()
     }
+
+    const showPreviousGames = () => {
+        previousGamesRef.current?.open()
+    }
+
+    const { bottom } = useSafeAreaInsets()
 
     return (
         <>
@@ -88,33 +97,14 @@ export const League = ({ leagueId, theme }: string) => {
                 colors={['#a103fc', '#0009bf']}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 0 }}
-                style={{ borderBottomLeftRadius: 25, borderBottomRightRadius: 25, height: 450 }}
+                style={styles(theme).linearGrad}
             >
                 <View style={styles(theme).leagueNameAndImage}>
                     <Text style={styles(theme).mainheading}>{league.name}</Text>
                 </View>
             </LinearGradient>
-            <View
-                style={{
-                    backgroundColor: theme.background.primary,
-                    height: '35%',
-                }}
-            >
-                <FlipCard
-                    friction={6}
-                    clickable={false}
-                    flip={flip}
-                    style={{
-                        //theme.background.primary
-                        backgroundColor: theme.background.primary,
-                        shadowOffset: { width: 0, height: 1 },
-                        shadowColor: '#ddd',
-                        shadowOpacity: 1,
-                        borderRadius: 20,
-                        margin: 20,
-                        marginTop: -270,
-                    }}
-                >
+            <View style={styles(theme).flipContainer}>
+                <FlipCard friction={6} clickable={false} flip={flip} style={styles(theme).flipCardContainer}>
                     <ScrollView
                         refreshControl={
                             <RefreshControl
@@ -129,16 +119,16 @@ export const League = ({ leagueId, theme }: string) => {
                         <CurrentGame loaded={loaded} theme={theme} flip={flip} setFlip={setFlip} />
                     </ScrollView>
 
-                    <View>
+                    <View style={{ minHeight: 250 }}>
                         <View style={styles(theme).topContainer}>
-                            <TouchableOpacity onPress={() => setFlip(!flip)}>
-                                <View style={styles(theme).ctaContainer}>
-                                    <Text>Back</Text>
-                                </View>
-                            </TouchableOpacity>
                             <TouchableOpacity onPress={onOpen}>
                                 <View style={styles(theme).ctaContainer}>
                                     <Text>Show fixtures</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setFlip(!flip)}>
+                                <View style={styles(theme).ctaContainer}>
+                                    <Text>Show game</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -150,9 +140,22 @@ export const League = ({ leagueId, theme }: string) => {
                         />
                     </View>
                 </FlipCard>
+                <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
+                    <Text style={styles(theme).openModalButton}>View Previous Games</Text>
+                </TouchableOpacity>
+
+                <Text style={styles(theme).openModalButton}>View Leagues Rules</Text>
                 <Portal>
-                    <Modalize ref={fixturesRef} modalHeight={300}>
+                    <Modalize ref={fixturesRef} modalHeight={300} closeOnOverlayTap>
                         <Fixtures fixtures={gameweekFixtures} />
+                    </Modalize>
+                    <Modalize ref={previousGamesRef} adjustToContentHeight childrenStyle={{ marginBottom: 30 }}>
+                        {league && (
+                            <PreviousGames
+                                games={Object.values(league.games).filter((game: any) => game.complete)}
+                                theme={theme}
+                            />
+                        )}
                     </Modalize>
                 </Portal>
             </View>
@@ -163,9 +166,31 @@ export const League = ({ leagueId, theme }: string) => {
 const styles = (theme) =>
     StyleSheet.create({
         leagueNameAndImage: {
-            // alignItems: 'center',
             marginLeft: 20,
             paddingBottom: 15,
+        },
+        flipContainer: {
+            backgroundColor: theme.background.primary,
+            flex: Platform.OS === 'ios' ? 1 : 0.5,
+            justifyContent: 'flex-end',
+        },
+        flipCardContainer: {
+            backgroundColor: theme.background.primary,
+            shadowOffset: { width: 0, height: 1 },
+            shadowColor: '#ddd',
+            shadowOpacity: 1,
+            elevation: 5,
+            borderRadius: 20,
+            margin: 20,
+            position: 'absolute',
+            top: -180,
+            width: '90%',
+        },
+
+        linearGrad: {
+            borderBottomLeftRadius: 25,
+            borderBottomRightRadius: 25,
+            flex: Platform.OS === 'ios' ? 1 : 0.5,
         },
         image: {
             resizeMode: 'contain',
@@ -176,8 +201,7 @@ const styles = (theme) =>
         mainheading: {
             color: theme.headings.inverse,
             fontSize: 30,
-            marginTop: 100,
-            marginBottom: 5,
+            marginTop: Platform.OS === 'ios' ? 100 : 20,
             padding: 10,
         },
         subheading: {
@@ -203,7 +227,20 @@ const styles = (theme) =>
         ctaContainer: {
             borderWidth: 1,
             borderColor: '#ccc',
-            borderRadius: 3,
+            borderRadius: 5,
             padding: 5,
+        },
+        openModalButton: {
+            borderRadius: 5,
+            padding: 5,
+            marginHorizontal: 50,
+            marginBottom: 20,
+            textAlign: 'center',
+            backgroundColor: theme.background.primary,
+            shadowOffset: { width: 0, height: 1 },
+            shadowColor: '#ddd',
+            shadowOpacity: 1,
+            elevation: 5,
+            fontFamily: 'Nunito',
         },
     })
