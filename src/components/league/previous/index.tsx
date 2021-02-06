@@ -4,66 +4,59 @@ import FastImage from 'react-native-fast-image'
 
 import * as Images from 'src/images'
 
+type Player = {
+    hasBeenEliminated: boolean
+    name: string
+    id: string
+    rounds: []
+}
+
+type Game = {
+    complete: boolean
+    currentGameRound: number
+    id: string
+    players: any
+}
+
 interface Props {
     games: []
     theme: {}
 }
 
 export const PreviousGames = ({ games, theme }: Props) => {
-    const [gameIdViewing, setGameIdViewing] = useState(null)
+    const [gameIdViewing, setGameIdViewing] = useState<string | null>(null)
 
     return games.length ? (
         <View style={styles(theme).container}>
-            {games.map((game) => {
-                const player = Object.values(game.players).find((player) => !player.hasBeenEliminated)
-                console.log(game.id, gameIdViewing, 'the game?')
+            {games.map((game: Game) => {
+                const player: Player | undefined = Object.values(game.players).find(
+                    (player: Player) => !player.hasBeenEliminated,
+                )
+
                 return (
                     <TouchableOpacity onPress={() => setGameIdViewing(game.id)} activeOpacity={0.7}>
                         <View style={styles(theme).previousGamesContainer}>
-                            <View>
+                            <View style={styles(theme).topRow}>
                                 <View>
                                     <Text style={styles(theme).playerNameText}>{player.name}</Text>
                                     <Text style={styles(theme).winnerText}>Winner</Text>
-                                    {game.id !== gameIdViewing && (
-                                        <View style={{ flexDirection: 'row' }}>
-                                            {player.rounds.map((playa) => (
-                                                <>
-                                                    <FastImage
-                                                        source={
-                                                            Images[playa.choice.value.replace(/\s/g, '').toLowerCase()]
-                                                        }
-                                                        style={{ width: 20, height: 20, marginRight: 5 }}
-                                                    />
-                                                </>
-                                            ))}
-                                        </View>
-                                    )}
                                 </View>
-                                <View
-                                    style={{
-                                        flexDirection: 'column',
-                                        display: game.id === gameIdViewing ? 'flex' : 'none',
-                                    }}
-                                >
-                                    {Object.values(game.players).map((player) => {
+
+                                <View>
+                                    <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
+                                    <Text style={styles(theme).correctText}>Correct</Text>
+                                </View>
+                            </View>
+                            <View>
+                                <View style={{ display: game.id === gameIdViewing ? 'flex' : 'none' }}>
+                                    {Object.values(game.players).map((player: Player) => {
                                         return (
-                                            <View
-                                                style={{
-                                                    flexDirection: 'column',
-                                                    marginVertical: 10,
-                                                }}
-                                            >
+                                            <View style={styles(theme).individualPlayerRounds}>
                                                 <Text>{player.name}</Text>
-                                                <View style={{ flexDirection: 'row' }}>
+                                                <View style={styles(theme).playerContainer}>
                                                     {player.rounds.map((round) => {
                                                         return (
-                                                            <View
-                                                                style={{
-                                                                    flexDirection: 'row',
-                                                                    marginVertical: 5,
-                                                                    marginRight: 10,
-                                                                }}
-                                                            >
+                                                            <View style={styles(theme).game}>
                                                                 <FastImage
                                                                     source={
                                                                         Images[
@@ -72,11 +65,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                                                                 .toLowerCase()
                                                                         ]
                                                                     }
-                                                                    style={{
-                                                                        width: 20,
-                                                                        height: 20,
-                                                                        marginRight: 5,
-                                                                    }}
+                                                                    style={styles(theme).userChoiceImage}
                                                                 />
                                                                 <Text>{round.choice.goals}</Text>
                                                                 <Text>-</Text>
@@ -89,7 +78,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                                                                 .toLowerCase()
                                                                         ]
                                                                     }
-                                                                    style={{ width: 20, height: 20, marginLeft: 5 }}
+                                                                    style={styles(theme).userOpponentImage}
                                                                 />
                                                             </View>
                                                         )
@@ -100,12 +89,6 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                     })}
                                 </View>
                             </View>
-                            {game.id !== gameIdViewing && (
-                                <View>
-                                    <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
-                                    <Text style={styles(theme).correctText}>Correct</Text>
-                                </View>
-                            )}
                         </View>
                     </TouchableOpacity>
                 )
@@ -120,10 +103,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
 
 const styles = (theme: any) =>
     StyleSheet.create({
-        container: {
-            alignSelf: 'center',
-            width: '100%',
-        },
+        container: {},
         amountCorrectText: {
             color: theme.text.primary,
             fontSize: theme.text.xlarge,
@@ -145,12 +125,39 @@ const styles = (theme: any) =>
             padding: 10,
             margin: 10,
             display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
             justifyContent: 'space-between',
+        },
+        playerContainer: {
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+        },
+        individualPlayerRounds: {
+            flexDirection: 'column',
+            marginVertical: 10,
+        },
+        game: {
+            flexDirection: 'row',
+            marginVertical: 5,
+            marginRight: 10,
         },
         winnerText: {
             color: '#aaa',
             marginVertical: 5,
+        },
+        userChoiceImage: {
+            width: 20,
+            height: 20,
+            marginRight: 5,
+        },
+        userOpponentImage: {
+            width: 20,
+            height: 20,
+            marginLeft: 5,
+            opacity: 0.25,
+        },
+        topRow: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
         },
     })
