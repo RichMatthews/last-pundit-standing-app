@@ -3,7 +3,6 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { CurrentRoundView } from 'src/components/league/current-round'
-import { PageNotFound } from '../../404'
 
 export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
@@ -28,10 +27,6 @@ export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
                 theme={theme}
             />
         )
-    }
-
-    if (loaded === 'no-league-found') {
-        return <PageNotFound />
     }
 
     return (
