@@ -29,23 +29,12 @@ export const CurrentRoundView = ({
                 <Text style={styles(theme).currentRoundHeading}>Current Round</Text>
                 <TouchableOpacity onPress={() => setFlip(!flip)}>
                     <View style={styles(theme).selectTeamContainer}>
-                        <Text style={{ fontFamily: 'Nunito' }}>Select team</Text>
+                        <Text style={styles(theme).buttonText}>Select team</Text>
                     </View>
                 </TouchableOpacity>
             </View>
             <ScrollView>
-                <Text
-                    style={{
-                        textAlign: 'center',
-                        backgroundColor: 'purple',
-                        color: '#fff',
-                        paddingVertical: 10,
-                        marginTop: 20,
-                        fontWeight: '700',
-                    }}
-                >
-                    Round closes: {gameweekCloses}
-                </Text>
+                <Text style={styles(theme).infoBanner}>Round closes: {gameweekCloses}</Text>
                 {Object.values(currentGame.players).map((player: any, index: number) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
                         <View key={player.id} style={styles(theme).playerContainer}>
@@ -119,6 +108,15 @@ const styles = (theme) =>
             fontFamily: 'Nunito',
             fontSize: 22,
             fontWeight: '700',
+            color: theme.text.primary,
+        },
+        infoBanner: {
+            textAlign: 'center',
+            backgroundColor: 'purple',
+            color: '#fff',
+            paddingVertical: 10,
+            marginTop: 20,
+            fontWeight: '700',
         },
         image: {
             width: 10,
@@ -149,8 +147,13 @@ const styles = (theme) =>
         },
         selectTeamContainer: {
             borderWidth: 1,
-            borderRadius: 3,
+            borderRadius: 5,
+            borderColor: '#ccc',
             padding: 5,
+        },
+        buttonText: {
+            color: theme.text.primary,
+            fontFamily: 'Nunito',
         },
         topContainer: {
             flexDirection: 'row',

@@ -55,7 +55,7 @@ const AuthStack = ({ theme }) => (
     <Stack.Navigator
         screenOptions={{
             animationEnabled: false,
-            cardStyle: { backgroundColor: '#fff' },
+            cardStyle: { backgroundColor: theme.background.primary },
             headerShown: false,
             headerTitle: '',
         }}
@@ -70,14 +70,22 @@ const Stacks = ({ isSignedIn, theme }: any) => (
     <Stack.Navigator>
         {isSignedIn ? (
             <>
-                <Stack.Screen name="My Leagues">
+                <Stack.Screen
+                    name="My Leagues"
+                    options={{
+                        headerStyle: {
+                            backgroundColor: theme.background.primary,
+                        },
+                        headerTintColor: theme.text.primary,
+                    }}
+                >
                     {(props: any) => <MyLeagues navigation={props.navigation} theme={theme} />}
                 </Stack.Screen>
 
                 <Stack.Screen
                     name="League"
                     options={{
-                        headerTintColor: '#fff',
+                        headerTintColor: theme.text.primary,
                         headerBackTitle: 'Back to leagues',
                         headerShown: false,
                         headerStyle: { backgroundColor: 'transparent', elevation: 0, shadowOpacity: 0 },
@@ -334,7 +342,7 @@ export const Routing = () => {
                     screenOptions={({ route }) => ({
                         animationEnabled: true,
                         headerTitleStyle: {
-                            color: '#000',
+                            color: theme.text.primary,
                             fontSize: 25,
                         },
                     })}

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import {
     ActivityIndicator,
     Keyboard,
@@ -7,18 +7,22 @@ import {
     Text,
     TextInput,
     View,
+    StyleSheet,
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Button, ButtonText } from 'src/ui-components/button'
 import { Container } from 'src/ui-components/containers'
+import { ScreenComponent } from 'src/ui-components/containers/screenComponent'
 import { attemptToJoinLeaugeIfItExists, joinLeagueAndAddLeagueToListOfUserLeagues } from 'src/firebase-helpers'
 import { getLeagues } from 'src/redux/reducer/leagues'
+
 interface JoinLeagueProps {
     currentUserId: string
     navigation: {
         navigate: () => void
     }
+    theme: any
 }
 
 export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps) => {
@@ -74,39 +78,46 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
             <Text>Joining League...</Text>
         </Container>
     ) : (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <Container style={{ backgroundColor: theme.background.primary }}>
-                <Text style={{ color: theme.colors.primaryColor }}>Please enter a pin to join a league</Text>
-                <View>
-                    <View style={{ marginTop: 20, width: 400 }}>
-                        <TextInput
-                            autoFocus={true}
-                            onChange={(e) => setLeaguePin(e.nativeEvent.text)}
-                            placeholder="League pin"
-                            placeholderTextColor={theme.text.primary}
-                            style={{
-                                alignSelf: 'center',
-                                backgroundColor: theme.input.backgroundColor,
-                                borderRadius: 5,
-                                color: theme.text.primary,
-                                fontSize: 15,
-                                marginBottom: 20,
-                                margin: 10,
-                                padding: 10,
-                                width: '100%',
-                            }}
-                        />
-
-                        <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>
-                            <View style={{ display: 'flex', alignSelf: 'flex-start' }}>
-                                <Button disabled={leaguePin === ''}>
-                                    <ButtonText>Join League</ButtonText>
-                                </Button>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+        <ScreenComponent theme={theme}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles(theme).container}>
+                    <Text style={styles(theme).helperText}>Please enter a pin to join a league</Text>
+                    <TextInput
+                        autoFocus={true}
+                        onChange={(e) => setLeaguePin(e.nativeEvent.text)}
+                        placeholder="League pin"
+                        placeholderTextColor={theme.text.primary}
+                        style={styles(theme).textInput}
+                    />
+                    <TouchableOpacity onPress={joinLeague} disabled={leaguePin === ''}>
+                        <Button disabled={leaguePin === ''}>
+                            <ButtonText>Join League</ButtonText>
+                        </Button>
+                    </TouchableOpacity>
                 </View>
-            </Container>
-        </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+        </ScreenComponent>
     )
 }
+
+const styles = (theme: any) =>
+    StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: theme.background.primary,
+            padding: 15,
+        },
+        textInput: {
+            backgroundColor: theme.input.backgroundColor,
+            color: theme.text.primary,
+            borderRadius: theme.borders.radius,
+            fontSize: 15,
+            padding: 10,
+            marginBottom: 20,
+            width: '100%',
+        },
+        helperText: {
+            color: theme.text.primary,
+            marginBottom: 20,
+        },
+    })
