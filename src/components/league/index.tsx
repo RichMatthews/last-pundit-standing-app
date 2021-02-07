@@ -94,9 +94,9 @@ export const League = ({ leagueId, theme }: string) => {
     return (
         <>
             <LinearGradient
-                colors={['#a103fc', '#0009bf']}
+                colors={['#fff', 'purple']}
                 start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
+                end={{ x: 0, y: 0 }}
                 style={styles(theme).linearGrad}
             >
                 <View style={styles(theme).leagueNameAndImage}>
