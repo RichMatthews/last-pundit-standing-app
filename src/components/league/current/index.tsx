@@ -19,21 +19,14 @@ export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
 
     if (loaded === 'league-found') {
         return (
-            <View>
-                <View style={styles(theme).subheading}>
-                    {/* <Text style={styles(theme).maintext}>
-                    <Text style={styles(theme).subtext}>Round closes: </Text>
-                    <Text style={{ color: theme.text.primary }}>{currentGameweek.endsReadable}</Text>
-                </Text> */}
-                </View>
-                <CurrentRoundView
-                    listOfExpandedPrevious={listOfExpandedPrevious}
-                    setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                    flip={flip}
-                    setFlip={setFlip}
-                    theme={theme}
-                />
-            </View>
+            <CurrentRoundView
+                gameweekCloses={currentGameweek.endsReadable}
+                listOfExpandedPrevious={listOfExpandedPrevious}
+                setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                flip={flip}
+                setFlip={setFlip}
+                theme={theme}
+            />
         )
     }
 
@@ -59,17 +52,5 @@ const styles = (theme) =>
         loadingText: {
             color: theme.text.primary,
             fontSize: 20,
-        },
-        subheading: {
-            padding: 10,
-        },
-        maintext: {
-            fontSize: theme.text.medium,
-            fontWeight: '700',
-            textAlign: 'center',
-        },
-        subtext: {
-            color: theme.text.primary,
-            fontWeight: '400',
         },
     })

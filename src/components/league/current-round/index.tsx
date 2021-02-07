@@ -13,6 +13,7 @@ interface Props {
 }
 
 export const CurrentRoundView = ({
+    gameweekCloses,
     listOfExpandedPrevious,
     setListOfExpandedPreviousHelper,
     setFlip,
@@ -33,15 +34,26 @@ export const CurrentRoundView = ({
                 </TouchableOpacity>
             </View>
             <ScrollView>
-                {Object.values(currentGame.players)
-                .map((player: any, index: number) => (
+                <Text
+                    style={{
+                        textAlign: 'center',
+                        backgroundColor: 'purple',
+                        color: '#fff',
+                        paddingVertical: 10,
+                        marginTop: 20,
+                        fontWeight: '700',
+                    }}
+                >
+                    Round closes: {gameweekCloses}
+                </Text>
+                {Object.values(currentGame.players).map((player: any, index: number) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
                         <View key={player.id} style={styles(theme).playerContainer}>
                             <View style={styles(theme).playerRow}>
                                 <Text
                                     style={[
                                         styles(theme).playerName,
-                                        { color: player.id === user.id ? theme.tint.active : theme.text.primary },
+                                        { color: player.id === user.id ? 'purple' : theme.text.primary },
                                     ]}
                                 >
                                     {player.name}
@@ -101,6 +113,7 @@ const styles = (theme) =>
             alignSelf: 'center',
             maxHeight: Platform.OS === 'ios' ? 400 : 300,
             width: '100%',
+            paddingTop: 10,
         },
         currentRoundHeading: {
             fontFamily: 'Nunito',
@@ -144,5 +157,14 @@ const styles = (theme) =>
             justifyContent: 'space-between',
             alignItems: 'center',
             marginHorizontal: 15,
+        },
+        maintext: {
+            fontSize: theme.text.medium,
+            fontWeight: '700',
+            textAlign: 'center',
+        },
+        subtext: {
+            color: theme.text.primary,
+            fontWeight: '400',
         },
     })
