@@ -150,7 +150,7 @@ export const League = ({ leagueId, theme }: string) => {
                         <Fixtures fixtures={gameweekFixtures} />
                     </Modalize>
                     <Modalize ref={previousGamesRef} adjustToContentHeight childrenStyle={{ marginBottom: 30 }}>
-                        {league && (
+                        {league && league.games && (
                             <PreviousGames
                                 games={Object.values(league.games).filter((game: any) => game.complete)}
                                 theme={theme}
