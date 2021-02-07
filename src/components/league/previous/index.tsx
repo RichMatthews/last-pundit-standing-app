@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 
@@ -26,6 +26,17 @@ interface Props {
 export const PreviousGames = ({ games, theme }: Props) => {
     const [gameIdViewing, setGameIdViewing] = useState<string | null>(null)
 
+    const setGameIdViewingHelper = useCallback(
+        (gameId) => {
+            if (gameId === gameIdViewing) {
+                setGameIdViewing(null)
+                return
+            }
+            setGameIdViewing(gameId)
+        },
+        [gameIdViewing],
+    )
+
     return games.length ? (
         <View style={styles(theme).container}>
             {games.map((game: Game) => {
@@ -34,7 +45,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
                 )
 
                 return (
-                    <TouchableOpacity onPress={() => setGameIdViewing(game.id)} activeOpacity={0.7}>
+                    <TouchableOpacity onPress={() => setGameIdViewingHelper(game.id)} activeOpacity={0.7}>
                         <View style={styles(theme).previousGamesContainer}>
                             <View style={styles(theme).topRow}>
                                 <View>
