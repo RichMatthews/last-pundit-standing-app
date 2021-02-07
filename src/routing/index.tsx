@@ -127,10 +127,13 @@ const ModalStacks = ({ theme }) => (
     <Stack.Navigator
         screenOptions={{
             headerTitle: 'Settings',
-            headerBackImage: () => <AntIcon name="close" color={'#000'} size={20} style={{ marginLeft: 20 }} />,
+            headerTitleStyle: { color: theme.text.primary },
+            headerBackImage: () => (
+                <AntIcon name="close" color={theme.button.color} size={20} style={{ marginLeft: 20 }} />
+            ),
             headerBackTitleVisible: false,
             animationEnabled: true,
-            cardStyle: { backgroundColor: '#fff' },
+            cardStyle: { backgroundColor: theme.background.primary },
         }}
         mode="modal"
     >

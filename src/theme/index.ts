@@ -3,6 +3,8 @@ const COLOURS = {
     BLACK: '#000',
     PRIMARY_WHITE: '#f7f7f7',
     PRIMARY_BLACK: '#1d1d1d',
+    // TODO: change to #
+    ACCENT: 'purple',
 }
 
 const DEFAULT_THEME = {
@@ -31,6 +33,7 @@ export const DARK_THEME = {
     },
     button: {
         backgroundColor: COLOURS.PRIMARY_BLACK,
+        color: COLOURS.PRIMARY_WHITE,
     },
     colors: {
         primaryColor: COLOURS.PRIMARY_BLACK,
@@ -38,6 +41,7 @@ export const DARK_THEME = {
     headings: {
         primary: COLOURS.PRIMARY_WHITE,
         inverse: COLOURS.PRIMARY_BLACK,
+        accent: COLOURS.ACCENT,
     },
     icons: {
         primary: COLOURS.PRIMARY_WHITE,
@@ -73,6 +77,7 @@ export const LIGHT_THEME = {
     },
     button: {
         backgroundColor: COLOURS.PRIMARY_WHITE,
+        color: COLOURS.PRIMARY_BLACK,
     },
     colors: {
         primaryColor: COLOURS.PRIMARY_WHITE,
@@ -80,6 +85,7 @@ export const LIGHT_THEME = {
     headings: {
         primary: COLOURS.PRIMARY_BLACK,
         inverse: COLOURS.PRIMARY_WHITE,
+        accent: COLOURS.ACCENT,
     },
     icons: {
         primary: COLOURS.PRIMARY_BLACK,

@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { Image, Platform, Text, TouchableOpacity, TouchableNativeFeedback, Switch, View } from 'react-native'
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import {
+    Dimensions,
+    Image,
+    Platform,
+    Text,
+    TouchableOpacity,
+    TouchableNativeFeedback,
+    View,
+    StyleSheet,
+} from 'react-native'
 import MaterialCommIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { signUserOut } from 'src/redux/reducer/leagues'
 import { setTheme } from 'src/redux/reducer/theme'
-import { styles } from './styles'
 import { checkFaceIDEnabled, turnOnFaceIDAuthentication } from 'src/utils/canLoginWithFaceId'
-const iconSize = Platform.OS === 'ios' ? 20 : 20
+import { SettingsRow } from './settingsRow'
+
+const isIos = Platform.OS === 'ios'
+const iconSize = isIos ? 20 : 20
+const width = Dimensions.get('window').width
 
 export const Account = ({ navigation, theme }: any) => {
     const [faceIdActivated, setFaceIdActivated] = useState(false)
@@ -60,72 +71,99 @@ export const Account = ({ navigation, theme }: any) => {
     }
 
     return (
-        <View style={{ alignSelf: 'center', marginTop: 25 }}>
-            <Text style={{ color: 'purple', marginLeft: 10 }}>Name</Text>
-            <View style={styles(theme).section}>
-                <View style={{ flexDirection: 'row' }}>
-                    <Text style={styles(theme).text}>
-                        {user.name + ''} {user.surname}
-                    </Text>
-                </View>
-            </View>
+        <View style={styles(theme).container}>
             <View style={{ flex: 1 }}>
-                <Text style={{ color: 'purple', marginLeft: 10 }}>Security</Text>
-                <TouchableOpacity onPress={() => updateEmailHelper()}>
-                    <View style={styles(theme).section}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <MaterialCommIcon name="email-edit-outline" size={iconSize} color={'grey'} />
-                            <Text style={[styles(theme).text, { marginLeft: 10 }]}>Update Email</Text>
-                        </View>
-                        <AntDesign name="right" size={iconSize * 0.75} color={'grey'} />
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => resetPasswordHelper()}>
-                    <View style={styles(theme).section}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <MaterialCommIcon name="lock-outline" size={iconSize} color={'grey'} />
-                            <Text style={[styles(theme).text, { marginLeft: 10 }]}>Reset Password</Text>
-                        </View>
-                        <AntDesign name="right" size={iconSize * 0.75} color={'grey'} />
-                    </View>
-                </TouchableOpacity>
-
+                <Text style={styles(theme).heading}>Name</Text>
                 <View style={styles(theme).section}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Image
-                            source={require('./face-recognition.png')}
-                            style={{ width: iconSize, height: iconSize }}
+                    <SettingsRow text={`${user.name} ${user.surname}`} theme={theme} />
+                </View>
+                <Text style={styles(theme).heading}>Security</Text>
+                <View style={styles(theme).section}>
+                    <TouchableOpacity onPress={() => updateEmailHelper()}>
+                        <SettingsRow
+                            text="Update Email"
+                            theme={theme}
+                            icon={
+                                <MaterialCommIcon
+                                    name="email-edit-outline"
+                                    size={iconSize}
+                                    color={styles(theme).icon.color}
+                                    style={styles(theme).icon}
+                                />
+                            }
+                            rightArrow
                         />
-                        <Text style={[styles(theme).text, { marginLeft: 10 }]}>Authenticate with FaceID</Text>
-                    </View>
-                    <Switch
-                        style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
-                        trackColor={{ false: '#767577', true: '#FFCFFF' }}
-                        thumbColor={faceIdActivated ? '#a103fc' : '#f4f3f4'}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={() => toggleFaceIdActivated(!faceIdActivated)}
-                        value={faceIdActivated}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => resetPasswordHelper()}>
+                        <SettingsRow
+                            text="Reset Password"
+                            theme={theme}
+                            icon={
+                                <MaterialCommIcon
+                                    name="lock-outline"
+                                    size={iconSize}
+                                    color={styles(theme).icon.color}
+                                    style={styles(theme).icon}
+                                />
+                            }
+                            rightArrow
+                        />
+                    </TouchableOpacity>
+                    <SettingsRow
+                        text="Authenticate with FaceID"
+                        theme={theme}
+                        icon={
+                            <Image
+                                source={require('./face-recognition.png')}
+                                style={[styles(theme).icon, { width: iconSize, height: iconSize }]}
+                            />
+                        }
+                        togglePress={() => toggleFaceIdActivated(!faceIdActivated)}
+                        toggleValue={faceIdActivated}
                     />
                 </View>
-
-                <Text style={{ color: 'purple', marginLeft: 10 }}>Theme</Text>
+                <Text style={styles(theme).heading}>Theme</Text>
                 <View style={styles(theme).section}>
-                    <Text style={styles(theme).text}>Dark Mode</Text>
-                    <Switch
-                        style={{ transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }] }}
-                        trackColor={{ false: 'red', true: '#FFCFFF' }}
-                        thumbColor={mode ? '#a103fc' : '#f4f3f4'}
-                        ios_backgroundColor="#3e3e3e"
-                        onValueChange={setModeAndAppendToStorage}
-                        value={mode === 'dark'}
+                    <SettingsRow
+                        text="Dark Mode"
+                        theme={theme}
+                        togglePress={setModeAndAppendToStorage}
+                        toggleValue={mode === 'dark'}
                     />
                 </View>
             </View>
             <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>
-                <Text style={[styles(theme).text, { color: 'red', textAlign: 'center', marginBottom: 50 }]}>
-                    Sign out
-                </Text>
+                <Text style={styles(theme).signOut}>Sign out</Text>
             </TouchableNativeFeedback>
         </View>
     )
 }
+
+const styles = (theme: any) =>
+    StyleSheet.create({
+        container: {
+            flex: 1,
+            alignSelf: 'center',
+            marginTop: 25,
+            backgroundColor: theme.background.primary,
+        },
+        heading: {
+            color: theme.headings.accent,
+        },
+        icon: {
+            color: theme.icons.primary,
+            marginRight: 10,
+            tintColor: theme.icons.primary,
+        },
+        section: {
+            flexDirection: 'column',
+            padding: 10,
+            width: width * 0.9,
+        },
+        signOut: {
+            color: 'red',
+            textAlign: 'center',
+            marginBottom: 50,
+            fontSize: isIos ? 18 : 15,
+        },
+    })
