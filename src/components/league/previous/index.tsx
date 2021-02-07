@@ -1,8 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import FastImage from 'react-native-fast-image'
-
-import * as Images from 'src/images'
+import { Results } from './results'
 
 type Player = {
     hasBeenEliminated: boolean
@@ -64,37 +62,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                         return (
                                             <View style={styles(theme).individualPlayerRounds}>
                                                 <Text>{player.name}</Text>
-                                                <View style={styles(theme).playerContainer}>
-                                                    {player.rounds.map((round) => {
-                                                        return (
-                                                            <View style={styles(theme).game}>
-                                                                <FastImage
-                                                                    source={
-                                                                        Images[
-                                                                            round.choice.value
-                                                                                .replace(/\s/g, '')
-                                                                                .toLowerCase()
-                                                                        ]
-                                                                    }
-                                                                    style={styles(theme).userChoiceImage}
-                                                                />
-                                                                <Text>{round.choice.goals}</Text>
-                                                                <Text>-</Text>
-                                                                <Text>{round.choice.opponent.goals}</Text>
-                                                                <FastImage
-                                                                    source={
-                                                                        Images[
-                                                                            round.choice.opponent.name
-                                                                                .replace(/\s/g, '')
-                                                                                .toLowerCase()
-                                                                        ]
-                                                                    }
-                                                                    style={styles(theme).userOpponentImage}
-                                                                />
-                                                            </View>
-                                                        )
-                                                    })}
-                                                </View>
+                                                <Results player={player} theme={theme} />
                                             </View>
                                         )
                                     })}
@@ -138,7 +106,7 @@ const styles = (theme: any) =>
             display: 'flex',
             justifyContent: 'space-between',
         },
-        playerContainer: {
+        playerResultsContainer: {
             flexDirection: 'row',
             flexWrap: 'wrap',
         },
@@ -164,7 +132,7 @@ const styles = (theme: any) =>
             width: 20,
             height: 20,
             marginLeft: 5,
-            opacity: 0.25,
+            // opacity: 0.25,
         },
         topRow: {
             flexDirection: 'row',
