@@ -53,9 +53,9 @@ export const CurrentRoundView = ({
                                         isCurrentLoggedInPlayer={player.id === user.id}
                                         player={player}
                                     />
-
                                     {listOfExpandedPrevious.includes(index) ? (
                                         <FastImage
+                                            // Guessing one of these should be an up arrow?
                                             source={require('src/images/other/down-arrow.png')}
                                             style={styles(theme).image}
                                         />
