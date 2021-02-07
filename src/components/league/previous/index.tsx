@@ -1,7 +1,22 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
+
 import * as Images from 'src/images'
+
+type Player = {
+    hasBeenEliminated: boolean
+    name: string
+    id: string
+    rounds: []
+}
+
+type Game = {
+    complete: boolean
+    currentGameRound: number
+    id: string
+    players: any
+}
 
 interface Props {
     games: []
@@ -9,32 +24,73 @@ interface Props {
 }
 
 export const PreviousGames = ({ games, theme }: Props) => {
+    const [gameIdViewing, setGameIdViewing] = useState<string | null>(null)
+
     return games.length ? (
         <View style={styles(theme).container}>
-            {games.map((game) => {
-                const player = Object.values(game.players).find((player) => !player.hasBeenEliminated)
+            {games.map((game: Game) => {
+                const player: Player | undefined = Object.values(game.players).find(
+                    (player: Player) => !player.hasBeenEliminated,
+                )
+
                 return (
-                    <View style={styles(theme).previousGamesContainer}>
-                        <View>
-                            <Text style={styles(theme).playerNameText}>{player.name}</Text>
-                            <Text style={styles(theme).winnerText}>Winner</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                {player.rounds.map((playa) => (
-                                    <>
-                                        {console.log(playa, 'p')}
-                                        <FastImage
-                                            source={Images[playa.choice.value.replace(/\s/g, '').toLowerCase()]}
-                                            style={{ width: 20, height: 20, marginRight: 5 }}
-                                        />
-                                    </>
-                                ))}
+                    <TouchableOpacity onPress={() => setGameIdViewing(game.id)} activeOpacity={0.7}>
+                        <View style={styles(theme).previousGamesContainer}>
+                            <View style={styles(theme).topRow}>
+                                <View>
+                                    <Text style={styles(theme).playerNameText}>{player.name}</Text>
+                                    <Text style={styles(theme).winnerText}>Winner</Text>
+                                </View>
+
+                                <View>
+                                    <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
+                                    <Text style={styles(theme).correctText}>Correct</Text>
+                                </View>
+                            </View>
+                            <View>
+                                <View style={{ display: game.id === gameIdViewing ? 'flex' : 'none' }}>
+                                    {Object.values(game.players).map((player: Player) => {
+                                        return (
+                                            <View style={styles(theme).individualPlayerRounds}>
+                                                <Text>{player.name}</Text>
+                                                <View style={styles(theme).playerContainer}>
+                                                    {player.rounds.map((round) => {
+                                                        return (
+                                                            <View style={styles(theme).game}>
+                                                                <FastImage
+                                                                    source={
+                                                                        Images[
+                                                                            round.choice.value
+                                                                                .replace(/\s/g, '')
+                                                                                .toLowerCase()
+                                                                        ]
+                                                                    }
+                                                                    style={styles(theme).userChoiceImage}
+                                                                />
+                                                                <Text>{round.choice.goals}</Text>
+                                                                <Text>-</Text>
+                                                                <Text>{round.choice.opponent.goals}</Text>
+                                                                <FastImage
+                                                                    source={
+                                                                        Images[
+                                                                            round.choice.opponent.name
+                                                                                .replace(/\s/g, '')
+                                                                                .toLowerCase()
+                                                                        ]
+                                                                    }
+                                                                    style={styles(theme).userOpponentImage}
+                                                                />
+                                                            </View>
+                                                        )
+                                                    })}
+                                                </View>
+                                            </View>
+                                        )
+                                    })}
+                                </View>
                             </View>
                         </View>
-                        <View>
-                            <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
-                            <Text style={styles(theme).correctText}>Correct</Text>
-                        </View>
-                    </View>
+                    </TouchableOpacity>
                 )
             })}
         </View>
@@ -47,10 +103,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
 
 const styles = (theme: any) =>
     StyleSheet.create({
-        container: {
-            alignSelf: 'center',
-            width: '100%',
-        },
+        container: {},
         amountCorrectText: {
             color: theme.text.primary,
             fontSize: theme.text.xlarge,
@@ -62,21 +115,49 @@ const styles = (theme: any) =>
             textAlign: 'center',
         },
         playerNameText: {
-            color: theme.text.primary,
+            color: 'purple',
             fontSize: theme.text.large,
         },
         previousGamesContainer: {
-            backgroundColor: theme.background.primary,
+            borderBottomWidth: 0.5,
+            borderBottomColor: 'purple',
             borderRadius: 5,
             padding: 10,
             margin: 10,
             display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
             justifyContent: 'space-between',
+        },
+        playerContainer: {
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+        },
+        individualPlayerRounds: {
+            flexDirection: 'column',
+            marginVertical: 10,
+        },
+        game: {
+            flexDirection: 'row',
+            marginVertical: 5,
+            marginRight: 10,
         },
         winnerText: {
             color: '#aaa',
             marginVertical: 5,
+        },
+        userChoiceImage: {
+            width: 20,
+            height: 20,
+            marginRight: 5,
+        },
+        userOpponentImage: {
+            width: 20,
+            height: 20,
+            marginLeft: 5,
+            opacity: 0.25,
+        },
+        topRow: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
         },
     })
