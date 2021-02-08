@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import {
     ActivityIndicator,
     Alert,
-    Dimensions,
+    StyleSheet,
     Keyboard,
     Text,
     TextInput,
@@ -11,37 +11,14 @@ import {
     View,
 } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import styled from 'styled-components'
 import uid from 'uid'
 
 import { Button, ButtonText } from 'src/ui-components/button'
+import { ScreenComponent } from 'src/ui-components/containers/screenComponent'
 import { Container } from 'src/ui-components/containers'
 import { getLeagueCreatorInformation } from 'src/firebase-helpers'
 import { firebaseApp } from 'src/config.js'
 import { getLeagues } from 'src/redux/reducer/leagues'
-
-interface HeadingStyled {
-    amount: boolean
-}
-
-const LeagueAmountValue = styled.View<HeadingStyled>`
-    align-items: center;
-    background: ${({ amount }) => (amount ? '#ccc' : 'transparent')};
-    border-width: 1px;
-    border-color: #ccc;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    height: 50px;
-    width: 70px;
-`
-
-const EntryFeeContainer = styled.View`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 350px;
-`
 
 export const CreateLeague = ({ navigation, theme }: any) => {
     const [privateLeague, setPrivateLeague] = useState(true)
@@ -155,113 +132,46 @@ export const CreateLeague = ({ navigation, theme }: any) => {
             <Text>Creating League...</Text>
         </Container>
     ) : (
-        <View style={{ backgroundColor: theme.background.primary }}>
+        <ScreenComponent theme={theme}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <Container style={{ alignSelf: 'center', width: 400 }}>
+                <View style={styles(theme).container}>
                     {leagueNameTooLong && <Text>League name must be 20 characters or less</Text>}
                     <TextInput
                         autoCorrect={false}
                         onChange={(e) => setLeagueNameHelper(e)}
                         placeholder="League name"
-                        style={{
-                            backgroundColor: '#f7f7f7',
-                            borderRadius: 5,
-                            fontSize: 15,
-                            padding: 10,
-                            margin: 10,
-                            width: '100%',
-                        }}
+                        placeholderTextColor={theme.text.primary}
+                        style={styles(theme).textInput}
                     />
 
-                    <View
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-around',
-                            margin: 10,
-                            width: '100%',
-                        }}
-                    >
+                    <View style={styles(theme).optionsWrapper}>
                         <TouchableOpacity onPress={() => setPrivateLeague(true)}>
-                            <View
-                                style={{
-                                    borderWidth: 0,
-                                    backgroundColor: privateLeague ? 'purple' : '#fff',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: 40,
-                                    height: 30,
-                                    width: 80,
-                                    shadowOpacity: 1,
-                                    shadowRadius: 3,
-                                    shadowColor: '#aaa',
-                                    shadowOffset: { height: 2, width: 0 },
-                                }}
-                            >
-                                <Text style={{ color: !privateLeague ? 'purple' : '#fff' }}>Private</Text>
+                            <View style={styles(theme, privateLeague).optionButton}>
+                                <Text style={styles(theme, privateLeague).optionButtonText}>Private</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => setPrivateLeague(false)}>
-                            <View
-                                style={{
-                                    borderWidth: 0,
-                                    backgroundColor: !privateLeague ? 'purple' : '#fff',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    borderRadius: 40,
-                                    height: 30,
-                                    width: 80,
-                                    shadowOpacity: 1,
-                                    shadowRadius: 3,
-                                    shadowColor: '#aaa',
-                                    shadowOffset: { height: 2, width: 0 },
-                                }}
-                            >
-                                <Text style={{ color: privateLeague ? 'purple' : '#fff' }}>Public</Text>
+                            <View style={styles(theme, !privateLeague).optionButton}>
+                                <Text style={styles(theme, !privateLeague).optionButtonText}>Public</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View>
-                        <View
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                margin: 10,
-                            }}
-                        >
-                            <EntryFeeContainer>
-                                {entryFees.map((fee: { key: number; amount: string }) => (
-                                    <TouchableOpacity onPress={() => setSelectedFee(fee.key)}>
-                                        <LeagueAmountValue
-                                            amount={selectedFee === fee.key}
-                                            key={fee.key}
-                                            style={{
-                                                borderWidth: 0,
-                                                backgroundColor: selectedFee === fee.key ? 'purple' : '#fff',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                textAlign: 'center',
-                                                borderRadius: 40,
-                                                height: 30,
-                                                width: 60,
-                                                shadowOpacity: 1,
-                                                shadowRadius: 3,
-                                                shadowColor: '#aaa',
-                                                shadowOffset: { height: 2, width: 0 },
-                                            }}
-                                        >
-                                            <Text style={{ color: selectedFee === fee.key ? '#fff' : 'purple' }}>
-                                                {fee.amount}
-                                            </Text>
-                                        </LeagueAmountValue>
-                                    </TouchableOpacity>
-                                ))}
-                            </EntryFeeContainer>
-                        </View>
+                    <View style={styles(theme).optionsWrapper}>
+                        {entryFees.map((fee: { key: number; amount: string }) => (
+                            <TouchableOpacity onPress={() => setSelectedFee(fee.key)}>
+                                <View
+                                    key={fee.key}
+                                    style={[
+                                        styles(theme, selectedFee === fee.key).optionButton,
+                                        styles(theme, selectedFee === fee.key).priceOptionButton,
+                                    ]}
+                                >
+                                    <Text style={styles(theme, selectedFee === fee.key).optionButtonText}>
+                                        {fee.amount}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
                     </View>
                     <View>
                         <TouchableOpacity
@@ -274,8 +184,52 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                             </Button>
                         </TouchableOpacity>
                     </View>
-                </Container>
+                </View>
             </TouchableWithoutFeedback>
-        </View>
+        </ScreenComponent>
     )
 }
+
+const styles = (theme: any, active?: boolean) =>
+    StyleSheet.create({
+        container: {
+            backgroundColor: theme.background.primary,
+            padding: 15,
+        },
+        textInput: {
+            backgroundColor: theme.input.backgroundColor,
+            color: theme.text.primary,
+            borderRadius: theme.borders.radius,
+            fontSize: 15,
+            padding: 10,
+            marginBottom: 20,
+            width: '100%',
+        },
+        optionsWrapper: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            width: '100%',
+            marginBottom: 20,
+        },
+        optionButton: {
+            borderWidth: 0,
+            backgroundColor: active ? 'purple' : '#fff',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 40,
+            height: 30,
+            width: 80,
+            shadowOpacity: 1,
+            shadowRadius: 3,
+            shadowColor: '#aaa',
+            shadowOffset: { height: 2, width: 0 },
+        },
+        priceOptionButton: {
+            width: 60,
+        },
+        optionButtonText: {
+            color: active ? '#fff' : 'purple',
+        },
+    })

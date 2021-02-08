@@ -41,7 +41,7 @@ export const DARK_THEME = {
     headings: {
         primary: COLOURS.PRIMARY_WHITE,
         inverse: COLOURS.PRIMARY_BLACK,
-        accent: COLOURS.ACCENT,
+        accent: '#e3a4f5',
     },
     icons: {
         primary: COLOURS.PRIMARY_WHITE,

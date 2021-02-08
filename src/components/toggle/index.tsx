@@ -16,7 +16,7 @@ export const Toggle = ({ value, onValueChange }: ToggleProps) => {
             trackColor={{ false: '#767577', true: mode === 'dark' ? '#767577' : '#FFCFFF' }}
             thumbColor={value ? '#a103fc' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={() => onValueChange()}
+            onValueChange={onValueChange}
             value={value}
         />
     )

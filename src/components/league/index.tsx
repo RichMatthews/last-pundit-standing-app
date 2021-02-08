@@ -123,12 +123,12 @@ export const League = ({ leagueId, theme }: string) => {
                         <View style={styles(theme).topContainer}>
                             <TouchableOpacity onPress={onOpen}>
                                 <View style={styles(theme).ctaContainer}>
-                                    <Text>Show fixtures</Text>
+                                    <Text style={styles(theme).buttonText}>Show fixtures</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => setFlip(!flip)}>
                                 <View style={styles(theme).ctaContainer}>
-                                    <Text>Show game</Text>
+                                    <Text style={styles(theme).buttonText}>Show game</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -186,7 +186,6 @@ const styles = (theme) =>
             top: -180,
             width: '90%',
         },
-
         linearGrad: {
             borderBottomLeftRadius: 25,
             borderBottomRightRadius: 25,
@@ -230,6 +229,10 @@ const styles = (theme) =>
             borderRadius: 5,
             padding: 5,
         },
+        buttonText: {
+            color: theme.text.primary,
+            fontFamily: 'Nunito',
+        },
         openModalButton: {
             borderRadius: 5,
             padding: 5,
@@ -237,6 +240,7 @@ const styles = (theme) =>
             marginBottom: 20,
             textAlign: 'center',
             backgroundColor: theme.background.primary,
+            color: theme.text.primary,
             shadowOffset: { width: 0, height: 1 },
             shadowColor: '#ddd',
             shadowOpacity: 1,
