@@ -1,38 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Image, Text, StyleSheet, TouchableOpacity, View } from 'react-native'
-import styled from 'styled-components'
+import React from 'react'
+import { Text, StyleSheet, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 
 import * as Images from '../../images'
-
-const HomeTeam = styled.View<any>`
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    width: 120px;
-`
-
-const AwayTeam = styled(HomeTeam)`
-    align-items: flex-start;
-`
-
-const LeagueNameAndLeagueTypeImage = styled.View`
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`
-
-const ExpandImage = styled.Image<any>`
-    align-self: center;
-    height: 15px;
-    transform: ${({ expand }: any) => (expand ? 'rotate(180deg)' : 'rotate(0deg)')};
-    width: 15px;
-`
-
 export const Fixtures = React.memo(
     ({ fixtures }) => {
-        console.log('rendering again')
+        console.log('rendering again', fixtures)
         return (
             <View>
                 <Text style={{ fontSize: 17, alignSelf: 'center', fontWeight: '700', marginBottom: 10 }}>
@@ -61,7 +34,6 @@ export const Fixtures = React.memo(
         )
     },
     (prevProps, nextProps) => {
-        console.log(prevProps, nextProps, 'please show the props')
         return true // props are not equal -> update the component)
     },
 )
@@ -73,14 +45,11 @@ const styles = StyleSheet.create({
         margin: 5,
     },
     container: {
-        // backgroundColor: 'yellow',
-        marginTop: 15,
         alignSelf: 'center',
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         flexWrap: 'wrap',
-        height: 200,
         width: 300,
     },
     vs: {

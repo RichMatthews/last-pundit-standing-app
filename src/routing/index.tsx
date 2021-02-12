@@ -190,8 +190,9 @@ const TabNavigation = ({ theme, user }: any) => {
             tabBarOptions={{
                 activeTintColor: theme.tint.active,
                 inactiveTintColor: theme.tint.inactive,
-                labelStyle: { fontSize: 13 },
+                labelStyle: { fontSize: 11 },
                 style: {
+                    borderTopColor: 'transparent',
                     backgroundColor: theme.background.primary,
                 },
             }}

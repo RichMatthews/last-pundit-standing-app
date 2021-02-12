@@ -16,8 +16,6 @@ export const CurrentRoundView = ({
     gameweekCloses,
     listOfExpandedPrevious,
     setListOfExpandedPreviousHelper,
-    setFlip,
-    flip,
     theme,
 }: any) => {
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
@@ -27,11 +25,6 @@ export const CurrentRoundView = ({
         <View style={styles(theme).container}>
             <View style={styles(theme).topContainer}>
                 <Text style={styles(theme).currentRoundHeading}>Current Round</Text>
-                <TouchableOpacity onPress={() => setFlip(!flip)}>
-                    <View style={styles(theme).selectTeamContainer}>
-                        <Text style={styles(theme).buttonText}>Select team</Text>
-                    </View>
-                </TouchableOpacity>
             </View>
             <ScrollView>
                 <Text style={styles(theme).infoBanner}>Round closes: {gameweekCloses}</Text>
@@ -42,7 +35,7 @@ export const CurrentRoundView = ({
                                 <Text
                                     style={[
                                         styles(theme).playerName,
-                                        { color: player.id === user.id ? 'purple' : theme.text.primary },
+                                        { color: player.id === user.id ? '#9f85d4' : theme.text.primary },
                                     ]}
                                 >
                                     {player.name}
@@ -100,19 +93,27 @@ const styles = (theme) =>
     StyleSheet.create({
         container: {
             alignSelf: 'center',
-            maxHeight: Platform.OS === 'ios' ? 400 : 300,
-            width: '100%',
+            backgroundColor: '#fff',
+            borderRadius: 5,
             paddingTop: 10,
+            width: '90%',
+            flexGrow: 1,
+            marginBottom: 20,
+            shadowOpacity: 1,
+            shadowRadius: 2,
+            shadowColor: '#ddd',
+            shadowOffset: { height: 3, width: 3 },
+            elevation: 2,
         },
         currentRoundHeading: {
-            fontFamily: 'Nunito',
+            fontFamily: 'Hind',
             fontSize: 22,
-            fontWeight: '700',
+            fontWeight: '600',
             color: theme.text.primary,
         },
         infoBanner: {
             textAlign: 'center',
-            backgroundColor: 'purple',
+            backgroundColor: '#9f85d4',
             color: '#fff',
             paddingVertical: 10,
             marginTop: 20,
@@ -135,7 +136,7 @@ const styles = (theme) =>
             flexDirection: 'row',
         },
         playerName: {
-            fontFamily: 'Nunito',
+            fontFamily: 'Hind',
             fontSize: theme.text.large,
         },
         playerChosenImageAndDownArrow: {

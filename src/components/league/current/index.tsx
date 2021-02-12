@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { CurrentRoundView } from 'src/components/league/current-round'
 
-export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
+export const CurrentGame = ({ loaded, theme }: any) => {
     const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
@@ -22,8 +22,6 @@ export const CurrentGame = ({ loaded, flip, setFlip, theme }: any) => {
                 gameweekCloses={currentGameweek.endsReadable}
                 listOfExpandedPrevious={listOfExpandedPrevious}
                 setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                flip={flip}
-                setFlip={setFlip}
                 theme={theme}
             />
         )

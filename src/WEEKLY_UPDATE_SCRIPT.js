@@ -21,9 +21,9 @@ const firebaseApp = firebase.initializeApp(PROD_CONFIG)
 
 const CURRENT_GAMEWEEK = {
     fixtures: [
-        { home: { team: 'Burnley', goals: 0 }, away: { team: 'Man City', goals: 2 }, result: 'Man City' },
-        { home: { team: 'Liverpool', goals: 0 }, away: { team: 'Brighton', goals: 1 }, result: 'Brighton' },
-        { home: { team: 'Fulham', goals: 0 }, away: { team: 'Leicester', goals: 2 }, result: 'Leicester' },
+        { home: { team: 'Aston Villa', goals: 1 }, away: { team: 'Arsenal', goals: 0 }, result: 'Aston Villa' },
+        { home: { team: 'Fulham', goals: 0 }, away: { team: 'West Ham', goals: 0 }, result: 'draw' },
+        { home: { team: 'Sheffield United', goals: 1 }, away: { team: 'Chelsea', goals: 2 }, result: 'Chelsea' },
     ],
 }
 

@@ -1,10 +1,11 @@
+const BRAND_PURPLE = '#9f85d4'
 const COLOURS = {
     WHITE: '#fff',
     BLACK: '#000',
     PRIMARY_WHITE: '#f7f7f7',
     PRIMARY_BLACK: '#1d1d1d',
     // TODO: change to #
-    ACCENT: 'purple',
+    ACCENT: BRAND_PURPLE,
 }
 
 const DEFAULT_THEME = {
@@ -41,7 +42,7 @@ export const DARK_THEME = {
     headings: {
         primary: COLOURS.PRIMARY_WHITE,
         inverse: COLOURS.PRIMARY_BLACK,
-        accent: '#e3a4f5',
+        accent: BRAND_PURPLE,
     },
     icons: {
         primary: COLOURS.PRIMARY_WHITE,
@@ -60,7 +61,7 @@ export const DARK_THEME = {
         inverse: COLOURS.PRIMARY_BLACK,
     },
     tint: {
-        active: '#e3a4f5',
+        active: BRAND_PURPLE,
         inactive: COLOURS.PRIMARY_WHITE,
     },
 }
@@ -104,7 +105,7 @@ export const LIGHT_THEME = {
         inverse: COLOURS.PRIMARY_WHITE,
     },
     tint: {
-        active: '#e3a4f5',
-        inactive: COLOURS.PRIMARY_BLACK,
+        active: BRAND_PURPLE,
+        inactive: '#4a4a4a',
     },
 }

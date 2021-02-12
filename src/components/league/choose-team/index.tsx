@@ -1,57 +1,34 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useState, useRef } from 'react'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import FastImage from 'react-native-fast-image'
+import Carousel from 'react-native-snap-carousel'
 
 import * as Images from 'src/images'
-import { Button, ButtonText } from 'src/ui-components/button'
-import { getCurrentGameweekFixtures, updateUserGamweekChoice } from 'src/firebase-helpers'
+import { ButtonText } from 'src/ui-components/button'
+import { updateUserGamweekChoice } from 'src/firebase-helpers'
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
+import { findOpponent } from './utils'
 
 interface Props {
     currentRound: any
     pullLatestLeagueData: () => void
 }
 
-export const ChooseTeam = React.memo(({ flip, setFlip, currentRound, pullLatestLeagueData }: Props) => {
+export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData }: Props) => {
     const [selectedTeam, setSelectedTeam] = useState<string>('')
+    const [activeSlide, setActiveSlide] = useState(0)
+    const refCarousel = useRef()
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const league = useSelector((store: { league: any }) => store.league)
     const user = useSelector((store: { user: any }) => store.user)
-    const findOpponent = async () => {
-        const fixtures = await getCurrentGameweekFixtures()
-        const selectedTeamFixture: any = fixtures.find(
-            (team: { home: string; away: string; result: string }) =>
-                team.home === selectedTeam || team.away === selectedTeam,
-        )
-        const homeTeam = selectedTeamFixture['home']
-        const awayTeam = selectedTeamFixture['away']
-        const selectedTeamPlayingAtHome = homeTeam === selectedTeam
-
-        if (selectedTeamPlayingAtHome) {
-            return {
-                teamPlayingAtHome: true,
-                opponent: {
-                    name: awayTeam,
-                },
-            }
-        } else {
-            return {
-                teamPlayingAtHome: false,
-                opponent: {
-                    name: homeTeam,
-                },
-            }
-        }
-    }
-
-    const setSelectedTeamHelper = (value: string) => {
-        if (value !== '0') {
-            setSelectedTeam(value)
-        }
-    }
+    const teams = calculateTeamsAllowedToPickForCurrentRound({
+        currentGame,
+        currentPlayer,
+        leagueTeams: PREMIER_LEAGUE_TEAMS,
+    })
 
     const submitChoice = () => {
         if (!selectedTeam) {
@@ -76,7 +53,7 @@ export const ChooseTeam = React.memo(({ flip, setFlip, currentRound, pullLatestL
     }
 
     const updateUserGamweekChoiceHelper = async () => {
-        const opponent = await findOpponent()
+        const opponent = await findOpponent(selectedTeam)
         const choice = {
             hasMadeChoice: true,
             ...opponent,
@@ -86,72 +63,91 @@ export const ChooseTeam = React.memo(({ flip, setFlip, currentRound, pullLatestL
 
         await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
         await pullLatestLeagueData()
+    }
 
-        setFlip(!flip)
+    const snapToSelectedItem = useCallback(
+        (index: number) => {
+            if (!teams[index].chosen) {
+                refCarousel?.current.snapToItem(index, true)
+                return
+            }
+            refCarousel?.current.snapToItem(index + 1, true)
+        },
+        [teams],
+    )
+
+    const setActiveSlideAndTeam = useCallback(
+        (index: number) => {
+            if (teams[index].chosen) {
+                // we should alert here
+                return
+            }
+            setActiveSlide(index)
+            setSelectedTeam(teams[index].value)
+        },
+        [teams],
+    )
+
+    const renderItem = ({ item, index }) => {
+        return (
+            <TouchableOpacity onPress={() => snapToSelectedItem(index)}>
+                <FastImage
+                    source={Images[item.value.replace(/\s/g, '').toLowerCase()]}
+                    style={[styles.image, item.value === selectedTeam ? styles.selected : styles.unselected]}
+                />
+            </TouchableOpacity>
+        )
     }
 
     return (
-        <View>
-            <View style={styles(undefined).innerContainer}>
-                {calculateTeamsAllowedToPickForCurrentRound({
-                    currentGame,
-                    currentPlayer,
-                    leagueTeams: PREMIER_LEAGUE_TEAMS,
-                }).map((item: { value: string; label: string; id: number; chosen: boolean }) => {
-                    return item.chosen ? (
-                        <TouchableOpacity onPress={null} activeOpacity={1}>
-                            <View selected={false} style={[styles(undefined).teamLogo]}>
-                                <FastImage
-                                    source={Images[item.value.replace(/\s/g, '').toLowerCase()]}
-                                    style={[styles(undefined).image, styles(undefined).alreadySelectedTeam]}
-                                />
-                            </View>
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity onPress={() => setSelectedTeamHelper(item.value)} activeOpacity={1}>
-                            <View style={styles(item.value === selectedTeam).teamLogo}>
-                                <FastImage
-                                    source={Images[item.value.replace(/\s/g, '').toLowerCase()]}
-                                    style={styles(undefined).image}
-                                />
-                            </View>
-                        </TouchableOpacity>
-                    )
-                })}
-            </View>
-            <View style={styles(undefined).button}>
+        <View style={styles.innerContainer}>
+            <Carousel
+                activeSlideOffset={2}
+                enableMomentum={true}
+                ref={refCarousel}
+                onSnapToItem={(index: number) => setActiveSlideAndTeam(index)}
+                layout={'default'}
+                data={teams}
+                renderItem={renderItem}
+                sliderWidth={250}
+                itemWidth={50}
+            />
+
+            <View style={styles.button}>
                 <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
-                    <Button disabled={selectedTeam === null}>
-                        <ButtonText>Confirm selection</ButtonText>
-                    </Button>
+                    <View style={styles.buttonText}>
+                        <Text>Confirm selection</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
         </View>
     )
 })
 
-const styles = (selected: boolean | undefined) =>
-    StyleSheet.create({
-        alreadySelectedTeam: {
-            opacity: 0.1,
-        },
-        button: {
-            marginTop: 30,
-        },
-        image: {
-            height: 40,
-            width: 40,
-        },
-        innerContainer: {
-            alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-        },
-        teamLogo: {
-            backgroundColor: selected ? '#eee' : 0,
-            borderRadius: selected ? 5 : 0,
-            padding: 5,
-            margin: 10,
-        },
-    })
+const styles = StyleSheet.create({
+    alreadySelectedTeam: {
+        opacity: 0.1,
+    },
+    button: {
+        marginTop: 30,
+    },
+    buttonText: {
+        backgroundColor: '#9f85d4',
+        borderRadius: 5,
+        padding: 10,
+    },
+    image: {
+        height: 50,
+        width: 50,
+    },
+    selected: {
+        opacity: 1,
+    },
+    unselected: {
+        opacity: 0.2,
+    },
+    innerContainer: {
+        flex: 1,
+        alignSelf: 'center',
+    },
+})

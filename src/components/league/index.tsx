@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { ScrollView, StyleSheet, RefreshControl, Platform, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import LinearGradient from 'react-native-linear-gradient'
 
 import { CurrentGame } from 'src/components/league/current'
 import { TeamSelection } from 'src/components/league/team-selection'
@@ -10,7 +9,6 @@ import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { setViewedLeague } from 'src/redux/reducer/league'
-import FlipCard from 'react-native-flip-card'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
@@ -29,9 +27,9 @@ export const League = ({ leagueId, theme }: string) => {
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
     const league = useSelector((store: { league: any }) => store.league)
-    const [flip, setFlip] = useState(false)
     const fixturesRef = useRef<Modalize>(null)
     const previousGamesRef = useRef<Modalize>(null)
+    const teamSelectionRef = useRef<Modalize>(null)
 
     const pullLatestLeagueData = useCallback(async () => {
         const leagueData: LeagueData = await pullLeagueData({ leagueId })
@@ -89,66 +87,52 @@ export const League = ({ leagueId, theme }: string) => {
         previousGamesRef.current?.open()
     }
 
+    const showTeamSelection = () => {
+        teamSelectionRef.current?.open()
+    }
+
     const { bottom } = useSafeAreaInsets()
 
     return (
         <>
-            <LinearGradient
-                colors={['#fff', 'purple']}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 0, y: 0 }}
-                style={styles(theme).linearGrad}
-            >
-                <View style={styles(theme).leagueNameAndImage}>
-                    <Text style={styles(theme).mainheading}>{league.name}</Text>
-                </View>
-            </LinearGradient>
-            <View style={styles(theme).flipContainer}>
-                <FlipCard friction={6} clickable={false} flip={flip} style={styles(theme).flipCardContainer}>
-                    <ScrollView
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                                title="Pull to refresh"
-                                tintColor={theme.text.primary}
-                                titleColor={theme.text.primary}
-                            />
-                        }
-                    >
-                        <CurrentGame loaded={loaded} theme={theme} flip={flip} setFlip={setFlip} />
-                    </ScrollView>
+            <View style={styles(theme).container}>
+                <Text style={styles(theme).mainheading}>{league.name}</Text>
 
-                    <View style={{ minHeight: 250 }}>
-                        <View style={styles(theme).topContainer}>
-                            <TouchableOpacity onPress={onOpen}>
-                                <View style={styles(theme).ctaContainer}>
-                                    <Text style={styles(theme).buttonText}>Show fixtures</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setFlip(!flip)}>
-                                <View style={styles(theme).ctaContainer}>
-                                    <Text style={styles(theme).buttonText}>Show game</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                        <TeamSelection
-                            setFlip={setFlip}
-                            flip={flip}
-                            pullLatestLeagueData={pullLatestLeagueData}
-                            theme={theme}
+                {/* <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                            title="Pull to refresh"
+                            tintColor={theme.text.primary}
+                            titleColor={theme.text.primary}
                         />
-                    </View>
-                </FlipCard>
-                <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
-                    <Text style={styles(theme).openModalButton}>View Previous Games</Text>
-                </TouchableOpacity>
+                    }
+                >
+                </ScrollView> */}
+                <View style={{ flexDirection: 'row', marginBottom: 10, marginLeft: 10 }}>
+                    <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
+                        <View style={styles(theme).openModalButton}>
+                            <Text style={styles(theme).openModalButtonText}>Previous Games</Text>
+                        </View>
+                    </TouchableOpacity>
 
-                <Text style={styles(theme).openModalButton}>View Leagues Rules</Text>
+                    <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
+                        <View style={styles(theme).openModalButton}>
+                            <Text style={styles(theme).openModalButtonText}>Leagues Rules</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={showTeamSelection} activeOpacity={0.7}>
+                        <View style={styles(theme).openModalButton}>
+                            <Text style={styles(theme).openModalButtonText}>Select team</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <CurrentGame loaded={loaded} theme={theme} />
+
                 <Portal>
-                    <Modalize ref={fixturesRef} modalHeight={300} closeOnOverlayTap>
-                        <Fixtures fixtures={gameweekFixtures} />
-                    </Modalize>
+                    <Modalize ref={fixturesRef} modalHeight={300} closeOnOverlayTap></Modalize>
                     <Modalize ref={previousGamesRef} adjustToContentHeight childrenStyle={{ marginBottom: 30 }}>
                         {league && league.games && (
                             <PreviousGames
@@ -156,6 +140,17 @@ export const League = ({ leagueId, theme }: string) => {
                                 theme={theme}
                             />
                         )}
+                    </Modalize>
+                    <Modalize
+                        ref={teamSelectionRef}
+                        scrollViewProps={{
+                            contentContainerStyle: { minHeight: '100%' },
+                        }}
+                    >
+                        <View style={{ flex: 1, justifyContent: 'space-between', margin: 30 }}>
+                            <Fixtures fixtures={gameweekFixtures} />
+                            <TeamSelection pullLatestLeagueData={pullLatestLeagueData} theme={theme} />
+                        </View>
                     </Modalize>
                 </Portal>
             </View>
@@ -165,31 +160,10 @@ export const League = ({ leagueId, theme }: string) => {
 
 const styles = (theme) =>
     StyleSheet.create({
-        leagueNameAndImage: {
-            marginLeft: 20,
-            paddingBottom: 15,
-        },
-        flipContainer: {
-            backgroundColor: theme.background.primary,
-            flex: Platform.OS === 'ios' ? 1 : 0.5,
-            justifyContent: 'flex-end',
-        },
-        flipCardContainer: {
-            backgroundColor: theme.background.primary,
-            shadowOffset: { width: 0, height: 1 },
-            shadowColor: '#ddd',
-            shadowOpacity: 1,
-            elevation: 5,
-            borderRadius: 20,
-            margin: 20,
-            position: 'absolute',
-            top: -180,
-            width: '90%',
-        },
-        linearGrad: {
-            borderBottomLeftRadius: 25,
-            borderBottomRightRadius: 25,
-            flex: Platform.OS === 'ios' ? 1 : 0.5,
+        container: {
+            backgroundColor: '#F2F4F8',
+
+            flex: 1,
         },
         image: {
             resizeMode: 'contain',
@@ -198,15 +172,12 @@ const styles = (theme) =>
             marginBottom: 20,
         },
         mainheading: {
-            color: theme.headings.inverse,
+            color: theme.text.primary,
             fontSize: 30,
-            marginTop: Platform.OS === 'ios' ? 100 : 20,
+            fontWeight: '700',
+            marginTop: Platform.OS === 'ios' ? 50 : 0,
             padding: 10,
-        },
-        subheading: {
-            borderColor: '#ccc',
-            padding: 10,
-            width: '100%',
+            paddingHorizontal: 20,
         },
         maintext: {
             fontSize: 17,
@@ -229,22 +200,22 @@ const styles = (theme) =>
             borderRadius: 5,
             padding: 5,
         },
-        buttonText: {
-            color: theme.text.primary,
-            fontFamily: 'Nunito',
-        },
         openModalButton: {
-            borderRadius: 5,
-            padding: 5,
-            marginHorizontal: 50,
-            marginBottom: 20,
-            textAlign: 'center',
-            backgroundColor: theme.background.primary,
-            color: theme.text.primary,
-            shadowOffset: { width: 0, height: 1 },
-            shadowColor: '#ddd',
+            width: 80,
+            alignItems: 'center',
             shadowOpacity: 1,
-            elevation: 5,
-            fontFamily: 'Nunito',
+            shadowRadius: 2,
+            shadowColor: '#ddd',
+            shadowOffset: { height: 3, width: 3 },
+            backgroundColor: theme.background.primary,
+            borderRadius: 5,
+            elevation: 2,
+            padding: 5,
+            margin: 10,
+        },
+        openModalButtonText: {
+            textAlign: 'center',
+            color: theme.text.primary,
+            fontFamily: 'Hind',
         },
     })

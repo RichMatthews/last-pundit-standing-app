@@ -50,6 +50,18 @@ static void InitializeFlipper(UIApplication *application) {
   InitializeFlipper(application);
 #endif
   
+  for (NSString* family in [UIFont familyNames])
+  {
+      NSLog(@"%@", family);
+
+      for (NSString* name in [UIFont fontNamesForFamilyName: family])
+      {
+          NSLog(@"Family name:  %@", name);
+      }
+  }
+  
+  
+  
   self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
 
 

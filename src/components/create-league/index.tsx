@@ -214,7 +214,7 @@ const styles = (theme: any, active?: boolean) =>
         },
         optionButton: {
             borderWidth: 0,
-            backgroundColor: active ? 'purple' : '#fff',
+            backgroundColor: active ? '#9f85d4' : '#fff',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

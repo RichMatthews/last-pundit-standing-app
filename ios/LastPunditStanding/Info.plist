@@ -89,6 +89,11 @@
 		<string>Nunito-Regular.ttf</string>
 		<string>Nunito-SemiBold.ttf</string>
 		<string>Nunito-SemiBoldItalic.ttf</string>
+		<string>Hind-Bold.ttf</string>
+		<string>Hind-Light.ttf</string>
+		<string>Hind-Medium.ttf</string>
+		<string>Hind-Regular.ttf</string>
+		<string>Hind-SemiBold.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
