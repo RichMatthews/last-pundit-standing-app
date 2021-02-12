@@ -230,6 +230,6 @@ const styles = (theme: any, active?: boolean) =>
             width: 60,
         },
         optionButtonText: {
-            color: active ? '#fff' : 'purple',
+            color: active ? '#fff' : '#9f85d4',
         },
     })

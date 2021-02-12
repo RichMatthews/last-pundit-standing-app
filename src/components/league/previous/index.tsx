@@ -94,12 +94,12 @@ const styles = (theme: any) =>
             textAlign: 'center',
         },
         playerNameText: {
-            color: 'purple',
+            color: '#9f85d4',
             fontSize: theme.text.large,
         },
         previousGamesContainer: {
             borderBottomWidth: 0.5,
-            borderBottomColor: 'purple',
+            borderBottomColor: '#9f85d4',
             borderRadius: 5,
             padding: 10,
             margin: 10,
