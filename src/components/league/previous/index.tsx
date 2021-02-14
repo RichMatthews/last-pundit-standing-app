@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Results } from './results'
 
 type Player = {
@@ -90,11 +90,13 @@ const styles = (theme: any) =>
         },
         correctText: {
             color: theme.text.primary,
-            fontSize: theme.text.xsmall,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontSize: theme.text.small,
             textAlign: 'center',
         },
         playerNameText: {
             color: '#9f85d4',
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: theme.text.large,
         },
         previousGamesContainer: {
@@ -121,7 +123,7 @@ const styles = (theme: any) =>
         },
         winnerText: {
             color: '#aaa',
-            marginVertical: 5,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
         },
         userChoiceImage: {
             width: 20,
@@ -132,7 +134,6 @@ const styles = (theme: any) =>
             width: 20,
             height: 20,
             marginLeft: 5,
-            // opacity: 0.25,
         },
         topRow: {
             flexDirection: 'row',

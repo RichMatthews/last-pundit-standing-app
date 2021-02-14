@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
+import { Platform } from 'react-native'
 import styled from 'styled-components'
 import FastImage from 'react-native-fast-image'
 import { useSelector } from 'react-redux'
@@ -39,26 +39,31 @@ const playerStatus = {
         bgColor: '#F8D7DA',
         color: '#721C25',
         text: 'Eliminated',
+        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
     },
     pending: {
         bgColor: '#FFF3CD',
         color: '#856404',
         text: 'Pending',
+        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
     },
     submitted: {
         bgColor: '#D4EDDA',
         color: '#155725',
         text: ' Submitted',
+        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
     },
     currentPending: {
         bgColor: '#FFF3CD',
         color: '#856404',
         text: 'Awaiting your prediction',
+        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
     },
     champion: {
         bgColor: '#FFF3CD',
         color: '#856404',
         text: 'Champion',
+        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
     },
 }
 

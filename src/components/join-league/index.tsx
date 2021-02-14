@@ -111,7 +111,7 @@ const styles = (theme: any) =>
             backgroundColor: theme.input.backgroundColor,
             color: theme.text.primary,
             borderRadius: theme.borders.radius,
-            fontSize: 15,
+            fontSize: theme.text.medium,
             padding: 10,
             marginBottom: 20,
             width: '100%',

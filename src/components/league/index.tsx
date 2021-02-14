@@ -152,7 +152,7 @@ const styles = (theme) =>
             paddingHorizontal: 20,
         },
         maintext: {
-            fontSize: 17,
+            fontSize: theme.text.large,
             fontWeight: '700',
             textAlign: 'center',
         },
@@ -185,6 +185,6 @@ const styles = (theme) =>
             color: theme.text.primary,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontWeight: '700',
-            fontSize: 13,
+            fontSize: theme.text.small,
         },
     })

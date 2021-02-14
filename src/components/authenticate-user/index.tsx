@@ -17,8 +17,7 @@ import { Container } from 'src/ui-components/containers'
 import * as Keychain from 'react-native-keychain'
 import { useDispatch } from 'react-redux'
 import * as RootNavigation from 'src/root-navigation'
-import LinearGradient from 'react-native-linear-gradient'
-
+import { ScreenComponent } from 'src/ui-components/containers/screenComponent'
 import { ResetPassword } from 'src/components/reset-password'
 import { logUserInToApplication, signUserUpToApplication, writeUserToDatabase } from '../../firebase-helpers'
 import {
@@ -145,15 +144,8 @@ export const AuthenticateUserScreen = ({ theme }) => {
     }
 
     return loaded ? (
-        <Fragment>
-            <LinearGradient
-                colors={['#a103fc', '#5055b3']}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                style={{ height: Platform.OS === 'ios' ? 300 : 100 }}
-            >
-                <Text style={styles(theme).heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
-            </LinearGradient>
+        <ScreenComponent theme={theme}>
+            <Text style={styles(theme).heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <SafeAreaView style={{ backgroundColor: theme.background.primary }}>
                     <Container style={{ marginTop: 50, width: 350, alignSelf: 'center' }}>
@@ -226,7 +218,13 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                                         alignSelf: 'flex-end',
                                                     }}
                                                 >
-                                                    <Text style={{ color: theme.text.primary, fontSize: 12 }}>
+                                                    <Text
+                                                        style={{
+                                                            color: theme.text.primary,
+                                                            fontSize: 12,
+                                                            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+                                                        }}
+                                                    >
                                                         Forgotten password?
                                                     </Text>
                                                 </View>
@@ -234,11 +232,18 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                         </TouchableOpacity>
                                         <View style={{ width: 300 }}>
                                             <TouchableOpacity onPress={logUserIn}>
-                                                <Button>
-                                                    <ButtonText style={{ fontSize: 16 }}>
+                                                <View style={{ borderWidth: 1, borderRadius: 5, padding: 5 }}>
+                                                    <Text
+                                                        style={{
+                                                            color: theme.text.primary,
+                                                            fontSize: 16,
+                                                            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
                                                         {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
-                                                    </ButtonText>
-                                                </Button>
+                                                    </Text>
+                                                </View>
                                             </TouchableOpacity>
                                         </View>
                                         {loginOption === 'signin' && showFaceIDButton && (
@@ -258,7 +263,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                         }}
                                     >
                                         <TouchableOpacity onPress={authenticateUserHelper}>
-                                            <InvertedButton background={theme.button.backgroundColor}>
+                                            <View>
                                                 <Text
                                                     style={{
                                                         color: theme.text.primary,
@@ -270,7 +275,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                                         ? 'HAVE AN ACCOUNT? SIGN IN'
                                                         : 'NO ACCOUNT? SIGN UP'}
                                                 </Text>
-                                            </InvertedButton>
+                                            </View>
                                         </TouchableOpacity>
                                     </View>
                                 </Fragment>
@@ -279,7 +284,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
                     </Container>
                 </SafeAreaView>
             </TouchableWithoutFeedback>
-        </Fragment>
+        </ScreenComponent>
     ) : (
         <Container style={{ backgroundColor: theme.background.primary, paddingTop: 200 }}>
             <ActivityIndicator size="large" color={theme.spinner.primary} />
@@ -290,9 +295,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
 const styles = (theme) =>
     StyleSheet.create({
         auth: {
-            bottom: 300,
             display: 'flex',
-            position: 'absolute',
             alignSelf: 'center',
         },
         authText: {
@@ -300,7 +303,7 @@ const styles = (theme) =>
             textAlign: 'center',
         },
         error: {
-            backgroundColor: theme.button.backgroundColor,
+            backgroundColor: theme.background.primary,
             borderRadius: 5,
             borderWidth: 1,
             borderColor: '#ff0033',
@@ -312,10 +315,10 @@ const styles = (theme) =>
             fontWeight: '700',
         },
         heading: {
-            color: '#fff',
-            position: 'absolute',
-            bottom: 0,
-            padding: 30,
+            color: theme.text.primary,
+            fontSize: 25,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontWeight: '600',
         },
         inputContainer: {
             display: 'flex',
@@ -328,6 +331,7 @@ const styles = (theme) =>
             borderColor: '#ccc',
             color: theme.text.primary,
             fontSize: 15,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             paddingBottom: Platform.OS === 'ios' ? 10 : 0,
             width: 300,
         },

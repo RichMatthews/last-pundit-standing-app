@@ -172,7 +172,7 @@ const styles = (theme) =>
         },
         buttonText: {
             color: theme.text.primary,
-            fontFamily: 'Nunito',
+            fontFamily: 'Hind',
         },
         topContainer: {
             flexDirection: 'row',

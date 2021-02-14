@@ -51,6 +51,7 @@ const styles = (theme: any) =>
         },
         text: {
             color: theme.text.primary,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
             fontSize: isIos ? 18 : 15,
         },
     })
