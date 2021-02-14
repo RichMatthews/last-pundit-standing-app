@@ -46,6 +46,25 @@ export const AuthenticateUserScreen = ({ theme }) => {
         checkIfFaceIDAvailable()
     }, [])
 
+    const {
+        linearGradient,
+        screenWrapper,
+        container,
+        forgottenPasswordWrapper,
+        forgottenPasswordText,
+        loginOptionWrapper,
+        loginOptionText,
+        faceIdWrapper,
+        helperButtonWrapper,
+        helperButtonText,
+        errorWrapper,
+        errorText,
+        heading,
+        inputContainer,
+        input,
+        spinnerWrapper,
+    } = styles(theme)
+
     const saveCredentialsToSecureStorage: any = async () => {
         await Keychain.setInternetCredentials('firebase', email, password)
     }
@@ -150,39 +169,40 @@ export const AuthenticateUserScreen = ({ theme }) => {
                 colors={['#a103fc', '#5055b3']}
                 start={{ x: 0, y: 1 }}
                 end={{ x: 1, y: 0 }}
-                style={{ height: Platform.OS === 'ios' ? 300 : 100 }}
+                style={linearGradient}
             >
-                <Text style={styles(theme).heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
+                <Text style={heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
             </LinearGradient>
+            {/* TODO: Need to check but reckon that some of these can be replaced by ScreenContainer */}
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <SafeAreaView style={{ backgroundColor: theme.background.primary }}>
-                    <Container style={{ marginTop: 50, width: 350, alignSelf: 'center' }}>
+                <SafeAreaView style={screenWrapper}>
+                    <Container style={container}>
                         {showResetScreen ? (
                             <ResetPassword setShowResetScreen={setShowResetScreen} theme={theme} />
                         ) : (
                             <Fragment>
                                 <View>
                                     {error ? (
-                                        <View style={styles(theme).error}>
-                                            <Text style={styles(theme).errorText}>{error}</Text>
+                                        <View style={errorWrapper}>
+                                            <Text style={errorText}>{error}</Text>
                                         </View>
                                     ) : null}
                                 </View>
 
                                 {loginOption === 'signup' && (
                                     <Fragment>
-                                        <View style={styles(theme).inputContainer}>
+                                        <View style={inputContainer}>
                                             <TextInput
-                                                style={styles(theme).input}
+                                                style={input}
                                                 autoCapitalize="none"
                                                 placeholder="name"
                                                 placeholderTextColor={theme.text.primary}
                                                 onChange={(e: any) => setName(e.nativeEvent.text)}
                                             />
                                         </View>
-                                        <View style={styles(theme).inputContainer}>
+                                        <View style={inputContainer}>
                                             <TextInput
-                                                style={styles(theme).input}
+                                                style={input}
                                                 autoCapitalize="none"
                                                 placeholder="surname"
                                                 placeholderTextColor={theme.text.primary}
@@ -193,9 +213,9 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                 )}
                                 {(loginOption === 'signup' || loginOption === 'signin') && (
                                     <Fragment>
-                                        <View style={styles(theme).inputContainer}>
+                                        <View style={inputContainer}>
                                             <TextInput
-                                                style={styles(theme).input}
+                                                style={input}
                                                 autoCapitalize="none"
                                                 placeholder="email"
                                                 placeholderTextColor={theme.text.primary}
@@ -203,9 +223,9 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                                 value={email}
                                             />
                                         </View>
-                                        <View style={styles(theme).inputContainer}>
+                                        <View style={inputContainer}>
                                             <TextInput
-                                                style={styles(theme).input}
+                                                style={input}
                                                 placeholder="password"
                                                 placeholderTextColor={theme.text.primary}
                                                 secureTextEntry={true}
@@ -220,29 +240,22 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                     <View>
                                         <TouchableOpacity onPress={() => setShowResetScreen(true)}>
                                             {loginOption === 'signin' && (
-                                                <View
-                                                    style={{
-                                                        marginBottom: 15,
-                                                        alignSelf: 'flex-end',
-                                                    }}
-                                                >
-                                                    <Text style={{ color: theme.text.primary, fontSize: 12 }}>
-                                                        Forgotten password?
-                                                    </Text>
+                                                <View style={forgottenPasswordWrapper}>
+                                                    <Text style={forgottenPasswordText}>Forgotten password?</Text>
                                                 </View>
                                             )}
                                         </TouchableOpacity>
-                                        <View style={{ width: 300 }}>
+                                        <View style={loginOptionWrapper}>
                                             <TouchableOpacity onPress={logUserIn}>
                                                 <Button>
-                                                    <ButtonText style={{ fontSize: 16 }}>
+                                                    <ButtonText style={loginOptionText}>
                                                         {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
                                                     </ButtonText>
                                                 </Button>
                                             </TouchableOpacity>
                                         </View>
                                         {loginOption === 'signin' && showFaceIDButton && (
-                                            <View style={{ marginTop: 10, width: 300 }}>
+                                            <View style={faceIdWrapper}>
                                                 <TouchableOpacity onPress={logUserInWithFaceId}>
                                                     <Button>
                                                         <ButtonText>USE FACE ID</ButtonText>
@@ -251,21 +264,10 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                             </View>
                                         )}
                                     </View>
-                                    <View
-                                        style={{
-                                            bottom: Platform.OS === 'ios' ? 400 : 300,
-                                            position: 'absolute',
-                                        }}
-                                    >
+                                    <View style={helperButtonWrapper}>
                                         <TouchableOpacity onPress={authenticateUserHelper}>
                                             <InvertedButton background={theme.button.backgroundColor}>
-                                                <Text
-                                                    style={{
-                                                        color: theme.text.primary,
-                                                        fontWeight: '700',
-                                                        textAlign: 'center',
-                                                    }}
-                                                >
+                                                <Text style={helperButtonText}>
                                                     {loginOption === 'signup'
                                                         ? 'HAVE AN ACCOUNT? SIGN IN'
                                                         : 'NO ACCOUNT? SIGN UP'}
@@ -281,7 +283,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
             </TouchableWithoutFeedback>
         </Fragment>
     ) : (
-        <Container style={{ backgroundColor: theme.background.primary, paddingTop: 200 }}>
+        <Container style={spinnerWrapper}>
             <ActivityIndicator size="large" color={theme.spinner.primary} />
         </Container>
     )
@@ -289,17 +291,39 @@ export const AuthenticateUserScreen = ({ theme }) => {
 
 const styles = (theme) =>
     StyleSheet.create({
-        auth: {
-            bottom: 300,
-            display: 'flex',
-            position: 'absolute',
+        linearGradient: {
+            height: Platform.OS === 'ios' ? 300 : 100,
+        },
+        screenWrapper: {
+            backgroundColor: theme.background.primary,
+        },
+        container: {
+            marginTop: 50,
+            width: 350,
             alignSelf: 'center',
         },
-        authText: {
-            fontSize: theme.text.small,
+        forgottenPasswordWrapper: {
+            marginBottom: 15,
+            alignSelf: 'flex-end',
+        },
+        forgottenPasswordText: { color: theme.text.primary, fontSize: 12 },
+        loginOptionWrapper: {
+            width: 300,
+        },
+        loginOptionText: {
+            fontSize: 16,
+        },
+        faceIdWrapper: { marginTop: 10, width: 300 },
+        helperButtonWrapper: {
+            bottom: Platform.OS === 'ios' ? 400 : 300,
+            position: 'absolute',
+        },
+        helperButtonText: {
+            color: theme.text.primary,
+            fontWeight: '700',
             textAlign: 'center',
         },
-        error: {
+        errorWrapper: {
             backgroundColor: theme.button.backgroundColor,
             borderRadius: 5,
             borderWidth: 1,
@@ -331,12 +355,5 @@ const styles = (theme) =>
             paddingBottom: Platform.OS === 'ios' ? 10 : 0,
             width: 300,
         },
-        inputSection: {
-            marginTop: 50,
-        },
-        image: {
-            alignSelf: 'center',
-            marginRight: 5,
-            textAlign: 'center',
-        },
+        spinnerWrapper: { backgroundColor: theme.background.primary, paddingTop: 200 },
     })

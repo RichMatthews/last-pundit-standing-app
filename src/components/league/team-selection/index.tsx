@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, Image, Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { ChooseTeam } from 'src/components/league/choose-team'
 import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
 
-const width = Dimensions.get('window').width
-
 const NoLongerInGame = ({ theme }) => (
     <View>
-        <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
-            You are no longer in this game
-        </Text>
+        <Text style={styles(theme).text}>You are no longer in this game</Text>
     </View>
 )
 
@@ -45,9 +41,7 @@ export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
         } else if (gameSelectionTimeEnded && playerHasNotMadeChoice) {
             return (
                 <View>
-                    <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
-                        The deadline has passed and you are out of this game
-                    </Text>
+                    <Text style={styles(theme).text}>The deadline has passed and you are out of this game</Text>
                 </View>
             )
         } else if (playerHasNotMadeChoice) {
@@ -55,9 +49,7 @@ export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
         } else if (playerHasMadeChoice) {
             return (
                 <View>
-                    <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
-                        You have made your choice for this week
-                    </Text>
+                    <Text style={styles(theme).text}>You have made your choice for this week</Text>
                 </View>
             )
         } else {
@@ -65,9 +57,11 @@ export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
         }
     }
 
-    return <View style={styles.section}>{showTeamSelectionPage()}</View>
+    return <View style={styles(theme).section}>{showTeamSelectionPage()}</View>
 }
 
-const styles = StyleSheet.create({
-    section: {},
-})
+const styles = (theme) =>
+    StyleSheet.create({
+        section: {},
+        text: { alignSelf: 'center', color: theme.text.primary, fontSize: 18 },
+    })

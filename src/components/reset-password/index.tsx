@@ -1,8 +1,8 @@
 import React, { Fragment, useState } from 'react'
-import { SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import firebase from 'firebase'
 
-import { Button, ButtonText, InvertedButton, InvertedButtonText } from 'src/ui-components/button'
+import { Button, ButtonText, InvertedButton } from 'src/ui-components/button'
 import { Container } from 'src/ui-components/containers'
 
 export const ResetPassword = ({ setShowResetScreen, theme }: any) => {
@@ -24,26 +24,20 @@ export const ResetPassword = ({ setShowResetScreen, theme }: any) => {
     return (
         <Fragment>
             <SafeAreaView>
-                <Container style={{ display: 'flex', alignSelf: 'center', width: 300 }}>
-                    <View style={{ marginBottom: 20 }}>
-                        <Text style={{ color: theme.text.primary, fontSize: theme.text.medium }}>
+                <Container stylesOverride={styles(theme).container}>
+                    <View style={styles(theme).bodyWrapper}>
+                        <Text style={styles(theme).bodyText}>
                             Enter your email and we will send you a link to reset your password{' '}
                         </Text>
                         <TextInput
                             autoCapitalize="none"
-                            style={{
-                                borderBottomWidth: 1,
-                                borderColor: '#ccc',
-                                fontSize: theme.text.small,
-                                marginTop: 15,
-                                paddingBottom: 10,
-                            }}
+                            style={styles(theme).textInput}
                             placeholder="Enter your email"
                             placeholderTextColor={theme.text.primary}
                             onChange={(e) => setEmail(e.nativeEvent.text)}
                         />
                     </View>
-                    <View style={{ width: 300 }}>
+                    <View style={styles(theme).resetTextWrapper}>
                         <TouchableOpacity onPress={resetPassword}>
                             <Button>
                                 <ButtonText>Send password reset link</ButtonText>
@@ -51,11 +45,9 @@ export const ResetPassword = ({ setShowResetScreen, theme }: any) => {
                         </TouchableOpacity>
                     </View>
                     <TouchableOpacity onPress={() => setShowResetScreen(false)}>
-                        <View style={{ marginTop: 20 }}>
+                        <View style={styles(theme).cancelButtonWrapper}>
                             <InvertedButton background={theme.button.backgroundColor}>
-                                <Text style={{ color: theme.text.primary, fontWeight: '700', textAlign: 'center' }}>
-                                    Cancel
-                                </Text>
+                                <Text style={styles(theme).cancelButtonText}>Cancel</Text>
                             </InvertedButton>
                         </View>
                     </TouchableOpacity>
@@ -64,3 +56,24 @@ export const ResetPassword = ({ setShowResetScreen, theme }: any) => {
         </Fragment>
     )
 }
+
+const styles = (theme) =>
+    StyleSheet.create({
+        container: {
+            display: 'flex',
+            alignSelf: 'center',
+            width: 300,
+        },
+        bodyWrapper: { marginBottom: 20 },
+        bodyText: { color: theme.text.primary, fontSize: theme.text.medium },
+        textInput: {
+            borderBottomWidth: 1,
+            borderColor: '#ccc',
+            fontSize: theme.text.small,
+            marginTop: 15,
+            paddingBottom: 10,
+        },
+        resetTextWrapper: { width: 300 },
+        cancelButtonWrapper: { marginTop: 20 },
+        cancelButtonText: { color: theme.text.primary, fontWeight: '700', textAlign: 'center' },
+    })

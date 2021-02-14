@@ -5,24 +5,21 @@ import FastImage from 'react-native-fast-image'
 import * as Images from '../../images'
 export const Fixtures = React.memo(
     ({ fixtures }) => {
-        console.log('rendering again', fixtures)
         return (
             <View>
-                <Text style={{ fontSize: 17, alignSelf: 'center', fontWeight: '700', marginBottom: 10 }}>
-                    Gameweek Fixtures
-                </Text>
+                <Text style={styles.title}>Gameweek Fixtures</Text>
                 <View style={styles.container}>
                     {fixtures.map((match: any) => (
                         <View key={match.home}>
                             <View style={styles.center}>
                                 <FastImage
-                                    style={{ width: 30, height: 30 }}
+                                    style={styles.clubBadge}
                                     source={Images[match.home.replace(/\s/g, '').toLowerCase()]}
                                     // resizeMode={FastImage.resizeMode.contain}
                                 />
                                 <Text style={styles.vs}> VS </Text>
                                 <FastImage
-                                    style={{ width: 30, height: 30 }}
+                                    style={styles.clubBadge}
                                     source={Images[match.away.replace(/\s/g, '').toLowerCase()]}
                                     // resizeMode={FastImage.resizeMode.contain}
                                 />
@@ -58,4 +55,6 @@ const styles = StyleSheet.create({
         fontSize: 11,
         fontWeight: '700',
     },
+    title: { fontSize: 17, alignSelf: 'center', fontWeight: '700', marginBottom: 10 },
+    clubBadge: { width: 30, height: 30 },
 })

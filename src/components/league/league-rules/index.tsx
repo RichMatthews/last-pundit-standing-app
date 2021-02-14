@@ -1,25 +1,14 @@
 import React, { useState } from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 
 export const LeagueRules = () => {
     const [showRules, setShowRules] = useState(false)
 
     return (
         <TouchableOpacity onPress={() => setShowRules(!showRules)} activeOpacity={1}>
-            <View
-                style={{
-                    borderRadius: 5,
-                    backgroundColor: '#f7f7ff',
-                    padding: 10,
-                    margin: 5,
-                    shadowOpacity: 1,
-                    shadowRadius: 2,
-                    shadowColor: '#ddd',
-                    shadowOffset: { height: 2, width: 0 },
-                }}
-            >
+            <View style={styles.container}>
                 <View>
-                    <Text style={{ fontSize: 17 }}>League Rules</Text>
+                    <Text style={styles.title}>League Rules</Text>
                 </View>
                 <View>
                     <Text>Pick a different team every week</Text>
@@ -32,3 +21,19 @@ export const LeagueRules = () => {
         </TouchableOpacity>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        borderRadius: 5,
+        backgroundColor: '#f7f7ff',
+        padding: 10,
+        margin: 5,
+        shadowOpacity: 1,
+        shadowRadius: 2,
+        shadowColor: '#ddd',
+        shadowOffset: { height: 2, width: 0 },
+    },
+    title: {
+        fontSize: 17,
+    },
+})

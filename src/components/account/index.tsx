@@ -32,6 +32,8 @@ export const Account = ({ navigation, theme }: any) => {
         getFaceIdStatus()
     }, [])
 
+    const { container, settingsWrapper, heading, section, icon, signOut } = styles(theme)
+
     const getFaceIdStatus = async () => {
         const faceIDEnabled = await checkFaceIDEnabled()
 
@@ -71,14 +73,14 @@ export const Account = ({ navigation, theme }: any) => {
     }
 
     return (
-        <View style={styles(theme).container}>
-            <View style={{ flex: 1 }}>
-                <Text style={styles(theme).heading}>Name</Text>
-                <View style={styles(theme).section}>
+        <View style={container}>
+            <View style={settingsWrapper}>
+                <Text style={heading}>Name</Text>
+                <View style={section}>
                     <SettingsRow text={`${user.name} ${user.surname}`} theme={theme} />
                 </View>
-                <Text style={styles(theme).heading}>Security</Text>
-                <View style={styles(theme).section}>
+                <Text style={heading}>Security</Text>
+                <View style={section}>
                     <TouchableOpacity onPress={() => updateEmailHelper()}>
                         <SettingsRow
                             text="Update Email"
@@ -87,8 +89,8 @@ export const Account = ({ navigation, theme }: any) => {
                                 <MaterialCommIcon
                                     name="email-edit-outline"
                                     size={iconSize}
-                                    color={styles(theme).icon.color}
-                                    style={styles(theme).icon}
+                                    color={icon.color}
+                                    style={icon}
                                 />
                             }
                             rightArrow
@@ -99,12 +101,7 @@ export const Account = ({ navigation, theme }: any) => {
                             text="Reset Password"
                             theme={theme}
                             icon={
-                                <MaterialCommIcon
-                                    name="lock-outline"
-                                    size={iconSize}
-                                    color={styles(theme).icon.color}
-                                    style={styles(theme).icon}
-                                />
+                                <MaterialCommIcon name="lock-outline" size={iconSize} color={icon.color} style={icon} />
                             }
                             rightArrow
                         />
@@ -115,15 +112,15 @@ export const Account = ({ navigation, theme }: any) => {
                         icon={
                             <Image
                                 source={require('./face-recognition.png')}
-                                style={[styles(theme).icon, { width: iconSize, height: iconSize }]}
+                                style={[icon, { width: iconSize, height: iconSize }]}
                             />
                         }
                         togglePress={() => toggleFaceIdActivated(!faceIdActivated)}
                         toggleValue={faceIdActivated}
                     />
                 </View>
-                <Text style={styles(theme).heading}>Theme</Text>
-                <View style={styles(theme).section}>
+                <Text style={heading}>Theme</Text>
+                <View style={section}>
                     <SettingsRow
                         text="Dark Mode"
                         theme={theme}
@@ -133,7 +130,7 @@ export const Account = ({ navigation, theme }: any) => {
                 </View>
             </View>
             <TouchableNativeFeedback onPress={() => dispatch(signUserOut({ navigation }))}>
-                <Text style={styles(theme).signOut}>Sign out</Text>
+                <Text style={signOut}>Sign out</Text>
             </TouchableNativeFeedback>
         </View>
     )
@@ -146,6 +143,9 @@ const styles = (theme: any) =>
             alignSelf: 'center',
             marginTop: 25,
             backgroundColor: theme.background.primary,
+        },
+        settingsWrapper: {
+            flex: 1,
         },
         heading: {
             color: theme.headings.accent,

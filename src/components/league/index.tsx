@@ -65,6 +65,10 @@ export const League = ({ leagueId, theme }: string) => {
         pullLatestLeagueData()
     }, [])
 
+    const { container, buttonsWrapper, mainheading, openModalButton, openModalButtonText, fixturesWrapper } = styles(
+        theme,
+    )
+
     const wait = (timeout: any) => {
         return new Promise((resolve) => {
             setTimeout(resolve, timeout)
@@ -95,8 +99,8 @@ export const League = ({ leagueId, theme }: string) => {
 
     return (
         <>
-            <View style={styles(theme).container}>
-                <Text style={styles(theme).mainheading}>{league.name}</Text>
+            <View style={container}>
+                <Text style={mainheading}>{league.name}</Text>
 
                 {/* <ScrollView
                     refreshControl={
@@ -110,22 +114,22 @@ export const League = ({ leagueId, theme }: string) => {
                     }
                 >
                 </ScrollView> */}
-                <View style={{ flexDirection: 'row', marginBottom: 10, marginLeft: 10 }}>
+                <View style={buttonsWrapper}>
                     <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
-                        <View style={styles(theme).openModalButton}>
-                            <Text style={styles(theme).openModalButtonText}>Previous Games</Text>
+                        <View style={openModalButton}>
+                            <Text style={openModalButtonText}>Previous Games</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
-                        <View style={styles(theme).openModalButton}>
-                            <Text style={styles(theme).openModalButtonText}>Leagues Rules</Text>
+                        <View style={openModalButton}>
+                            <Text style={openModalButtonText}>Leagues Rules</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity onPress={showTeamSelection} activeOpacity={0.7}>
-                        <View style={styles(theme).openModalButton}>
-                            <Text style={styles(theme).openModalButtonText}>Select team</Text>
+                        <View style={openModalButton}>
+                            <Text style={openModalButtonText}>Select team</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -147,7 +151,7 @@ export const League = ({ leagueId, theme }: string) => {
                             contentContainerStyle: { minHeight: '100%' },
                         }}
                     >
-                        <View style={{ flex: 1, justifyContent: 'space-between', margin: 30 }}>
+                        <View style={fixturesWrapper}>
                             <Fixtures fixtures={gameweekFixtures} />
                             <TeamSelection pullLatestLeagueData={pullLatestLeagueData} theme={theme} />
                         </View>
@@ -165,12 +169,7 @@ const styles = (theme) =>
 
             flex: 1,
         },
-        image: {
-            resizeMode: 'contain',
-            height: 30,
-            width: 100,
-            marginBottom: 20,
-        },
+        buttonsWrapper: { flexDirection: 'row', marginBottom: 10, marginLeft: 10 },
         mainheading: {
             color: theme.text.primary,
             fontSize: 30,
@@ -178,27 +177,6 @@ const styles = (theme) =>
             marginTop: Platform.OS === 'ios' ? 50 : 0,
             padding: 10,
             paddingHorizontal: 20,
-        },
-        maintext: {
-            fontSize: 17,
-            fontWeight: '700',
-            textAlign: 'center',
-        },
-        subtext: {
-            fontWeight: '400',
-        },
-        topContainer: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginHorizontal: 15,
-            marginVertical: 15,
-        },
-        ctaContainer: {
-            borderWidth: 1,
-            borderColor: '#ccc',
-            borderRadius: 5,
-            padding: 5,
         },
         openModalButton: {
             width: 80,
@@ -218,4 +196,5 @@ const styles = (theme) =>
             color: theme.text.primary,
             fontFamily: 'Hind',
         },
+        fixturesWrapper: { flex: 1, justifyContent: 'space-between', margin: 30 },
     })
