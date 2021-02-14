@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { ScrollView, StyleSheet, RefreshControl, Platform, Text, View } from 'react-native'
+import { StyleSheet, Platform, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { CurrentGame } from 'src/components/league/current'
@@ -13,7 +13,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
 import { PreviousGames } from 'src/components/league/previous'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface LeagueData {
     games: {}
@@ -21,7 +20,6 @@ interface LeagueData {
 
 export const League = ({ leagueId, theme }: string) => {
     const [loaded, setLoaded] = useState<string>('')
-    const [refreshing, setRefreshing] = useState<boolean>(false)
     const [gameweekFixtures, setGameweekFixtures] = useState([])
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
@@ -63,20 +61,6 @@ export const League = ({ leagueId, theme }: string) => {
         pullLatestLeagueData()
     }, [])
 
-    const wait = (timeout: any) => {
-        return new Promise((resolve) => {
-            setTimeout(resolve, timeout)
-        })
-    }
-
-    const onRefresh = useCallback(() => {
-        setRefreshing(true)
-        pullLatestLeagueData()
-        wait(500).then(() => {
-            setRefreshing(false)
-        })
-    }, [pullLatestLeagueData])
-
     const showPreviousGames = () => {
         previousGamesRef.current?.open()
     }
@@ -93,19 +77,6 @@ export const League = ({ leagueId, theme }: string) => {
         <>
             <View style={styles(theme).container}>
                 <Text style={styles(theme).mainheading}>{league.name}</Text>
-
-                {/* <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                            title="Pull to refresh"
-                            tintColor={theme.text.primary}
-                            titleColor={theme.text.primary}
-                        />
-                    }
-                >
-                </ScrollView> */}
                 <View style={{ flexDirection: 'row', marginBottom: 10, marginLeft: 10 }}>
                     <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
                         <View style={styles(theme).openModalButton}>
@@ -125,6 +96,7 @@ export const League = ({ leagueId, theme }: string) => {
                         </View>
                     </TouchableOpacity>
                 </View>
+
                 <CurrentGame loaded={loaded} theme={theme} />
 
                 <Portal>
@@ -161,8 +133,7 @@ export const League = ({ leagueId, theme }: string) => {
 const styles = (theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: '#F2F4F8',
-
+            backgroundColor: theme.background.primary,
             flex: 1,
         },
         image: {
@@ -173,6 +144,7 @@ const styles = (theme) =>
         },
         mainheading: {
             color: theme.text.primary,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: 30,
             fontWeight: '700',
             marginTop: Platform.OS === 'ios' ? 50 : 0,
@@ -201,22 +173,18 @@ const styles = (theme) =>
             padding: 5,
         },
         openModalButton: {
-            width: 100,
+            width: 110,
             alignItems: 'center',
-            shadowOpacity: 1,
-            shadowRadius: 2,
-            shadowColor: '#ddd',
-            shadowOffset: { height: 3, width: 0 },
             backgroundColor: theme.background.primary,
             borderRadius: 5,
-            elevation: 2,
             padding: 5,
             margin: 10,
         },
         openModalButtonText: {
             textAlign: 'center',
             color: theme.text.primary,
-            fontFamily: 'Hind',
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontWeight: '700',
             fontSize: 13,
         },
     })

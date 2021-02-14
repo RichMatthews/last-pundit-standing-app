@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     heading: {
-        fontFamily: 'Hind',
+        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
         fontSize: 20,
         alignSelf: 'center',
         fontWeight: '600',
