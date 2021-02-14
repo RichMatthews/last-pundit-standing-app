@@ -57,7 +57,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
     const updateUserGamweekChoiceHelper = async () => {
         const opponent = await findOpponent(selectedTeam)
         const choice = {
-            hasMadeChoice: true,
+            selection: true,
             ...opponent,
             result: 'pending',
             value: selectedTeam,

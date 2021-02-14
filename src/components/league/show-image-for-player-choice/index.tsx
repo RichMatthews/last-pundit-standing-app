@@ -90,7 +90,7 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
             setGameSelectionTimeEnded(true)
         }
     }
-    const PLAYER_OUT_OF_CURRENT_GAME = player.rounds.filter((round: any) => round.choice.result === 'lost')
+    const PLAYER_OUT_OF_CURRENT_GAME = player.rounds.filter((round: any) => round.selection.result === 'lost')
     const ALL_PLAYERS_IN_CURRENT_GAME = Object.values(currentGame.players)
     const CURRENT_ROUND_WITHIN_CURRENT_GAME = currentGame.currentGameRound
 
@@ -105,7 +105,7 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
         (playa: any) => playa.rounds.length === CURRENT_ROUND_WITHIN_CURRENT_GAME + 1,
     )
     const ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE = REMAINING_PLAYERS_IN_CURRENT_GAME.every(
-        (playa: any) => playa.rounds[CURRENT_ROUND_WITHIN_CURRENT_GAME].choice.hasMadeChoice,
+        (playa: any) => playa.rounds[CURRENT_ROUND_WITHIN_CURRENT_GAME].selection.selection,
     )
 
     if (ALL_OTHER_PLAYERS_ELIMINATED && ALL_PLAYERS_IN_CURRENT_GAME.length > 1) {
@@ -114,18 +114,18 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
 
     if (
         PLAYER_CURRENT_ROUND === undefined ||
-        (gameSelectionTimeEnded && !PLAYER_CURRENT_ROUND.choice.hasMadeChoice) ||
+        (gameSelectionTimeEnded && !PLAYER_CURRENT_ROUND.selection.selection) ||
         (!gameSelectionTimeEnded && PLAYER_OUT_OF_CURRENT_GAME.length)
     ) {
         return GameStatusIndicatorComponent('eliminated')
     }
 
     if (isCurrentLoggedInPlayer) {
-        if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
+        if (PLAYER_CURRENT_ROUND.selection.selection) {
             return (
                 <FastImage
                     style={{ width: 25, height: 25, marginRight: 10 }}
-                    source={Images[PLAYER_CURRENT_ROUND.choice.value.replace(/\s/g, '').toLowerCase()]}
+                    source={Images[PLAYER_CURRENT_ROUND.selection.name.replace(/\s/g, '').toLowerCase()]}
                 />
             )
         } else {
@@ -133,12 +133,12 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
         }
     }
 
-    if (PLAYER_CURRENT_ROUND.choice.hasMadeChoice) {
+    if (PLAYER_CURRENT_ROUND.selection.selection) {
         if (ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE) {
             return (
                 <FastImage
                     style={{ width: 25, height: 25, marginRight: 10 }}
-                    source={Images[PLAYER_CURRENT_ROUND.choice.value.replace(/\s/g, '').toLowerCase()]}
+                    source={Images[PLAYER_CURRENT_ROUND.selection.name.replace(/\s/g, '').toLowerCase()]}
                 />
             )
         } else {

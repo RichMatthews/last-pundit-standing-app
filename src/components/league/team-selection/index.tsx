@@ -32,9 +32,9 @@ export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, t
     const showTeamSelectionPage = () => {
         const currentGameRound = currentGame.currentGameRound
         const currentRound = currentPlayer.rounds[currentGameRound]
-        const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
-        const playerHasMadeChoice = currentRound && currentRound.choice.hasMadeChoice
-        const playerHasNotMadeChoice = currentRound && !currentRound.choice.hasMadeChoice
+        const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.selection.result === 'lost')
+        const playerHasMadeChoice = currentRound && currentRound.selection.selection
+        const playerHasNotMadeChoice = currentRound && !currentRound.selection.selection
 
         if (playerOutOfGame.length) {
             return <NoLongerInGame theme={theme} />

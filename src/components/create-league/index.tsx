@@ -80,7 +80,7 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                             [user.id]: {
                                 id: user.id,
                                 name: playerInfo.name,
-                                rounds: [{ choice: { hasMadeChoice: false } }],
+                                rounds: [{ choice: { selection: false } }],
                             },
                         },
                         winner: false,

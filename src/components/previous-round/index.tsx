@@ -25,7 +25,7 @@ const TeamBadge = styled.Image<ImageStyled>`
 
 export const PreviousRound = ({ choice, theme }: any) => {
     const opponentTeamName: any = choice.opponent.name.replace(/\s/g, '').toLowerCase()
-    const userTeamName: any = choice.value.replace(/\s/g, '').toLowerCase()
+    const userTeamName: any = choice.name.replace(/\s/g, '').toLowerCase()
 
     return choice.teamPlayingAtHome ? (
         <Container>

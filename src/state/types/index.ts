@@ -11,7 +11,7 @@ type Opponent = {
 type PlayerRound = {
     choice: {
         goals: number
-        hasMadeChoice: boolean
+        selection: boolean
         id: number
         opponent: Opponent
         result: string

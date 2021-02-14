@@ -45,7 +45,7 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
                     [`/leagues/${league.id}/games/${currentGame[0].id}/players/${currentUserId}`]: {
                         id: currentUserId,
                         name: name + ' ' + surname,
-                        rounds: [{ choice: { hasMadeChoice: false } }],
+                        rounds: [{ choice: { selection: false } }],
                     },
                     [`/users/${currentUserId}/leagues/${league.id}`]: {
                         id: league.id,

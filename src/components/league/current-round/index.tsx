@@ -63,7 +63,7 @@ export const CurrentRoundView = ({
                                         { color: player.id === user.id ? '#9f85d4' : theme.text.primary },
                                     ]}
                                 >
-                                    {player.name}
+                                    {player.information.name}
                                 </Text>
                                 <View style={styles(theme).playerChosenImageAndDownArrow}>
                                     <MemoizedShowImageForPlayerChoice
@@ -93,10 +93,10 @@ export const CurrentRoundView = ({
                                             {player.rounds
                                                 .filter(
                                                     (round: any) =>
-                                                        round.choice.value && round.choice.result !== 'pending',
+                                                        round.selection.name && round.selection.result !== 'pending',
                                                 )
                                                 .map((round: any) => (
-                                                    <PreviousRound choice={round.choice} theme={theme} />
+                                                    <PreviousRound choice={round.selection} theme={theme} />
                                                 ))}
                                         </>
                                     ) : (

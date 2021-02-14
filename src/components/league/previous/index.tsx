@@ -47,7 +47,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
                         <View style={styles(theme).previousGamesContainer}>
                             <View style={styles(theme).topRow}>
                                 <View>
-                                    <Text style={styles(theme).playerNameText}>{player.name}</Text>
+                                    <Text style={styles(theme).playerNameText}>{player.information.name}</Text>
                                     <Text style={styles(theme).winnerText}>Winner</Text>
                                 </View>
 
@@ -61,7 +61,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                     {Object.values(game.players).map((player: Player) => {
                                         return (
                                             <View style={styles(theme).individualPlayerRounds}>
-                                                <Text>{player.name}</Text>
+                                                <Text>{player.information.name}</Text>
                                                 <Results player={player} theme={theme} />
                                             </View>
                                         )
