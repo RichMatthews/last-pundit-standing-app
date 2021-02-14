@@ -7,11 +7,11 @@ import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded
 
 const NoLongerInGame = ({ theme }) => (
     <View>
-        <Text style={styles(theme).text}>You are no longer in this game</Text>
+        <Text style={[styles(theme).noLongerInGameText]}>You are no longer in this game</Text>
     </View>
 )
 
-export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
+export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, theme, fixtures }) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
@@ -45,7 +45,14 @@ export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
                 </View>
             )
         } else if (playerHasNotMadeChoice) {
-            return <ChooseTeam currentRound={currentGameRound} pullLatestLeagueData={pullLatestLeagueData} />
+            return (
+                <ChooseTeam
+                    closeTeamSelectionModal={closeTeamSelectionModal}
+                    currentRound={currentGameRound}
+                    pullLatestLeagueData={pullLatestLeagueData}
+                    fixtures={fixtures}
+                />
+            )
         } else if (playerHasMadeChoice) {
             return (
                 <View>
@@ -64,4 +71,9 @@ const styles = (theme) =>
     StyleSheet.create({
         section: {},
         text: { alignSelf: 'center', color: theme.text.primary, fontSize: 18 },
+        noLongerInGameText: {
+            alignSelf: 'center',
+            fontSize: 18,
+            color: theme.text.primary,
+        },
     })

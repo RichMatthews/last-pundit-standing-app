@@ -75,6 +75,7 @@ const Stacks = ({ isSignedIn, theme }: any) => (
                     options={{
                         headerStyle: {
                             backgroundColor: theme.background.primary,
+                            shadowOpacity: 0,
                         },
                         headerTintColor: theme.text.primary,
                     }}
