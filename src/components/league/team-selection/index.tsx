@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Dimensions, Image, Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { ChooseTeam } from 'src/components/league/choose-team'
 import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
 
-const width = Dimensions.get('window').width
-
 const NoLongerInGame = ({ theme }) => (
     <View>
-        <Text style={{ alignSelf: 'center', color: theme.text.primary, fontSize: 18 }}>
-            You are no longer in this game
-        </Text>
+        <Text style={[styles.noLongerInGameText, { color: theme.text.primary }]}>You are no longer in this game</Text>
     </View>
 )
 
-export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
+export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, theme, fixtures }) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
@@ -51,7 +47,14 @@ export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
                 </View>
             )
         } else if (playerHasNotMadeChoice) {
-            return <ChooseTeam currentRound={currentGameRound} pullLatestLeagueData={pullLatestLeagueData} />
+            return (
+                <ChooseTeam
+                    closeTeamSelectionModal={closeTeamSelectionModal}
+                    currentRound={currentGameRound}
+                    pullLatestLeagueData={pullLatestLeagueData}
+                    fixtures={fixtures}
+                />
+            )
         } else if (playerHasMadeChoice) {
             return (
                 <View>
@@ -69,5 +72,8 @@ export const TeamSelection = ({ pullLatestLeagueData, theme }) => {
 }
 
 const styles = StyleSheet.create({
-    section: {},
+    noLongerInGameText: {
+        alignSelf: 'center',
+        fontSize: 18,
+    },
 })

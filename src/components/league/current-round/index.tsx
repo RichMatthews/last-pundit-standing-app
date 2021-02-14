@@ -102,7 +102,7 @@ const styles = (theme) =>
             shadowOpacity: 1,
             shadowRadius: 2,
             shadowColor: '#ddd',
-            shadowOffset: { height: 3, width: 3 },
+            shadowOffset: { height: 3, width: 0 },
             elevation: 2,
         },
         currentRoundHeading: {
@@ -124,11 +124,7 @@ const styles = (theme) =>
             height: 10,
         },
         playerContainer: {
-            borderRadius: theme.borders.radius,
-            borderBottomWidth: 1,
-            borderBottomColor: '#eee',
-            paddingTop: 35,
-            paddingBottom: 10,
+            paddingVertical: 20,
             marginHorizontal: 20,
         },
         playerRow: {
@@ -137,7 +133,7 @@ const styles = (theme) =>
         },
         playerName: {
             fontFamily: 'Hind',
-            fontSize: theme.text.large,
+            fontSize: theme.text.medium,
         },
         playerChosenImageAndDownArrow: {
             borderRadius: 5,

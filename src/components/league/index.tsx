@@ -12,7 +12,6 @@ import { setViewedLeague } from 'src/redux/reducer/league'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
-import { Fixtures } from 'src/components/fixtures'
 import { PreviousGames } from 'src/components/league/previous'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -27,7 +26,6 @@ export const League = ({ leagueId, theme }: string) => {
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
     const league = useSelector((store: { league: any }) => store.league)
-    const fixturesRef = useRef<Modalize>(null)
     const previousGamesRef = useRef<Modalize>(null)
     const teamSelectionRef = useRef<Modalize>(null)
 
@@ -79,10 +77,6 @@ export const League = ({ leagueId, theme }: string) => {
         })
     }, [pullLatestLeagueData])
 
-    const onOpen = () => {
-        fixturesRef.current?.open()
-    }
-
     const showPreviousGames = () => {
         previousGamesRef.current?.open()
     }
@@ -91,7 +85,9 @@ export const League = ({ leagueId, theme }: string) => {
         teamSelectionRef.current?.open()
     }
 
-    const { bottom } = useSafeAreaInsets()
+    const closeTeamSelectionModal = () => {
+        teamSelectionRef.current?.close()
+    }
 
     return (
         <>
@@ -132,7 +128,6 @@ export const League = ({ leagueId, theme }: string) => {
                 <CurrentGame loaded={loaded} theme={theme} />
 
                 <Portal>
-                    <Modalize ref={fixturesRef} modalHeight={300} closeOnOverlayTap></Modalize>
                     <Modalize ref={previousGamesRef} adjustToContentHeight childrenStyle={{ marginBottom: 30 }}>
                         {league && league.games && (
                             <PreviousGames
@@ -142,14 +137,19 @@ export const League = ({ leagueId, theme }: string) => {
                         )}
                     </Modalize>
                     <Modalize
+                        adjustToContentHeight
                         ref={teamSelectionRef}
                         scrollViewProps={{
-                            contentContainerStyle: { minHeight: '100%' },
+                            contentContainerStyle: { minHeight: '50%' },
                         }}
                     >
                         <View style={{ flex: 1, justifyContent: 'space-between', margin: 30 }}>
-                            <Fixtures fixtures={gameweekFixtures} />
-                            <TeamSelection pullLatestLeagueData={pullLatestLeagueData} theme={theme} />
+                            <TeamSelection
+                                closeTeamSelectionModal={closeTeamSelectionModal}
+                                pullLatestLeagueData={pullLatestLeagueData}
+                                theme={theme}
+                                fixtures={gameweekFixtures}
+                            />
                         </View>
                     </Modalize>
                 </Portal>
@@ -201,12 +201,12 @@ const styles = (theme) =>
             padding: 5,
         },
         openModalButton: {
-            width: 80,
+            width: 100,
             alignItems: 'center',
             shadowOpacity: 1,
             shadowRadius: 2,
             shadowColor: '#ddd',
-            shadowOffset: { height: 3, width: 3 },
+            shadowOffset: { height: 3, width: 0 },
             backgroundColor: theme.background.primary,
             borderRadius: 5,
             elevation: 2,
@@ -217,5 +217,6 @@ const styles = (theme) =>
             textAlign: 'center',
             color: theme.text.primary,
             fontFamily: 'Hind',
+            fontSize: 13,
         },
     })

@@ -1,25 +1,19 @@
-import React, { useCallback, useState, useRef } from 'react'
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Alert, StyleSheet, Text, TouchableOpacity, Platform, View } from 'react-native'
 import { useSelector } from 'react-redux'
-import FastImage from 'react-native-fast-image'
-import Carousel from 'react-native-snap-carousel'
 
-import * as Images from 'src/images'
-import { ButtonText } from 'src/ui-components/button'
 import { updateUserGamweekChoice } from 'src/firebase-helpers'
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
 import { findOpponent } from './utils'
+import { Fixtures } from 'src/components/fixtures'
 
 interface Props {
     currentRound: any
     pullLatestLeagueData: () => void
 }
 
-export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData }: Props) => {
-    const [selectedTeam, setSelectedTeam] = useState<string>('')
-    const [activeSlide, setActiveSlide] = useState(0)
-    const refCarousel = useRef()
+export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLeagueData, fixtures }: Props) => {
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const league = useSelector((store: { league: any }) => store.league)
@@ -29,6 +23,14 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData }: Pr
         currentPlayer,
         leagueTeams: PREMIER_LEAGUE_TEAMS,
     })
+    const [selectedTeam, setSelectedTeam] = useState<string>('')
+
+    useEffect(() => {
+        console.log(
+            fixtures,
+            teams.filter((team) => team.chosen).map((team) => team['value']),
+        )
+    }, [])
 
     const submitChoice = () => {
         if (!selectedTeam) {
@@ -63,66 +65,28 @@ export const ChooseTeam = React.memo(({ currentRound, pullLatestLeagueData }: Pr
 
         await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
         await pullLatestLeagueData()
-    }
 
-    const snapToSelectedItem = useCallback(
-        (index: number) => {
-            if (!teams[index].chosen) {
-                refCarousel?.current.snapToItem(index, true)
-                return
-            }
-            refCarousel?.current.snapToItem(index + 1, true)
-        },
-        [teams],
-    )
-
-    const setActiveSlideAndTeam = useCallback(
-        (index: number) => {
-            if (teams[index].chosen) {
-                // we should alert here
-                return
-            }
-            setActiveSlide(index)
-            setSelectedTeam(teams[index].value)
-        },
-        [teams],
-    )
-
-    const renderItem = ({ item, index }) => {
-        return (
-            <TouchableOpacity onPress={() => snapToSelectedItem(index)}>
-                <FastImage
-                    source={Images[item.value.replace(/\s/g, '').toLowerCase()]}
-                    style={[styles.image, item.value === selectedTeam ? styles.selected : styles.unselected]}
-                />
-            </TouchableOpacity>
-        )
+        closeTeamSelectionModal()
     }
 
     return (
         <View style={styles.innerContainer}>
-            <Carousel
-                activeSlideOffset={2}
-                enableMomentum={true}
-                ref={refCarousel}
-                onSnapToItem={(index: number) => setActiveSlideAndTeam(index)}
-                layout={'default'}
-                data={teams}
-                renderItem={renderItem}
-                sliderWidth={250}
-                itemWidth={50}
+            <Fixtures
+                fixtures={fixtures}
+                selectedTeam={selectedTeam}
+                setSelectedTeam={setSelectedTeam}
+                chosenTeams={teams.filter((team) => team.chosen).map((team) => team['value'])}
             />
-
             <View style={styles.button}>
                 <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
                     <View style={styles.buttonText}>
-                        <Text>Confirm selection</Text>
+                        <Text style={styles.confirmSelectionText}>Confirm selection</Text>
                     </View>
                 </TouchableOpacity>
             </View>
         </View>
     )
-})
+}
 
 const styles = StyleSheet.create({
     alreadySelectedTeam: {
@@ -135,6 +99,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#9f85d4',
         borderRadius: 5,
         padding: 10,
+    },
+    confirmSelectionText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+        fontSize: 17,
+        textAlign: 'center',
     },
     image: {
         height: 50,
