@@ -55,12 +55,12 @@ export const CurrentRoundView = ({
             >
                 {Object.values(currentGame.players).map((player: any, index: number) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        <View key={player.id} style={styles(theme).playerContainer}>
+                        <View key={player.information.id} style={styles(theme).playerContainer}>
                             <View style={styles(theme).playerRow}>
                                 <Text
                                     style={[
                                         styles(theme).playerName,
-                                        { color: player.id === user.id ? '#9f85d4' : theme.text.primary },
+                                        { color: player.information.id === user.id ? '#9f85d4' : theme.text.primary },
                                     ]}
                                 >
                                     {player.information.name}
@@ -68,7 +68,7 @@ export const CurrentRoundView = ({
                                 <View style={styles(theme).playerChosenImageAndDownArrow}>
                                     <MemoizedShowImageForPlayerChoice
                                         currentGame={currentGame}
-                                        isCurrentLoggedInPlayer={player.id === user.id}
+                                        isCurrentLoggedInPlayer={player.information.id === user.id}
                                         player={player}
                                     />
                                     {listOfExpandedPrevious.includes(index) ? (

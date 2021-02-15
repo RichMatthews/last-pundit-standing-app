@@ -36,7 +36,7 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
         const currentGame: any = games.filter((game: any) => game !== game.complete)
         if (currentGame) {
             const currentPlayers = Object.values(currentGame[0].players)
-            const playerAlreadyInLeague = currentPlayers.find((player: any) => player.id === currentUserId)
+            const playerAlreadyInLeague = currentPlayers.find((player: any) => player.information.id === currentUserId)
             if (playerAlreadyInLeague) {
                 alert('You have already entered this league!')
                 setLoading(false)

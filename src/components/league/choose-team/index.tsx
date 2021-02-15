@@ -23,14 +23,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
         currentPlayer,
         leagueTeams: PREMIER_LEAGUE_TEAMS,
     })
-    const [selectedTeam, setSelectedTeam] = useState<string>('')
-
-    useEffect(() => {
-        console.log(
-            fixtures,
-            teams.filter((team) => team.chosen).map((team) => team['value']),
-        )
-    }, [])
+    const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string }>()
 
     const submitChoice = () => {
         if (!selectedTeam) {
@@ -38,7 +31,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
             return
         }
 
-        const confirmationMsg: string = `You are picking ${selectedTeam}. Are you sure? Once you confirm you are locked in for this gameweek.`
+        const confirmationMsg: string = `You are picking ${selectedTeam.code}. Are you sure? Once you confirm you are locked in for this gameweek.`
 
         Alert.alert(
             'Confirm team selection',
@@ -60,7 +53,8 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
             selection: true,
             ...opponent,
             result: 'pending',
-            value: selectedTeam,
+            name: selectedTeam?.name,
+            code: selectedTeam?.code,
         }
 
         await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
@@ -75,7 +69,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
                 fixtures={fixtures}
                 selectedTeam={selectedTeam}
                 setSelectedTeam={setSelectedTeam}
-                chosenTeams={teams.filter((team) => team.chosen).map((team) => team['value'])}
+                chosenTeams={teams.filter((team) => team.chosen).map((team) => team['name'])}
                 theme={theme}
             />
             <View style={styles(theme).button}>

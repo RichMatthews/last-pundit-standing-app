@@ -8,9 +8,10 @@ export const Results = ({ player, theme }) => (
     <View style={styles(theme).playerResultsContainer}>
         {player.rounds.map((round) => {
             const { opponent: playerChoiceOpponent, name: playerChoice } = round.selection
+            console.log(playerChoiceOpponent, playerChoice, 'choices')
             const playerChoicePlayingAtHome = round.selection.teamPlayingAtHome
-            const playerChoiceOpponentImage = Images[playerChoiceOpponent.name.replace(/\s/g, '').toLowerCase()]
-            const playerChoiceImage = Images[playerChoice.replace(/\s/g, '').toLowerCase()]
+            const playerChoiceOpponentImage = Images[playerChoiceOpponent.code]
+            const playerChoiceImage = Images[playerChoice.code]
             let homeImage, awayImage
 
             if (playerChoicePlayingAtHome) {

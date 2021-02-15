@@ -318,6 +318,8 @@ const styles = (theme) =>
             color: theme.text.primary,
             fontSize: 25,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            marginHorizontal: 50,
+            marginTop: 100,
             fontWeight: '600',
         },
         inputContainer: {

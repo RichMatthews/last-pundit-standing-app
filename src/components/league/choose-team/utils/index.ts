@@ -1,10 +1,9 @@
 import { getCurrentGameweekFixtures } from 'src/firebase-helpers'
 
-export const findOpponent = async (selectedTeam: string) => {
+export const findOpponent = async (selectedTeam) => {
     const fixtures = await getCurrentGameweekFixtures()
     const selectedTeamFixture: any = fixtures.find(
-        (team: { home: string; away: string; result: string }) =>
-            team.home === selectedTeam || team.away === selectedTeam,
+        (team) => team.home.code === selectedTeam.code || team.away.code === selectedTeam.code,
     )
     const homeTeam = selectedTeamFixture['home']
     const awayTeam = selectedTeamFixture['away']
@@ -14,14 +13,16 @@ export const findOpponent = async (selectedTeam: string) => {
         return {
             teamPlayingAtHome: true,
             opponent: {
-                name: awayTeam,
+                name: awayTeam.name,
+                code: awayTeam.code,
             },
         }
     } else {
         return {
             teamPlayingAtHome: false,
             opponent: {
-                name: homeTeam,
+                name: homeTeam.name,
+                code: homeTeam.code,
             },
         }
     }

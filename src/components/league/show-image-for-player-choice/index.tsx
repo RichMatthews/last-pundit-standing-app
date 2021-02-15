@@ -78,7 +78,7 @@ const GameStatusIndicatorComponent = (status: string) => (
 export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer, player }: any) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
-
+    console.log('is it:', isCurrentLoggedInPlayer)
     useEffect(() => {
         checkIfTimeEnded()
     }, [])
@@ -95,7 +95,7 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
     const CURRENT_ROUND_WITHIN_CURRENT_GAME = currentGame.currentGameRound
 
     const OTHER_PLAYERS_EXCEPT_CURRENT_LOGGED_IN_PLAYER = ALL_PLAYERS_IN_CURRENT_GAME.filter(
-        (play: any) => play.id !== player.id,
+        (play: any) => play.id !== player.information.id,
     )
     const ALL_OTHER_PLAYERS_ELIMINATED = OTHER_PLAYERS_EXCEPT_CURRENT_LOGGED_IN_PLAYER.every(
         (playa: any) => playa.hasBeenEliminated,
@@ -121,11 +121,11 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
     }
 
     if (isCurrentLoggedInPlayer) {
-        if (PLAYER_CURRENT_ROUND.selection.selection) {
+        if (PLAYER_CURRENT_ROUND.selection.complete) {
             return (
                 <FastImage
                     style={{ width: 25, height: 25, marginRight: 10 }}
-                    source={Images[PLAYER_CURRENT_ROUND.selection.name.replace(/\s/g, '').toLowerCase()]}
+                    source={Images[PLAYER_CURRENT_ROUND.selection.code.toUpperCase()]}
                 />
             )
         } else {
@@ -133,12 +133,12 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
         }
     }
 
-    if (PLAYER_CURRENT_ROUND.selection.selection) {
+    if (PLAYER_CURRENT_ROUND.selection.complete) {
         if (ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE) {
             return (
                 <FastImage
                     style={{ width: 25, height: 25, marginRight: 10 }}
-                    source={Images[PLAYER_CURRENT_ROUND.selection.name.replace(/\s/g, '').toLowerCase()]}
+                    source={Images[PLAYER_CURRENT_ROUND.selection.code.toUpperCase()]}
                 />
             )
         } else {

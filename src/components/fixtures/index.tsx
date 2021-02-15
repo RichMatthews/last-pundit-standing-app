@@ -13,9 +13,11 @@ export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam,
                 {fixtures.map((match: any) => {
                     const homeTeamPreviouslyChosen = chosenTeams.includes(match.home)
                     const awayTeamPreviouslyChosen = chosenTeams.includes(match.away)
-
+                    const { code: homeTeamCode, name: homeTeamName } = match.home
+                    const { code: awayTeamCode, name: awayTeamName } = match.away
+                    console.log(match, 'sts')
                     return (
-                        <View key={match.home}>
+                        <View key={homeTeamCode}>
                             <View style={styles(theme).center}>
                                 <TouchableOpacity
                                     onPress={homeTeamPreviouslyChosen ? null : () => setSelectedTeam(match.home)}
@@ -30,15 +32,15 @@ export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam,
                                         <Text
                                             style={[
                                                 styles(theme).teamName,
-                                                { color: selectedTeam === match.home ? '#9f85d4' : 'black' },
+                                                { color: selectedTeam?.code === homeTeamCode ? '#9f85d4' : 'black' },
                                             ]}
                                         >
-                                            {match.home}
+                                            {homeTeamName}
                                         </Text>
                                         <View style={styles(theme).teamBadgeContainer}>
                                             <FastImage
                                                 style={{ width: 40, height: 40 }}
-                                                source={Images[match.home.replace(/\s/g, '').toLowerCase()]}
+                                                source={Images[homeTeamCode]}
                                             />
                                         </View>
                                     </View>
@@ -57,18 +59,15 @@ export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam,
                                         ]}
                                     >
                                         <View style={styles(theme).teamBadgeContainer}>
-                                            <FastImage
-                                                style={styles(theme).teamBadge}
-                                                source={Images[match.away.replace(/\s/g, '').toLowerCase()]}
-                                            />
+                                            <FastImage style={styles(theme).teamBadge} source={Images[awayTeamCode]} />
                                         </View>
                                         <Text
                                             style={[
                                                 styles(theme).teamName,
-                                                { color: selectedTeam === match.away ? '#9f85d4' : 'black' },
+                                                { color: selectedTeam?.code === awayTeamCode ? '#9f85d4' : 'black' },
                                             ]}
                                         >
-                                            {match.away}
+                                            {awayTeamName}
                                         </Text>
                                     </View>
                                 </TouchableOpacity>

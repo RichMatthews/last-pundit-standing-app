@@ -31,7 +31,9 @@ export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, t
 
     const showTeamSelectionPage = () => {
         const currentGameRound = currentGame.currentGameRound
+        console.log(currentPlayer, 'cpcp1')
         const currentRound = currentPlayer.rounds[currentGameRound]
+
         const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.selection.result === 'lost')
         const playerHasMadeChoice = currentRound && currentRound.selection.selection
         const playerHasNotMadeChoice = currentRound && !currentRound.selection.selection
