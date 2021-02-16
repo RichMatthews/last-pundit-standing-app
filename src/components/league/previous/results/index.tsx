@@ -7,10 +7,11 @@ import * as Images from 'src/images'
 export const Results = ({ player, theme }) => (
     <View style={styles(theme).playerResultsContainer}>
         {player.rounds.map((round) => {
-            const { opponent: playerChoiceOpponent, value: playerChoice } = round.choice
-            const playerChoicePlayingAtHome = round.choice.teamPlayingAtHome
-            const playerChoiceOpponentImage = Images[playerChoiceOpponent.name.replace(/\s/g, '').toLowerCase()]
-            const playerChoiceImage = Images[playerChoice.replace(/\s/g, '').toLowerCase()]
+            const { opponent: playerChoiceOpponent, name: playerChoice } = round.selection
+            console.log(playerChoiceOpponent, playerChoice, 'choices')
+            const playerChoicePlayingAtHome = round.selection.teamPlayingAtHome
+            const playerChoiceOpponentImage = Images[playerChoiceOpponent.code]
+            const playerChoiceImage = Images[playerChoice.code]
             let homeImage, awayImage
 
             if (playerChoicePlayingAtHome) {
@@ -27,9 +28,9 @@ export const Results = ({ player, theme }) => (
                         source={homeImage}
                         style={[styles(theme).homeImage, { opacity: playerChoicePlayingAtHome ? 1 : 0.25 }]}
                     />
-                    <Text>{playerChoicePlayingAtHome ? round.choice.goals : round.choice.opponent.goals}</Text>
+                    <Text>{playerChoicePlayingAtHome ? round.selection.goals : round.selection.opponent.goals}</Text>
                     <Text>-</Text>
-                    <Text>{!playerChoicePlayingAtHome ? round.choice.goals : round.choice.opponent.goals}</Text>
+                    <Text>{!playerChoicePlayingAtHome ? round.selection.goals : round.selection.opponent.goals}</Text>
                     <FastImage
                         source={awayImage}
                         style={[styles(theme).awayImage, { opacity: playerChoicePlayingAtHome ? 0.25 : 1 }]}

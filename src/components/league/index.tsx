@@ -33,7 +33,7 @@ export const League = ({ leagueId, theme }: string) => {
         const gamesConvertedToArray = Object.values(games)
         const currentGame: any = gamesConvertedToArray.find((game: any) => !game.complete)
         const players: Array<{ id: string }> = Object.values(currentGame.players)
-        const currentPlayer = players.find((player: { id: string }) => player.id === currentUser.id)
+        const currentPlayer = players.find((player) => player.information.id === currentUser.id)
 
         dispatch(getCurrentGame({ currentGame }))
         dispatch(setViewedLeague({ ...leagueData, games: gamesConvertedToArray }))
@@ -159,7 +159,7 @@ const styles = (theme) =>
             color: theme.text.primary,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontWeight: '700',
-            fontSize: 13,
+            fontSize: theme.text.small,
         },
         fixturesWrapper: { flex: 1, justifyContent: 'space-between', margin: 30 },
     })

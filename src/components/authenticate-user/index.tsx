@@ -12,13 +12,12 @@ import {
     View,
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { Button, ButtonText, InvertedButton, InvertedButtonText } from 'src/ui-components/button'
+import { Button, ButtonText } from 'src/ui-components/button'
 import { Container } from 'src/ui-components/containers'
 import * as Keychain from 'react-native-keychain'
 import { useDispatch } from 'react-redux'
 import * as RootNavigation from 'src/root-navigation'
-import LinearGradient from 'react-native-linear-gradient'
-
+import { ScreenComponent } from 'src/ui-components/containers/screenComponent'
 import { ResetPassword } from 'src/components/reset-password'
 import { logUserInToApplication, signUserUpToApplication, writeUserToDatabase } from '../../firebase-helpers'
 import {
@@ -47,19 +46,19 @@ export const AuthenticateUserScreen = ({ theme }) => {
     }, [])
 
     const {
-        linearGradient,
         screenWrapper,
         container,
+        heading,
         forgottenPasswordWrapper,
         forgottenPasswordText,
         loginOptionWrapper,
         loginOptionText,
+        loginOptionTextWrapper,
         faceIdWrapper,
         helperButtonWrapper,
         helperButtonText,
         errorWrapper,
         errorText,
-        heading,
         inputContainer,
         input,
         spinnerWrapper,
@@ -164,16 +163,8 @@ export const AuthenticateUserScreen = ({ theme }) => {
     }
 
     return loaded ? (
-        <Fragment>
-            <LinearGradient
-                colors={['#a103fc', '#5055b3']}
-                start={{ x: 0, y: 1 }}
-                end={{ x: 1, y: 0 }}
-                style={linearGradient}
-            >
-                <Text style={heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
-            </LinearGradient>
-            {/* TODO: Need to check but reckon that some of these can be replaced by ScreenContainer */}
+        <ScreenComponent theme={theme}>
+            <Text style={heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <SafeAreaView style={screenWrapper}>
                     <Container style={container}>
@@ -247,11 +238,11 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                         </TouchableOpacity>
                                         <View style={loginOptionWrapper}>
                                             <TouchableOpacity onPress={logUserIn}>
-                                                <Button>
-                                                    <ButtonText style={loginOptionText}>
+                                                <View style={loginOptionTextWrapper}>
+                                                    <Text style={loginOptionText}>
                                                         {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
-                                                    </ButtonText>
-                                                </Button>
+                                                    </Text>
+                                                </View>
                                             </TouchableOpacity>
                                         </View>
                                         {loginOption === 'signin' && showFaceIDButton && (
@@ -266,13 +257,13 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                     </View>
                                     <View style={helperButtonWrapper}>
                                         <TouchableOpacity onPress={authenticateUserHelper}>
-                                            <InvertedButton background={theme.button.backgroundColor}>
+                                            <View>
                                                 <Text style={helperButtonText}>
                                                     {loginOption === 'signup'
                                                         ? 'HAVE AN ACCOUNT? SIGN IN'
                                                         : 'NO ACCOUNT? SIGN UP'}
                                                 </Text>
-                                            </InvertedButton>
+                                            </View>
                                         </TouchableOpacity>
                                     </View>
                                 </Fragment>
@@ -281,7 +272,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
                     </Container>
                 </SafeAreaView>
             </TouchableWithoutFeedback>
-        </Fragment>
+        </ScreenComponent>
     ) : (
         <Container style={spinnerWrapper}>
             <ActivityIndicator size="large" color={theme.spinner.primary} />
@@ -291,27 +282,35 @@ export const AuthenticateUserScreen = ({ theme }) => {
 
 const styles = (theme) =>
     StyleSheet.create({
-        linearGradient: {
-            height: Platform.OS === 'ios' ? 300 : 100,
-        },
         screenWrapper: {
             backgroundColor: theme.background.primary,
         },
         container: {
             marginTop: 50,
             width: 350,
+        },
+        auth: {
+            display: 'flex',
             alignSelf: 'center',
         },
         forgottenPasswordWrapper: {
             marginBottom: 15,
             alignSelf: 'flex-end',
         },
-        forgottenPasswordText: { color: theme.text.primary, fontSize: 12 },
+        forgottenPasswordText: {
+            color: theme.text.primary,
+            fontSize: 12,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+        },
         loginOptionWrapper: {
             width: 300,
         },
+        loginOptionTextWrapper: { borderWidth: 1, borderRadius: 5, padding: 5 },
         loginOptionText: {
+            color: theme.text.primary,
             fontSize: 16,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            textAlign: 'center',
         },
         faceIdWrapper: { marginTop: 10, width: 300 },
         helperButtonWrapper: {
@@ -325,6 +324,9 @@ const styles = (theme) =>
         },
         errorWrapper: {
             backgroundColor: theme.button.backgroundColor,
+        },
+        error: {
+            backgroundColor: theme.background.primary,
             borderRadius: 5,
             borderWidth: 1,
             borderColor: '#ff0033',
@@ -336,10 +338,12 @@ const styles = (theme) =>
             fontWeight: '700',
         },
         heading: {
-            color: '#fff',
-            position: 'absolute',
-            bottom: 0,
-            padding: 30,
+            color: theme.text.primary,
+            fontSize: 25,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            marginHorizontal: 50,
+            marginTop: 100,
+            fontWeight: '600',
         },
         inputContainer: {
             display: 'flex',
@@ -352,6 +356,7 @@ const styles = (theme) =>
             borderColor: '#ccc',
             color: theme.text.primary,
             fontSize: 15,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             paddingBottom: Platform.OS === 'ios' ? 10 : 0,
             width: 300,
         },

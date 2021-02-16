@@ -18,5 +18,5 @@
             "src/*": ["./*"]
         }
     },
-    "include": ["src", "WEEKLY_UPDATE_SCRIPT.js"]
+    "include": ["src", "WEEKLY_UPDATE_SCRIPT.js", "teamcodes.ts"]
 }

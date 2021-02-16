@@ -32,9 +32,10 @@ export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, t
     const showTeamSelectionPage = () => {
         const currentGameRound = currentGame.currentGameRound
         const currentRound = currentPlayer.rounds[currentGameRound]
-        const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.choice.result === 'lost')
-        const playerHasMadeChoice = currentRound && currentRound.choice.hasMadeChoice
-        const playerHasNotMadeChoice = currentRound && !currentRound.choice.hasMadeChoice
+
+        const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.selection.result === 'lost')
+        const playerHasMadeChoice = currentRound && currentRound.selection.selection
+        const playerHasNotMadeChoice = currentRound && !currentRound.selection.selection
 
         if (playerOutOfGame.length) {
             return <NoLongerInGame theme={theme} />
@@ -49,8 +50,9 @@ export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, t
                 <ChooseTeam
                     closeTeamSelectionModal={closeTeamSelectionModal}
                     currentRound={currentGameRound}
-                    pullLatestLeagueData={pullLatestLeagueData}
                     fixtures={fixtures}
+                    pullLatestLeagueData={pullLatestLeagueData}
+                    theme={theme}
                 />
             )
         } else if (playerHasMadeChoice) {
@@ -64,16 +66,18 @@ export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, t
         }
     }
 
-    return <View style={styles(theme).section}>{showTeamSelectionPage()}</View>
+    return <View>{showTeamSelectionPage()}</View>
 }
 
 const styles = (theme) =>
     StyleSheet.create({
-        section: {},
-        text: { alignSelf: 'center', color: theme.text.primary, fontSize: 18 },
+        text: {
+            alignSelf: 'center',
+            color: theme.text.primary,
+            fontSize: theme.text.large,
+        },
         noLongerInGameText: {
             alignSelf: 'center',
-            fontSize: 18,
-            color: theme.text.primary,
+            fontSize: theme.text.large,
         },
     })

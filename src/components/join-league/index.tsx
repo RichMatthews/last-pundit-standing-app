@@ -36,7 +36,7 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
         const currentGame: any = games.filter((game: any) => game !== game.complete)
         if (currentGame) {
             const currentPlayers = Object.values(currentGame[0].players)
-            const playerAlreadyInLeague = currentPlayers.find((player: any) => player.id === currentUserId)
+            const playerAlreadyInLeague = currentPlayers.find((player: any) => player.information.id === currentUserId)
             if (playerAlreadyInLeague) {
                 alert('You have already entered this league!')
                 setLoading(false)
@@ -45,7 +45,7 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
                     [`/leagues/${league.id}/games/${currentGame[0].id}/players/${currentUserId}`]: {
                         id: currentUserId,
                         name: name + ' ' + surname,
-                        rounds: [{ choice: { hasMadeChoice: false } }],
+                        rounds: [{ choice: { selection: false } }],
                     },
                     [`/users/${currentUserId}/leagues/${league.id}`]: {
                         id: league.id,
@@ -112,7 +112,7 @@ const styles = (theme: any) =>
             backgroundColor: theme.input.backgroundColor,
             color: theme.text.primary,
             borderRadius: theme.borders.radius,
-            fontSize: 15,
+            fontSize: theme.text.medium,
             padding: 10,
             marginBottom: 20,
             width: '100%',

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActivityIndicator, Image, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { ActivityIndicator, Image, Text, TouchableOpacity, Platform, View, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import Entypo from 'react-native-vector-icons/Entypo'
 
@@ -84,7 +84,7 @@ const styles = (theme: any) =>
         leagueTitle: {
             color: theme.text.primary,
             fontSize: theme.text.large,
-            fontFamily: 'Nunito',
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontWeight: '700',
         },
         leagueImage: {
@@ -99,12 +99,12 @@ const styles = (theme: any) =>
         },
         text: {
             color: theme.text.primary,
-            fontFamily: 'Nunito',
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             alignSelf: 'center',
-            fontSize: 15,
+            fontSize: theme.text.medium,
         },
         helperText: {
-            fontFamily: 'Nunito',
+            fontFamily: 'Hind',
         },
         joinLeagueWrapper: {
             marginTop: 50,

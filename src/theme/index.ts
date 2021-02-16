@@ -18,7 +18,6 @@ const DEFAULT_THEME = {
         large: 18,
         medium: 15,
         small: 12,
-        xsmall: 9,
     },
 }
 

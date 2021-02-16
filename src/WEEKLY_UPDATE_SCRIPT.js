@@ -30,7 +30,7 @@ const CURRENT_GAMEWEEK = {
 const findFixture = (choice) => {
     const gameWeekFixtures = CURRENT_GAMEWEEK.fixtures
     const foundMatch = gameWeekFixtures.find(
-        (fixture) => fixture.home.team === choice.value || fixture.away.team === choice.value,
+        (fixture) => fixture.home.team === choice.name || fixture.away.team === choice.name,
     )
     return foundMatch
 }
@@ -39,9 +39,9 @@ const roundResultDetails = ({ currentPlayerGameRound, fixture, playingAthome, wo
     const showHomeDetails = playingAthome ? 'home' : 'away'
     const showAwayDetails = playingAthome ? 'away' : 'home'
     let roundResult = {
-        hasMadeChoice: true,
+        selection: true,
         teamPlayingAtHome: playingAthome,
-        value: currentPlayerGameRound.choice.value,
+        value: currentPlayerGameRound.selection.name,
         goals: fixture[showHomeDetails].goals,
         opponent: {
             name: fixture[showAwayDetails].team,
@@ -63,7 +63,7 @@ const roundResultDetails = ({ currentPlayerGameRound, fixture, playingAthome, wo
 
 const calculateIfTheChoiceWon = ({ currentPlayerGameRound, fixture, game, league, player, playingAthome }) => {
     if (playingAthome) {
-        if (fixture.result === currentPlayerGameRound.choice.value) {
+        if (fixture.result === currentPlayerGameRound.selection.name) {
             updateFirebaseWithResults({
                 game,
                 league,
@@ -81,7 +81,7 @@ const calculateIfTheChoiceWon = ({ currentPlayerGameRound, fixture, game, league
             })
         }
     } else {
-        if (fixture.result === currentPlayerGameRound.choice.value || fixture.result === 'draw') {
+        if (fixture.result === currentPlayerGameRound.selection.name || fixture.result === 'draw') {
             updateFirebaseWithResults({
                 game,
                 league,
@@ -118,17 +118,17 @@ const updateAllLeagues = () => {
                         // fix the line below to update firebase if someone has not made a choice
                         if (
                             currentPlayerGameRound &&
-                            currentPlayerGameRound.choice &&
-                            currentPlayerGameRound.choice.hasMadeChoice
+                            currentPlayerGameRound.selection &&
+                            currentPlayerGameRound.selection.selection
                         ) {
-                            const fixture = findFixture(currentPlayerGameRound.choice)
+                            const fixture = findFixture(currentPlayerGameRound.selection)
                             calculateIfTheChoiceWon({
                                 currentPlayerGameRound,
                                 fixture,
                                 game: currentGame,
                                 league,
                                 player,
-                                playingAthome: currentPlayerGameRound.choice.teamPlayingAtHome,
+                                playingAthome: currentPlayerGameRound.selection.teamPlayingAtHome,
                             })
                         }
                     })
@@ -180,7 +180,7 @@ const updateCurrentGameStatus = ({ game, league }) => {
                 let newPlayer = {
                     ...player,
                     hasBeenEliminated: false,
-                    rounds: [{ choice: { hasMadeChoice: false } }],
+                    rounds: [{ choice: { selection: false } }],
                 }
 
                 resetPlayers = { ...resetPlayers, [player.id]: newPlayer }
@@ -266,7 +266,7 @@ const updateGameStillInProgress = ({ game, league, remainingPlayers, roundId }) 
         return firebaseApp
             .database()
             .ref(`leagues/${league.id}/games/${game.id}/players/${player.id}/rounds/${roundId}`)
-            .update({ choice: { hasMadeChoice: false } }, (error) => {
+            .update({ choice: { selection: false } }, (error) => {
                 if (error) {
                     console.log('ERROR!:', error)
                 } else {

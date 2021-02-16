@@ -55,20 +55,20 @@ export const CurrentRoundView = ({
             >
                 {Object.values(currentGame.players).map((player: any, index: number) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        <View key={player.id} style={styles(theme).playerContainer}>
+                        <View key={player.information.id} style={styles(theme).playerContainer}>
                             <View style={styles(theme).playerRow}>
                                 <Text
                                     style={[
                                         styles(theme).playerName,
-                                        { color: player.id === user.id ? '#9f85d4' : theme.text.primary },
+                                        { color: player.information.id === user.id ? '#9f85d4' : theme.text.primary },
                                     ]}
                                 >
-                                    {player.name}
+                                    {player.information.name}
                                 </Text>
                                 <View style={styles(theme).playerChosenImageAndDownArrow}>
                                     <MemoizedShowImageForPlayerChoice
                                         currentGame={currentGame}
-                                        isCurrentLoggedInPlayer={player.id === user.id}
+                                        isCurrentLoggedInPlayer={player.information.id === user.id}
                                         player={player}
                                     />
                                     {listOfExpandedPrevious.includes(index) ? (
@@ -93,10 +93,10 @@ export const CurrentRoundView = ({
                                             {player.rounds
                                                 .filter(
                                                     (round: any) =>
-                                                        round.choice.value && round.choice.result !== 'pending',
+                                                        round.selection.name && round.selection.result !== 'pending',
                                                 )
                                                 .map((round: any) => (
-                                                    <PreviousRound choice={round.choice} theme={theme} />
+                                                    <PreviousRound choice={round.selection} theme={theme} />
                                                 ))}
                                         </>
                                     ) : (
@@ -172,7 +172,7 @@ const styles = (theme) =>
         },
         buttonText: {
             color: theme.text.primary,
-            fontFamily: 'Nunito',
+            fontFamily: 'Hind',
         },
         topContainer: {
             flexDirection: 'row',

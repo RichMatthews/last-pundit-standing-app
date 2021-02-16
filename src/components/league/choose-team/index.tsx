@@ -13,7 +13,7 @@ interface Props {
     pullLatestLeagueData: () => void
 }
 
-export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLeagueData, fixtures }: Props) => {
+export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLeagueData, fixtures, theme }: Props) => {
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const league = useSelector((store: { league: any }) => store.league)
@@ -23,14 +23,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
         currentPlayer,
         leagueTeams: PREMIER_LEAGUE_TEAMS,
     })
-    const [selectedTeam, setSelectedTeam] = useState<string>('')
-
-    useEffect(() => {
-        console.log(
-            fixtures,
-            teams.filter((team) => team.chosen).map((team) => team['value']),
-        )
-    }, [])
+    const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string }>()
 
     const submitChoice = () => {
         if (!selectedTeam) {
@@ -38,7 +31,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
             return
         }
 
-        const confirmationMsg: string = `You are picking ${selectedTeam}. Are you sure? Once you confirm you are locked in for this gameweek.`
+        const confirmationMsg: string = `You are picking ${selectedTeam.code}. Are you sure? Once you confirm you are locked in for this gameweek.`
 
         Alert.alert(
             'Confirm team selection',
@@ -57,10 +50,11 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
     const updateUserGamweekChoiceHelper = async () => {
         const opponent = await findOpponent(selectedTeam)
         const choice = {
-            hasMadeChoice: true,
+            selection: true,
             ...opponent,
             result: 'pending',
-            value: selectedTeam,
+            name: selectedTeam?.name,
+            code: selectedTeam?.code,
         }
 
         await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
@@ -70,17 +64,18 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
     }
 
     return (
-        <View style={styles.innerContainer}>
+        <View style={styles(theme).innerContainer}>
             <Fixtures
                 fixtures={fixtures}
                 selectedTeam={selectedTeam}
                 setSelectedTeam={setSelectedTeam}
-                chosenTeams={teams.filter((team) => team.chosen).map((team) => team['value'])}
+                chosenTeams={teams.filter((team) => team.chosen).map((team) => team['name'])}
+                theme={theme}
             />
-            <View style={styles.button}>
+            <View style={styles(theme).button}>
                 <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
-                    <View style={styles.buttonText}>
-                        <Text style={styles.confirmSelectionText}>Confirm selection</Text>
+                    <View style={styles(theme).buttonText}>
+                        <Text style={styles(theme).confirmSelectionText}>Confirm selection</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -88,37 +83,38 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
     )
 }
 
-const styles = StyleSheet.create({
-    alreadySelectedTeam: {
-        opacity: 0.1,
-    },
-    button: {
-        marginTop: 30,
-    },
-    buttonText: {
-        backgroundColor: '#9f85d4',
-        borderRadius: 5,
-        padding: 10,
-    },
-    confirmSelectionText: {
-        color: '#fff',
-        fontWeight: '600',
-        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-        fontSize: 17,
-        textAlign: 'center',
-    },
-    image: {
-        height: 50,
-        width: 50,
-    },
-    selected: {
-        opacity: 1,
-    },
-    unselected: {
-        opacity: 0.2,
-    },
-    innerContainer: {
-        flex: 1,
-        alignSelf: 'center',
-    },
-})
+const styles = (theme) =>
+    StyleSheet.create({
+        alreadySelectedTeam: {
+            opacity: 0.1,
+        },
+        button: {
+            marginTop: 30,
+        },
+        buttonText: {
+            backgroundColor: '#9f85d4',
+            borderRadius: 5,
+            padding: 10,
+        },
+        confirmSelectionText: {
+            color: theme.text.primary,
+            fontWeight: '600',
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontSize: theme.text.large,
+            textAlign: 'center',
+        },
+        image: {
+            height: 50,
+            width: 50,
+        },
+        selected: {
+            opacity: 1,
+        },
+        unselected: {
+            opacity: 0.2,
+        },
+        innerContainer: {
+            flex: 1,
+            alignSelf: 'center',
+        },
+    })

@@ -80,7 +80,7 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                             [user.id]: {
                                 id: user.id,
                                 name: playerInfo.name,
-                                rounds: [{ choice: { hasMadeChoice: false } }],
+                                rounds: [{ choice: { selection: false } }],
                             },
                         },
                         winner: false,
@@ -200,7 +200,7 @@ const styles = (theme: any, active?: boolean) =>
             backgroundColor: theme.input.backgroundColor,
             color: theme.text.primary,
             borderRadius: theme.borders.radius,
-            fontSize: 15,
+            fontSize: theme.text.medium,
             padding: 10,
             marginBottom: 20,
             width: '100%',

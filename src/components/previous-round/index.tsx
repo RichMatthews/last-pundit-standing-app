@@ -4,8 +4,8 @@ import { Image, Text, View, StyleSheet } from 'react-native'
 import * as Images from '../../images'
 
 export const PreviousRound = ({ choice, theme }: any) => {
-    const opponentTeamName: any = choice.opponent.name.replace(/\s/g, '').toLowerCase()
-    const userTeamName: any = choice.value.replace(/\s/g, '').toLowerCase()
+    const opponentTeamName: any = choice.opponent.code.toUpperCase()
+    const userTeamName: any = choice.code.toUpperCase()
 
     return choice.teamPlayingAtHome ? (
         <View style={styles(theme).container}>
