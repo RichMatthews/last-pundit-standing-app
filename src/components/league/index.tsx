@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Image, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { CurrentGame } from 'src/components/league/current'
 import { TeamSelection } from 'src/components/league/team-selection'
@@ -75,69 +76,86 @@ export const League = ({ leagueId, theme }: string) => {
     }
 
     return (
-        <ScreenComponent theme={theme}>
-            <View style={styles(theme).container}>
+        <>
+            <SafeAreaView style={{ flex: 0, backgroundColor: '#f2f2f2' }} />
+            <View
+                style={{
+                    backgroundColor: '#f2f2f2',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 20,
+                    alignItems: 'center',
+                }}
+            >
                 <Text style={styles(theme).mainheading}>{league.name}</Text>
-                <View style={styles(theme).buttonsWrapper}>
+                <TouchableOpacity onPress={showTeamSelection}>
+                    <Image source={require('src/images/other/menu.png')} />
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles(theme).container}>
                 <View
                     style={{
+                        backgroundColor: '#fff',
                         flexDirection: 'row',
                         alignItems: 'center',
+                        borderRadius: 20,
                         justifyContent: 'space-between',
                         marginVertical: 10,
-                        marginHorizontal: 20,
+                        marginBottom: 20,
+                        width: 300,
+                        alignSelf: 'center',
+                        shadowOpacity: 1,
+                        shadowRadius: 3,
+                        shadowColor: '#ccc',
+                        shadowOffset: { height: 2, width: 0 },
                     }}
                 >
-                    <Image source={require('src/images/other/menu.png')} />
-                </View>
-                {/* <View style={{ flexDirection: 'row' }}>
-                    <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
-                        <View style={styles(theme).openModalButton}>
-                            <Text style={styles(theme).openModalButtonText}>Previous Games</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
-                        <View style={styles(theme).openModalButton}>
-                            <Text style={styles(theme).openModalButtonText}>Leagues Rules</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity onPress={showTeamSelection} activeOpacity={0.7}>
-                        <View style={styles(theme).openModalButton}>
-                            <Text style={styles(theme).openModalButtonText}>Select team</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View> */}
-
-                <View style={styles(theme).tabContainer}>
-                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)} style={{ borderRadius: 10 }}>
-                        <Text
-                            style={[
-                                styles(theme).currentRoundHeading,
-                                {
-                                    backgroundColor: showCurrent ? '#9f85d4' : 'transparent',
-                                    color: showCurrent ? '#fff' : 'black',
-                                    padding: 5,
-                                },
-                            ]}
+                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)}>
+                        <View
+                            style={{
+                                backgroundColor: showCurrent ? '#9f85d4' : 'transparent',
+                                borderRadius: 20,
+                                padding: 10,
+                                width: 150,
+                            }}
                         >
-                            Current Round
-                        </Text>
+                            <Text
+                                style={[
+                                    styles(theme).currentRoundHeading,
+                                    {
+                                        color: showCurrent ? '#fff' : 'black',
+                                        fontSize: 15,
+                                        textAlign: 'center',
+                                    },
+                                ]}
+                            >
+                                Current Round
+                            </Text>
+                        </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)}>
-                        <Text
-                            style={[
-                                styles(theme).currentRoundHeading,
-                                {
-                                    backgroundColor: !showCurrent ? '#9f85d4' : 'transparent',
-                                    color: showCurrent ? 'black' : '#fff',
-                                    padding: 5,
-                                },
-                            ]}
+                        <View
+                            style={{
+                                backgroundColor: !showCurrent ? '#9f85d4' : 'transparent',
+                                borderRadius: 20,
+                                padding: 10,
+                                width: 150,
+                            }}
                         >
-                            Previous Rounds
-                        </Text>
+                            <Text
+                                style={[
+                                    styles(theme).currentRoundHeading,
+                                    {
+                                        color: !showCurrent ? '#fff' : 'black',
+                                        fontSize: 15,
+                                        textAlign: 'center',
+                                    },
+                                ]}
+                            >
+                                Previous Rounds
+                            </Text>
+                        </View>
                     </TouchableOpacity>
                 </View>
 
@@ -156,14 +174,6 @@ export const League = ({ leagueId, theme }: string) => {
                 )}
 
                 <Portal>
-                    {/* <Modalize ref={previousGamesRef} adjustToContentHeight childrenStyle={{ marginBottom: 30 }}>
-                        {league && league.games && (
-                            <PreviousGames
-                                games={Object.values(league.games).filter((game: any) => game.complete)}
-                                theme={theme}
-                            />
-                        )}
-                    </Modalize> */}
                     <Modalize
                         adjustToContentHeight
                         ref={teamSelectionRef}
@@ -182,18 +192,16 @@ export const League = ({ leagueId, theme }: string) => {
                     </Modalize>
                 </Portal>
             </View>
-        </ScreenComponent>
+        </>
     )
 }
 
 const styles = (theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.background.primary,
+            backgroundColor: '#f2f2f2',
             flex: 1,
         },
-
-        buttonsWrapper: { flexDirection: 'row', marginBottom: 10, marginLeft: 10 },
         currentRoundHeading: {
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: 20,
@@ -226,12 +234,6 @@ const styles = (theme) =>
             alignItems: 'center',
             marginHorizontal: 15,
             marginVertical: 15,
-        },
-        tabContainer: {
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            marginHorizontal: 15,
         },
         ctaContainer: {
             borderWidth: 1,

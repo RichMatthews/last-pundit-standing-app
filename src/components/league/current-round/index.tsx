@@ -116,11 +116,11 @@ const styles = (theme) =>
             alignSelf: 'center',
             backgroundColor: theme.background.primary,
             borderRadius: 5,
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
             paddingTop: 10,
             width: '100%',
             flexGrow: 1,
-            marginBottom: 20,
-            elevation: 2,
         },
 
         infoBanner: {
