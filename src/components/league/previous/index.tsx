@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { Results } from './results'
+import { CachedResults } from './results'
 
 type Player = {
     hasBeenEliminated: boolean
@@ -62,7 +62,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                         return (
                                             <View style={styles(theme).individualPlayerRounds}>
                                                 <Text>{player.information.name}</Text>
-                                                <Results player={player} theme={theme} />
+                                                <CachedResults player={player} theme={theme} />
                                             </View>
                                         )
                                     })}
@@ -79,6 +79,12 @@ export const PreviousGames = ({ games, theme }: Props) => {
         </View>
     )
 }
+
+const compare = (p, pa) => {
+    console.log(p, pa, 'papa')
+}
+
+export const CachedPreviousGames = React.memo(PreviousGames, compare)
 
 const styles = (theme: any) =>
     StyleSheet.create({

@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react'
-import { StyleSheet, Text, ScrollView, RefreshControl, Platform, View } from 'react-native'
+import { StyleSheet, Text, ScrollView, RefreshControl, TouchableOpacity, Platform, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 import FastImage from 'react-native-fast-image'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { PreviousRound } from 'src/components/previous-round/index.tsx'
 import { MemoizedShowImageForPlayerChoice } from '../show-image-for-player-choice'
 
@@ -38,9 +37,6 @@ export const CurrentRoundView = ({
 
     return (
         <View style={styles(theme).container}>
-            <View style={styles(theme).topContainer}>
-                <Text style={styles(theme).currentRoundHeading}>Current Round</Text>
-            </View>
             <Text style={styles(theme).infoBanner}>Round closes: {gameweekCloses}</Text>
             <ScrollView
                 refreshControl={
@@ -126,12 +122,7 @@ const styles = (theme) =>
             marginBottom: 20,
             elevation: 2,
         },
-        currentRoundHeading: {
-            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-            fontSize: 22,
-            fontWeight: '600',
-            color: theme.text.primary,
-        },
+
         infoBanner: {
             textAlign: 'center',
             backgroundColor: '#9f85d4',
@@ -174,12 +165,7 @@ const styles = (theme) =>
             color: theme.text.primary,
             fontFamily: 'Hind',
         },
-        topContainer: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginHorizontal: 15,
-        },
+
         maintext: {
             fontSize: theme.text.medium,
             fontWeight: '700',

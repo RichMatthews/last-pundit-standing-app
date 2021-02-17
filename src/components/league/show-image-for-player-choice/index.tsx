@@ -54,7 +54,7 @@ const GameStatusIndicatorComponent = (status: string) => {
 export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer, player }: any) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
-    console.log('is it:', isCurrentLoggedInPlayer)
+
     useEffect(() => {
         checkIfTimeEnded()
     }, [])
