@@ -11,11 +11,11 @@ export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam,
             <Text style={styles(theme).subHeading}>Select your team then confirm at the bottom</Text>
             <View style={styles(theme).container}>
                 {fixtures.map((match: any) => {
-                    const homeTeamPreviouslyChosen = chosenTeams.includes(match.home)
-                    const awayTeamPreviouslyChosen = chosenTeams.includes(match.away)
                     const { code: homeTeamCode, name: homeTeamName } = match.home
                     const { code: awayTeamCode, name: awayTeamName } = match.away
-                    console.log(match, 'sts')
+                    const homeTeamPreviouslyChosen = chosenTeams.includes(homeTeamCode)
+                    const awayTeamPreviouslyChosen = chosenTeams.includes(awayTeamCode)
+
                     return (
                         <View key={homeTeamCode}>
                             <View style={styles(theme).center}>
@@ -26,7 +26,7 @@ export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam,
                                     <View
                                         style={[
                                             styles(theme).matchContainerHome,
-                                            { opacity: homeTeamPreviouslyChosen ? 0.2 : 1 },
+                                            { opacity: homeTeamPreviouslyChosen ? 0.1 : 1 },
                                         ]}
                                     >
                                         <Text
@@ -49,13 +49,13 @@ export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam,
                                     <Text style={styles(theme).vs}>{match.time || 'TBC'}</Text>
                                 </View>
                                 <TouchableOpacity
-                                    onPress={() => setSelectedTeam(match.away)}
+                                    onPress={awayTeamPreviouslyChosen ? null : () => setSelectedTeam(match.away)}
                                     activeOpacity={awayTeamPreviouslyChosen ? 1 : 0.7}
                                 >
                                     <View
                                         style={[
                                             styles(theme).matchContainerAway,
-                                            { opacity: awayTeamPreviouslyChosen ? 0.2 : 1 },
+                                            { opacity: awayTeamPreviouslyChosen ? 0.1 : 1 },
                                         ]}
                                     >
                                         <View style={styles(theme).teamBadgeContainer}>
@@ -138,7 +138,6 @@ const styles = (theme) =>
             alignItems: 'center',
             borderWidth: 1,
             padding: 10,
-
             margin: 10,
         },
         vs: {

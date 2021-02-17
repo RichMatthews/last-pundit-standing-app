@@ -8,7 +8,6 @@ export const Results = ({ player, theme }) => (
     <View style={styles(theme).playerResultsContainer}>
         {player.rounds.map((round) => {
             const { opponent: playerChoiceOpponent, name: playerChoice } = round.selection
-            console.log(playerChoiceOpponent, playerChoice, 'choices')
             const playerChoicePlayingAtHome = round.selection.teamPlayingAtHome
             const playerChoiceOpponentImage = Images[playerChoiceOpponent.code]
             const playerChoiceImage = Images[playerChoice.code]
@@ -40,6 +39,8 @@ export const Results = ({ player, theme }) => (
         })}
     </View>
 )
+
+export const CachedResults = React.memo(Results)
 
 const styles = (theme: any) =>
     StyleSheet.create({

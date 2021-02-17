@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { StyleSheet, Platform, Text, View } from 'react-native'
+import { Image, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { CurrentGame } from 'src/components/league/current'
@@ -9,10 +9,10 @@ import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { setViewedLeague } from 'src/redux/reducer/league'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
-import { PreviousGames } from 'src/components/league/previous'
+import { CachedPreviousGames } from 'src/components/league/previous'
+import { ScreenComponent } from 'src/ui-components/containers/screenComponent'
 
 interface LeagueData {
     games: {}
@@ -21,6 +21,7 @@ interface LeagueData {
 export const League = ({ leagueId, theme }: string) => {
     const [loaded, setLoaded] = useState<string>('')
     const [gameweekFixtures, setGameweekFixtures] = useState([])
+    const [showCurrent, setShowCurrent] = useState(true)
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
     const league = useSelector((store: { league: any }) => store.league)
@@ -74,10 +75,21 @@ export const League = ({ leagueId, theme }: string) => {
     }
 
     return (
-        <>
+        <ScreenComponent theme={theme}>
             <View style={styles(theme).container}>
-                <Text style={styles(theme).mainheading}>{league.name}</Text>
-                <View style={{ flexDirection: 'row', marginBottom: 10, marginLeft: 10 }}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginVertical: 10,
+                        marginHorizontal: 20,
+                    }}
+                >
+                    <Text style={styles(theme).mainheading}>{league.name}</Text>
+                    <Image source={require('src/images/other/menu.png')} />
+                </View>
+                {/* <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={showPreviousGames} activeOpacity={0.7}>
                         <View style={styles(theme).openModalButton}>
                             <Text style={styles(theme).openModalButtonText}>Previous Games</Text>
@@ -95,19 +107,62 @@ export const League = ({ leagueId, theme }: string) => {
                             <Text style={styles(theme).openModalButtonText}>Select team</Text>
                         </View>
                     </TouchableOpacity>
+                </View> */}
+
+                <View style={styles(theme).tabContainer}>
+                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)} style={{ borderRadius: 10 }}>
+                        <Text
+                            style={[
+                                styles(theme).currentRoundHeading,
+                                {
+                                    backgroundColor: showCurrent ? '#9f85d4' : 'transparent',
+                                    color: showCurrent ? '#fff' : 'black',
+                                    padding: 5,
+                                },
+                            ]}
+                        >
+                            Current Round
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)}>
+                        <Text
+                            style={[
+                                styles(theme).currentRoundHeading,
+                                {
+                                    backgroundColor: !showCurrent ? '#9f85d4' : 'transparent',
+                                    color: showCurrent ? 'black' : '#fff',
+                                    padding: 5,
+                                },
+                            ]}
+                        >
+                            Previous Rounds
+                        </Text>
+                    </TouchableOpacity>
                 </View>
 
-                <CurrentGame loaded={loaded} theme={theme} />
+                {showCurrent ? (
+                    <CurrentGame
+                        loaded={loaded}
+                        theme={theme}
+                        showCurrent={showCurrent}
+                        setShowCurrent={setShowCurrent}
+                    />
+                ) : (
+                    <CachedPreviousGames
+                        games={Object.values(league.games).filter((game: any) => game.complete)}
+                        theme={theme}
+                    />
+                )}
 
                 <Portal>
-                    <Modalize ref={previousGamesRef} adjustToContentHeight childrenStyle={{ marginBottom: 30 }}>
+                    {/* <Modalize ref={previousGamesRef} adjustToContentHeight childrenStyle={{ marginBottom: 30 }}>
                         {league && league.games && (
                             <PreviousGames
                                 games={Object.values(league.games).filter((game: any) => game.complete)}
                                 theme={theme}
                             />
                         )}
-                    </Modalize>
+                    </Modalize> */}
                     <Modalize
                         adjustToContentHeight
                         ref={teamSelectionRef}
@@ -126,7 +181,7 @@ export const League = ({ leagueId, theme }: string) => {
                     </Modalize>
                 </Portal>
             </View>
-        </>
+        </ScreenComponent>
     )
 }
 
@@ -135,6 +190,12 @@ const styles = (theme) =>
         container: {
             backgroundColor: theme.background.primary,
             flex: 1,
+        },
+        currentRoundHeading: {
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontSize: 20,
+            fontWeight: '600',
+            color: theme.text.primary,
         },
         image: {
             resizeMode: 'contain',
@@ -147,9 +208,6 @@ const styles = (theme) =>
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: 30,
             fontWeight: '700',
-            marginTop: Platform.OS === 'ios' ? 50 : 0,
-            padding: 10,
-            paddingHorizontal: 20,
         },
         maintext: {
             fontSize: theme.text.large,
@@ -165,6 +223,12 @@ const styles = (theme) =>
             alignItems: 'center',
             marginHorizontal: 15,
             marginVertical: 15,
+        },
+        tabContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            marginHorizontal: 15,
         },
         ctaContainer: {
             borderWidth: 1,

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Alert, StyleSheet, Text, TouchableOpacity, Platform, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import { updateUserGamweekChoice } from 'src/firebase-helpers'
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
-import { findOpponent } from './utils'
+import { findOpponent, isTeamPlayingInADoubleGameweek } from './utils'
 import { Fixtures } from 'src/components/fixtures'
 
 interface Props {
@@ -31,7 +31,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
             return
         }
 
-        const confirmationMsg: string = `You are picking ${selectedTeam.code}. Are you sure? Once you confirm you are locked in for this gameweek.`
+        const confirmationMsg: string = `You are picking ${selectedTeam.name}. Are you sure? Once you confirm you are locked in for this gameweek.`
 
         Alert.alert(
             'Confirm team selection',
@@ -47,18 +47,28 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
         )
     }
 
-    const updateUserGamweekChoiceHelper = async () => {
-        const opponent = await findOpponent(selectedTeam)
-        const choice = {
-            selection: true,
-            ...opponent,
-            result: 'pending',
-            name: selectedTeam?.name,
-            code: selectedTeam?.code,
-        }
+    const showModalForDoubleGameweek = () => {}
 
-        await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
-        await pullLatestLeagueData()
+    const updateUserGamweekChoiceHelper = async () => {
+        const opponentPlayingAtLeastTwice = await isTeamPlayingInADoubleGameweek(selectedTeam)
+
+        if (opponentPlayingAtLeastTwice) {
+            showModalForDoubleGameweek()
+            return
+        } else {
+            const opponent = await findOpponent(selectedTeam)
+            console.log(opponent, 'opnt')
+            const choice = {
+                code: selectedTeam?.code,
+                complete: true,
+                name: selectedTeam?.name,
+                ...opponent,
+                result: 'pending',
+            }
+            console.log(choice, 'choi!')
+            // await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
+            // await pullLatestLeagueData()
+        }
 
         closeTeamSelectionModal()
     }
@@ -69,7 +79,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
                 fixtures={fixtures}
                 selectedTeam={selectedTeam}
                 setSelectedTeam={setSelectedTeam}
-                chosenTeams={teams.filter((team) => team.chosen).map((team) => team['name'])}
+                chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
                 theme={theme}
             />
             <View style={styles(theme).button}>
