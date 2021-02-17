@@ -1,47 +1,62 @@
 import React from 'react'
-import styled from 'styled-components'
-import { View } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 
-const APP_BRAND_COLOR = '#2C3E50'
-const APP_BACKGROUND_COLOR = '#F2F1F7'
+export const ButtonText = ({ children }) => (
+    <View style={buttonTextStyles.wrapper}>
+        <Text style={buttonTextStyles.text}>{children}</Text>
+    </View>
+)
 
-export const ButtonText = styled.Text`
-    align-items: center;
-    color: #fff;
-    display: flex;
-    font-size: 15px;
-    font-weight: 700;
-    text-align: center;
-    align-self: center;
-`
+const buttonTextStyles = StyleSheet.create({
+    wrapper: {
+        alignItems: 'center',
+        display: 'flex',
+        alignSelf: 'center',
+    },
+    text: {
+        color: '#fff',
+        fontSize: 15,
+        fontWeight: '700',
+        textAlign: 'center',
+    },
+})
 
-export const InvertedButtonText = styled(ButtonText)`
-    color: #2c3e50;
-`
+export const InvertedButtonText = ({ children }) => <Text style={invertedButtonTextStyles}>{children}</Text>
+
+const invertedButtonTextStyles = {
+    color: '#2c3e50',
+}
 
 export const Button = ({ children, disabled }) => (
     <LinearGradient
         colors={['#a103fc', '#5055b3']}
         start={{ x: 0, y: 1 }}
         end={{ x: 1, y: 0 }}
-        style={{ borderRadius: 25 }}
+        style={buttonStyles.linearGradient}
     >
-        <View
-            style={{
-                alignSelf: 'center',
-                padding: 10,
-                width: 400,
-            }}
-        >
-            {children}
-        </View>
+        <View style={buttonStyles.buttonWrapper}>{children}</View>
     </LinearGradient>
 )
 
+const buttonStyles = StyleSheet.create({
+    linearGradient: {
+        borderRadius: 25,
+    },
+    buttonWrapper: {
+        alignSelf: 'center',
+        padding: 10,
+        width: 400,
+    },
+})
+
 export const InvertedButton = ({ background, children, disabled }) => (
-    <View
-        style={{
+    <View style={invertedButtonStyles(background).wrapper}>{children}</View>
+)
+
+const invertedButtonStyles = (background) =>
+    StyleSheet.create({
+        wrapper: {
             backgroundColor: background,
             borderColor: '#2C3E50',
             borderWidth: 1,
@@ -50,8 +65,5 @@ export const InvertedButton = ({ background, children, disabled }) => (
             padding: 10,
             width: 300,
             zIndex: 100,
-        }}
-    >
-        {children}
-    </View>
-)
+        },
+    })

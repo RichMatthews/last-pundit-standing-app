@@ -13,22 +13,33 @@ interface LeagueState {
 export const MyLeagues = ({ navigation, theme }: any) => {
     const userLeagues = useSelector((store: { userLeagues: any }) => store.userLeagues)
 
+    const {
+        container,
+        leagueButton,
+        leagueTitle,
+        leagueImage,
+        imageWrapper,
+        text,
+        helperText,
+        joinLeagueWrapper,
+    } = styles(theme)
+
     return (
         <ScreenComponent theme={theme}>
-            <View style={styles(theme).container}>
+            <View style={container}>
                 <View>
                     {userLeagues.loading ? (
                         <ActivityIndicator size="large" color={theme.spinner.primary} />
                     ) : userLeagues.leagues.length ? (
                         userLeagues.leagues.map((league: LeagueState) => (
                             <TouchableOpacity onPress={() => navigation.push('League', { leagueId: league.id })}>
-                                <View key={league.id} style={styles(theme).leagueButton}>
+                                <View key={league.id} style={leagueButton}>
                                     <View>
-                                        <Text style={styles(theme).leagueTitle}>{league.name}</Text>
-                                        <View style={styles(theme).imageWrapper}>
+                                        <Text style={leagueTitle}>{league.name}</Text>
+                                        <View style={imageWrapper}>
                                             <Image
                                                 source={require('../../images/other/premier-league.png')}
-                                                style={styles(theme).leagueImage}
+                                                style={leagueImage}
                                             />
                                         </View>
                                     </View>
@@ -38,14 +49,14 @@ export const MyLeagues = ({ navigation, theme }: any) => {
                         ))
                     ) : (
                         <View>
-                            <Text style={{ fontFamily: 'Hind' }}>You have not entered any public leagues yet</Text>
+                            <Text style={helperText}>You have not entered any public leagues yet</Text>
                         </View>
                     )}
                 </View>
 
-                <View style={{ marginTop: 50 }}>
+                <View style={joinLeagueWrapper}>
                     <TouchableOpacity onPress={() => navigation.navigate('Join')}>
-                        <Text style={styles(theme).text}>Tap here to join a league</Text>
+                        <Text style={text}>Tap here to join a league</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -91,5 +102,11 @@ const styles = (theme: any) =>
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             alignSelf: 'center',
             fontSize: theme.text.medium,
+        },
+        helperText: {
+            fontFamily: 'Hind',
+        },
+        joinLeagueWrapper: {
+            marginTop: 50,
         },
     })

@@ -1,55 +1,49 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Image, Text, View } from 'react-native'
+import { Image, Text, View, StyleSheet } from 'react-native'
 
 import * as Images from '../../images'
-
-interface ImageStyled {
-    lost: boolean
-}
-
-const Container = styled.View`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 200px;
-    margin: 5px auto;
-`
-
-const TeamBadge = styled.Image<ImageStyled>`
-    opacity: ${({ lost }) => (lost ? 0.2 : 1)};
-    height: 30px;
-    width: 30px;
-`
 
 export const PreviousRound = ({ choice, theme }: any) => {
     const opponentTeamName: any = choice.opponent.code.toUpperCase()
     const userTeamName: any = choice.code.toUpperCase()
 
     return choice.teamPlayingAtHome ? (
-        <Container>
-            <TeamBadge source={Images[userTeamName]} lost={false} />
-            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
-                {choice.goals}
-            </Text>
-            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>-</Text>
-            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
-                {choice.opponent.goals}
-            </Text>
-            <TeamBadge source={Images[opponentTeamName]} lost={true} />
-        </Container>
+        <View style={styles(theme).container}>
+            <Image source={Images[userTeamName]} style={styles(theme, false).teamBadge} />
+            <Text style={styles(theme).text}>{choice.goals}</Text>
+            <Text style={styles(theme).text}>-</Text>
+            <Text style={styles(theme).text}>{choice.opponent.goals}</Text>
+            <Image source={Images[opponentTeamName]} style={styles(theme, true).teamBadge} />
+        </View>
     ) : (
-        <Container>
-            <TeamBadge source={Images[opponentTeamName]} lost={true} />
-            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
-                {choice.opponent.goals}
-            </Text>
-            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>-</Text>
-            <Text style={{ color: theme.text.primary, fontSize: theme.text.large, fontWeight: '700' }}>
-                {choice.goals}
-            </Text>
-            <TeamBadge source={Images[userTeamName]} lost={false} />
-        </Container>
+        <View style={styles(theme).container}>
+            <Image source={Images[opponentTeamName]} style={styles(theme, true).teamBadge} />
+            <Text style={styles(theme).text}>{choice.opponent.goals}</Text>
+            <Text style={styles(theme).text}>-</Text>
+            <Text style={styles(theme).text}>{choice.goals}</Text>
+            <Image source={Images[userTeamName]} style={styles(theme, false).teamBadge} />
+        </View>
     )
 }
+
+const styles = (theme, lost?: boolean) =>
+    StyleSheet.create({
+        container: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-evenly',
+            width: 200,
+            margin: 5,
+        },
+        teamBadge: {
+            opacity: lost ? 0.2 : 1,
+            height: 30,
+            width: 30,
+        },
+        text: {
+            color: theme.text.primary,
+            fontSize: theme.text.large,
+            fontWeight: '700',
+        },
+    })

@@ -73,7 +73,7 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
     }
 
     return loading ? (
-        <Container style={{ backgroundColor: theme.background.primary }}>
+        <Container style={styles(theme).loadingContainer}>
             <ActivityIndicator size="large" color="#2C3E50" />
             <Text>Joining League...</Text>
         </Container>
@@ -102,6 +102,7 @@ export const JoinLeague = ({ currentUserId, navigation, theme }: JoinLeagueProps
 
 const styles = (theme: any) =>
     StyleSheet.create({
+        loadingContainer: { backgroundColor: theme.background.primary },
         container: {
             flex: 1,
             backgroundColor: theme.background.primary,

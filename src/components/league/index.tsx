@@ -77,6 +77,8 @@ export const League = ({ leagueId, theme }: string) => {
     return (
         <ScreenComponent theme={theme}>
             <View style={styles(theme).container}>
+                <Text style={styles(theme).mainheading}>{league.name}</Text>
+                <View style={styles(theme).buttonsWrapper}>
                 <View
                     style={{
                         flexDirection: 'row',
@@ -86,7 +88,6 @@ export const League = ({ leagueId, theme }: string) => {
                         marginHorizontal: 20,
                     }}
                 >
-                    <Text style={styles(theme).mainheading}>{league.name}</Text>
                     <Image source={require('src/images/other/menu.png')} />
                 </View>
                 {/* <View style={{ flexDirection: 'row' }}>
@@ -170,7 +171,7 @@ export const League = ({ leagueId, theme }: string) => {
                             contentContainerStyle: { minHeight: '50%' },
                         }}
                     >
-                        <View style={{ flex: 1, justifyContent: 'space-between', margin: 30 }}>
+                        <View style={styles(theme).fixturesWrapper}>
                             <TeamSelection
                                 closeTeamSelectionModal={closeTeamSelectionModal}
                                 pullLatestLeagueData={pullLatestLeagueData}
@@ -191,6 +192,8 @@ const styles = (theme) =>
             backgroundColor: theme.background.primary,
             flex: 1,
         },
+
+        buttonsWrapper: { flexDirection: 'row', marginBottom: 10, marginLeft: 10 },
         currentRoundHeading: {
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: 20,
@@ -251,4 +254,5 @@ const styles = (theme) =>
             fontWeight: '700',
             fontSize: theme.text.small,
         },
+        fixturesWrapper: { flex: 1, justifyContent: 'space-between', margin: 30 },
     })

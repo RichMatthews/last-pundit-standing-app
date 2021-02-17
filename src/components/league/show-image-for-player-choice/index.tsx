@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 import { Platform } from 'react-native'
-import styled from 'styled-components'
 import FastImage from 'react-native-fast-image'
 import { useSelector } from 'react-redux'
 
@@ -8,72 +8,48 @@ import * as Images from '../../../images'
 
 import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
 
-interface ImageStyled {
-    lost?: boolean
+const isIos = Platform.OS === 'ios'
+
+// I do not like this
+const GameStatusIndicatorComponent = (status: string) => {
+    const playerStatus = {
+        eliminated: {
+            bgColor: '#F8D7DA',
+            color: '#721C25',
+            text: 'Eliminated',
+        },
+        pending: {
+            bgColor: '#FFF3CD',
+            color: '#856404',
+            text: 'Pending',
+        },
+        submitted: {
+            bgColor: '#D4EDDA',
+            color: '#155725',
+            text: ' Submitted',
+        },
+        currentPending: {
+            bgColor: '#FFF3CD',
+            color: '#856404',
+            text: 'Awaiting your prediction',
+        },
+        champion: {
+            bgColor: '#FFF3CD',
+            color: '#856404',
+            text: 'Champion',
+        },
+    }
+
+    return (
+        <View style={gameStatusIndicatorStyles().gameStatusIndicator}>
+            <View style={gameStatusIndicatorStyles(playerStatus[status].bgColor).labelWrapper}>
+                <Text style={gameStatusIndicatorStyles(undefined, playerStatus[status].textColor).labelText}>
+                    {playerStatus[status].text}
+                </Text>
+            </View>
+        </View>
+    )
 }
-
-const GameStatusIndicator = styled.View`
-    margin-right: 10px;
-`
-
-const Image = styled.Image<ImageStyled>`
-    opacity: ${({ lost }) => (lost ? 0.2 : 1)};
-    height: 25px;
-    margin-right: 10px;
-    width: 25px;
-`
-
-const Label = styled.View`
-    background-color: ${({ bgColor }) => bgColor};
-    border-radius: 5px;
-`
-
-const LabelText = styled.Text`
-    color: ${({ color }) => color};
-    font-size: 10px;
-    padding: 5px;
-`
-
-const playerStatus = {
-    eliminated: {
-        bgColor: '#F8D7DA',
-        color: '#721C25',
-        text: 'Eliminated',
-        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-    },
-    pending: {
-        bgColor: '#FFF3CD',
-        color: '#856404',
-        text: 'Pending',
-        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-    },
-    submitted: {
-        bgColor: '#D4EDDA',
-        color: '#155725',
-        text: ' Submitted',
-        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-    },
-    currentPending: {
-        bgColor: '#FFF3CD',
-        color: '#856404',
-        text: 'Awaiting your prediction',
-        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-    },
-    champion: {
-        bgColor: '#FFF3CD',
-        color: '#856404',
-        text: 'Champion',
-        fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-    },
-}
-
-const GameStatusIndicatorComponent = (status: string) => (
-    <GameStatusIndicator>
-        <Label bgColor={playerStatus[status].bgColor}>
-            <LabelText color={playerStatus[status].color}>{playerStatus[status].text}</LabelText>
-        </Label>
-    </GameStatusIndicator>
-)
 
 export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedInPlayer, player }: any) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
@@ -124,7 +100,7 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
         if (PLAYER_CURRENT_ROUND.selection.complete) {
             return (
                 <FastImage
-                    style={{ width: 25, height: 25, marginRight: 10 }}
+                    style={styles.clubBadge}
                     source={Images[PLAYER_CURRENT_ROUND.selection.code.toUpperCase()]}
                 />
             )
@@ -137,7 +113,7 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
         if (ALL_REMAINING_PLAYERS_HAVE_MADE_CHOICE) {
             return (
                 <FastImage
-                    style={{ width: 25, height: 25, marginRight: 10 }}
+                    style={styles.clubBadge}
                     source={Images[PLAYER_CURRENT_ROUND.selection.code.toUpperCase()]}
                 />
             )
@@ -148,3 +124,24 @@ export const MemoizedShowImageForPlayerChoice = ({ currentGame, isCurrentLoggedI
         return GameStatusIndicatorComponent('pending')
     }
 }
+
+const styles = StyleSheet.create({
+    clubBadge: { width: 25, height: 25, marginRight: 10 },
+})
+
+const gameStatusIndicatorStyles = (bgColor?: string, textColor?: string) =>
+    StyleSheet.create({
+        gameStatusIndicator: {
+            marginRight: 10,
+        },
+        labelWrapper: {
+            borderRadius: 5,
+            backgroundColor: bgColor,
+        },
+        labelText: {
+            fontSize: 10,
+            padding: 5,
+            color: textColor,
+            fontFamily: isIos ? 'Hind' : 'Hind-Bold',
+        },
+    })

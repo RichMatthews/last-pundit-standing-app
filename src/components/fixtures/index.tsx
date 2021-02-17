@@ -38,10 +38,7 @@ export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam,
                                             {homeTeamName}
                                         </Text>
                                         <View style={styles(theme).teamBadgeContainer}>
-                                            <FastImage
-                                                style={{ width: 40, height: 40 }}
-                                                source={Images[homeTeamCode]}
-                                            />
+                                            <FastImage style={styles(theme).teamBadge} source={Images[homeTeamCode]} />
                                         </View>
                                     </View>
                                 </TouchableOpacity>

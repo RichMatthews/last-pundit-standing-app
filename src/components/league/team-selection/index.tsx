@@ -7,7 +7,7 @@ import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded
 
 const NoLongerInGame = ({ theme }) => (
     <View>
-        <Text style={[styles.noLongerInGameText, { color: theme.text.primary }]}>You are no longer in this game</Text>
+        <Text style={[styles(theme).noLongerInGameText]}>You are no longer in this game</Text>
     </View>
 )
 
@@ -31,7 +31,6 @@ export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, t
 
     const showTeamSelectionPage = () => {
         const currentGameRound = currentGame.currentGameRound
-        console.log(currentPlayer, 'cpcp1')
         const currentRound = currentPlayer.rounds[currentGameRound]
 
         const playerOutOfGame = currentPlayer.rounds.filter((round: any) => round.selection.result === 'lost')

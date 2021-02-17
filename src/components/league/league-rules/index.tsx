@@ -5,7 +5,7 @@ export const LeagueRules = ({ theme }) => {
     return (
         <View>
             <View>
-                <Text style={{ fontSize: theme.text.heading }}>League Rules</Text>
+                <Text style={styles(theme).title}>League Rules</Text>
             </View>
             <View>
                 <Text>Pick a different team every week</Text>
@@ -18,4 +18,9 @@ export const LeagueRules = ({ theme }) => {
     )
 }
 
-const styles = (theme) => StyleSheet.create({})
+const styles = (theme) =>
+    StyleSheet.create({
+        title: {
+            fontSize: theme.text.heading,
+        },
+    })
