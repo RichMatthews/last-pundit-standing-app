@@ -57,7 +57,6 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
             return
         } else {
             const opponent = await findOpponent(selectedTeam)
-            console.log(opponent, 'opnt')
             const choice = {
                 code: selectedTeam?.code,
                 complete: true,
@@ -65,9 +64,8 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
                 ...opponent,
                 result: 'pending',
             }
-            console.log(choice, 'choi!')
-            // await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
-            // await pullLatestLeagueData()
+            await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
+            await pullLatestLeagueData()
         }
 
         closeTeamSelectionModal()
@@ -99,7 +97,7 @@ const styles = (theme) =>
             opacity: 0.1,
         },
         button: {
-            marginTop: 30,
+            marginTop: 10,
         },
         buttonText: {
             backgroundColor: '#9f85d4',
@@ -107,7 +105,7 @@ const styles = (theme) =>
             padding: 10,
         },
         confirmSelectionText: {
-            color: theme.text.primary,
+            color: theme.text.inverse,
             fontWeight: '600',
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: theme.text.large,

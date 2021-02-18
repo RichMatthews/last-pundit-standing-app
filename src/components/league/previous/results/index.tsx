@@ -7,10 +7,10 @@ import * as Images from 'src/images'
 export const Results = ({ player, theme }) => (
     <View style={styles(theme).playerResultsContainer}>
         {player.rounds.map((round) => {
-            const { opponent: playerChoiceOpponent, name: playerChoice } = round.selection
+            const { opponent: playerChoiceOpponent, code: playerChoice } = round.selection
             const playerChoicePlayingAtHome = round.selection.teamPlayingAtHome
             const playerChoiceOpponentImage = Images[playerChoiceOpponent.code]
-            const playerChoiceImage = Images[playerChoice.code]
+            const playerChoiceImage = Images[playerChoice]
             let homeImage, awayImage
 
             if (playerChoicePlayingAtHome) {

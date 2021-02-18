@@ -9,7 +9,6 @@ export const calculateTeamsAllowedToPickForCurrentRound = ({ currentGame, curren
                 teamsAlreadyChosen.push(round.selection.code)
             }
         })
-        console.log(teamsAlreadyChosen, 'tactacsa')
         return allTeamsForThisLeague.map((team: any) => {
             if (teamsAlreadyChosen.includes(team.code)) {
                 return { ...team, chosen: true }

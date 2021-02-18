@@ -124,7 +124,7 @@ export const League = ({ leagueId, theme }: string) => {
                                 style={[
                                     styles(theme).currentRoundHeading,
                                     {
-                                        color: showCurrent ? '#fff' : 'black',
+                                        color: showCurrent ? '#fff' : '#4c4a4f',
                                         fontSize: 15,
                                         textAlign: 'center',
                                     },
@@ -147,7 +147,7 @@ export const League = ({ leagueId, theme }: string) => {
                                 style={[
                                     styles(theme).currentRoundHeading,
                                     {
-                                        color: !showCurrent ? '#fff' : 'black',
+                                        color: !showCurrent ? '#fff' : '#4c4a4f',
                                         fontSize: 15,
                                         textAlign: 'center',
                                     },
@@ -215,7 +215,7 @@ const styles = (theme) =>
             marginBottom: 20,
         },
         mainheading: {
-            color: theme.text.primary,
+            color: '#4c4a4f',
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: 30,
             fontWeight: '700',

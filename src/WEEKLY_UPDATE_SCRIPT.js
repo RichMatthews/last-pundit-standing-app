@@ -21,16 +21,18 @@ const firebaseApp = firebase.initializeApp(PROD_CONFIG)
 
 const CURRENT_GAMEWEEK = {
     fixtures: [
-        { home: { team: 'Aston Villa', goals: 1 }, away: { team: 'Arsenal', goals: 0 }, result: 'Aston Villa' },
-        { home: { team: 'Fulham', goals: 0 }, away: { team: 'West Ham', goals: 0 }, result: 'draw' },
-        { home: { team: 'Sheffield United', goals: 1 }, away: { team: 'Chelsea', goals: 2 }, result: 'Chelsea' },
+        {
+            home: { code: 'WBA', name: 'West Brom', goals: 1 },
+            away: { team: 'Man United', code: 'MNU', goals: 1 },
+            result: 'draw',
+        },
     ],
 }
 
 const findFixture = (choice) => {
     const gameWeekFixtures = CURRENT_GAMEWEEK.fixtures
     const foundMatch = gameWeekFixtures.find(
-        (fixture) => fixture.home.team === choice.name || fixture.away.team === choice.name,
+        (fixture) => fixture.home.code === choice.code || fixture.away.code === choice.code,
     )
     return foundMatch
 }
@@ -141,8 +143,8 @@ const updateAllLeagues = () => {
 const updatePlayerChoiceObjectWithMatchResult = ({ game, league, roundResult, player }) => {
     return firebaseApp
         .database()
-        .ref(`leagues/${league.id}/games/${game.id}/players/${player.id}/rounds/${game.currentGameRound}`)
-        .update({ choice: roundResult }, (error) => {
+        .ref(`leagues/${league.id}/games/${game.id}/players/${player.information.id}/rounds/${game.currentGameRound}`)
+        .update({ selection: roundResult }, (error) => {
             if (error) {
                 console.log('ERROR!:', error)
             } else {
@@ -154,7 +156,7 @@ const updatePlayerChoiceObjectWithMatchResult = ({ game, league, roundResult, pl
 const updatePlayerEliminationStatus = ({ eliminated, game, league, player }) => {
     return firebaseApp
         .database()
-        .ref(`leagues/${league.id}/games/${game.id}/players/${player.id}`)
+        .ref(`leagues/${league.id}/games/${game.id}/players/${player.information.id}`)
         .update({ hasBeenEliminated: eliminated }, (error) => {
             if (error) {
                 console.log('ERROR!:', error)
@@ -180,10 +182,10 @@ const updateCurrentGameStatus = ({ game, league }) => {
                 let newPlayer = {
                     ...player,
                     hasBeenEliminated: false,
-                    rounds: [{ choice: { selection: false } }],
+                    rounds: [{ selection: { complete: false } }],
                 }
 
-                resetPlayers = { ...resetPlayers, [player.id]: newPlayer }
+                resetPlayers = { ...resetPlayers, [player.information.id]: newPlayer }
             })
             console.log(resetPlayers, 'reset')
             if (allPlayersEliminated) {
@@ -265,8 +267,8 @@ const updateGameStillInProgress = ({ game, league, remainingPlayers, roundId }) 
     return remainingPlayers.forEach((player) => {
         return firebaseApp
             .database()
-            .ref(`leagues/${league.id}/games/${game.id}/players/${player.id}/rounds/${roundId}`)
-            .update({ choice: { selection: false } }, (error) => {
+            .ref(`leagues/${league.id}/games/${game.id}/players/${player.information.id}/rounds/${roundId}`)
+            .update({ selection: { complete: false } }, (error) => {
                 if (error) {
                     console.log('ERROR!:', error)
                 } else {

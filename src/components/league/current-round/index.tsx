@@ -3,8 +3,9 @@ import { StyleSheet, Text, ScrollView, RefreshControl, TouchableOpacity, Platfor
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 import FastImage from 'react-native-fast-image'
-import { PreviousRound } from 'src/components/previous-round/index.tsx'
+import { PreviousRound } from 'src/components/previous-round'
 import { MemoizedShowImageForPlayerChoice } from '../show-image-for-player-choice'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 interface Props {
     id: string
@@ -56,7 +57,7 @@ export const CurrentRoundView = ({
                                 <Text
                                     style={[
                                         styles(theme).playerName,
-                                        { color: player.information.id === user.id ? '#9f85d4' : theme.text.primary },
+                                        { color: player.information.id === user.id ? '#9f85d4' : '#4c4a4f' },
                                     ]}
                                 >
                                     {player.information.name}
@@ -68,22 +69,15 @@ export const CurrentRoundView = ({
                                         player={player}
                                     />
                                     {listOfExpandedPrevious.includes(index) ? (
-                                        <FastImage
-                                            // Guessing one of these should be an up arrow?
-                                            source={require('src/images/other/down-arrow.png')}
-                                            style={styles(theme).image}
-                                        />
+                                        <Entypo name="chevron-small-up" size={30} color={theme.icons.primary} />
                                     ) : (
-                                        <FastImage
-                                            source={require('src/images/other/down-arrow.png')}
-                                            style={styles(theme).image}
-                                        />
+                                        <Entypo name="chevron-small-down" size={30} color={theme.icons.primary} />
                                     )}
                                 </View>
                             </View>
 
                             <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
-                                <View>
+                                <View style={{ backgroundColor: '#f2f2f2' }}>
                                     {player.rounds.length > 0 ? (
                                         <>
                                             {player.rounds

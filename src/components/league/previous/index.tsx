@@ -80,11 +80,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
     )
 }
 
-const compare = (p, pa) => {
-    console.log(p, pa, 'papa')
-}
-
-export const CachedPreviousGames = React.memo(PreviousGames, compare)
+export const CachedPreviousGames = React.memo(PreviousGames)
 
 const styles = (theme: any) =>
     StyleSheet.create({
