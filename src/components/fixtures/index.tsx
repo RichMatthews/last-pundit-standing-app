@@ -12,7 +12,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                 <Text style={styles(theme).subHeading}>Select your team then confirm at the bottom</Text>
             )}
             <View style={styles(theme).container}>
-                {fixtures.map((match: any) => {
+                {fixtures.map((match: any, index: number) => {
                     const { code: homeTeamCode, name: homeTeamName } = match.home
                     const { code: awayTeamCode, name: awayTeamName } = match.away
                     const homeTeamPreviouslyChosen = chosenTeams.includes(homeTeamCode)
@@ -22,7 +22,11 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                         <View key={homeTeamCode}>
                             <View style={styles(theme).center}>
                                 <TouchableOpacity
-                                    onPress={homeTeamPreviouslyChosen ? null : () => setSelectedTeam(match.home)}
+                                    onPress={
+                                        homeTeamPreviouslyChosen
+                                            ? null
+                                            : () => setSelectedTeam({ ...match.home, index, home: true })
+                                    }
                                     activeOpacity={homeTeamPreviouslyChosen ? 1 : 0.7}
                                 >
                                     <View
@@ -34,7 +38,13 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                         <Text
                                             style={[
                                                 styles(theme).teamName,
-                                                { color: selectedTeam?.code === homeTeamCode ? '#9f85d4' : 'black' },
+                                                {
+                                                    color:
+                                                        selectedTeam?.code === homeTeamCode &&
+                                                        selectedTeam?.index === index
+                                                            ? '#9f85d4'
+                                                            : 'black',
+                                                },
                                             ]}
                                         >
                                             {homeTeamName}
@@ -48,7 +58,11 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                     <Text style={styles(theme).vs}>{match.time || 'TBC'}</Text>
                                 </View>
                                 <TouchableOpacity
-                                    onPress={awayTeamPreviouslyChosen ? null : () => setSelectedTeam(match.away)}
+                                    onPress={
+                                        awayTeamPreviouslyChosen
+                                            ? null
+                                            : () => setSelectedTeam({ ...match.away, index, home: false })
+                                    }
                                     activeOpacity={awayTeamPreviouslyChosen ? 1 : 0.7}
                                 >
                                     <View
@@ -63,7 +77,13 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                         <Text
                                             style={[
                                                 styles(theme).teamName,
-                                                { color: selectedTeam?.code === awayTeamCode ? '#9f85d4' : 'black' },
+                                                {
+                                                    color:
+                                                        selectedTeam?.code === awayTeamCode &&
+                                                        selectedTeam?.index === index
+                                                            ? '#9f85d4'
+                                                            : 'black',
+                                                },
                                             ]}
                                         >
                                             {awayTeamName}

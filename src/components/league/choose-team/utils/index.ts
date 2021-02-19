@@ -1,40 +1,23 @@
 import { getCurrentGameweekFixtures } from 'src/firebase-helpers'
 
-export const isTeamPlayingInADoubleGameweek = async (selectedTeam) => {
+export const findOpponent = async (selectedTeam: any) => {
     const fixtures = await getCurrentGameweekFixtures()
-    const selectedTeamFixture: any = fixtures.filter(
-        (team) => team.home.code === selectedTeam.code || team.away.code === selectedTeam.code,
-    )
+    const fixture = fixtures[selectedTeam.index]
 
-    if (selectedTeamFixture.length > 1) {
-        return true
-    }
-    return false
-}
-
-export const findOpponent = async (selectedTeam) => {
-    const fixtures = await getCurrentGameweekFixtures()
-    const selectedTeamFixture: any = fixtures.filter(
-        (team) => team.home.code === selectedTeam.code || team.away.code === selectedTeam.code,
-    )
-    const homeTeam = selectedTeamFixture[0].home
-    const awayTeam = selectedTeamFixture[0].away
-    const selectedTeamPlayingAtHome = homeTeam === selectedTeam
-
-    if (selectedTeamPlayingAtHome) {
+    if (selectedTeam.home) {
         return {
             teamPlayingAtHome: true,
             opponent: {
-                name: awayTeam.name,
-                code: awayTeam.code,
+                name: fixture.away.name,
+                code: fixture.away.code,
             },
         }
     } else {
         return {
             teamPlayingAtHome: false,
             opponent: {
-                name: homeTeam.name,
-                code: homeTeam.code,
+                name: fixture.home.name,
+                code: fixture.home.code,
             },
         }
     }

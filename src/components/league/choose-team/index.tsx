@@ -24,15 +24,16 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
         leagueTeams: PREMIER_LEAGUE_TEAMS,
     })
     const playerHasMadeChoice = currentPlayer.rounds[currentPlayer.rounds.length - 1].selection.complete
-    const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string }>()
+    const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string; index: 0 }>()
 
-    const submitChoice = () => {
+    const submitChoice = async () => {
         if (!selectedTeam) {
             alert('No team selected!')
             return
         }
 
-        const confirmationMsg: string = `You are picking ${selectedTeam.name}. Are you sure? Once you confirm you are locked in for this gameweek.`
+        const { opponent } = await findOpponent(selectedTeam)
+        const confirmationMsg: string = `You are picking ${selectedTeam.name} vs ${opponent.name}. Are you sure? Once you confirm you are locked in for this gameweek.`
 
         Alert.alert(
             'Confirm team selection',
@@ -48,26 +49,17 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
         )
     }
 
-    const showModalForDoubleGameweek = () => {}
-
     const updateUserGamweekChoiceHelper = async () => {
-        const opponentPlayingAtLeastTwice = await isTeamPlayingInADoubleGameweek(selectedTeam)
-
-        if (opponentPlayingAtLeastTwice) {
-            showModalForDoubleGameweek()
-            return
-        } else {
-            const opponent = await findOpponent(selectedTeam)
-            const selection = {
-                code: selectedTeam?.code,
-                complete: true,
-                name: selectedTeam?.name,
-                ...opponent,
-                result: 'pending',
-            }
-            await updateUserGamweekChoice({ selection, currentRound, currentGame, league, userId: user.id })
-            await pullLatestLeagueData()
+        const opponent = await findOpponent(selectedTeam)
+        const selection = {
+            code: selectedTeam?.code,
+            complete: true,
+            name: selectedTeam?.name,
+            ...opponent,
+            result: 'pending',
         }
+        await updateUserGamweekChoice({ selection, currentRound, currentGame, league, userId: user.id })
+        await pullLatestLeagueData()
 
         closeTeamSelectionModal()
     }
