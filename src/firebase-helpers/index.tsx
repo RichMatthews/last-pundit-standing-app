@@ -38,11 +38,11 @@ export const getUserInformation = ({ userId }) => {
         })
 }
 
-export const updateUserGamweekChoice = ({ choice, currentRound, currentGame, league, userId }: any) => {
+export const updateUserGamweekChoice = ({ selection, currentRound, currentGame, league, userId }: any) => {
     return firebaseApp
         .database()
         .ref(`leagues/${league.id}/games/${currentGame.id}/players/${userId}/rounds/${currentRound}`)
-        .update({ choice }, (error) => {
+        .update({ selection }, (error) => {
             if (error) {
                 alert('Oops something went wrong. Please try again or contact admin')
             }

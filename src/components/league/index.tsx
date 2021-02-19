@@ -88,7 +88,7 @@ export const League = ({ leagueId, theme }: string) => {
                 }}
             >
                 <Text style={styles(theme).mainheading}>{league.name}</Text>
-                <TouchableOpacity onPress={showTeamSelection}>
+                <TouchableOpacity onPress={showTeamSelection} style={{ padding: 10 }}>
                     <Image source={require('src/images/other/menu.png')} />
                 </TouchableOpacity>
             </View>

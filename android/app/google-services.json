@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "571433706213",
+    "firebase_url": "https://last-pundit-standing.firebaseio.com",
+    "project_id": "last-pundit-standing",
+    "storage_bucket": "last-pundit-standing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571433706213:android:4087d6ac0a3a5f9f3b2a0c",
+        "android_client_info": {
+          "package_name": "com.lastpunditstanding"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571433706213-m7cq4s4co717522jldpjb7ogo1q4ffj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjgBbpLafr3IfjkAqLu9c3Bf6WJxG6MZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571433706213-m7cq4s4co717522jldpjb7ogo1q4ffj0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "571433706213-8bh740td6ja68coqdiq6d99nunjdb0l3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.live.lastpunditstanding"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

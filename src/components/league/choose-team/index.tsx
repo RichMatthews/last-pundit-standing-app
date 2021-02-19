@@ -23,6 +23,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
         currentPlayer,
         leagueTeams: PREMIER_LEAGUE_TEAMS,
     })
+    const playerHasMadeChoice = currentPlayer.rounds[currentPlayer.rounds.length - 1].selection.complete
     const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string }>()
 
     const submitChoice = () => {
@@ -57,14 +58,14 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
             return
         } else {
             const opponent = await findOpponent(selectedTeam)
-            const choice = {
+            const selection = {
                 code: selectedTeam?.code,
                 complete: true,
                 name: selectedTeam?.name,
                 ...opponent,
                 result: 'pending',
             }
-            await updateUserGamweekChoice({ choice, currentRound, currentGame, league, userId: user.id })
+            await updateUserGamweekChoice({ selection, currentRound, currentGame, league, userId: user.id })
             await pullLatestLeagueData()
         }
 
@@ -74,19 +75,22 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
     return (
         <View style={styles(theme).innerContainer}>
             <Fixtures
+                playerHasMadeChoice={playerHasMadeChoice}
                 fixtures={fixtures}
                 selectedTeam={selectedTeam}
                 setSelectedTeam={setSelectedTeam}
                 chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
                 theme={theme}
             />
-            <View style={styles(theme).button}>
-                <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
-                    <View style={styles(theme).buttonText}>
-                        <Text style={styles(theme).confirmSelectionText}>Confirm selection</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            {!playerHasMadeChoice && (
+                <View style={styles(theme).button}>
+                    <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
+                        <View style={styles(theme).buttonText}>
+                            <Text style={styles(theme).confirmSelectionText}>Confirm selection</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View>
     )
 }

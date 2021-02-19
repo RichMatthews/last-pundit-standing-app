@@ -4,11 +4,13 @@ import FastImage from 'react-native-fast-image'
 
 import * as Images from '../../images'
 
-export const Fixtures = ({ chosenTeams, fixtures, selectedTeam, setSelectedTeam, theme }) => {
+export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedTeam, setSelectedTeam, theme }) => {
     return (
         <View>
             <Text style={styles(theme).heading}>Gameweek Fixtures</Text>
-            <Text style={styles(theme).subHeading}>Select your team then confirm at the bottom</Text>
+            {!playerHasMadeChoice && (
+                <Text style={styles(theme).subHeading}>Select your team then confirm at the bottom</Text>
+            )}
             <View style={styles(theme).container}>
                 {fixtures.map((match: any) => {
                     const { code: homeTeamCode, name: homeTeamName } = match.home
