@@ -83,7 +83,6 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                                 rounds: [{ choice: { selection: false } }],
                             },
                         },
-                        winner: false,
                     },
                 },
                 isPrivate: privateLeague,

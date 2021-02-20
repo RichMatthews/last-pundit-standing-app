@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { Image, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -61,10 +61,6 @@ export const League = ({ leagueId, theme }: string) => {
     useEffect(() => {
         pullLatestLeagueData()
     }, [])
-
-    const showPreviousGames = () => {
-        previousGamesRef.current?.open()
-    }
 
     const showTeamSelection = () => {
         teamSelectionRef.current?.open()

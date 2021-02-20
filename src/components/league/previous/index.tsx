@@ -37,41 +37,43 @@ export const PreviousGames = ({ games, theme }: Props) => {
 
     return games.length ? (
         <View style={styles(theme).container}>
-            {games.map((game: Game) => {
-                const player: Player | undefined = Object.values(game.players).find(
-                    (player: Player) => !player.hasBeenEliminated,
-                )
+            {games
+                .sort((a, b) => a.leagueRound - b.leagueRound)
+                .map((game: Game) => {
+                    const player: Player | undefined = Object.values(game.players).find(
+                        (player: Player) => !player.hasBeenEliminated,
+                    )
 
-                return (
-                    <View style={styles(theme).previousGamesContainer}>
-                        <View style={styles(theme).topRow}>
-                            <TouchableOpacity onPress={() => setGameIdViewingHelper(game.id)} activeOpacity={0.7}>
+                    return (
+                        <View style={styles(theme).previousGamesContainer}>
+                            <View style={styles(theme).topRow}>
+                                <TouchableOpacity onPress={() => setGameIdViewingHelper(game.id)} activeOpacity={0.7}>
+                                    <View>
+                                        <Text style={styles(theme).playerNameText}>{player.information.name}</Text>
+                                        <Text style={styles(theme).winnerText}>Winner</Text>
+                                    </View>
+                                </TouchableOpacity>
+
                                 <View>
-                                    <Text style={styles(theme).playerNameText}>{player.information.name}</Text>
-                                    <Text style={styles(theme).winnerText}>Winner</Text>
+                                    <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
+                                    <Text style={styles(theme).correctText}>Correct</Text>
                                 </View>
-                            </TouchableOpacity>
-
+                            </View>
                             <View>
-                                <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
-                                <Text style={styles(theme).correctText}>Correct</Text>
+                                <View style={{ display: game.id === gameIdViewing ? 'flex' : 'none' }}>
+                                    {Object.values(game.players).map((player: Player) => {
+                                        return (
+                                            <View style={styles(theme).individualPlayerRounds}>
+                                                <Text>{player.information.name}</Text>
+                                                <CachedResults player={player} theme={theme} />
+                                            </View>
+                                        )
+                                    })}
+                                </View>
                             </View>
                         </View>
-                        <View>
-                            <View style={{ display: game.id === gameIdViewing ? 'flex' : 'none' }}>
-                                {Object.values(game.players).map((player: Player) => {
-                                    return (
-                                        <View style={styles(theme).individualPlayerRounds}>
-                                            <Text>{player.information.name}</Text>
-                                            <CachedResults player={player} theme={theme} />
-                                        </View>
-                                    )
-                                })}
-                            </View>
-                        </View>
-                    </View>
-                )
-            })}
+                    )
+                })}
         </View>
     ) : (
         <View style={styles(theme).container}>
