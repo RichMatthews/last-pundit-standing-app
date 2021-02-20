@@ -13,7 +13,6 @@ import { setViewedLeague } from 'src/redux/reducer/league'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
 import { CachedPreviousGames } from 'src/components/league/previous'
-import { ScreenComponent } from 'src/ui-components/containers/screenComponent'
 
 interface LeagueData {
     games: {}
