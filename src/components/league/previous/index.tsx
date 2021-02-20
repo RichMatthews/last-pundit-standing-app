@@ -43,33 +43,33 @@ export const PreviousGames = ({ games, theme }: Props) => {
                 )
 
                 return (
-                    <TouchableOpacity onPress={() => setGameIdViewingHelper(game.id)} activeOpacity={0.7}>
-                        <View style={styles(theme).previousGamesContainer}>
-                            <View style={styles(theme).topRow}>
+                    <View style={styles(theme).previousGamesContainer}>
+                        <View style={styles(theme).topRow}>
+                            <TouchableOpacity onPress={() => setGameIdViewingHelper(game.id)} activeOpacity={0.7}>
                                 <View>
                                     <Text style={styles(theme).playerNameText}>{player.information.name}</Text>
                                     <Text style={styles(theme).winnerText}>Winner</Text>
                                 </View>
+                            </TouchableOpacity>
 
-                                <View>
-                                    <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
-                                    <Text style={styles(theme).correctText}>Correct</Text>
-                                </View>
-                            </View>
                             <View>
-                                <View style={{ display: game.id === gameIdViewing ? 'flex' : 'none' }}>
-                                    {Object.values(game.players).map((player: Player) => {
-                                        return (
-                                            <View style={styles(theme).individualPlayerRounds}>
-                                                <Text>{player.information.name}</Text>
-                                                <CachedResults player={player} theme={theme} />
-                                            </View>
-                                        )
-                                    })}
-                                </View>
+                                <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
+                                <Text style={styles(theme).correctText}>Correct</Text>
                             </View>
                         </View>
-                    </TouchableOpacity>
+                        <View>
+                            <View style={{ display: game.id === gameIdViewing ? 'flex' : 'none' }}>
+                                {Object.values(game.players).map((player: Player) => {
+                                    return (
+                                        <View style={styles(theme).individualPlayerRounds}>
+                                            <Text>{player.information.name}</Text>
+                                            <CachedResults player={player} theme={theme} />
+                                        </View>
+                                    )
+                                })}
+                            </View>
+                        </View>
+                    </View>
                 )
             })}
         </View>
@@ -84,7 +84,16 @@ export const CachedPreviousGames = React.memo(PreviousGames)
 
 const styles = (theme: any) =>
     StyleSheet.create({
-        container: {},
+        container: {
+            alignSelf: 'center',
+            backgroundColor: theme.background.primary,
+            borderRadius: 5,
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            paddingTop: 10,
+            width: '100%',
+            flexGrow: 1,
+        },
         amountCorrectText: {
             color: theme.text.primary,
             fontSize: theme.text.xlarge,
@@ -115,8 +124,10 @@ const styles = (theme: any) =>
             flexWrap: 'wrap',
         },
         individualPlayerRounds: {
+            backgroundColor: '#f2f2f2',
             flexDirection: 'column',
             marginVertical: 10,
+            paddingVertical: 10,
         },
         game: {
             flexDirection: 'row',
