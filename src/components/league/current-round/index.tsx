@@ -40,15 +40,17 @@ export const CurrentRoundView = ({
         <View style={styles(theme).container}>
             <Text style={styles(theme).infoBanner}>Round closes: {gameweekCloses}</Text>
             <ScrollView
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                        title="Pull to refresh"
-                        tintColor={theme.text.primary}
-                        titleColor={theme.text.primary}
-                    />
-                }
+                showsVerticalScrollIndicator={false}
+                // contentContainerStyle={{ flexGrow: 1 }}
+                // refreshControl={
+                //     <RefreshControl
+                //         refreshing={refreshing}
+                //         onRefresh={onRefresh}
+                //         title="Pull to refresh"
+                //         tintColor={theme.text.primary}
+                //         titleColor={theme.text.primary}
+                //     />
+                // }
             >
                 {Object.values(currentGame.players).map((player: any, index: number) => (
                     <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
@@ -117,7 +119,7 @@ const styles = (theme) =>
             borderTopRightRadius: 30,
             paddingTop: 10,
             width: '100%',
-            flexGrow: 1,
+            flex: 1,
         },
 
         infoBanner: {

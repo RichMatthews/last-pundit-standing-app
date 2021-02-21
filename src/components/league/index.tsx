@@ -154,19 +154,21 @@ export const League = ({ leagueId, theme }: string) => {
                     </TouchableOpacity>
                 </View>
 
-                {showCurrent ? (
-                    <CurrentGame
-                        loaded={loaded}
-                        theme={theme}
-                        showCurrent={showCurrent}
-                        setShowCurrent={setShowCurrent}
-                    />
-                ) : (
-                    <CachedPreviousGames
-                        games={Object.values(league.games).filter((game: any) => game.complete)}
-                        theme={theme}
-                    />
-                )}
+                <View style={{ flex: 1 }}>
+                    {showCurrent ? (
+                        <CurrentGame
+                            loaded={loaded}
+                            theme={theme}
+                            showCurrent={showCurrent}
+                            setShowCurrent={setShowCurrent}
+                        />
+                    ) : (
+                        <CachedPreviousGames
+                            games={Object.values(league.games).filter((game: any) => game.complete)}
+                            theme={theme}
+                        />
+                    )}
+                </View>
 
                 <Portal>
                     <Modalize

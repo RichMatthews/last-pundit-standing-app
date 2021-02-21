@@ -18,14 +18,16 @@ export const CurrentGame = ({ loaded, showCurrent, setShowCurrent, theme }: any)
 
     if (loaded === 'league-found') {
         return (
-            <CurrentRoundView
-                gameweekCloses={currentGameweek.endsReadable}
-                listOfExpandedPrevious={listOfExpandedPrevious}
-                setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
-                theme={theme}
-                showCurrent={showCurrent}
-                setShowCurrent={setShowCurrent}
-            />
+            <View style={{ flex: 1 }}>
+                <CurrentRoundView
+                    gameweekCloses={currentGameweek.endsReadable}
+                    listOfExpandedPrevious={listOfExpandedPrevious}
+                    setListOfExpandedPreviousHelper={setListOfExpandedPreviousHelper}
+                    theme={theme}
+                    showCurrent={showCurrent}
+                    setShowCurrent={setShowCurrent}
+                />
+            </View>
         )
     }
 

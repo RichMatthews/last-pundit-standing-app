@@ -78,9 +78,11 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                         id: newGameId,
                         players: {
                             [user.id]: {
-                                id: user.id,
-                                name: playerInfo.name,
-                                rounds: [{ choice: { selection: false } }],
+                                information: {
+                                    id: user.id,
+                                    name: playerInfo.name,
+                                },
+                                rounds: [{ selection: false }],
                             },
                         },
                     },
