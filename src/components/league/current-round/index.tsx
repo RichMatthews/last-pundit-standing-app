@@ -57,7 +57,10 @@ export const CurrentRoundView = ({
                                 <Text
                                     style={[
                                         styles(theme).playerName,
-                                        { color: player.information.id === user.id ? '#9f85d4' : '#4c4a4f' },
+                                        {
+                                            color: player.information.id === user.id ? '#9f85d4' : '#4c4a4f',
+                                            opacity: player.hasBeenEliminated ? 0.2 : 1,
+                                        },
                                     ]}
                                 >
                                     {player.information.name}
