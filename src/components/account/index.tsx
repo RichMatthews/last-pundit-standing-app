@@ -59,11 +59,11 @@ export const Account = ({ navigation, theme }: any) => {
     }
 
     const resetPasswordHelper = () => {
-        navigation.navigate('Home', { screen: 'Reset Password', resetPassword: true })
+        navigation.navigate('Reset Password', { screen: 'Reset Password', resetPassword: true })
     }
 
     const updateEmailHelper = () => {
-        navigation.navigate('Account', { screen: 'Update Email', resetPassword: false, updateEmail: true })
+        navigation.navigate('Update Email', { screen: 'Update Email', resetPassword: false, updateEmail: true })
     }
 
     const setModeAndAppendToStorage = async () => {
