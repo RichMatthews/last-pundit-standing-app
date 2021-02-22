@@ -221,7 +221,6 @@ const createNewGame = ({ league, players }) => {
         complete: false,
         id: newGameId,
         currentGameRound: 0,
-        winner: false,
         players,
     }
     return firebaseApp
@@ -239,7 +238,6 @@ const createNewGame = ({ league, players }) => {
 const completeCurrentGame = ({ league, game }) => {
     const gameConfig = {
         complete: true,
-        winner: true,
     }
     return firebaseApp
         .database()

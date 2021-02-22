@@ -63,7 +63,7 @@ export const Account = ({ navigation, theme }: any) => {
     }
 
     const updateEmailHelper = () => {
-        navigation.navigate('Home', { screen: 'Update Email', resetPassword: false, updateEmail: true })
+        navigation.navigate('Account', { screen: 'Update Email', resetPassword: false, updateEmail: true })
     }
 
     const setModeAndAppendToStorage = async () => {

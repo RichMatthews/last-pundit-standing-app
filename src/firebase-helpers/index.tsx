@@ -132,10 +132,10 @@ export const attemptToJoinLeaugeIfItExists = ({ currentUserId, leaguePin }: any)
                 .once('value')
                 .then((snapshot) => {
                     const allLeagues = Object.values(snapshot.val())
-                    const foundLeague = allLeagues.filter((league: any) => league.joinPin === leaguePin)
-                    if (foundLeague.length) {
+                    const foundLeague = allLeagues.find((league: any) => league.joinPin === leaguePin)
+                    if (foundLeague) {
                         return {
-                            league: foundLeague[0],
+                            league: foundLeague,
                             name,
                             surname,
                         }

@@ -12,88 +12,111 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                 <Text style={styles(theme).subHeading}>Select your team then confirm at the bottom</Text>
             )}
             <View style={styles(theme).container}>
-                {fixtures.map((match: any, index: number) => {
-                    const { code: homeTeamCode, name: homeTeamName } = match.home
-                    const { code: awayTeamCode, name: awayTeamName } = match.away
-                    const homeTeamPreviouslyChosen = chosenTeams.includes(homeTeamCode)
-                    const awayTeamPreviouslyChosen = chosenTeams.includes(awayTeamCode)
+                {fixtures.map((block: any, index: number) => (
+                    <>
+                        <Text
+                            style={{
+                                backgroundColor: '#eee',
+                                fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+                                fontWeight: '500',
+                                padding: 5,
+                                textAlign: 'center',
+                            }}
+                        >
+                            {block.date}
+                        </Text>
+                        <View>
+                            {block.matches.map((match, index: number) => {
+                                const { code: homeTeamCode, name: homeTeamName } = match.home
+                                const { code: awayTeamCode, name: awayTeamName } = match.away
+                                const homeTeamPreviouslyChosen = chosenTeams.includes(homeTeamCode)
+                                const awayTeamPreviouslyChosen = chosenTeams.includes(awayTeamCode)
 
-                    return (
-                        <View key={homeTeamCode}>
-                            <View style={styles(theme).center}>
-                                <TouchableOpacity
-                                    onPress={
-                                        homeTeamPreviouslyChosen
-                                            ? null
-                                            : () => setSelectedTeam({ ...match.home, index, home: true })
-                                    }
-                                    activeOpacity={homeTeamPreviouslyChosen ? 1 : 0.7}
-                                >
-                                    <View
-                                        style={[
-                                            styles(theme).matchContainerHome,
-                                            { opacity: homeTeamPreviouslyChosen ? 0.1 : 1 },
-                                        ]}
-                                    >
-                                        <Text
-                                            style={[
-                                                styles(theme).teamName,
-                                                {
-                                                    color:
-                                                        selectedTeam?.code === homeTeamCode &&
-                                                        selectedTeam?.index === index
-                                                            ? '#9f85d4'
-                                                            : 'black',
-                                                },
-                                            ]}
-                                        >
-                                            {homeTeamName}
-                                        </Text>
-                                        <View style={styles(theme).teamBadgeContainer}>
-                                            <FastImage style={styles(theme).teamBadge} source={Images[homeTeamCode]} />
+                                return (
+                                    <View key={homeTeamCode}>
+                                        <View style={styles(theme).center}>
+                                            <TouchableOpacity
+                                                onPress={
+                                                    homeTeamPreviouslyChosen
+                                                        ? null
+                                                        : () => setSelectedTeam({ ...match.home, index, home: true })
+                                                }
+                                                activeOpacity={homeTeamPreviouslyChosen ? 1 : 0.7}
+                                            >
+                                                <View
+                                                    style={[
+                                                        styles(theme).matchContainerHome,
+                                                        { opacity: homeTeamPreviouslyChosen ? 0.1 : 1 },
+                                                    ]}
+                                                >
+                                                    <Text
+                                                        style={[
+                                                            styles(theme).teamName,
+                                                            {
+                                                                color:
+                                                                    selectedTeam?.code === homeTeamCode &&
+                                                                    selectedTeam?.index === index
+                                                                        ? '#9f85d4'
+                                                                        : 'black',
+                                                            },
+                                                        ]}
+                                                    >
+                                                        {homeTeamName}
+                                                    </Text>
+                                                    <View style={styles(theme).teamBadgeContainer}>
+                                                        <FastImage
+                                                            style={styles(theme).teamBadge}
+                                                            source={Images[homeTeamCode]}
+                                                        />
+                                                    </View>
+                                                </View>
+                                            </TouchableOpacity>
+                                            <View style={styles(theme).vsContainer}>
+                                                <Text style={styles(theme).vs}>{match.time || 'TBC'}</Text>
+                                            </View>
+                                            <TouchableOpacity
+                                                onPress={
+                                                    awayTeamPreviouslyChosen
+                                                        ? null
+                                                        : () => setSelectedTeam({ ...match.away, index, home: false })
+                                                }
+                                                activeOpacity={awayTeamPreviouslyChosen ? 1 : 0.7}
+                                            >
+                                                <View
+                                                    style={[
+                                                        styles(theme).matchContainerAway,
+                                                        { opacity: awayTeamPreviouslyChosen ? 0.1 : 1 },
+                                                    ]}
+                                                >
+                                                    <View style={styles(theme).teamBadgeContainer}>
+                                                        <FastImage
+                                                            style={styles(theme).teamBadge}
+                                                            source={Images[awayTeamCode]}
+                                                        />
+                                                    </View>
+                                                    <Text
+                                                        style={[
+                                                            styles(theme).teamName,
+                                                            {
+                                                                color:
+                                                                    selectedTeam?.code === awayTeamCode &&
+                                                                    selectedTeam?.index === index
+                                                                        ? '#9f85d4'
+                                                                        : 'black',
+                                                            },
+                                                        ]}
+                                                    >
+                                                        {awayTeamName}
+                                                    </Text>
+                                                </View>
+                                            </TouchableOpacity>
                                         </View>
                                     </View>
-                                </TouchableOpacity>
-                                <View style={styles(theme).vsContainer}>
-                                    <Text style={styles(theme).vs}>{match.time || 'TBC'}</Text>
-                                </View>
-                                <TouchableOpacity
-                                    onPress={
-                                        awayTeamPreviouslyChosen
-                                            ? null
-                                            : () => setSelectedTeam({ ...match.away, index, home: false })
-                                    }
-                                    activeOpacity={awayTeamPreviouslyChosen ? 1 : 0.7}
-                                >
-                                    <View
-                                        style={[
-                                            styles(theme).matchContainerAway,
-                                            { opacity: awayTeamPreviouslyChosen ? 0.1 : 1 },
-                                        ]}
-                                    >
-                                        <View style={styles(theme).teamBadgeContainer}>
-                                            <FastImage style={styles(theme).teamBadge} source={Images[awayTeamCode]} />
-                                        </View>
-                                        <Text
-                                            style={[
-                                                styles(theme).teamName,
-                                                {
-                                                    color:
-                                                        selectedTeam?.code === awayTeamCode &&
-                                                        selectedTeam?.index === index
-                                                            ? '#9f85d4'
-                                                            : 'black',
-                                                },
-                                            ]}
-                                        >
-                                            {awayTeamName}
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
+                                )
+                            })}
                         </View>
-                    )
-                })}
+                    </>
+                ))}
             </View>
         </View>
     )
@@ -105,12 +128,9 @@ const styles = (theme) =>
             alignSelf: 'center',
             flexDirection: 'row',
             justifyContent: 'center',
-            width: 300,
         },
         container: {
             alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
         },
         heading: {
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
