@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Text, View, StyleSheet } from 'react-native'
+import { Image, Text, View, Platform, StyleSheet } from 'react-native'
 
 import * as Images from '../../images'
 
@@ -53,7 +53,7 @@ const styles = (theme) =>
             width: 300,
         },
         centerGoals: {
-            backgroundColor: '#390d40',
+            backgroundColor: theme.purple,
             flexDirection: 'row',
             alignSelf: 'center',
             alignItems: 'center',
@@ -73,7 +73,8 @@ const styles = (theme) =>
             fontSize: 15,
         },
         playerTeam: {
-            color: '#390d40',
+            color: theme.purple,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
         },
         centerText: {
             alignItems: 'center',
@@ -84,8 +85,8 @@ const styles = (theme) =>
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'flex-end',
-            width: 150,
             marginRight: 10,
+            width: 150,
         },
         awayTeam: {
             alignItems: 'center',
@@ -94,11 +95,13 @@ const styles = (theme) =>
             marginLeft: 10,
         },
         homeTeamName: {
+            color: theme.text.primary,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
             marginRight: 5,
-            fontSize: 12,
+            fontSize: 13,
         },
         userTeamAway: {
             marginLeft: 5,
-            fontSize: 12,
+            fontSize: 13,
         },
     })

@@ -60,7 +60,7 @@ export const CurrentRoundView = ({
                                     style={[
                                         styles(theme).playerName,
                                         {
-                                            color: player.information.id === user.id ? '#390d40' : '#4c4a4f',
+                                            color: theme.text.primary,
                                             opacity: player.hasBeenEliminated ? 0.2 : 1,
                                         },
                                     ]}
@@ -82,7 +82,7 @@ export const CurrentRoundView = ({
                             </View>
 
                             <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
-                                <View style={{ backgroundColor: '#f2f2f2' }}>
+                                <View style={{ backgroundColor: theme.background.secondary }}>
                                     {player.rounds.length > 0 ? (
                                         <>
                                             {player.rounds
@@ -113,7 +113,7 @@ const styles = (theme) =>
     StyleSheet.create({
         container: {
             alignSelf: 'center',
-            backgroundColor: theme.background.primary,
+            backgroundColor: theme.background.secondary,
             borderRadius: 5,
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
@@ -124,7 +124,7 @@ const styles = (theme) =>
 
         infoBanner: {
             textAlign: 'center',
-            backgroundColor: '#390d40',
+            backgroundColor: theme.purple,
             color: '#fff',
             paddingVertical: 10,
             marginTop: 20,

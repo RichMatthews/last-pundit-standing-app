@@ -16,9 +16,10 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                     <>
                         <Text
                             style={{
-                                backgroundColor: '#eee',
+                                backgroundColor: '#302d30',
                                 fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-                                fontWeight: '500',
+                                color: theme.text.primary,
+                                fontWeight: '600',
                                 padding: 5,
                                 textAlign: 'center',
                             }}
@@ -57,7 +58,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                                     selectedTeam?.code === homeTeamCode &&
                                                                     selectedTeam?.index === index
                                                                         ? '#390d40'
-                                                                        : 'black',
+                                                                        : theme.text.primary,
                                                             },
                                                         ]}
                                                     >
@@ -102,7 +103,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                                     selectedTeam?.code === awayTeamCode &&
                                                                     selectedTeam?.index === index
                                                                         ? '#390d40'
-                                                                        : 'black',
+                                                                        : theme.text.primary,
                                                             },
                                                         ]}
                                                     >
@@ -133,6 +134,7 @@ const styles = (theme) =>
             alignSelf: 'center',
         },
         heading: {
+            color: theme.text.primary,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: 20,
             alignSelf: 'center',
@@ -152,7 +154,7 @@ const styles = (theme) =>
         },
         subHeading: {
             alignSelf: 'center',
-            color: '#aaa',
+            color: theme.text.primary,
             marginBottom: 10,
         },
         teamName: {
@@ -171,7 +173,7 @@ const styles = (theme) =>
         },
         vsContainer: {
             alignSelf: 'center',
-            borderColor: '#ccc',
+            borderColor: '#454545',
             borderRadius: 5,
             justifyContent: 'center',
             alignItems: 'center',
@@ -180,6 +182,7 @@ const styles = (theme) =>
             margin: 10,
         },
         vs: {
+            color: theme.text.primary,
             marginLeft: 10,
             marginRight: 10,
         },

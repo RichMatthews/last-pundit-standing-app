@@ -3,8 +3,12 @@ const COLOURS = {
     WHITE: '#fff',
     BLACK: '#000',
     PRIMARY_WHITE: '#f7f7f7',
-    PRIMARY_BLACK: '#1d1d1d',
-    // TODO: change to #
+    SECONDARY_WHITE: '#f2f2f2',
+    PRIMARY_BLACK: '#1c191c',
+    SECONDARY_BLACK: '#302d30',
+    TERTIARY_BLACK: '#454145',
+    BRAND_COLOR_DARK: '#BB86FC',
+    BRAND_COLOR_LIGHT: '#390d40',
     ACCENT: BRAND_PURPLE,
 }
 
@@ -24,19 +28,21 @@ const DEFAULT_THEME = {
 export const DARK_THEME = {
     ...DEFAULT_THEME,
     dark: true,
+    purple: COLOURS.BRAND_COLOR_DARK,
     background: {
-        primary: '#111111',
+        primary: COLOURS.PRIMARY_BLACK,
+        secondary: COLOURS.SECONDARY_BLACK,
     },
     borders: {
         ...DEFAULT_THEME.borders,
-        primaryColor: COLOURS.PRIMARY_BLACK,
+        primary: '#454545',
     },
     button: {
         backgroundColor: COLOURS.PRIMARY_BLACK,
         color: COLOURS.PRIMARY_WHITE,
     },
     colors: {
-        primaryColor: COLOURS.PRIMARY_BLACK,
+        primary: COLOURS.PRIMARY_BLACK,
     },
     headings: {
         primary: COLOURS.PRIMARY_WHITE,
@@ -68,19 +74,21 @@ export const DARK_THEME = {
 export const LIGHT_THEME = {
     ...DEFAULT_THEME,
     dark: false,
+    purple: COLOURS.BRAND_COLOR_LIGHT,
     background: {
-        primary: '#fff',
+        primary: COLOURS.PRIMARY_WHITE,
+        secondary: COLOURS.SECONDARY_WHITE,
     },
     borders: {
         ...DEFAULT_THEME.borders,
-        primaryColor: COLOURS.PRIMARY_WHITE,
+        primary: COLOURS.PRIMARY_BLACK,
     },
     button: {
         backgroundColor: COLOURS.PRIMARY_WHITE,
         color: COLOURS.PRIMARY_BLACK,
     },
     colors: {
-        primaryColor: COLOURS.PRIMARY_WHITE,
+        primary: COLOURS.PRIMARY_BLACK,
     },
     headings: {
         primary: COLOURS.PRIMARY_BLACK,

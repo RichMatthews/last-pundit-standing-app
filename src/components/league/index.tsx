@@ -72,10 +72,10 @@ export const League = ({ leagueId, theme }: string) => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 0, backgroundColor: '#f2f2f2' }} />
+            <SafeAreaView style={{ flex: 0, backgroundColor: theme.background.primary }} />
             <View
                 style={{
-                    backgroundColor: '#f2f2f2',
+                    backgroundColor: theme.background.primary,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     paddingHorizontal: 20,
@@ -83,15 +83,15 @@ export const League = ({ leagueId, theme }: string) => {
                 }}
             >
                 <Text style={styles(theme).mainheading}>{league.name}</Text>
-                <TouchableOpacity onPress={showTeamSelection} style={{ padding: 10 }}>
-                    <Text>Team selection</Text>
+                <TouchableOpacity onPress={showTeamSelection} style={{ padding: 10 }} activeOpacity={0.7}>
+                    <Text style={{ color: theme.text.primary }}>Team selection</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles(theme).container}>
                 <View
                     style={{
-                        backgroundColor: '#fff',
+                        backgroundColor: theme.background.primary,
                         flexDirection: 'row',
                         alignItems: 'center',
                         borderRadius: 20,
@@ -102,14 +102,14 @@ export const League = ({ leagueId, theme }: string) => {
                         alignSelf: 'center',
                         shadowOpacity: 1,
                         shadowRadius: 3,
-                        shadowColor: '#ccc',
+                        shadowColor: theme.background.secondary,
                         shadowOffset: { height: 2, width: 0 },
                     }}
                 >
-                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)} activeOpacity={0.7}>
+                    <TouchableOpacity onPress={() => setShowCurrent(true)} activeOpacity={0.7}>
                         <View
                             style={{
-                                backgroundColor: showCurrent ? '#390d40' : 'transparent',
+                                backgroundColor: showCurrent ? theme.background.secondary : 'transparent',
                                 borderRadius: 20,
                                 padding: 10,
                                 width: 150,
@@ -119,7 +119,7 @@ export const League = ({ leagueId, theme }: string) => {
                                 style={[
                                     styles(theme).currentRoundHeading,
                                     {
-                                        color: showCurrent ? '#fff' : '#4c4a4f',
+                                        color: theme.text.primary,
                                         fontSize: 15,
                                         textAlign: 'center',
                                     },
@@ -129,10 +129,10 @@ export const League = ({ leagueId, theme }: string) => {
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)} activeOpacity={0.7}>
+                    <TouchableOpacity onPress={() => setShowCurrent(false)} activeOpacity={0.7}>
                         <View
                             style={{
-                                backgroundColor: !showCurrent ? '#390d40' : 'transparent',
+                                backgroundColor: !showCurrent ? theme.background.secondary : 'transparent',
                                 borderRadius: 20,
                                 padding: 10,
                                 width: 150,
@@ -142,7 +142,7 @@ export const League = ({ leagueId, theme }: string) => {
                                 style={[
                                     styles(theme).currentRoundHeading,
                                     {
-                                        color: !showCurrent ? '#fff' : '#4c4a4f',
+                                        color: theme.text.primary,
                                         fontSize: 15,
                                         textAlign: 'center',
                                     },
@@ -173,9 +173,10 @@ export const League = ({ leagueId, theme }: string) => {
                 <Portal>
                     <Modalize
                         adjustToContentHeight
+                        disableScrollIfPossible
                         ref={teamSelectionRef}
                         scrollViewProps={{
-                            contentContainerStyle: { minHeight: '50%' },
+                            contentContainerStyle: { backgroundColor: theme.background.primary, minHeight: '50%' },
                         }}
                     >
                         <View style={styles(theme).fixturesWrapper}>
@@ -196,7 +197,7 @@ export const League = ({ leagueId, theme }: string) => {
 const styles = (theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: '#f2f2f2',
+            backgroundColor: theme.background.primary,
             flex: 1,
         },
         currentRoundHeading: {
@@ -212,7 +213,7 @@ const styles = (theme) =>
             marginBottom: 20,
         },
         mainheading: {
-            color: '#4c4a4f',
+            color: theme.text.primary,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: 30,
             fontWeight: '700',

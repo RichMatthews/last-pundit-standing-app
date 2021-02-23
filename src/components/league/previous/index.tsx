@@ -72,8 +72,8 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                                     <View style={styles(theme).individualPlayerRounds}>
                                                         <Text
                                                             style={{
-                                                                backgroundColor: '#390d40',
-                                                                color: '#fff',
+                                                                backgroundColor: theme.purple,
+                                                                color: theme.text.inverse,
                                                                 fontFamily: 'Hind',
                                                                 fontWeight: '700',
                                                                 paddingLeft: 5,
@@ -107,7 +107,7 @@ const styles = (theme: any) =>
     StyleSheet.create({
         container: {
             alignSelf: 'center',
-            backgroundColor: theme.background.primary,
+            backgroundColor: theme.background.secondary,
             borderRadius: 5,
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,
@@ -127,13 +127,13 @@ const styles = (theme: any) =>
             textAlign: 'center',
         },
         playerNameText: {
-            color: '#390d40',
+            color: theme.text.primary,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: theme.text.large,
         },
         previousGamesContainer: {
             borderBottomWidth: 0.5,
-            borderBottomColor: '#390d40',
+            borderBottomColor: theme.borders.ƒrimary,
             borderRadius: 5,
             padding: 10,
             margin: 10,
@@ -145,7 +145,7 @@ const styles = (theme: any) =>
             flexWrap: 'wrap',
         },
         individualPlayerRounds: {
-            backgroundColor: '#f2f2f2',
+            backgroundColor: theme.background.secondary,
             flexDirection: 'column',
             marginBottom: 20,
         },

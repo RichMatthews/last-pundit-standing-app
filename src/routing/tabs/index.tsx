@@ -1,4 +1,5 @@
 import React from 'react'
+import { Platform } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CreateStack } from 'src/routing/tabs/create'
 import { LeagueStack } from 'src/routing/tabs/leagues'
@@ -16,9 +17,9 @@ export const TabNavigation = ({ theme, user }: any) => (
             ),
         })}
         tabBarOptions={{
-            activeTintColor: theme.tint.active,
-            inactiveTintColor: theme.tint.inactive,
-            labelStyle: { fontSize: theme.text.small },
+            activeTintColor: theme.purple,
+            inactiveTintColor: theme.text.primary,
+            labelStyle: { fontSize: theme.text.small, fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold' },
             style: {
                 borderTopColor: 'transparent',
                 backgroundColor: theme.background.primary,

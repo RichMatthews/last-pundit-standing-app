@@ -71,7 +71,7 @@ const styles = (theme: any) =>
             fontSize: 15,
         },
         centerGoals: {
-            backgroundColor: '#390d40',
+            backgroundColor: theme.purple,
             flexDirection: 'row',
             alignSelf: 'center',
             alignItems: 'center',
@@ -91,14 +91,14 @@ const styles = (theme: any) =>
             alignItems: 'center',
         },
         roundNumberContainer: {
-            backgroundColor: '#390d40',
+            backgroundColor: theme.purple,
             borderRadius: 50,
             width: 20,
             height: 20,
             justifyContent: 'center',
         },
         roundNumberText: {
-            color: '#fff',
+            color: theme.text.inverse,
             fontWeight: '700',
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             textAlign: 'center',

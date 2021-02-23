@@ -18,10 +18,10 @@ export const RenderCorrectIcon = ({ focused, route, size, theme }) => {
             <MaterialIcons
                 name={'account-circle-outline'}
                 size={size}
-                color={focused ? theme.tint.active : theme.tint.inactive}
+                color={focused ? theme.purple : theme.tint.inactive}
             />
         )
     }
 
-    return <Ionicons name={iconName} size={size} color={focused ? theme.tint.active : theme.tint.inactive} />
+    return <Ionicons name={iconName} size={size} color={focused ? theme.purple : theme.tint.inactive} />
 }
