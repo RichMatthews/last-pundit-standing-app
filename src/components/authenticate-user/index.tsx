@@ -167,11 +167,11 @@ export const AuthenticateUserScreen = ({ theme }) => {
             <Text style={heading}>{showResetScreen ? 'Reset Password' : 'Login'}</Text>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <SafeAreaView style={screenWrapper}>
-                    <Container style={container}>
-                        {showResetScreen ? (
-                            <ResetPassword setShowResetScreen={setShowResetScreen} theme={theme} />
-                        ) : (
-                            <Fragment>
+                    {showResetScreen ? (
+                        <ResetPassword setShowResetScreen={setShowResetScreen} theme={theme} />
+                    ) : (
+                        <View style={container}>
+                            <View style={{ alignSelf: 'center', marginHorizontal: 50 }}>
                                 <View>
                                     {error ? (
                                         <View style={errorWrapper}>
@@ -203,7 +203,7 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                     </Fragment>
                                 )}
                                 {(loginOption === 'signup' || loginOption === 'signin') && (
-                                    <Fragment>
+                                    <View>
                                         <View style={inputContainer}>
                                             <TextInput
                                                 style={input}
@@ -224,59 +224,57 @@ export const AuthenticateUserScreen = ({ theme }) => {
                                                 value={password}
                                             />
                                         </View>
-                                    </Fragment>
+                                    </View>
                                 )}
 
-                                <Fragment>
-                                    <View>
-                                        <TouchableOpacity onPress={() => setShowResetScreen(true)}>
-                                            {loginOption === 'signin' && (
-                                                <View style={forgottenPasswordWrapper}>
-                                                    <Text style={forgottenPasswordText}>Forgotten password?</Text>
-                                                </View>
-                                            )}
-                                        </TouchableOpacity>
-                                        <View style={loginOptionWrapper}>
-                                            <TouchableOpacity onPress={logUserIn}>
-                                                <View style={loginOptionTextWrapper}>
-                                                    <Text style={loginOptionText}>
-                                                        {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
-                                                    </Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                        {loginOption === 'signin' && showFaceIDButton && (
-                                            <View style={faceIdWrapper}>
-                                                <TouchableOpacity onPress={logUserInWithFaceId}>
-                                                    <Button>
-                                                        <ButtonText>USE FACE ID</ButtonText>
-                                                    </Button>
-                                                </TouchableOpacity>
+                                <>
+                                    <TouchableOpacity onPress={() => setShowResetScreen(true)} activeOpacity={0.7}>
+                                        {loginOption === 'signin' && (
+                                            <View style={forgottenPasswordWrapper}>
+                                                <Text style={forgottenPasswordText}>Forgotten password?</Text>
                                             </View>
                                         )}
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={logUserIn} activeOpacity={0.7}>
+                                        <View style={loginOptionTextWrapper}>
+                                            <Text style={loginOptionText}>
+                                                {loginOption === 'signup' ? 'SIGN UP' : 'SIGN IN'}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    {loginOption === 'signin' && showFaceIDButton && (
+                                        <View style={faceIdWrapper}>
+                                            <TouchableOpacity onPress={logUserInWithFaceId}>
+                                                <Button>
+                                                    <ButtonText>USE FACE ID</ButtonText>
+                                                </Button>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                </>
+                            </View>
+                            <View style={helperButtonWrapper}>
+                                <TouchableOpacity onPress={authenticateUserHelper} activeOpacity={0.7}>
+                                    <View>
+                                        <Text style={helperButtonText}>
+                                            {loginOption === 'signup'
+                                                ? 'HAVE AN ACCOUNT? SIGN IN'
+                                                : 'NO ACCOUNT? SIGN UP'}
+                                        </Text>
                                     </View>
-                                    <View style={helperButtonWrapper}>
-                                        <TouchableOpacity onPress={authenticateUserHelper}>
-                                            <View>
-                                                <Text style={helperButtonText}>
-                                                    {loginOption === 'signup'
-                                                        ? 'HAVE AN ACCOUNT? SIGN IN'
-                                                        : 'NO ACCOUNT? SIGN UP'}
-                                                </Text>
-                                            </View>
-                                        </TouchableOpacity>
-                                    </View>
-                                </Fragment>
-                            </Fragment>
-                        )}
-                    </Container>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    )}
                 </SafeAreaView>
             </TouchableWithoutFeedback>
         </ScreenComponent>
     ) : (
-        <Container style={spinnerWrapper}>
-            <ActivityIndicator size="large" color={theme.spinner.primary} />
-        </Container>
+        <View style={spinnerWrapper}>
+            <ActivityIndicator size="large" color={theme.spinner.inverse} />
+        </View>
     )
 }
 
@@ -284,13 +282,13 @@ const styles = (theme) =>
     StyleSheet.create({
         screenWrapper: {
             backgroundColor: theme.background.primary,
+            flex: 1,
         },
         container: {
-            marginTop: 50,
-            width: 350,
+            justifyContent: 'space-between',
+            flex: 1,
         },
         auth: {
-            display: 'flex',
             alignSelf: 'center',
         },
         forgottenPasswordWrapper: {
@@ -305,37 +303,42 @@ const styles = (theme) =>
         loginOptionWrapper: {
             width: 300,
         },
-        loginOptionTextWrapper: { borderWidth: 1, borderRadius: 5, padding: 5 },
+        loginOptionTextWrapper: {
+            backgroundColor: '#bb99ff',
+            borderColor: '#bb99ff',
+            borderWidth: 1,
+            borderRadius: 5,
+            padding: 5,
+            alignSelf: 'center',
+            width: '100%',
+        },
         loginOptionText: {
-            color: theme.text.primary,
+            color: theme.text.inverse,
             fontSize: 16,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontWeight: '600',
             textAlign: 'center',
         },
         faceIdWrapper: { marginTop: 10, width: 300 },
-        helperButtonWrapper: {
-            bottom: Platform.OS === 'ios' ? 400 : 300,
-            position: 'absolute',
-        },
+        helperButtonWrapper: {},
         helperButtonText: {
             color: theme.text.primary,
             fontWeight: '700',
             textAlign: 'center',
         },
         errorWrapper: {
-            backgroundColor: theme.button.backgroundColor,
+            justifyContent: 'flex-start',
         },
         error: {
-            backgroundColor: theme.background.primary,
             borderRadius: 5,
             borderWidth: 1,
             borderColor: '#ff0033',
-            padding: 10,
             width: 300,
         },
         errorText: {
             color: '#ff0033',
-            fontWeight: '700',
+            fontWeight: '600',
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
         },
         heading: {
             color: theme.text.primary,
@@ -346,10 +349,9 @@ const styles = (theme) =>
             fontWeight: '600',
         },
         inputContainer: {
-            display: 'flex',
             flexDirection: 'row',
             padding: Platform.OS === 'ios' ? 10 : 0,
-            margin: 10,
+            marginVertical: 10,
         },
         input: {
             borderBottomWidth: 1,
@@ -358,7 +360,7 @@ const styles = (theme) =>
             fontSize: 15,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             paddingBottom: Platform.OS === 'ios' ? 10 : 0,
-            width: 300,
+            width: '100%',
         },
-        spinnerWrapper: { backgroundColor: theme.background.primary, paddingTop: 200 },
+        spinnerWrapper: { backgroundColor: theme.background.primary, marginTop: 100 },
     })

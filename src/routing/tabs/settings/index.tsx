@@ -27,7 +27,7 @@ export const SettingsStack = ({ theme }) => (
                 }}
             </Stack.Screen>
             <Stack.Screen options={{ headerTitle: 'Update Email' }} name="Update Email">
-                {(props: any) => <UpdateEmail theme={theme} />}
+                {(props: any) => <UpdateEmail theme={theme} navigation={props.navigation} />}
             </Stack.Screen>
             <Stack.Screen name="Reset Password">{(props: any) => <ResetPassword theme={theme} />}</Stack.Screen>
         </>

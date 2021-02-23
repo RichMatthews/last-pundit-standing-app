@@ -81,7 +81,7 @@ export const Account = ({ navigation, theme }: any) => {
                 </View>
                 <Text style={heading}>Security</Text>
                 <View style={section}>
-                    <TouchableOpacity onPress={() => updateEmailHelper()}>
+                    <TouchableOpacity onPress={() => updateEmailHelper()} activeOpacity={0.7}>
                         <SettingsRow
                             text="Update Email"
                             theme={theme}
@@ -157,7 +157,7 @@ const styles = (theme: any) =>
         },
         section: {
             flexDirection: 'column',
-            padding: 10,
+            paddingVertical: 10,
             width: width * 0.9,
         },
         signOut: {
