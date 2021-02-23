@@ -95,7 +95,6 @@ const styles = (theme: any) =>
             borderRadius: 50,
             width: 20,
             height: 20,
-
             justifyContent: 'center',
         },
         roundNumberText: {

@@ -69,8 +69,19 @@ export const PreviousGames = ({ games, theme }: Props) => {
                                         {Object.values(game.players).map((player: Player) => {
                                             return (
                                                 <>
-                                                    <Text>{player.information.name}</Text>
                                                     <View style={styles(theme).individualPlayerRounds}>
+                                                        <Text
+                                                            style={{
+                                                                backgroundColor: '#390d40',
+                                                                color: '#fff',
+                                                                fontFamily: 'Hind',
+                                                                fontWeight: '700',
+                                                                paddingLeft: 5,
+                                                                marginBottom: 5,
+                                                            }}
+                                                        >
+                                                            {player.information.name}
+                                                        </Text>
                                                         <CachedResults player={player} theme={theme} />
                                                     </View>
                                                 </>
@@ -116,13 +127,13 @@ const styles = (theme: any) =>
             textAlign: 'center',
         },
         playerNameText: {
-            color: '#9f85d4',
+            color: '#390d40',
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
             fontSize: theme.text.large,
         },
         previousGamesContainer: {
             borderBottomWidth: 0.5,
-            borderBottomColor: '#9f85d4',
+            borderBottomColor: '#390d40',
             borderRadius: 5,
             padding: 10,
             margin: 10,
@@ -136,8 +147,7 @@ const styles = (theme: any) =>
         individualPlayerRounds: {
             backgroundColor: '#f2f2f2',
             flexDirection: 'column',
-            marginVertical: 10,
-            paddingVertical: 10,
+            marginBottom: 20,
         },
         game: {
             flexDirection: 'row',

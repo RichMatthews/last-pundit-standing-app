@@ -56,7 +56,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                                 color:
                                                                     selectedTeam?.code === homeTeamCode &&
                                                                     selectedTeam?.index === index
-                                                                        ? '#9f85d4'
+                                                                        ? '#390d40'
                                                                         : 'black',
                                                             },
                                                         ]}
@@ -101,7 +101,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                                 color:
                                                                     selectedTeam?.code === awayTeamCode &&
                                                                     selectedTeam?.index === index
-                                                                        ? '#9f85d4'
+                                                                        ? '#390d40'
                                                                         : 'black',
                                                             },
                                                         ]}

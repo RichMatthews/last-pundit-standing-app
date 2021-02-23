@@ -82,10 +82,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     cancelButton: {
-        borderColor: '#9f85d4',
+        borderColor: '#390d40',
     },
     cancelButtonText: {
-        color: '#9f85d4',
+        color: '#390d40',
         fontFamily,
         fontSize: 15,
         textAlign: 'center',
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
         fontSize: 25,
     },
     submitButton: {
-        backgroundColor: '#9f85d4',
-        borderColor: '#9f85d4',
+        backgroundColor: '#390d40',
+        borderColor: '#390d40',
     },
     submitButtonText: {
         color: '#fff',

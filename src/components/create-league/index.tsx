@@ -215,7 +215,7 @@ const styles = (theme: any, active?: boolean) =>
         },
         optionButton: {
             borderWidth: 0,
-            backgroundColor: active ? '#9f85d4' : '#fff',
+            backgroundColor: active ? '#390d40' : '#fff',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -231,6 +231,6 @@ const styles = (theme: any, active?: boolean) =>
             width: 60,
         },
         optionButtonText: {
-            color: active ? '#fff' : '#9f85d4',
+            color: active ? '#fff' : '#390d40',
         },
     })

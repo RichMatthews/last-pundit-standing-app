@@ -60,7 +60,7 @@ export const CurrentRoundView = ({
                                     style={[
                                         styles(theme).playerName,
                                         {
-                                            color: player.information.id === user.id ? '#9f85d4' : '#4c4a4f',
+                                            color: player.information.id === user.id ? '#390d40' : '#4c4a4f',
                                             opacity: player.hasBeenEliminated ? 0.2 : 1,
                                         },
                                     ]}
@@ -124,7 +124,7 @@ const styles = (theme) =>
 
         infoBanner: {
             textAlign: 'center',
-            backgroundColor: '#9f85d4',
+            backgroundColor: '#390d40',
             color: '#fff',
             paddingVertical: 10,
             marginTop: 20,

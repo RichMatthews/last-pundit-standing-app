@@ -73,7 +73,7 @@ const styles = (theme) =>
             fontSize: 15,
         },
         playerTeam: {
-            color: '#9f85d4',
+            color: '#390d40',
         },
         centerText: {
             alignItems: 'center',

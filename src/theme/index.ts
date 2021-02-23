@@ -1,4 +1,4 @@
-const BRAND_PURPLE = '#9f85d4'
+const BRAND_PURPLE = '#390d40'
 const COLOURS = {
     WHITE: '#fff',
     BLACK: '#000',

@@ -106,10 +106,10 @@ export const League = ({ leagueId, theme }: string) => {
                         shadowOffset: { height: 2, width: 0 },
                     }}
                 >
-                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)}>
+                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)} activeOpacity={0.7}>
                         <View
                             style={{
-                                backgroundColor: showCurrent ? '#9f85d4' : 'transparent',
+                                backgroundColor: showCurrent ? '#390d40' : 'transparent',
                                 borderRadius: 20,
                                 padding: 10,
                                 width: 150,
@@ -129,10 +129,10 @@ export const League = ({ leagueId, theme }: string) => {
                             </Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)}>
+                    <TouchableOpacity onPress={() => setShowCurrent(!showCurrent)} activeOpacity={0.7}>
                         <View
                             style={{
-                                backgroundColor: !showCurrent ? '#9f85d4' : 'transparent',
+                                backgroundColor: !showCurrent ? '#390d40' : 'transparent',
                                 borderRadius: 20,
                                 padding: 10,
                                 width: 150,

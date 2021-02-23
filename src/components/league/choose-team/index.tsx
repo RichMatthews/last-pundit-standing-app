@@ -95,7 +95,7 @@ const styles = (theme) =>
             marginTop: 10,
         },
         buttonText: {
-            backgroundColor: '#9f85d4',
+            backgroundColor: '#390d40',
             borderRadius: 5,
             padding: 10,
         },
