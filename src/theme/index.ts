@@ -81,7 +81,7 @@ export const LIGHT_THEME = {
     },
     borders: {
         ...DEFAULT_THEME.borders,
-        primary: COLOURS.PRIMARY_BLACK,
+        primary: '#ccc',
     },
     button: {
         backgroundColor: COLOURS.PRIMARY_WHITE,

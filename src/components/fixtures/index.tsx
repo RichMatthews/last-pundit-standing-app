@@ -16,7 +16,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                     <>
                         <Text
                             style={{
-                                backgroundColor: '#302d30',
+                                backgroundColor: theme.background.secondary,
                                 fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
                                 color: theme.text.primary,
                                 fontWeight: '600',
@@ -63,7 +63,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                                 color:
                                                                     selectedTeam?.code === homeTeamCode &&
                                                                     selectedTeam?.index === index
-                                                                        ? '#390d40'
+                                                                        ? theme.purple
                                                                         : theme.text.primary,
                                                             },
                                                         ]}
@@ -114,7 +114,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                                 color:
                                                                     selectedTeam?.code === awayTeamCode &&
                                                                     selectedTeam?.index === index
-                                                                        ? '#390d40'
+                                                                        ? theme.purple
                                                                         : theme.text.primary,
                                                             },
                                                         ]}
@@ -185,7 +185,7 @@ const styles = (theme) =>
         },
         vsContainer: {
             alignSelf: 'center',
-            borderColor: '#454545',
+            borderColor: theme.borders.primary,
             borderRadius: 5,
             justifyContent: 'center',
             alignItems: 'center',

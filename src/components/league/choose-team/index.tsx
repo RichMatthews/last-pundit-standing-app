@@ -75,6 +75,7 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
                                     modalOpen={modalOpen}
                                     setModalOpen={setModalOpen}
                                     selectedTeamOpponent={opponent}
+                                    theme={theme}
                                     updateUserGamweekChoiceHelper={updateUserGamweekChoiceHelper}
                                 />
                             )}
@@ -95,7 +96,7 @@ const styles = (theme) =>
             marginTop: 10,
         },
         buttonText: {
-            backgroundColor: '#390d40',
+            backgroundColor: theme.purple,
             borderRadius: 5,
             padding: 10,
         },

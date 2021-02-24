@@ -17,6 +17,7 @@ export const CurrentRoundView = ({
     listOfExpandedPrevious,
     setListOfExpandedPreviousHelper,
     theme,
+    showTeamSelection,
 }: any) => {
     const [refreshing, setRefreshing] = useState<boolean>(false)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
@@ -53,56 +54,60 @@ export const CurrentRoundView = ({
                 // }
             >
                 {Object.values(currentGame.players).map((player: any, index: number) => (
-                    <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
-                        <View key={player.information.id} style={styles(theme).playerContainer}>
-                            <View style={styles(theme).playerRow}>
-                                <Text
-                                    style={[
-                                        styles(theme).playerName,
-                                        {
-                                            color: theme.text.primary,
-                                            opacity: player.hasBeenEliminated ? 0.2 : 1,
-                                        },
-                                    ]}
+                    <View key={player.information.id} style={styles(theme).playerContainer}>
+                        <View style={styles(theme).playerRow}>
+                            <Text
+                                style={[
+                                    styles(theme).playerName,
+                                    {
+                                        color: theme.text.primary,
+                                        opacity: player.hasBeenEliminated ? 0.2 : 1,
+                                    },
+                                ]}
+                            >
+                                {player.information.name}
+                            </Text>
+                            <View style={styles(theme).playerChosenImageAndDownArrow}>
+                                <MemoizedShowImageForPlayerChoice
+                                    currentGame={currentGame}
+                                    isCurrentLoggedInPlayer={player.information.id === user.id}
+                                    player={player}
+                                    showTeamSelection={showTeamSelection}
+                                />
+                                <TouchableOpacity
+                                    onPress={() => setListOfExpandedPreviousHelper(index)}
+                                    activeOpacity={1}
                                 >
-                                    {player.information.name}
-                                </Text>
-                                <View style={styles(theme).playerChosenImageAndDownArrow}>
-                                    <MemoizedShowImageForPlayerChoice
-                                        currentGame={currentGame}
-                                        isCurrentLoggedInPlayer={player.information.id === user.id}
-                                        player={player}
-                                    />
                                     {listOfExpandedPrevious.includes(index) ? (
                                         <Entypo name="chevron-small-up" size={30} color={theme.icons.primary} />
                                     ) : (
                                         <Entypo name="chevron-small-down" size={30} color={theme.icons.primary} />
                                     )}
-                                </View>
+                                </TouchableOpacity>
                             </View>
-
-                            <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
-                                <View style={{ backgroundColor: theme.background.secondary }}>
-                                    {player.rounds.length > 0 ? (
-                                        <>
-                                            {player.rounds
-                                                .filter(
-                                                    (round: any) =>
-                                                        round.selection.name && round.selection.result !== 'pending',
-                                                )
-                                                .map((round: any) => (
-                                                    <PreviousRound choice={round.selection} theme={theme} />
-                                                ))}
-                                        </>
-                                    ) : (
-                                        <View>
-                                            <Text>Previous results will show here after Round 1</Text>
-                                        </View>
-                                    )}
-                                </View>
-                            </Collapsible>
                         </View>
-                    </TouchableOpacity>
+
+                        <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
+                            <View style={{ backgroundColor: theme.background.secondary }}>
+                                {player.rounds.length > 0 ? (
+                                    <>
+                                        {player.rounds
+                                            .filter(
+                                                (round: any) =>
+                                                    round.selection.name && round.selection.result !== 'pending',
+                                            )
+                                            .map((round: any) => (
+                                                <PreviousRound choice={round.selection} theme={theme} />
+                                            ))}
+                                    </>
+                                ) : (
+                                    <View>
+                                        <Text>Previous results will show here after Round 1</Text>
+                                    </View>
+                                )}
+                            </View>
+                        </Collapsible>
+                    </View>
                 ))}
             </ScrollView>
         </View>

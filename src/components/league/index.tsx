@@ -84,7 +84,7 @@ export const League = ({ leagueId, theme }: string) => {
             >
                 <Text style={styles(theme).mainheading}>{league.name}</Text>
                 <TouchableOpacity onPress={showTeamSelection} style={{ padding: 10 }} activeOpacity={0.7}>
-                    <Text style={{ color: theme.text.primary }}>Team selection</Text>
+                    <Text style={{ color: theme.text.primary }}>View fixtures</Text>
                 </TouchableOpacity>
             </View>
 
@@ -161,6 +161,7 @@ export const League = ({ leagueId, theme }: string) => {
                             theme={theme}
                             showCurrent={showCurrent}
                             setShowCurrent={setShowCurrent}
+                            showTeamSelection={showTeamSelection}
                         />
                     ) : (
                         <CachedPreviousGames

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import * as Images from '../../../images'
 
 import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const isIos = Platform.OS === 'ios'
 
@@ -29,7 +30,7 @@ const playerStatus = {
     currentPending: {
         bgColor: '#FFF3CD',
         color: '#856404',
-        text: 'Awaiting your prediction',
+        text: 'Tap to make your prediction',
     },
     champion: {
         bgColor: '#FFF3CD',
@@ -37,12 +38,14 @@ const playerStatus = {
         text: 'Champion',
     },
 }
-const GameStatusIndicatorComponent = (status: string) => (
+const GameStatusIndicatorComponent = (status: string, showTeamSelection = null) => (
     <View style={gameStatusIndicatorStyles().gameStatusIndicator}>
         <View style={gameStatusIndicatorStyles(playerStatus[status].bgColor).labelWrapper}>
-            <Text style={gameStatusIndicatorStyles(undefined, playerStatus[status].textColor).labelText}>
-                {playerStatus[status].text}
-            </Text>
+            <TouchableOpacity onPress={() => (showTeamSelection ? showTeamSelection() : null)} activeOpacity={1}>
+                <Text style={gameStatusIndicatorStyles(undefined, playerStatus[status].textColor).labelText}>
+                    {playerStatus[status].text}
+                </Text>
+            </TouchableOpacity>
         </View>
     </View>
 )
@@ -51,6 +54,7 @@ export const MemoizedShowImageForPlayerChoice = ({
     currentGame,
     isCurrentLoggedInPlayer,
     player: currentPlayer,
+    showTeamSelection,
 }: any) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
@@ -88,7 +92,7 @@ export const MemoizedShowImageForPlayerChoice = ({
         if (currentPlayerCurrentRound.selection.complete) {
             return <FastImage style={styles.clubBadge} source={Images[currentPlayerCurrentRound.selection.code]} />
         } else {
-            return GameStatusIndicatorComponent('currentPending')
+            return GameStatusIndicatorComponent('currentPending', showTeamSelection)
         }
     }
 
