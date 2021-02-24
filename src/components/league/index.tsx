@@ -72,10 +72,10 @@ export const League = ({ leagueId, theme }: string) => {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 0, backgroundColor: theme.background.primary }} />
+            <SafeAreaView style={{ flex: 0, backgroundColor: theme.background.secondary }} />
             <View
                 style={{
-                    backgroundColor: theme.background.primary,
+                    backgroundColor: theme.background.secondary,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     paddingHorizontal: 20,
@@ -109,7 +109,7 @@ export const League = ({ leagueId, theme }: string) => {
                     <TouchableOpacity onPress={() => setShowCurrent(true)} activeOpacity={0.7}>
                         <View
                             style={{
-                                backgroundColor: showCurrent ? theme.background.secondary : 'transparent',
+                                backgroundColor: showCurrent ? theme.purple : theme.background.primary,
                                 borderRadius: 20,
                                 padding: 10,
                                 width: 150,
@@ -119,7 +119,7 @@ export const League = ({ leagueId, theme }: string) => {
                                 style={[
                                     styles(theme).currentRoundHeading,
                                     {
-                                        color: theme.text.primary,
+                                        color: showCurrent ? theme.text.inverse : theme.text.primary,
                                         fontSize: 15,
                                         textAlign: 'center',
                                     },
@@ -132,7 +132,7 @@ export const League = ({ leagueId, theme }: string) => {
                     <TouchableOpacity onPress={() => setShowCurrent(false)} activeOpacity={0.7}>
                         <View
                             style={{
-                                backgroundColor: !showCurrent ? theme.background.secondary : 'transparent',
+                                backgroundColor: !showCurrent ? theme.purple : theme.background.primary,
                                 borderRadius: 20,
                                 padding: 10,
                                 width: 150,
@@ -142,7 +142,7 @@ export const League = ({ leagueId, theme }: string) => {
                                 style={[
                                     styles(theme).currentRoundHeading,
                                     {
-                                        color: theme.text.primary,
+                                        color: !showCurrent ? theme.text.inverse : theme.text.primary,
                                         fontSize: 15,
                                         textAlign: 'center',
                                     },
@@ -197,7 +197,7 @@ export const League = ({ leagueId, theme }: string) => {
 const styles = (theme) =>
     StyleSheet.create({
         container: {
-            backgroundColor: theme.background.primary,
+            backgroundColor: theme.background.secondary,
             flex: 1,
         },
         currentRoundHeading: {

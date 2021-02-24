@@ -113,7 +113,7 @@ const styles = (theme) =>
     StyleSheet.create({
         container: {
             alignSelf: 'center',
-            backgroundColor: theme.background.secondary,
+            backgroundColor: theme.background.primary,
             borderRadius: 5,
             borderTopLeftRadius: 30,
             borderTopRightRadius: 30,

@@ -2,7 +2,7 @@ const BRAND_PURPLE = '#390d40'
 const COLOURS = {
     WHITE: '#fff',
     BLACK: '#000',
-    PRIMARY_WHITE: '#f7f7f7',
+    PRIMARY_WHITE: '#fff',
     SECONDARY_WHITE: '#f2f2f2',
     PRIMARY_BLACK: '#1c191c',
     SECONDARY_BLACK: '#302d30',
