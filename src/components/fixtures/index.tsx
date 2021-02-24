@@ -40,7 +40,13 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                 onPress={
                                                     homeTeamPreviouslyChosen
                                                         ? null
-                                                        : () => setSelectedTeam({ ...match.home, index, home: true })
+                                                        : () =>
+                                                              setSelectedTeam({
+                                                                  ...match.home,
+                                                                  block: block.block,
+                                                                  index,
+                                                                  home: true,
+                                                              })
                                                 }
                                                 activeOpacity={homeTeamPreviouslyChosen ? 1 : 0.7}
                                             >
@@ -79,7 +85,13 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                                 onPress={
                                                     awayTeamPreviouslyChosen
                                                         ? null
-                                                        : () => setSelectedTeam({ ...match.away, index, home: false })
+                                                        : () =>
+                                                              setSelectedTeam({
+                                                                  ...match.away,
+                                                                  block: block.block,
+                                                                  index,
+                                                                  home: false,
+                                                              })
                                                 }
                                                 activeOpacity={awayTeamPreviouslyChosen ? 1 : 0.7}
                                             >

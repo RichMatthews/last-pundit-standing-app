@@ -22,9 +22,19 @@ const firebaseApp = firebase.initializeApp(PROD_CONFIG)
 const CURRENT_GAMEWEEK = {
     fixtures: [
         {
-            home: { code: 'WBA', name: 'West Brom', goals: 1 },
-            away: { team: 'Man United', code: 'MNU', goals: 1 },
+            home: { code: 'SOT', name: 'Southampton', goals: 1 },
+            away: { code: 'CHE', name: 'Chelsea', goals: 1 },
             result: 'draw',
+        },
+        {
+            home: { code: 'AST', name: 'Aston Villa', goals: 1 },
+            away: { code: 'LEI', name: 'Leicester', goals: 2 },
+            result: 'LEI',
+        },
+        {
+            home: { code: 'ARS', name: 'Arsenal', goals: 0 },
+            away: { code: 'MNC', name: 'Man City', goals: 1 },
+            result: 'MNC',
         },
     ],
 }
@@ -37,41 +47,50 @@ const findFixture = (choice) => {
     return foundMatch
 }
 
-const roundResultDetails = ({ currentPlayerGameRound, fixture, playingAthome, won }) => {
+const roundResultDetails = ({
+    currentPlayerGameRound,
+    fixture,
+    playerTeamCode,
+    playerTeamOpponentCode,
+    playingAthome,
+    won,
+}) => {
     const showHomeDetails = playingAthome ? 'home' : 'away'
     const showAwayDetails = playingAthome ? 'away' : 'home'
-    let roundResult = {
-        selection: true,
+
+    return {
+        complete: true,
         teamPlayingAtHome: playingAthome,
-        value: currentPlayerGameRound.selection.name,
+        name: currentPlayerGameRound.selection.name,
         goals: fixture[showHomeDetails].goals,
+        code: playerTeamCode,
         opponent: {
-            name: fixture[showAwayDetails].team,
+            code: playerTeamOpponentCode,
+            name: fixture[showAwayDetails].name,
             goals: fixture[showAwayDetails].goals,
         },
-    }
-    if (won) {
-        return {
-            ...roundResult,
-            result: 'won',
-        }
-    } else {
-        return {
-            ...roundResult,
-            result: 'lost',
-        }
+        result: won ? 'won' : 'lost',
     }
 }
 
 const calculateIfTheChoiceWon = ({ currentPlayerGameRound, fixture, game, league, player, playingAthome }) => {
+    const playerTeamCode = currentPlayerGameRound.selection.code
+    const playerTeamOpponentCode = currentPlayerGameRound.selection.opponent.code
     if (playingAthome) {
-        if (fixture.result === currentPlayerGameRound.selection.name) {
+        if (fixture.result === currentPlayerGameRound.selection.code) {
             updateFirebaseWithResults({
                 game,
                 league,
                 player,
                 eliminated: false,
-                roundResult: roundResultDetails({ currentPlayerGameRound, fixture, playingAthome, won: true }),
+                roundResult: roundResultDetails({
+                    currentPlayerGameRound,
+                    playerTeamCode,
+                    playerTeamOpponentCode,
+                    fixture,
+                    playingAthome,
+                    won: true,
+                }),
             })
         } else {
             updateFirebaseWithResults({
@@ -79,17 +98,31 @@ const calculateIfTheChoiceWon = ({ currentPlayerGameRound, fixture, game, league
                 league,
                 player,
                 eliminated: true,
-                roundResult: roundResultDetails({ currentPlayerGameRound, fixture, playingAthome, won: false }),
+                roundResult: roundResultDetails({
+                    currentPlayerGameRound,
+                    playerTeamCode,
+                    playerTeamOpponentCode,
+                    fixture,
+                    playingAthome,
+                    won: false,
+                }),
             })
         }
     } else {
-        if (fixture.result === currentPlayerGameRound.selection.name || fixture.result === 'draw') {
+        if (fixture.result === currentPlayerGameRound.selection.code || fixture.result === 'draw') {
             updateFirebaseWithResults({
                 game,
                 league,
                 player,
                 eliminated: false,
-                roundResult: roundResultDetails({ currentPlayerGameRound, fixture, playingAthome, won: true }),
+                roundResult: roundResultDetails({
+                    currentPlayerGameRound,
+                    playerTeamCode,
+                    playerTeamOpponentCode,
+                    fixture,
+                    playingAthome,
+                    won: true,
+                }),
             })
         } else {
             updateFirebaseWithResults({
@@ -97,7 +130,14 @@ const calculateIfTheChoiceWon = ({ currentPlayerGameRound, fixture, game, league
                 league,
                 player,
                 eliminated: true,
-                roundResult: roundResultDetails({ currentPlayerGameRound, fixture, playingAthome, won: false }),
+                roundResult: roundResultDetails({
+                    currentPlayerGameRound,
+                    playerTeamCode,
+                    playerTeamOpponentCode,
+                    fixture,
+                    playingAthome,
+                    won: false,
+                }),
             })
         }
     }
@@ -111,7 +151,7 @@ const updateAllLeagues = () => {
         .then((snapshot) => {
             const everyLeague = Object.values(snapshot.val())
             everyLeague
-                // .filter((league) => league.id === 'l72r12ezoku')
+                .filter((league) => league.id === '9hk0btr26u7')
                 .forEach((league) => {
                     const currentGame = Object.values(league.games).find((game) => !game.complete)
                     const currentGamePlayers = Object.values(currentGame.players)
@@ -121,7 +161,7 @@ const updateAllLeagues = () => {
                         if (
                             currentPlayerGameRound &&
                             currentPlayerGameRound.selection &&
-                            currentPlayerGameRound.selection.selection
+                            currentPlayerGameRound.selection.complete
                         ) {
                             const fixture = findFixture(currentPlayerGameRound.selection)
                             calculateIfTheChoiceWon({
@@ -148,7 +188,7 @@ const updatePlayerChoiceObjectWithMatchResult = ({ game, league, roundResult, pl
             if (error) {
                 console.log('ERROR!:', error)
             } else {
-                console.log('SUCCESSFULLY UPDATED ANOTHER LEAGUE')
+                console.log(`Updated: ${player.information.name} match result`)
             }
         })
 }
@@ -161,7 +201,7 @@ const updatePlayerEliminationStatus = ({ eliminated, game, league, player }) => 
             if (error) {
                 console.log('ERROR!:', error)
             } else {
-                console.log('SUCCESSFULLY UPDATED ANOTHER LEAGUE')
+                console.log(`Updated ${player.information.id} elimination status`)
             }
         })
 }
@@ -187,7 +227,7 @@ const updateCurrentGameStatus = ({ game, league }) => {
 
                 resetPlayers = { ...resetPlayers, [player.information.id]: newPlayer }
             })
-            console.log(resetPlayers, 'reset')
+
             if (allPlayersEliminated) {
                 updateGameWithNoWinner()
                 return
@@ -230,7 +270,7 @@ const createNewGame = ({ league, players }) => {
             if (error) {
                 console.log('ERROR!:', error)
             } else {
-                console.log('SUCCESSFULLY UPDATED PLAYER')
+                //
             }
         })
 }
@@ -246,7 +286,6 @@ const completeCurrentGame = ({ league, game }) => {
             if (error) {
                 console.log('ERROR!:', error)
             } else {
-                console.log('SUCCESSFULLY UPDATED PLAYER')
             }
         })
 }
@@ -259,7 +298,6 @@ const updateGameStillInProgress = ({ game, league, remainingPlayers, roundId }) 
             if (error) {
                 console.log('ERROR!:', error)
             } else {
-                console.log('SUCCESSFULLY UPDATED PLAYER')
             }
         })
     return remainingPlayers.forEach((player) => {
@@ -270,7 +308,6 @@ const updateGameStillInProgress = ({ game, league, remainingPlayers, roundId }) 
                 if (error) {
                     console.log('ERROR!:', error)
                 } else {
-                    console.log('SUCCESSFULLY UPDATED PLAYER')
                 }
             })
     })
