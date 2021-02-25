@@ -2,7 +2,7 @@ import React from 'react'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal from 'react-native-modal'
 
-const fontFamily = Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold'
+const fontFamily = Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular'
 
 export const SelectionModal = ({
     modalOpen,
@@ -73,7 +73,6 @@ const styles = (theme) =>
         },
         container: {
             backgroundColor: theme.background.primary,
-            flex: 1,
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -96,7 +95,9 @@ const styles = (theme) =>
             color: theme.text.primary,
             fontFamily,
             fontSize: 20,
+            fontWeight: Platform.OS === 'ios' ? '600' : '700',
             marginBottom: 20,
+            textAlign: 'center',
         },
         font: {
             color: theme.text.primary,
@@ -104,6 +105,7 @@ const styles = (theme) =>
         },
         selectionTextContainer: {
             marginTop: 20,
+            marginBottom: 20,
         },
         selectedTeamName: {
             fontSize: 25,

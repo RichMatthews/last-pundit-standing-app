@@ -14,13 +14,13 @@ export const PreviousRound = ({ choice, theme }: any) => {
                 <Image source={Images[userTeamCode]} style={styles(theme).teamBadge} />
             </View>
             <View style={styles(theme).centerGoals}>
-                <Text style={styles(theme).goals}>{choice.goals}</Text>
+                <Text style={[styles(theme).goals, styles(theme).userGoals]}>{choice.goals}</Text>
                 <Text style={styles(theme).centerText}>|</Text>
                 <Text style={styles(theme).goals}>{choice.opponent.goals}</Text>
             </View>
             <View style={styles(theme).awayTeam}>
                 <Image source={Images[opponentTeamCode]} style={styles(theme).teamBadge} />
-                <Text style={[styles(theme).userTeamAway]}>{opponentName}</Text>
+                <Text style={[styles(theme).awayTeamName]}>{opponentName}</Text>
             </View>
         </View>
     ) : (
@@ -32,11 +32,11 @@ export const PreviousRound = ({ choice, theme }: any) => {
             <View style={styles(theme).centerGoals}>
                 <Text style={styles(theme).goals}>{choice.opponent.goals}</Text>
                 <Text style={styles(theme).centerText}>|</Text>
-                <Text style={styles(theme).goals}>{choice.goals}</Text>
+                <Text style={[styles(theme).goals, styles(theme).userGoals]}>{choice.goals}</Text>
             </View>
             <View style={styles(theme).awayTeam}>
                 <Image source={Images[userTeamCode]} style={styles(theme).teamBadge} />
-                <Text style={[styles(theme).playerTeam, styles(theme).userTeamAway]}>{userTeamName}</Text>
+                <Text style={[styles(theme).playerTeam, styles(theme).awayTeamName]}>{userTeamName}</Text>
             </View>
         </View>
     )
@@ -73,8 +73,7 @@ const styles = (theme) =>
             fontSize: 15,
         },
         playerTeam: {
-            color: theme.purple,
-            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
+            // color: theme.purple,
         },
         centerText: {
             alignItems: 'center',
@@ -96,12 +95,19 @@ const styles = (theme) =>
         },
         homeTeamName: {
             color: theme.text.primary,
-            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontWeight: '600',
             marginRight: 5,
             fontSize: 13,
         },
-        userTeamAway: {
+        awayTeamName: {
+            color: theme.text.primary,
+            fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontWeight: '600',
             marginLeft: 5,
             fontSize: 13,
+        },
+        userGoals: {
+            color: '#00FF87',
         },
     })

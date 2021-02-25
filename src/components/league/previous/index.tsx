@@ -129,6 +129,7 @@ const styles = (theme: any) =>
         playerNameText: {
             color: theme.text.primary,
             fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+            fontWeight: '500',
             fontSize: theme.text.large,
         },
         previousGamesContainer: {
