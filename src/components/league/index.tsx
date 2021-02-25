@@ -25,7 +25,6 @@ export const League = ({ leagueId, theme }: string) => {
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
     const league = useSelector((store: { league: any }) => store.league)
-    const previousGamesRef = useRef<Modalize>(null)
     const teamSelectionRef = useRef<Modalize>(null)
 
     const pullLatestLeagueData = useCallback(async () => {
@@ -179,6 +178,7 @@ export const League = ({ leagueId, theme }: string) => {
                         scrollViewProps={{
                             contentContainerStyle: { backgroundColor: theme.background.primary, minHeight: '50%' },
                         }}
+                        modalStyle={{ backgroundColor: theme.background.primary }}
                     >
                         <View style={styles(theme).fixturesWrapper}>
                             <TeamSelection
