@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>571433706213-8bh740td6ja68coqdiq6d99nunjdb0l3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.571433706213-8bh740td6ja68coqdiq6d99nunjdb0l3</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA848LK-NGdYijC3b1x9WKWYta86_VAK7I</string>
+	<key>GCM_SENDER_ID</key>
+	<string>571433706213</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.live.lastpunditstanding</string>
+	<key>PROJECT_ID</key>
+	<string>last-pundit-standing</string>
+	<key>STORAGE_BUCKET</key>
+	<string>last-pundit-standing.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:571433706213:ios:0da8c664327f50d23b2a0c</string>
+	<key>DATABASE_URL</key>
+	<string>https://last-pundit-standing.firebaseio.com</string>
+</dict>
+</plist>

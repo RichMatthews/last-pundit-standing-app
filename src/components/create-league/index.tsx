@@ -17,8 +17,8 @@ import { Button, ButtonText } from 'src/ui-components/button'
 import { ScreenComponent } from 'src/ui-components/containers/screenComponent'
 import { Container } from 'src/ui-components/containers'
 import { getLeagueCreatorInformation } from 'src/firebase-helpers'
-import { firebaseApp } from 'src/config.js'
 import { getLeagues } from 'src/redux/reducer/leagues'
+import { firebaseDatabase } from '../../../firebase.js'
 
 export const CreateLeague = ({ navigation, theme }: any) => {
     const [privateLeague, setPrivateLeague] = useState(true)
@@ -97,8 +97,7 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                 name: leagueName,
             },
         }
-        return firebaseApp
-            .database()
+        return firebaseDatabase()
             .ref()
             .update(updateMultipleLeaguesAndUsersJoinedLeagues, async (error) => {
                 if (error) {

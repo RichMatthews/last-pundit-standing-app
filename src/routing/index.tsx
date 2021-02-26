@@ -1,16 +1,15 @@
-import 'react-native-gesture-handler'
 import React, { useEffect } from 'react'
+import { firebaseAuth, firebaseMessaging } from '../../firebase'
+
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import SplashScreen from 'react-native-splash-screen'
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { AuthenticateUserScreen } from '../components/authenticate-user'
 import { logUserInToApplication } from 'src/firebase-helpers'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { getLeagues } from 'src/redux/reducer/leagues'
 import { getCurrentUser } from 'src/redux/reducer/user'
-import { firebaseApp } from '../config.js'
 import { DARK_THEME, LIGHT_THEME } from 'src/theme'
 import {
     attemptFaceIDAuthentication,
@@ -21,17 +20,39 @@ import { setTheme } from 'src/redux/reducer/theme'
 import { Host } from 'react-native-portalize'
 import { SettingsStack } from 'src/routing/tabs/settings'
 import { TabNavigation } from 'src/routing/tabs'
+import { Platform } from 'react-native'
+import { AuthenticateUserScreen } from '../components/authenticate-user'
 
 export const Stack = createStackNavigator()
-
 export const Routing = () => {
-    const currentUser = firebaseApp.auth().currentUser
+    const currentUser = firebaseAuth.currentUser
     const dispatch = useDispatch()
     const userFromRedux = useSelector((store: { user: any }) => store.user)
     const mode = useSelector((store: { theme: any }) => store.theme)
     const theme = mode === 'dark' ? DARK_THEME : LIGHT_THEME
     console.disableYellowBox = true
 
+    // useEffect(() => {
+    //     // if (Platform.OS === 'android') {
+    //     firebaseMessaging()
+    //         .getToken()
+    //         .then((token) => {
+    //             console.log('A TOKEN:', token)
+    //             //   setPushNotificationToken(token)
+    //             //   dispatch(acceptPushNotifications())
+    //         })
+    //         .catch((e) => {
+    //             console.log('error')
+    //         })
+    // }, [])
+
+    // useEffect(() => {
+    //     const unsubscribe = firebaseMessaging().onMessage(async (remoteMessage) => {
+    //         alert('A new FCM message arrived!')
+    //     })
+
+    //     return unsubscribe
+    // }, [])
     useEffect(() => {
         async function getUser() {
             if (await userJustSignedOut()) {
@@ -39,13 +60,11 @@ export const Routing = () => {
             }
             await setThemeMode()
             const lastLogin = await checkIfNeedToReauthenticateUser()
-
             if (currentUser) {
                 try {
                     await dispatch(getCurrentUser(currentUser))
                     await dispatch(getLeagues(currentUser.uid))
                     await dispatch(getCurrentGameWeekInfo())
-
                     SplashScreen.hide()
                 } catch (e) {
                     console.error(e)

@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react'
 import { SafeAreaView, Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
-import firebase from 'firebase'
+import { firebaseAuth } from '../../../firebase.js'
 
 import { Button, ButtonText, InvertedButton } from 'src/ui-components/button'
 import { Container } from 'src/ui-components/containers'
@@ -9,8 +9,7 @@ export const ResetPassword = ({ setShowResetScreen, theme }: any) => {
     const [email, setEmail] = useState('')
 
     const resetPassword = () => {
-        return firebase
-            .auth()
+        return firebaseAuth()
             .sendPasswordResetEmail(`${email}`)
             .then(() => {
                 alert(`We have sent an email to ${email}. Check your inbox, reset and get predicting again`)
