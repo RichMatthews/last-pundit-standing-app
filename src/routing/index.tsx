@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { firebaseAuth, firebaseMessaging } from '../../firebase'
+import React, { useCallback, useEffect } from 'react'
+import { firebaseAuth, firebaseMessaging, firebaseDatabase } from '../../firebase'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -20,39 +20,79 @@ import { setTheme } from 'src/redux/reducer/theme'
 import { Host } from 'react-native-portalize'
 import { SettingsStack } from 'src/routing/tabs/settings'
 import { TabNavigation } from 'src/routing/tabs'
-import { Platform } from 'react-native'
+import { Platform, Linking } from 'react-native'
 import { AuthenticateUserScreen } from '../components/authenticate-user'
+import * as RootNavigation from 'src/root-navigation'
 
 export const Stack = createStackNavigator()
 export const Routing = () => {
-    const currentUser = firebaseAuth.currentUser
+    const currentUser = firebaseAuth().currentUser
     const dispatch = useDispatch()
     const userFromRedux = useSelector((store: { user: any }) => store.user)
     const mode = useSelector((store: { theme: any }) => store.theme)
     const theme = mode === 'dark' ? DARK_THEME : LIGHT_THEME
     console.disableYellowBox = true
 
-    // useEffect(() => {
-    //     // if (Platform.OS === 'android') {
-    //     firebaseMessaging()
-    //         .getToken()
-    //         .then((token) => {
-    //             console.log('A TOKEN:', token)
-    //             //   setPushNotificationToken(token)
-    //             //   dispatch(acceptPushNotifications())
-    //         })
-    //         .catch((e) => {
-    //             console.log('error')
-    //         })
+    const requestPermission = useCallback(async () => {
+        console.log('calling requests')
+        const status = await firebaseMessaging().requestPermission()
+        console.log('the status is:', status)
+        return (
+            status === firebaseMessaging.AuthorizationStatus.AUTHORIZED ||
+            status === firebaseMessaging.AuthorizationStatus.PROVISIONAL
+        )
+    }, [])
+
+    // const requestPermission = useCallback(async () => {
+    //     try {
+    //         await firebaseMessaging().requestPermission()
+    //         // User has authorised
+    //         getToken()
+    //     } catch (error) {
+    //         // User has rejected permissions
+    //         console.log('permission rejected')
+    //     }
     // }, [])
 
-    // useEffect(() => {
-    //     const unsubscribe = firebaseMessaging().onMessage(async (remoteMessage) => {
-    //         alert('A new FCM message arrived!')
-    //     })
+    const checkPermission = useCallback(async () => {
+        const enabled = await firebaseMessaging().hasPermission()
 
-    //     return unsubscribe
-    // }, [])
+        if (enabled === 1 || enabled === 2) {
+            // Linking.openURL('app-settings:')
+            getToken()
+        } else {
+            const a = await requestPermission()
+
+            if (a) {
+                getToken()
+            }
+        }
+    }, [requestPermission])
+
+    useEffect(() => {
+        firebaseMessaging().onNotificationOpenedApp(() => {
+            RootNavigation.navigate('Join')
+            // RootNavigation.navigate('League', { leagueId: 'l72r12ezoku' })
+            // alert('Make your pred now!')
+        })
+    }, [])
+
+    const getToken = async () => {
+        let fcmToken = await AsyncStorage.getItem('fcmToken')
+        if (!fcmToken) {
+            fcmToken = await firebaseMessaging().getToken()
+            if (fcmToken) {
+                // user has a device token
+                await AsyncStorage.setItem('fcmToken', fcmToken)
+
+                if (currentUser) {
+                    console.log(currentUser, 'user from currentUser')
+                    return await firebaseDatabase().ref(`users/${currentUser.uid}`).update({ token: fcmToken })
+                }
+            }
+        }
+    }
+
     useEffect(() => {
         async function getUser() {
             if (await userJustSignedOut()) {
@@ -66,6 +106,7 @@ export const Routing = () => {
                     await dispatch(getLeagues(currentUser.uid))
                     await dispatch(getCurrentGameWeekInfo())
                     SplashScreen.hide()
+                    checkPermission()
                 } catch (e) {
                     console.error(e)
                 }
@@ -101,7 +142,7 @@ export const Routing = () => {
         const date = new Date()
         const tomorrow = date.setDate(date.getDate() + 1) / 1000
 
-        return true
+        return false
     }
 
     const userJustSignedOut = async () => {

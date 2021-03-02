@@ -92,13 +92,21 @@ export const CurrentRoundView = ({
                                 {player.rounds.length > 0 ? (
                                     <>
                                         {player.rounds
-                                            .filter(
-                                                (round: any) =>
-                                                    round.selection.name && round.selection.result !== 'pending',
-                                            )
-                                            .map((round: any) => (
-                                                <PreviousRound choice={round.selection} theme={theme} />
-                                            ))}
+                                            .filter((round: any) => round.selection.complete)
+                                            .map((round: any, i: number) => {
+                                                const pendingGame =
+                                                    i === player.rounds.length - 1 &&
+                                                    round.selection.result === 'pending'
+                                                const roundLost = round.selection.result === 'lost'
+                                                return (
+                                                    <PreviousRound
+                                                        choice={round.selection}
+                                                        pendingGame={pendingGame}
+                                                        roundLost={roundLost}
+                                                        theme={theme}
+                                                    />
+                                                )
+                                            })}
                                     </>
                                 ) : (
                                     <View>

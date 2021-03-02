@@ -28,13 +28,13 @@ export const TabNavigation = ({ theme, user }: any) => (
     >
         <Tab.Screen name="Leagues">
             {() => {
-                return <LeagueStack isSignedIn={user} theme={theme} userId={user.id} />
+                return <LeagueStack theme={theme} userId={user.id} />
             }}
         </Tab.Screen>
 
         <Tab.Screen name="Create">
             {() => {
-                return <CreateStack isSignedIn={user} theme={theme} userId={user.id} />
+                return <CreateStack theme={theme} userId={user.id} />
             }}
         </Tab.Screen>
 
