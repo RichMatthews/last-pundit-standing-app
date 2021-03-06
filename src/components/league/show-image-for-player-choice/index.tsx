@@ -73,7 +73,7 @@ export const MemoizedShowImageForPlayerChoice = ({
 
     const currentPlayerOutOfCurrentGame = currentPlayer.rounds.some((round: any) => round.selection.result === 'lost')
     const currentGamePlayers = Object.values(currentGame.players)
-    const currentGameRound = currentGame.currentGameRound
+    const currentGameRound = currentPlayer.rounds.length - 1
     const currentPlayerCurrentRound = currentPlayer.rounds[currentGameRound]
     const currentGameRemainingPlayers: any = currentGamePlayers.filter((p: any) => !p.hasBeenEliminated)
     const allCurrentGameRemainingPlayersHaveMadeSelection = currentGameRemainingPlayers.every(

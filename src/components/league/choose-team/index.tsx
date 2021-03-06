@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, Platform, View } from 'react-native'
 import { useSelector } from 'react-redux'
 
-import { updateUserGamweekChoice } from 'src/firebase-helpers'
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
-import { findOpponent } from './utils'
 import { Fixtures } from 'src/components/fixtures'
+
+import { updateUserGamweekChoice } from './api'
+import { findOpponent } from './utils'
 import { SelectionModal } from './selection-modal'
 
 interface Props {
@@ -15,7 +16,6 @@ interface Props {
 }
 
 export const ChooseTeam = ({
-    currentRound,
     closeTeamSelectionModal,
     pullLatestLeagueData,
     fixtures,
@@ -47,20 +47,29 @@ export const ChooseTeam = ({
     }
 
     const updateUserGamweekChoiceHelper = async () => {
+        console.log('got in here too', league)
         setLoadingModalOpen(true)
-        // const selection = {
-        //     code: selectedTeam?.code,
-        //     complete: true,
-        //     name: selectedTeam?.name,
-        //     opponent,
-        //     result: 'pending',
-        // }
+        const selection = {
+            code: selectedTeam?.code,
+            complete: true,
+            name: selectedTeam?.name,
+            opponent,
+            result: 'pending',
+        }
+
         setTimeout(() => {
             closeTeamSelectionModal()
         }, 2000)
-        // await updateUserGamweekChoice({ selection, currentRound, currentGame, league, userId: user.id })
-        // await pullLatestLeagueData()
-        // setModalOpen(false)
+
+        await updateUserGamweekChoice({
+            selection,
+            gameId: currentGame.id,
+            leagueId: league.id,
+            playerId: user.id,
+            roundId: currentPlayer.rounds[currentPlayer.rounds.length - 1].id,
+        })
+        await pullLatestLeagueData()
+        setModalOpen(false)
     }
 
     return (

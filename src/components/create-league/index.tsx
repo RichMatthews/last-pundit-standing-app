@@ -62,6 +62,7 @@ export const CreateLeague = ({ navigation, theme }: any) => {
         const leagueId = uid()
         const leagueJoinPin = uid()
         const newGameId = uid()
+        const newRoundId = uid()
         const updateMultipleLeaguesAndUsersJoinedLeagues = {
             [`/leagues/${leagueId}`]: {
                 admin: {
@@ -74,7 +75,6 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                 games: {
                     [newGameId]: {
                         complete: false,
-                        currentGameRound: 0,
                         id: newGameId,
                         players: {
                             [user.id]: {
@@ -82,7 +82,13 @@ export const CreateLeague = ({ navigation, theme }: any) => {
                                     id: user.id,
                                     name: playerInfo.name,
                                 },
-                                rounds: [{ selection: false }],
+                                rounds: {
+                                    [newRoundId]: {
+                                        selection: {
+                                            complete: false,
+                                        },
+                                    },
+                                },
                             },
                         },
                     },
