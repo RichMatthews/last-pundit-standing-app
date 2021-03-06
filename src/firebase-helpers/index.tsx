@@ -4,7 +4,7 @@ import { firebaseAuth, firebaseDatabase } from '../../firebase.js'
 export const getCurrentGameweekFixtures = () => {
     return new Promise((res, rej) => {
         res(
-            firebaseDatabase()
+            firebaseDatabase
                 .ref(`information/gameweek/current/matches`)
                 .once('value')
                 .then((snapshot: any) => {
@@ -15,7 +15,7 @@ export const getCurrentGameweekFixtures = () => {
 }
 
 export const getCurrentGameweekEndTime = () => {
-    return firebaseDatabase()
+    return firebaseDatabase
         .ref('information/gameweek/current')
         .once('value')
         .then((snapshot) => {
@@ -27,7 +27,7 @@ export const getCurrentGameweekEndTime = () => {
 }
 
 export const getUserInformation = ({ userId }) => {
-    return firebaseDatabase()
+    return firebaseDatabase
         .ref(`users/${userId}`)
         .once('value')
         .then((snapshot) => {
@@ -36,7 +36,7 @@ export const getUserInformation = ({ userId }) => {
 }
 
 export const updateUserGamweekChoice = ({ selection, currentRound, currentGame, league, userId }: any) => {
-    return firebaseDatabase()
+    return firebaseDatabase
         .ref(`leagues/${league.id}/games/${currentGame.id}/players/${userId}/rounds/${currentRound}`)
         .update({ selection }, (error) => {
             if (error) {
@@ -46,7 +46,7 @@ export const updateUserGamweekChoice = ({ selection, currentRound, currentGame, 
 }
 
 export const getUserLeagues = ({ userId }: any) => {
-    return firebaseDatabase()
+    return firebaseDatabase
         .ref(`users/${userId}/leagues`)
         .once('value')
         .then((snapshot) => {
@@ -69,7 +69,7 @@ export const signUserUpToApplication = async ({ email, password, name, surname }
 }
 
 export const writeUserToDatabase = async ({ name, surname, user }) => {
-    const result = await firebaseDatabase().ref(`users/${user.uid}`).update({ name, surname, id: user.uid })
+    const result = await firebaseDatabase.ref(`users/${user.uid}`).update({ name, surname, id: user.uid })
     return result
 }
 
@@ -84,7 +84,7 @@ export const signUserOutOfApplication = () => {
 
 export const getLeagueCreatorInformation = (userId: string) => {
     try {
-        return firebaseDatabase()
+        return firebaseDatabase
             .ref(`/users/${userId}`)
             .once('value')
             .then((snapshot) => {
@@ -100,24 +100,22 @@ export const getLeagueCreatorInformation = (userId: string) => {
 }
 
 export const joinLeagueAndAddLeagueToListOfUserLeagues = ({ league, leagueAndUserData, navigation }) => {
-    return firebaseDatabase()
-        .ref()
-        .update(leagueAndUserData, (error) => {
-            if (error) {
-                alert('Failed to join league, please try again.')
-            } else {
-                navigation.navigate('League', { leagueId: league.id })
-            }
-        })
+    return firebaseDatabase.ref().update(leagueAndUserData, (error) => {
+        if (error) {
+            alert('Failed to join league, please try again.')
+        } else {
+            navigation.navigate('League', { leagueId: league.id })
+        }
+    })
 }
 
 export const attemptToJoinLeaugeIfItExists = ({ currentUserId, leaguePin }: any) => {
-    return firebaseDatabase()
+    return firebaseDatabase
         .ref(`users/${currentUserId}`)
         .once('value')
         .then((snapshot) => {
             const { name, surname } = snapshot.val()
-            return firebaseDatabase()
+            return firebaseDatabase
                 .ref(`leagues`)
                 .once('value')
                 .then((snapshot) => {
@@ -137,7 +135,7 @@ export const attemptToJoinLeaugeIfItExists = ({ currentUserId, leaguePin }: any)
 }
 
 export const pullLeagueData = ({ leagueId }) => {
-    return firebaseDatabase()
+    return firebaseDatabase
         .ref(`leagues/${leagueId}`)
         .once('value')
         .then((snapshot) => {

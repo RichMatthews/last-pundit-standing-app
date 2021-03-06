@@ -22,19 +22,14 @@ const firebaseApp = firebase.initializeApp(PROD_CONFIG)
 const CURRENT_GAMEWEEK = {
     fixtures: [
         {
-            home: { code: 'SOT', name: 'Southampton', goals: 1 },
-            away: { code: 'CHE', name: 'Chelsea', goals: 1 },
-            result: 'draw',
+            home: { code: 'SHU', name: 'Sheffield United', goals: 0 },
+            away: { code: 'LIV', name: 'Liverpool', goals: 2 },
+            result: 'LIV',
         },
         {
-            home: { code: 'AST', name: 'Aston Villa', goals: 1 },
-            away: { code: 'LEI', name: 'Leicester', goals: 2 },
-            result: 'LEI',
-        },
-        {
-            home: { code: 'ARS', name: 'Arsenal', goals: 0 },
-            away: { code: 'MNC', name: 'Man City', goals: 1 },
-            result: 'MNC',
+            home: { code: 'WBA', name: 'West Brom', goals: 0 },
+            away: { code: 'EVE', name: 'Everton', goals: 1 },
+            result: 'EVE',
         },
     ],
 }
@@ -151,7 +146,7 @@ const updateAllLeagues = () => {
         .then((snapshot) => {
             const everyLeague = Object.values(snapshot.val())
             everyLeague
-                .filter((league) => league.id === '9hk0btr26u7')
+                .filter((league) => league.id === 'l72r12ezoku')
                 .forEach((league) => {
                     const currentGame = Object.values(league.games).find((game) => !game.complete)
                     const currentGamePlayers = Object.values(currentGame.players)

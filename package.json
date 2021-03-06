@@ -11,6 +11,7 @@
         "cocoapods": "cd ios && pod install && cd .."
     },
     "dependencies": {
+        "@firebase/app": "^0.6.15",
         "@react-native-async-storage/async-storage": "^1.13.2",
         "@react-native-community/masked-view": "^0.1.10",
         "@react-native-firebase/app": "^10.8.1",
@@ -32,6 +33,7 @@
         "appcenter-analytics": "3.1.2",
         "appcenter-crashes": "3.1.2",
         "expo-local-authentication": "^9.3.0",
+        "firebase": "^8.2.10",
         "react": "^16.13.1",
         "react-native": "^0.63.3",
         "react-native-collapsible": "^1.5.3",
@@ -47,6 +49,7 @@
         "react-native-splash-screen": "^3.2.0",
         "react-native-svg": "^12.1.0",
         "react-native-text-gradient": "^0.1.7",
+        "react-native-toast-message": "^1.4.9",
         "react-native-unimodules": "^0.11.0",
         "react-native-vector-icons": "^7.1.0",
         "react-navigation": "^4.4.3",

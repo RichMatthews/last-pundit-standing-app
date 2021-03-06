@@ -8,6 +8,7 @@ export const Results = ({ player, theme }) => (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles(theme).playerResultsContainer}>
             {player.rounds.map((round, index) => {
+                console.log(round, 'round')
                 const { opponent: playerChoiceOpponent, code: playerChoice } = round.selection
                 const playerChoicePlayingAtHome = round.selection.teamPlayingAtHome
                 const playerChoiceOpponentImage = Images[playerChoiceOpponent.code]

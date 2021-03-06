@@ -9,7 +9,7 @@ export const getLeagues = createAsyncThunk('getLeagues', async (userId) => {
         const leagues = await getUserLeagues({ userId })
         return leagues
     } catch (e) {
-        console.error('errored getting user')
+        console.error('errored getting user in leagues')
     }
 })
 

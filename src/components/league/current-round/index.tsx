@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { StyleSheet, Text, ScrollView, RefreshControl, TouchableOpacity, Platform, View } from 'react-native'
+import { StyleSheet, Text, ScrollView, RefreshControl, Linking, TouchableOpacity, Platform, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 import FastImage from 'react-native-fast-image'
@@ -37,9 +37,16 @@ export const CurrentRoundView = ({
         })
     }, [])
 
+    const test = async () => {
+        // const a = await firebaseMessaging().requestPermission()
+        // console.log(a, 'a?')
+        Linking.openURL('app-settings:')
+    }
+
     return (
         <View style={styles(theme).container}>
             <Text style={styles(theme).infoBanner}>Round closes: {gameweekCloses}</Text>
+            <Text onPress={test}> test</Text>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 // contentContainerStyle={{ flexGrow: 1 }}
@@ -94,6 +101,7 @@ export const CurrentRoundView = ({
                                         {player.rounds
                                             .filter((round: any) => round.selection.complete)
                                             .map((round: any, i: number) => {
+                                                console.log('ROUND:', round)
                                                 const pendingGame =
                                                     i === player.rounds.length - 1 &&
                                                     round.selection.result === 'pending'
@@ -152,6 +160,8 @@ const styles = (theme) =>
             marginHorizontal: 20,
         },
         playerRow: {
+            borderBottomWidth: 1,
+            borderBottomColor: '#eee',
             justifyContent: 'space-between',
             flexDirection: 'row',
         },

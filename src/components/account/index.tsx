@@ -118,6 +118,18 @@ export const Account = ({ navigation, theme }: any) => {
                         togglePress={() => toggleFaceIdActivated(!faceIdActivated)}
                         toggleValue={faceIdActivated}
                     />
+                    <SettingsRow
+                        text="Allow notifications"
+                        theme={theme}
+                        icon={
+                            <Image
+                                source={require('./face-recognition.png')}
+                                style={[icon, { width: iconSize, height: iconSize }]}
+                            />
+                        }
+                        togglePress={() => toggleFaceIdActivated(!faceIdActivated)}
+                        toggleValue={faceIdActivated}
+                    />
                 </View>
                 <Text style={heading}>Theme</Text>
                 <View style={section}>

@@ -14,7 +14,14 @@ interface Props {
     pullLatestLeagueData: () => void
 }
 
-export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLeagueData, fixtures, theme }: Props) => {
+export const ChooseTeam = ({
+    currentRound,
+    closeTeamSelectionModal,
+    pullLatestLeagueData,
+    fixtures,
+    theme,
+    setLoadingModalOpen,
+}: Props) => {
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const league = useSelector((store: { league: any }) => store.league)
@@ -40,18 +47,20 @@ export const ChooseTeam = ({ currentRound, closeTeamSelectionModal, pullLatestLe
     }
 
     const updateUserGamweekChoiceHelper = async () => {
-        const selection = {
-            code: selectedTeam?.code,
-            complete: true,
-            name: selectedTeam?.name,
-            opponent,
-            result: 'pending',
-        }
-        await updateUserGamweekChoice({ selection, currentRound, currentGame, league, userId: user.id })
-        await pullLatestLeagueData()
-        setModalOpen(false)
-
-        closeTeamSelectionModal()
+        setLoadingModalOpen(true)
+        // const selection = {
+        //     code: selectedTeam?.code,
+        //     complete: true,
+        //     name: selectedTeam?.name,
+        //     opponent,
+        //     result: 'pending',
+        // }
+        setTimeout(() => {
+            closeTeamSelectionModal()
+        }, 2000)
+        // await updateUserGamweekChoice({ selection, currentRound, currentGame, league, userId: user.id })
+        // await pullLatestLeagueData()
+        // setModalOpen(false)
     }
 
     return (

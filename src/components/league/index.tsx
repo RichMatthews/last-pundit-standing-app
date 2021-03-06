@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -13,6 +13,7 @@ import { setViewedLeague } from 'src/redux/reducer/league'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
 import { CachedPreviousGames } from 'src/components/league/previous'
+import Toast from 'react-native-toast-message'
 
 interface LeagueData {
     games: {}
@@ -22,21 +23,31 @@ export const League = ({ leagueId, theme }: string) => {
     const [loaded, setLoaded] = useState<string>('')
     const [gameweekFixtures, setGameweekFixtures] = useState([])
     const [showCurrent, setShowCurrent] = useState(true)
+    const [loadingModalOpen, setLoadingModalOpen] = useState(false)
     const dispatch = useDispatch()
     const currentUser = useSelector((store: { user: any }) => store.user)
     const league = useSelector((store: { league: any }) => store.league)
     const teamSelectionRef = useRef<Modalize>(null)
-
     const pullLatestLeagueData = useCallback(async () => {
         const leagueData: LeagueData = await pullLeagueData({ leagueId })
-        const { games }: any = leagueData
-        const gamesConvertedToArray = Object.values(games)
-        const currentGame: any = gamesConvertedToArray.find((game: any) => !game.complete)
+        let transformedData = {
+            ...leagueData,
+            games: Object.values(leagueData.games).map((game) => {
+                return {
+                    ...game,
+                    players: Object.values(game.players).map((player) => {
+                        return { ...player, rounds: Object.values(player.rounds).sort((a, b) => a.round - b.round) }
+                    }),
+                }
+            }),
+        }
+
+        const currentGame: any = transformedData.games.find((game: any) => !game.complete)
         const players: Array<{ id: string }> = Object.values(currentGame.players)
         const currentPlayer = players.find((player) => player.information.id === currentUser.id)
 
         dispatch(getCurrentGame({ currentGame }))
-        dispatch(setViewedLeague({ ...leagueData, games: gamesConvertedToArray }))
+        dispatch(setViewedLeague(transformedData))
         await dispatch(getCurrentGameWeekInfo())
         if (currentPlayer) {
             dispatch(setCurrentPlayer({ currentPlayer }))
@@ -48,6 +59,19 @@ export const League = ({ leagueId, theme }: string) => {
             setLoaded('no-league-found')
         }
     }, [currentUser.id, dispatch, leagueId])
+
+    useEffect(() => {
+        // console.log(Toast)
+        // Toast.show({
+        //     type: 'success',
+        //     text1: 'Prediction successfully submitted!',
+        //     text2: "Click here if you'd like to be notified when others make their prediction",
+        //     autoHide: false,
+        //     topOffset: 50,
+        //     onHide: () => Toast.hide(),
+        //     // position: 'top',
+        // })
+    }, [])
 
     useEffect(() => {
         async function fetchFixtures() {
@@ -72,6 +96,7 @@ export const League = ({ leagueId, theme }: string) => {
     return (
         <>
             <SafeAreaView style={{ flex: 0, backgroundColor: theme.background.secondary }} />
+
             <View
                 style={{
                     backgroundColor: theme.background.secondary,
@@ -176,18 +201,36 @@ export const League = ({ leagueId, theme }: string) => {
                         disableScrollIfPossible
                         ref={teamSelectionRef}
                         scrollViewProps={{
-                            contentContainerStyle: { backgroundColor: theme.background.primary, minHeight: '50%' },
+                            contentContainerStyle: { backgroundColor: theme.background.primary, minHeight: '100%' },
                         }}
+                        handlePosition={'inside'}
                         modalStyle={{ backgroundColor: theme.background.primary }}
+                        onClosed={() => setLoadingModalOpen(false)}
+                        // openAnimationConfig={{
+                        //     timing: { duration: 1 },
+                        //     spring: { bounciness: 10, speed: 1 },
+                        // }}
                     >
-                        <View style={styles(theme).fixturesWrapper}>
-                            <TeamSelection
-                                closeTeamSelectionModal={closeTeamSelectionModal}
-                                pullLatestLeagueData={pullLatestLeagueData}
-                                theme={theme}
-                                fixtures={gameweekFixtures}
-                            />
-                        </View>
+                        {loadingModalOpen ? (
+                            <View style={{ alignSelf: 'center', marginTop: 100 }}>
+                                <ActivityIndicator size={'large'} color={theme.spinner.inverse} />
+                                <Text
+                                    style={{ fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold', fontSize: 20 }}
+                                >
+                                    Submitting choice, please wait...
+                                </Text>
+                            </View>
+                        ) : (
+                            <View style={styles(theme).fixturesWrapper}>
+                                <TeamSelection
+                                    closeTeamSelectionModal={closeTeamSelectionModal}
+                                    setLoadingModalOpen={setLoadingModalOpen}
+                                    pullLatestLeagueData={pullLatestLeagueData}
+                                    theme={theme}
+                                    fixtures={gameweekFixtures}
+                                />
+                            </View>
+                        )}
                     </Modalize>
                 </Portal>
             </View>

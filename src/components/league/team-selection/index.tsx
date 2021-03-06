@@ -11,7 +11,13 @@ const NoLongerInGame = ({ theme }) => (
     </View>
 )
 
-export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, theme, fixtures }) => {
+export const TeamSelection = ({
+    closeTeamSelectionModal,
+    pullLatestLeagueData,
+    setLoadingModalOpen,
+    theme,
+    fixtures,
+}) => {
     const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
@@ -52,6 +58,7 @@ export const TeamSelection = ({ closeTeamSelectionModal, pullLatestLeagueData, t
                     currentRound={currentGameRound}
                     fixtures={fixtures}
                     pullLatestLeagueData={pullLatestLeagueData}
+                    setLoadingModalOpen={setLoadingModalOpen}
                     theme={theme}
                 />
             )

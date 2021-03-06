@@ -1,7 +1,7 @@
-import database from '@react-native-firebase/database'
+import database, { firebase } from '@react-native-firebase/database'
 import auth from '@react-native-firebase/auth'
 import messaging from '@react-native-firebase/messaging'
-import firebase from '@react-native-firebase/app'
+import firebases from '@react-native-firebase/app'
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDGstYWa2DI7Y9V6LIEjZ14l3Tvb3PdA2M',
@@ -14,13 +14,14 @@ const firebaseConfig = {
     measurementId: 'G-6NMKP6QLFC',
 }
 
-// let config
-// // doing this in case we add a dev database further down the line
-// if (process.env.NODE_ENV === 'production') {
-//     config = Production_firebaseConfig
-// } else {
-//     config = Production_firebaseConfig
-// }
+let config
+if (process.env.NODE_ENV === 'production') {
+    config = database
+} else {
+    config = firebase.app().database('https://last-pundit-standing-dev.firebaseio.com/')
+    console.log(config.ref(), 'con')
+    console.log(database, 'dat')
+}
 
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
@@ -28,5 +29,5 @@ if (!firebase.apps.length) {
 
 export const firebaseAuth = auth
 export const firebaseMessaging = messaging
-export const firebaseDatabase = database
-export default firebase
+export const firebaseDatabase = config
+export default firebases
