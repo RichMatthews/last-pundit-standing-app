@@ -6,13 +6,13 @@ const pushNotificationsSlice = createSlice({
         status: -1,
     },
     reducers: {
-        acceptPushNotifications: () => ({
+        pushNotificationsRejected: () => ({
+            status: 0,
+        }),
+        pushNotificationsAccepted: () => ({
             status: 1,
         }),
-        rejectPushNotifications: () => ({
-            status: 3,
-        }),
-        setDeviceRegistered: () => ({
+        pushNotificationsProvisional: () => ({
             status: 2,
         }),
     },
@@ -20,5 +20,5 @@ const pushNotificationsSlice = createSlice({
 })
 
 const { actions, reducer } = pushNotificationsSlice
-export const { setViewedLeague } = actions
+export const { pushNotificationsRejected, pushNotificationsAccepted, pushNotificationsProvisional } = actions
 export default reducer

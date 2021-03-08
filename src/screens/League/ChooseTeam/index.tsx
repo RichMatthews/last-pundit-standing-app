@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, Platform, View } from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { StyleSheet, Text, Linking, TouchableOpacity, Platform, View } from 'react-native'
 import { useSelector } from 'react-redux'
+import Toast from 'react-native-toast-message'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
@@ -9,6 +11,7 @@ import { Fixtures } from 'src/components/fixtures'
 import { updateUserGamweekChoice } from './api'
 import { findOpponent } from './utils'
 import { SelectionModal } from './selection-modal'
+import { firebaseAuth, firebaseMessaging, firebaseDatabase } from '../../../../firebase'
 
 interface Props {
     currentRound: any
@@ -24,6 +27,8 @@ export const ChooseTeam = ({
 }: Props) => {
     const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
+    const currentUser = useSelector((store: { user: any }) => store.user)
+    const pushNotifications = useSelector((store: { pushNotifications: any }) => store.pushNotifications)
     const league = useSelector((store: { league: any }) => store.league)
     const user = useSelector((store: { user: any }) => store.user)
     const teams = calculateTeamsAllowedToPickForCurrentRound({
@@ -47,7 +52,6 @@ export const ChooseTeam = ({
     }
 
     const updateUserGamweekChoiceHelper = async () => {
-        console.log('got in here too', league)
         setLoadingModalOpen(true)
         const selection = {
             code: selectedTeam?.code,
@@ -70,7 +74,70 @@ export const ChooseTeam = ({
         })
         await pullLatestLeagueData()
         setModalOpen(false)
+
+        Toast.show({
+            type: 'success',
+            text1: 'Prediction successfully submitted!',
+            text2:
+                pushNotifications.status === 1
+                    ? "We'll notify you when others have selected"
+                    : "Click here if you'd like to be notified when others make their prediction",
+            autoHide: false,
+            topOffset: 50,
+            props: { onPress: toastPressed, onHide: hideToast },
+            // position: 'top',
+        })
     }
+
+    const hideToast = () => {
+        Toast.hide()
+    }
+
+    const toastPressed = () => {
+        Toast.hide()
+        checkPermission()
+    }
+
+    const requestPermission = useCallback(async () => {
+        const status = await firebaseMessaging().requestPermission()
+        return (
+            status === firebaseMessaging.AuthorizationStatus.AUTHORIZED ||
+            status === firebaseMessaging.AuthorizationStatus.PROVISIONAL
+        )
+    }, [])
+
+    const getToken = useCallback(async () => {
+        let fcmToken = await AsyncStorage.getItem('fcmToken')
+        if (!fcmToken) {
+            fcmToken = await firebaseMessaging().getToken()
+            if (fcmToken) {
+                // user has a device token
+                await AsyncStorage.setItem('fcmToken', fcmToken)
+
+                if (currentUser) {
+                    return await firebaseDatabase.ref(`users/${currentUser.uid}`).update({ token: fcmToken })
+                }
+            }
+        }
+        return await firebaseDatabase.ref(`users/${currentUser.uid}`).update({ token: fcmToken })
+    }, [currentUser])
+
+    const checkPermission = useCallback(async () => {
+        const enabled = await firebaseMessaging().hasPermission()
+        console.log(enabled, 'en')
+        if (enabled === 0) {
+            Linking.openURL('app-settings:')
+        }
+        if (enabled === 1 || enabled === 2) {
+            getToken()
+        } else {
+            const requestPermissionGranted = await requestPermission()
+            console.log('granted?', requestPermissionGranted)
+            if (requestPermissionGranted) {
+                getToken()
+            }
+        }
+    }, [getToken, requestPermission])
 
     return (
         <View style={styles(theme).innerContainer}>

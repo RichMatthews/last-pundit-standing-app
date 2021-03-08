@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { CachedResults } from './results'
 
 type Player = {

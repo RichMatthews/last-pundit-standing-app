@@ -1,10 +1,18 @@
 import React, { useCallback, useState } from 'react'
-import { StyleSheet, Text, ScrollView, RefreshControl, Linking, TouchableOpacity, Platform, View } from 'react-native'
+import {
+    ActivityIndicator,
+    StyleSheet,
+    Text,
+    ScrollView,
+    RefreshControl,
+    TouchableOpacity,
+    Platform,
+    View,
+} from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
-import FastImage from 'react-native-fast-image'
 import { PreviousRound } from 'src/components/previous-round'
-import { MemoizedShowImageForPlayerChoice } from '../show-image-for-player-choice'
+import { MemoizedShowImageForPlayerChoice } from '../ShowImageForPlayerChoice'
 import Entypo from 'react-native-vector-icons/Entypo'
 
 interface Props {
@@ -12,16 +20,20 @@ interface Props {
     name: string
 }
 
-export const CurrentRoundView = ({
-    gameweekCloses,
-    listOfExpandedPrevious,
-    setListOfExpandedPreviousHelper,
-    theme,
-    showTeamSelection,
-}: any) => {
+export const CurrentGame = ({ loaded, theme, showTeamSelection }: any) => {
     const [refreshing, setRefreshing] = useState<boolean>(false)
     const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
     const user = useSelector((store: { user: any }) => store.user)
+    const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
+    const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
+
+    const setListOfExpandedPreviousHelper = (index: number) => {
+        if (listOfExpandedPrevious.includes(index)) {
+            setListOfExpandedPrevious(listOfExpandedPrevious.filter((x: number) => x !== index))
+        } else {
+            setListOfExpandedPrevious(listOfExpandedPrevious.concat(index))
+        }
+    }
 
     const wait = (timeout: any) => {
         return new Promise((resolve) => {
@@ -37,16 +49,9 @@ export const CurrentRoundView = ({
         })
     }, [])
 
-    const test = async () => {
-        // const a = await firebaseMessaging().requestPermission()
-        // console.log(a, 'a?')
-        Linking.openURL('app-settings:')
-    }
-
-    return (
+    return loaded ? (
         <View style={styles(theme).container}>
-            <Text style={styles(theme).infoBanner}>Round closes: {gameweekCloses}</Text>
-            <Text onPress={test}> test</Text>
+            <Text style={styles(theme).infoBanner}>Round closes: {currentGameweek.endsReadable}</Text>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 // contentContainerStyle={{ flexGrow: 1 }}
@@ -127,6 +132,11 @@ export const CurrentRoundView = ({
                 ))}
             </ScrollView>
         </View>
+    ) : (
+        <View style={styles(theme).loading}>
+            <ActivityIndicator size="large" color={theme.spinner.primary} />
+            <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
+        </View>
     )
 }
 
@@ -142,7 +152,10 @@ const styles = (theme) =>
             width: '100%',
             flex: 1,
         },
-
+        loadingText: {
+            color: theme.text.primary,
+            fontSize: 20,
+        },
         infoBanner: {
             textAlign: 'center',
             backgroundColor: theme.purple,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppRegistry } from 'react-native'
+import { AppRegistry, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { Routing } from './src/routing'
 import { name as appName } from './app.json'
 import { Provider, useDispatch } from 'react-redux'
@@ -14,23 +14,42 @@ firebaseMessaging().setBackgroundMessageHandler(async (remoteMessage) => {
 })
 
 const toastConfig = {
-    success: ({ text1, text2, ...rest }) => (
-        <BaseToast
-            {...rest}
-            style={{ borderLeftColor: 'pink', height: 80 }}
-            contentContainerStyle={{ paddingHorizontal: 10 }}
-            text1Style={{
-                fontSize: 17,
-                fontFamily: 'Hind',
-            }}
-            text2Style={{
-                fontSize: 15,
-                fontFamily: 'Hind',
-                lineHeight: 22,
-            }}
-            text1={text1}
-            text2={text2}
-        />
+    success: ({ text1, text2, props, ...rest }) => (
+        <TouchableOpacity activeOpacity={0.8} onPress={props.onPress}>
+            <View
+                style={{
+                    backgroundColor: '#fff',
+                    borderRadius: 10,
+                    height: 80,
+                    flexDirection: 'row',
+                    margin: 10,
+                    width: '85%',
+                    shadowOpacity: 1,
+                    shadowRadius: 3,
+                    shadowColor: '#ccc',
+                    shadowOffset: { height: 2, width: 0 },
+                }}
+            >
+                <View
+                    style={{
+                        width: 10,
+                        height: '100%',
+                        backgroundColor: 'red',
+                        borderTopLeftRadius: 10,
+                        borderBottomLeftRadius: 10,
+                    }}
+                />
+                <View style={{ justifyContent: 'center', marginLeft: 15 }}>
+                    <Text style={{ fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold', fontWeight: '600' }}>
+                        {text1}
+                    </Text>
+                    <Text style={{ fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold' }}>{text2}</Text>
+                </View>
+                <TouchableOpacity onPress={props.onHide}>
+                    <Text>Close</Text>
+                </TouchableOpacity>
+            </View>
+        </TouchableOpacity>
     ),
 }
 

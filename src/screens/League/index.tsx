@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { ActivityIndicator, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Platform, Linking, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { CurrentGame } from 'src/components/league/current'
-import { TeamSelection } from 'src/components/league/team-selection'
+import { CurrentGame } from './CurrentGame'
+import { ChooseTeam } from 'src/screens/League/ChooseTeam'
 import { pullLeagueData, getCurrentGameweekFixtures } from 'src/firebase-helpers'
 import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
@@ -12,8 +12,7 @@ import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { setViewedLeague } from 'src/redux/reducer/league'
 import { Modalize } from 'react-native-modalize'
 import { Portal } from 'react-native-portalize'
-import { CachedPreviousGames } from 'src/components/league/previous'
-import Toast from 'react-native-toast-message'
+import { CachedPreviousGames } from 'src/screens/PreviousGames'
 
 interface LeagueData {
     games: {}
@@ -61,14 +60,13 @@ export const League = ({ leagueId, theme }: string) => {
     }, [currentUser.id, dispatch, leagueId])
 
     useEffect(() => {
-        // console.log(Toast)
         // Toast.show({
         //     type: 'success',
         //     text1: 'Prediction successfully submitted!',
         //     text2: "Click here if you'd like to be notified when others make their prediction",
         //     autoHide: false,
         //     topOffset: 50,
-        //     onHide: () => Toast.hide(),
+        //     // props: { onPress: toastPressed, onHide: hideToast },
         //     // position: 'top',
         // })
     }, [])
@@ -222,7 +220,7 @@ export const League = ({ leagueId, theme }: string) => {
                             </View>
                         ) : (
                             <View style={styles(theme).fixturesWrapper}>
-                                <TeamSelection
+                                <ChooseTeam
                                     closeTeamSelectionModal={closeTeamSelectionModal}
                                     setLoadingModalOpen={setLoadingModalOpen}
                                     pullLatestLeagueData={pullLatestLeagueData}

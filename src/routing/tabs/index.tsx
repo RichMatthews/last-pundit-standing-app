@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CreateStack } from 'src/routing/tabs/create'
 import { LeagueStack } from 'src/routing/tabs/leagues'
 import { RenderCorrectIcon } from 'src/routing/utils'
-import { Account } from 'src/components/account'
-import { JoinLeague } from 'src/components/join-league'
+import { Account } from 'src/screens/MyAccount'
+import { JoinLeague } from 'src/screens/JoinLeague'
 
 const Tab = createBottomTabNavigator()
 

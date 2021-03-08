@@ -17,6 +17,7 @@ import { signUserOut } from 'src/redux/reducer/leagues'
 import { setTheme } from 'src/redux/reducer/theme'
 import { checkFaceIDEnabled, turnOnFaceIDAuthentication } from 'src/utils/canLoginWithFaceId'
 import { SettingsRow } from './settingsRow'
+import { pushNotificationsAccepted, pushNotificationsRejected } from 'src/redux/reducer/push-notifications'
 
 const isIos = Platform.OS === 'ios'
 const iconSize = isIos ? 20 : 20
@@ -26,6 +27,7 @@ export const Account = ({ navigation, theme }: any) => {
     const [faceIdActivated, setFaceIdActivated] = useState(false)
     const mode = useSelector((store: { theme: any }) => store.theme)
     const user = useSelector((store: { user: any }) => store.user)
+    const pushNotifications = useSelector((store: { pushNotifications: any }) => store.pushNotifications)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -70,6 +72,14 @@ export const Account = ({ navigation, theme }: any) => {
         const newMode = mode === 'light' ? 'dark' : 'light'
         dispatch(setTheme(newMode))
         await AsyncStorage.setItem('theme', newMode)
+    }
+
+    const togglePushNotifications = () => {
+        if (pushNotifications.status === 1) {
+            dispatch(pushNotificationsRejected())
+        } else {
+            dispatch(pushNotificationsAccepted())
+        }
     }
 
     return (
@@ -127,8 +137,8 @@ export const Account = ({ navigation, theme }: any) => {
                                 style={[icon, { width: iconSize, height: iconSize }]}
                             />
                         }
-                        togglePress={() => toggleFaceIdActivated(!faceIdActivated)}
-                        toggleValue={faceIdActivated}
+                        togglePress={() => togglePushNotifications()}
+                        toggleValue={pushNotifications.status === 1}
                     />
                 </View>
                 <Text style={heading}>Theme</Text>

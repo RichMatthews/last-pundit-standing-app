@@ -2,7 +2,7 @@ import React from 'react'
 import { Dimensions, Platform, Text, View, StyleSheet } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
-import { Toggle } from '../toggle'
+import { Toggle } from './toggle'
 
 type RowProps = {
     text: string
