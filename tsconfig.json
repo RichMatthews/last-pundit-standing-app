@@ -1,22 +1,22 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
-        "jsx": "react",
-        "paths": {
-            "src/*": ["./*"]
-        }
+      "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "isolatedModules": true,
+      "jsx": "react",
+      "lib": ["es2018"],
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "baseUrl": ".",
+      "paths": {
+        "app/*": ["*"]
+      },
+      "noEmit": true,
+      "strict": true,
+      "target": "esnext",
+      "skipLibCheck": true
     },
-    "include": ["src", "WEEKLY_UPDATE_SCRIPT.js", "teamcodes.ts", "config.js"]
-}
+    "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.tsx", "e2e/**/*.ts"]
+  }
+  
