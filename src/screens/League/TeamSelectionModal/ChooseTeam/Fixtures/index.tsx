@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, TouchableOpacity, Platform, StyleSheet, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 
-import * as Images from '../../images'
+import * as Images from 'app/src/images'
 
 export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedTeam, setSelectedTeam, theme }) => {
   return (

@@ -2,17 +2,15 @@ import React, { useCallback, useState } from 'react'
 import { StyleSheet, Text, Linking, TouchableOpacity, Platform, View, Alert } from 'react-native'
 import { useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
-import { Fixtures } from 'src/components/fixtures'
 
+import { Fixtures } from './Fixtures'
 import { updateUserGamweekChoice } from './api'
 import { findOpponent } from './utils'
-import { SelectionModal } from './selection-modal'
-import { firebaseAuth, firebaseMessaging, firebaseDatabase } from '../../../../firebase'
-import { current } from 'immer'
+import { ConfirmationScreen } from './ConfirmationScreen'
+import { firebaseMessaging, firebaseDatabase } from 'app/firebase'
 
 interface Props {
   currentRound: any
@@ -25,6 +23,8 @@ export const ChooseTeam = ({
   fixtures,
   theme,
   setLoadingModalOpen,
+  showConfirmationScreen,
+  setShowConfirmationScreen,
 }: any) => {
   const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
   const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
@@ -39,7 +39,6 @@ export const ChooseTeam = ({
   })
   const playerHasMadeChoice = currentPlayer.rounds[currentPlayer.rounds.length - 1].selection.complete
   const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string; index: 0 }>()
-  const [modalOpen, setModalOpen] = useState(false)
   const [opponent, setOpponent] = useState(null)
 
   const submitChoice = () => {
@@ -50,7 +49,7 @@ export const ChooseTeam = ({
     const { opponent: opponentData } = findOpponent(selectedTeam, fixtures)
 
     setOpponent(opponentData)
-    setModalOpen(true)
+    setShowConfirmationScreen(true)
   }
 
   const updateUserGamweekChoiceHelper = async () => {
@@ -73,7 +72,7 @@ export const ChooseTeam = ({
       roundId: currentPlayer.rounds[currentPlayer.rounds.length - 1].id,
     })
     await pullLatestLeagueData()
-    setModalOpen(false)
+    setShowConfirmationScreen(false)
 
     Toast.show({
       type: 'success',
@@ -136,13 +135,13 @@ export const ChooseTeam = ({
 
   return (
     <View style={styles(theme).innerContainer}>
-      {modalOpen ? (
+      {showConfirmationScreen ? (
         <View style={styles(theme).button}>
           {selectedTeam && opponent && (
-            <SelectionModal
+            <ConfirmationScreen
               selectedTeam={selectedTeam}
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
+              showConfirmationScreen={showConfirmationScreen}
+              setShowConfirmationScreen={setShowConfirmationScreen}
               selectedTeamOpponent={opponent}
               theme={theme}
               updateUserGamweekChoiceHelper={updateUserGamweekChoiceHelper}

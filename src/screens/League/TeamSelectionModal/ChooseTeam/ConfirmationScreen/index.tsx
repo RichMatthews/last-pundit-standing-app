@@ -1,12 +1,11 @@
 import React from 'react'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Modal from 'react-native-modal'
 
 const fontFamily = Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular'
+const boldFontFamily = Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold'
 
-export const SelectionModal = ({
-  modalOpen,
-  setModalOpen,
+export const ConfirmationScreen = ({
+  setShowConfirmationScreen,
   selectedTeam,
   selectedTeamOpponent,
   updateUserGamweekChoiceHelper,
@@ -17,10 +16,10 @@ export const SelectionModal = ({
       <Text style={styles(theme).confirmText}>Confirm selection</Text>
       <View>
         <Text style={styles(theme).text}>You have selected</Text>
-        <Text style={[styles(theme).text, styles(theme).selectedTeamName]}>{selectedTeam.name}</Text>
+        <Text style={[styles(theme).text, styles(theme).selectedTeamName]}>{selectedTeam.name.toUpperCase()}</Text>
       </View>
       <View>
-        <Text style={styles(theme).text}>against</Text>
+        <Text style={styles(theme).text}>vs</Text>
         <Text style={styles(theme).text}>{selectedTeamOpponent.name}</Text>
       </View>
 
@@ -37,14 +36,14 @@ export const SelectionModal = ({
       </View>
 
       <View style={styles(theme).buttonContainers}>
-        <TouchableOpacity onPress={() => setModalOpen(false)} activeOpacity={0.7}>
-          <View style={[styles(theme).button, styles(theme).cancelButton]}>
-            <Text style={styles(theme).cancelButtonText}>Cancel</Text>
-          </View>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => updateUserGamweekChoiceHelper()} activeOpacity={0.7}>
           <View style={[styles(theme).button, styles(theme).submitButton]}>
             <Text style={styles(theme).submitButtonText}>Confirm</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setShowConfirmationScreen(false)} activeOpacity={0.7}>
+          <View style={[styles(theme).button, styles(theme).cancelButton]}>
+            <Text style={styles(theme).cancelButtonText}>Cancel</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -62,28 +61,25 @@ const styles = (theme) =>
       paddingHorizontal: 30,
     },
     buttonContainers: {
-      flexDirection: 'row',
       alignSelf: 'center',
+      flexDirection: 'column',
+      width: '100%',
     },
     container: {
       backgroundColor: theme.background.primary,
-      alignItems: 'center',
+      // backgroundColor: 'red',
       justifyContent: 'center',
       flex: 1,
+      marginBottom: 50,
     },
     cancelButton: {
       borderColor: theme.purple,
     },
-    cancelButtonText: {
-      color: theme.purple,
-      fontFamily,
-      fontSize: 15,
-      textAlign: 'center',
-    },
+
     confirmText: {
       color: theme.text.primary,
       fontFamily,
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: Platform.OS === 'ios' ? '600' : '700',
       marginBottom: 20,
       textAlign: 'center',
@@ -97,16 +93,24 @@ const styles = (theme) =>
       marginBottom: 20,
     },
     selectedTeamName: {
-      fontSize: 25,
+      fontSize: 30,
     },
     submitButton: {
       backgroundColor: theme.purple,
       borderColor: theme.purple,
     },
+    cancelButtonText: {
+      color: theme.purple,
+      fontFamily: boldFontFamily,
+      fontSize: 18,
+      fontWeight: '600',
+      textAlign: 'center',
+    },
     submitButtonText: {
       color: theme.text.inverse,
-      fontSize: 15,
-      fontFamily,
+      fontSize: 18,
+      fontWeight: '600',
+      fontFamily: boldFontFamily,
       textAlign: 'center',
     },
     text: {

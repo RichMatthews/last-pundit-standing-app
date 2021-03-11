@@ -2,7 +2,7 @@ import React, { forwardRef, Ref } from 'react'
 import { ActivityIndicator, Platform, View, StyleSheet, Text } from 'react-native'
 import { Modalize } from 'react-native-modalize'
 
-import { ChooseTeam } from 'app/src/screens/League/ChooseTeam'
+import { ChooseTeam } from './ChooseTeam'
 
 export const TeamSelectionModal = forwardRef((props, ref: Ref<Modalize>) => {
   const {
@@ -12,17 +12,20 @@ export const TeamSelectionModal = forwardRef((props, ref: Ref<Modalize>) => {
     setLoadingModalOpen,
     pullLatestLeagueData,
     theme,
+    showConfirmationScreen,
+    setShowConfirmationScreen,
   } = props
 
   return (
     <Modalize
+      withReactModal
       disableScrollIfPossible
       ref={ref}
       scrollViewProps={{
-        contentContainerStyle: { backgroundColor: theme.background.primary },
+        contentContainerStyle: { backgroundColor: theme.background.primary, minHeight: '100%' },
       }}
       handlePosition={'inside'}
-      modalStyle={{ backgroundColor: theme.background.primary }}
+      modalStyle={{ backgroundColor: theme.background.primary, minHeight: showConfirmationScreen ? '100%' : 'auto' }}
       onClosed={() => setLoadingModalOpen(false)}
     >
       {loadingModalOpen ? (
@@ -35,6 +38,8 @@ export const TeamSelectionModal = forwardRef((props, ref: Ref<Modalize>) => {
       ) : (
         <View style={styles(theme).fixturesWrapper}>
           <ChooseTeam
+            showConfirmationScreen={showConfirmationScreen}
+            setShowConfirmationScreen={setShowConfirmationScreen}
             closeTeamSelectionModal={closeTeamSelectionModal}
             setLoadingModalOpen={setLoadingModalOpen}
             pullLatestLeagueData={pullLatestLeagueData}

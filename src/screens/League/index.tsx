@@ -8,8 +8,8 @@ import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { setViewedLeague } from 'src/redux/reducer/league'
-import { CachedPreviousGames } from 'src/screens/PreviousGames'
 
+import { CachedPreviousGames } from './PreviousGames'
 import { pullLeagueData, getCurrentGameweekFixtures } from './api'
 import { CurrentGame } from './CurrentGame'
 import { TeamSelectionModal } from './TeamSelectionModal'
@@ -27,6 +27,7 @@ export const League = ({ leagueId, theme }: string) => {
   const currentUser = useSelector((store: { user: any }) => store.user)
   const league = useSelector((store: { league: any }) => store.league)
   const teamSelectionRef = useRef<Modalize>(null)
+  const [showConfirmationScreen, setShowConfirmationScreen] = useState(false)
 
   const pullLatestLeagueData = useCallback(async () => {
     const leagueData: LeagueData = await pullLeagueData({ leagueId })
@@ -144,6 +145,8 @@ export const League = ({ leagueId, theme }: string) => {
         <Portal>
           <TeamSelectionModal
             closeTeamSelectionModal={closeTeamSelectionModal}
+            showConfirmationScreen={showConfirmationScreen}
+            setShowConfirmationScreen={setShowConfirmationScreen}
             loadingModalOpen={loadingModalOpen}
             gameweekFixtures={gameweekFixtures}
             setLoadingModalOpen={setLoadingModalOpen}
