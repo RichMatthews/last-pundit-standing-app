@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { CreateStack } from 'src/routing/tabs/create'
 import { LeagueStack } from 'src/routing/tabs/leagues'
 import { RenderCorrectIcon } from 'src/routing/utils'
-import { Account } from 'src/components/account'
-import { JoinLeague } from 'src/components/join-league'
+import { Account } from 'src/screens/MyAccount'
+import { JoinLeague } from 'src/screens/JoinLeague'
 
 const Tab = createBottomTabNavigator()
 
@@ -28,13 +28,13 @@ export const TabNavigation = ({ theme, user }: any) => (
     >
         <Tab.Screen name="Leagues">
             {() => {
-                return <LeagueStack isSignedIn={user} theme={theme} userId={user.id} />
+                return <LeagueStack theme={theme} userId={user.id} />
             }}
         </Tab.Screen>
 
         <Tab.Screen name="Create">
             {() => {
-                return <CreateStack isSignedIn={user} theme={theme} userId={user.id} />
+                return <CreateStack theme={theme} userId={user.id} />
             }}
         </Tab.Screen>
 

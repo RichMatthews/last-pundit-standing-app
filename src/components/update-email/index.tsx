@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { StyleSheet, Platform, TouchableOpacity, View, Text, TextInput } from 'react-native'
-import firebase from 'firebase'
-
-const auth = firebase.auth()
+import { firebaseAuth } from '../../../firebase.js'
 
 export const UpdateEmail = ({ navigation }) => {
     const [email, setEmail] = useState('')
 
     const updateEmail = () => {
-        const user = firebase.auth().currentUser
+        const user = firebaseAuth().currentUser
         if (user) {
             return user
                 .updateEmail(email)

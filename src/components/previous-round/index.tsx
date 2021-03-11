@@ -1,22 +1,38 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Image, Text, View, Platform, StyleSheet } from 'react-native'
 
-import * as Images from '../../images'
+import * as Images from 'src/images'
 
-export const PreviousRound = ({ choice, theme }: any) => {
+export const PreviousRound = ({ choice, pendingGame, roundLost, theme }: any) => {
     const { code: opponentTeamCode, name: opponentName } = choice.opponent
-    const { code: userTeamCode, name: userTeamName }: any = choice
+    const { code: userTeamCode, name: userTeamName } = choice
+
+    const choiceGoals = pendingGame ? '-' : choice.goals
+    const opponentGoals = pendingGame ? '-' : choice.opponent.goals
+
+    const containerStyles = useMemo(
+        () =>
+            pendingGame
+                ? [styles(theme).container, { opacity: pendingGame ? 0.5 : 1, marginTop: pendingGame ? 20 : 0 }]
+                : styles(theme).container,
+        [pendingGame, theme],
+    )
+
+    const userGoalsStyle = useMemo(
+        () => (roundLost ? [styles(theme).goals, { color: 'red' }] : [styles(theme).goals, { color: '#00FF87' }]),
+        [roundLost, theme],
+    )
 
     return choice.teamPlayingAtHome ? (
-        <View style={styles(theme).container}>
+        <View style={containerStyles}>
             <View style={styles(theme).homeTeam}>
-                <Text style={[styles(theme).homeTeamName, styles(theme).playerTeam]}>{userTeamName}</Text>
+                <Text style={[styles(theme).homeTeamName]}>{userTeamName}</Text>
                 <Image source={Images[userTeamCode]} style={styles(theme).teamBadge} />
             </View>
             <View style={styles(theme).centerGoals}>
-                <Text style={[styles(theme).goals, styles(theme).userGoals]}>{choice.goals}</Text>
+                <Text style={userGoalsStyle}>{choiceGoals}</Text>
                 <Text style={styles(theme).centerText}>|</Text>
-                <Text style={styles(theme).goals}>{choice.opponent.goals}</Text>
+                <Text style={styles(theme).goals}>{opponentGoals}</Text>
             </View>
             <View style={styles(theme).awayTeam}>
                 <Image source={Images[opponentTeamCode]} style={styles(theme).teamBadge} />
@@ -24,19 +40,19 @@ export const PreviousRound = ({ choice, theme }: any) => {
             </View>
         </View>
     ) : (
-        <View style={styles(theme).container}>
+        <View style={containerStyles}>
             <View style={styles(theme).homeTeam}>
                 <Text style={styles(theme).homeTeamName}>{opponentName}</Text>
                 <Image source={Images[opponentTeamCode]} style={styles(theme).teamBadge} />
             </View>
             <View style={styles(theme).centerGoals}>
-                <Text style={styles(theme).goals}>{choice.opponent.goals}</Text>
+                <Text style={styles(theme).goals}>{opponentGoals}</Text>
                 <Text style={styles(theme).centerText}>|</Text>
-                <Text style={[styles(theme).goals, styles(theme).userGoals]}>{choice.goals}</Text>
+                <Text style={userGoalsStyle}>{choiceGoals}</Text>
             </View>
             <View style={styles(theme).awayTeam}>
                 <Image source={Images[userTeamCode]} style={styles(theme).teamBadge} />
-                <Text style={[styles(theme).playerTeam, styles(theme).awayTeamName]}>{userTeamName}</Text>
+                <Text style={[styles(theme).awayTeamName]}>{userTeamName}</Text>
             </View>
         </View>
     )
@@ -49,6 +65,7 @@ const styles = (theme) =>
             alignSelf: 'center',
             flexDirection: 'row',
             justifyContent: 'center',
+            paddingVertical: 5,
             margin: 5,
             width: 300,
         },
@@ -71,9 +88,6 @@ const styles = (theme) =>
             fontWeight: '700',
             textAlign: 'center',
             fontSize: 15,
-        },
-        playerTeam: {
-            // color: theme.purple,
         },
         centerText: {
             alignItems: 'center',
@@ -106,8 +120,5 @@ const styles = (theme) =>
             fontWeight: '600',
             marginLeft: 5,
             fontSize: 13,
-        },
-        userGoals: {
-            color: '#00FF87',
         },
     })

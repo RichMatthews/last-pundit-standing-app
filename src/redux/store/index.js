@@ -7,6 +7,7 @@ import themeReducer from '../reducer/theme'
 import userLeaguesReducer from '../reducer/leagues'
 import userReducer from '../reducer/user'
 import viewingLeagueReducer from '../reducer/league'
+import pushNotificationsReducer from '../reducer/push-notifications'
 
 const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
         currentPlayer: currentPlayerReducer,
         theme: themeReducer,
         league: viewingLeagueReducer,
+        pushNotifications: pushNotificationsReducer,
         user: userReducer,
         userLeagues: userLeaguesReducer,
     },

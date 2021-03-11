@@ -1,25 +1,5 @@
 PODS:
-  - appcenter-analytics (3.1.2):
-    - AppCenter/Analytics
-    - AppCenterReactNativeShared
-    - React
-  - appcenter-core (3.1.2):
-    - AppCenterReactNativeShared
-    - React
-  - appcenter-crashes (3.1.2):
-    - AppCenter/Crashes
-    - AppCenterReactNativeShared
-    - React
-  - AppCenter/Analytics (3.3.4):
-    - AppCenter/Core
-  - AppCenter/Core (3.3.4)
-  - AppCenter/Crashes (3.3.4):
-    - AppCenter/Core
-  - AppCenterReactNativeShared (3.1.2):
-    - AppCenter/Core (= 3.3.4)
   - boost-for-react-native (1.63.0)
-  - BVLinearGradient (2.5.6):
-    - React
   - DoubleConversion (1.1.6)
   - EXConstants (9.2.0):
     - UMConstantsInterface
@@ -31,9 +11,6 @@ PODS:
     - React-Core
     - UMCore
     - UMImageLoaderInterface
-  - EXLocalAuthentication (9.5.0):
-    - UMConstantsInterface
-    - UMCore
   - EXPermissions (9.3.0):
     - UMCore
     - UMPermissionsInterface
@@ -45,17 +22,51 @@ PODS:
     - React-Core (= 0.63.4)
     - React-jsi (= 0.63.4)
     - ReactCommon/turbomodule/core (= 0.63.4)
-  - Firebase/CoreOnly (7.0.0):
-    - FirebaseCore (= 7.0.0)
-  - FirebaseCore (7.0.0):
-    - FirebaseCoreDiagnostics (~> 7.0)
+  - Firebase/Auth (7.6.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 7.6.0)
+  - Firebase/CoreOnly (7.6.0):
+    - FirebaseCore (= 7.6.0)
+  - Firebase/Database (7.6.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (~> 7.6.0)
+  - Firebase/Messaging (7.6.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 7.6.0)
+  - FirebaseAuth (7.6.0):
+    - FirebaseCore (~> 7.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GTMSessionFetcher/Core (~> 1.4)
+  - FirebaseCore (7.6.0):
+    - FirebaseCoreDiagnostics (~> 7.4)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
-  - FirebaseCoreDiagnostics (7.0.0):
+  - FirebaseCoreDiagnostics (7.7.0):
     - GoogleDataTransport (~> 8.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
-    - nanopb (~> 2.30906.0)
+    - nanopb (~> 2.30907.0)
+  - FirebaseDatabase (7.6.0):
+    - FirebaseCore (~> 7.0)
+    - leveldb-library (~> 1.22)
+  - FirebaseInstallations (7.7.0):
+    - FirebaseCore (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/UserDefaults (~> 7.0)
+    - PromisesObjC (~> 1.2)
+  - FirebaseInstanceID (7.7.0):
+    - FirebaseCore (~> 7.0)
+    - FirebaseInstallations (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/UserDefaults (~> 7.0)
+  - FirebaseMessaging (7.6.0):
+    - FirebaseCore (~> 7.0)
+    - FirebaseInstanceID (~> 7.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/Reachability (~> 7.0)
+    - GoogleUtilities/UserDefaults (~> 7.0)
   - Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -66,27 +77,42 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - GoogleDataTransport (8.0.0):
-    - nanopb (~> 2.30906.0)
-  - GoogleUtilities/Environment (7.0.0):
-    - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (7.0.0):
+  - GoogleDataTransport (8.2.0):
+    - nanopb (~> 2.30907.0)
+  - GoogleUtilities/AppDelegateSwizzler (7.2.2):
     - GoogleUtilities/Environment
-  - libwebp (1.1.0):
-    - libwebp/demux (= 1.1.0)
-    - libwebp/mux (= 1.1.0)
-    - libwebp/webp (= 1.1.0)
-  - libwebp/demux (1.1.0):
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (7.2.2):
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Logger (7.2.2):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/Network (7.2.2):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.2.2)"
+  - GoogleUtilities/Reachability (7.2.2):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.2.2):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.5.0)
+  - leveldb-library (1.22.1)
+  - libwebp (1.2.0):
+    - libwebp/demux (= 1.2.0)
+    - libwebp/mux (= 1.2.0)
+    - libwebp/webp (= 1.2.0)
+  - libwebp/demux (1.2.0):
     - libwebp/webp
-  - libwebp/mux (1.1.0):
+  - libwebp/mux (1.2.0):
     - libwebp/demux
-  - libwebp/webp (1.1.0)
-  - nanopb (2.30906.0):
-    - nanopb/decode (= 2.30906.0)
-    - nanopb/encode (= 2.30906.0)
-  - nanopb/decode (2.30906.0)
-  - nanopb/encode (2.30906.0)
-  - PromisesObjC (1.2.11)
+  - libwebp/webp (1.2.0)
+  - nanopb (2.30907.0):
+    - nanopb/decode (= 2.30907.0)
+    - nanopb/encode (= 2.30907.0)
+  - nanopb/decode (2.30907.0)
+  - nanopb/encode (2.30907.0)
+  - PromisesObjC (1.2.12)
   - RCTRequired (0.63.4)
   - RCTTypeSafety (0.63.4):
     - FBLazyVector (= 0.63.4)
@@ -253,7 +279,7 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - React-jsinspector (0.63.4)
-  - react-native-safe-area-context (3.1.9):
+  - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-splash-screen (3.2.0):
     - React
@@ -317,22 +343,34 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - RNCAsyncStorage (1.13.2):
-    - React
+  - RNCAsyncStorage (1.14.1):
+    - React-Core
   - RNCMaskedView (0.1.10):
     - React
   - RNFastImage (8.3.4):
     - React-Core
     - SDWebImage (~> 5.8)
     - SDWebImageWebPCoder (~> 0.6.1)
-  - RNFBApp (9.0.0):
-    - Firebase/CoreOnly (~> 7.0.0)
+  - RNFBApp (10.8.1):
+    - Firebase/CoreOnly (~> 7.6.0)
     - React-Core
-  - RNGestureHandler (1.9.0):
+  - RNFBAuth (10.8.1):
+    - Firebase/Auth (~> 7.6.0)
+    - React-Core
+    - RNFBApp
+  - RNFBDatabase (10.8.1):
+    - Firebase/Database (~> 7.6.0)
+    - React-Core
+    - RNFBApp
+  - RNFBMessaging (10.8.1):
+    - Firebase/Messaging (~> 7.6.0)
+    - React-Core
+    - RNFBApp
+  - RNGestureHandler (1.10.3):
     - React-Core
   - RNKeychain (6.2.0):
     - React
-  - RNScreens (2.16.1):
+  - RNScreens (2.18.1):
     - React-Core
   - RNSVG (12.1.0):
     - React
@@ -340,9 +378,9 @@ PODS:
     - React
   - RNVectorIcons (7.1.0):
     - React
-  - SDWebImage (5.10.2):
-    - SDWebImage/Core (= 5.10.2)
-  - SDWebImage/Core (5.10.2)
+  - SDWebImage (5.10.4):
+    - SDWebImage/Core (= 5.10.4)
+  - SDWebImage/Core (5.10.4)
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
@@ -366,18 +404,16 @@ PODS:
   - Yoga (1.14.0)
 
 DEPENDENCIES:
-  - appcenter-analytics (from `../node_modules/appcenter-analytics/ios`)
-  - appcenter-core (from `../node_modules/appcenter/ios`)
-  - appcenter-crashes (from `../node_modules/appcenter-crashes/ios`)
-  - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
-  - EXLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - EXPermissions (from `../node_modules/expo-permissions/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
+  - Firebase/Auth
+  - Firebase/Database
+  - Firebase/Messaging
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -408,6 +444,9 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
+  - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
+  - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
+  - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -431,14 +470,19 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AppCenter
-    - AppCenterReactNativeShared
     - boost-for-react-native
     - Firebase
+    - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseDatabase
+    - FirebaseInstallations
+    - FirebaseInstanceID
+    - FirebaseMessaging
     - GoogleDataTransport
     - GoogleUtilities
+    - GTMSessionFetcher
+    - leveldb-library
     - libwebp
     - nanopb
     - PromisesObjC
@@ -446,14 +490,6 @@ SPEC REPOS:
     - SDWebImageWebPCoder
 
 EXTERNAL SOURCES:
-  appcenter-analytics:
-    :path: "../node_modules/appcenter-analytics/ios"
-  appcenter-core:
-    :path: "../node_modules/appcenter/ios"
-  appcenter-crashes:
-    :path: "../node_modules/appcenter-crashes/ios"
-  BVLinearGradient:
-    :path: "../node_modules/react-native-linear-gradient"
   DoubleConversion:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   EXConstants:
@@ -462,8 +498,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-file-system/ios"
   EXImageLoader:
     :path: "../node_modules/expo-image-loader/ios"
-  EXLocalAuthentication:
-    :path: "../node_modules/expo-local-authentication/ios"
   EXPermissions:
     :path: "../node_modules/expo-permissions/ios"
   FBLazyVector:
@@ -526,6 +560,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fast-image"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
+  RNFBAuth:
+    :path: "../node_modules/@react-native-firebase/auth"
+  RNFBDatabase:
+    :path: "../node_modules/@react-native-firebase/database"
+  RNFBMessaging:
+    :path: "../node_modules/@react-native-firebase/messaging"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNKeychain:
@@ -568,31 +608,31 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppCenter: 0487be185c038ed2ecc5ed38219af1dcd280af23
-  appcenter-analytics: 86931681ba39a34856727e415d39e7d4693ad7fe
-  appcenter-core: 1cca3f4d1f01e820710dc82e14ad2b4806a4f907
-  appcenter-crashes: 5da5dca952c3d1a3eea2d596748d94ec0412fbd1
-  AppCenterReactNativeShared: 66667cd2dfad295b84bbf0f462e0e139e2128284
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   EXConstants: f486f6b4a36b86e47ab258d4d2b7b2699786fdce
   EXFileSystem: afe9b1fd937d30270bf5108ba44e2f4a1d1ad694
   EXImageLoader: 7153fb1307ac643299a9072b71da0d276f4c7789
-  EXLocalAuthentication: acb740dcb15753d8f0ce90d93609322a2545cd41
   EXPermissions: 30cbe5b72bd209b65c00884180ad058a60bb413d
   FBLazyVector: 3bb422f41b18121b71783a905c10e58606f7dc3e
   FBReactNativeSpec: f2c97f2529dd79c083355182cc158c9f98f4bd6e
-  Firebase: 50be68416f50eb4eb2ecb0e78acab9a051ef95df
-  FirebaseCore: cf3122185fce1cf71cedbbc498ea84d2b3e7cb69
-  FirebaseCoreDiagnostics: 5f4aa04fdb04923693cc704c7ef9158bdf41a48b
+  Firebase: e1e089d9aac215a52442583f818ab61de3c4581b
+  FirebaseAuth: 0a1df88dc32569db509e6269c3e4bf2a168e8ae8
+  FirebaseCore: 0a43b7f1c5b36f3358cd703011ca4c7e0df55870
+  FirebaseCoreDiagnostics: 179bf3831213451c8addd036aca7fcf5492ec154
+  FirebaseDatabase: 21842227253dafe61482065148fd044ba7983a41
+  FirebaseInstallations: 42c86e7b02ff75b7f27f85833bf5dcb5f38a9774
+  FirebaseInstanceID: cf940324a20ac14a27ad1e931d15ac9d335526db
+  FirebaseMessaging: 4b9b2850fcfcaac2820097ee3703ba6cfff3df84
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  GoogleDataTransport: 6ce8004a961db1b905740d7be106c61ba7e89c21
-  GoogleUtilities: ffb2f4159f2c897c6e8992bd7fbcdef8a300589c
-  libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
-  nanopb: 1bf24dd71191072e120b83dd02d08f3da0d65e53
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
+  GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
+  GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
+  leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
+  libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
+  nanopb: 59221d7f958fb711001e6a449489542d92ae113e
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   RCTRequired: 082f10cd3f905d6c124597fd1c14f6f2655ff65e
   RCTTypeSafety: 8c9c544ecbf20337d069e4ae7fd9a377aadf504b
   React: b0a957a2c44da4113b0c4c9853d8387f8e64e615
@@ -603,7 +643,7 @@ SPEC CHECKSUMS:
   React-jsi: a0418934cf48f25b485631deb27c64dc40fb4c31
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
-  react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
+  react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
@@ -615,17 +655,20 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  RNCAsyncStorage: 05bae7ecfab1cbd5441993f1ca098f7c3b3f8d0e
+  RNCAsyncStorage: fe58eec522885718d6b297b7b658bf87d7ca557b
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
-  RNFBApp: 2810471bdc092151f20f16a9f8915b1ad70325b2
-  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RNFBApp: 02bde3edecf2e9694b908a5d3504e03449980f20
+  RNFBAuth: 16f2b91bf53f398d83a15cff0dd52225967c1d78
+  RNFBDatabase: 21ebccd262d7ab77db2b5c7fe4c6528c6ec259c3
+  RNFBMessaging: 1823217d31e942531cc3f51fb5367dcbc69c1e10
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
-  RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
+  RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNTextGradientView: 3eb4744303f801546fad35ac47a53cc82257cb25
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
-  SDWebImage: b969dcfc02c40a5da71eac0b03b8f1a0c794a86f
+  SDWebImage: c666b97e1fa9c64b4909816a903322018f0a9c84
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   UMAppLoader: 5db5dc03176c6238da9c8b3657a370137882a4ad
   UMBarCodeScannerInterface: 017672479f93de88d94c3a50dfb66b5348b65989
@@ -642,6 +685,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 6cad5929dbc0a5b986ad4d77caac497d4de730a7
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: 2cc309986fd955438fadf9a0bffbf4af05a48814
+PODFILE CHECKSUM: 2c380ea5f51e748bacb17bbd20213329433af6d8
 
 COCOAPODS: 1.10.0

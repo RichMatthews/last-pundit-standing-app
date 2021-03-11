@@ -13,7 +13,6 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Button, ButtonText } from 'src/ui-components/button'
-import { Container } from 'src/ui-components/containers'
 import * as Keychain from 'react-native-keychain'
 import { useDispatch } from 'react-redux'
 import * as RootNavigation from 'src/root-navigation'

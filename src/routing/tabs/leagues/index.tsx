@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Stack } from 'src/routing'
-import { MyLeagues } from 'src/components/my-leagues'
-import { League } from 'src/components/league'
+import { MyLeagues } from 'src/screens/MyLeagues'
+import { League } from 'src/screens/League'
 
 export const LeagueStack = ({ theme }: any) => (
     <Stack.Navigator>

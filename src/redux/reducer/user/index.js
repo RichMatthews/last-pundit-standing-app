@@ -11,7 +11,7 @@ export const getCurrentUser = createAsyncThunk('getCurrentUser', async (user) =>
         await AsyncStorage.setItem('lastLogin', Date.now().toString())
         return userInfo
     } catch (e) {
-        console.log('errored getting user')
+        console.log('errored getting user in redux')
     }
 })
 

@@ -2,7 +2,7 @@ import React from 'react'
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import { Stack } from 'src/routing'
 
-import { Account } from 'src/components/account'
+import { Account } from 'src/screens/MyAccount'
 import { ResetPassword } from 'src/components/reset-password'
 import { UpdateEmail } from 'src/components/update-email'
 
