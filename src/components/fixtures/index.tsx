@@ -51,21 +51,18 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                         activeOpacity={homeTeamPreviouslyChosen ? 1 : 0.7}
                       >
                         <View
-                          style={[styles(theme).matchContainerHome, { opacity: homeTeamPreviouslyChosen ? 0.1 : 1 }]}
+                          style={[
+                            styles(theme).matchContainerHome,
+                            {
+                              backgroundColor:
+                                selectedTeam?.code === homeTeamCode && selectedTeam?.index === index
+                                  ? '#fcebff'
+                                  : 'transparent',
+                              opacity: homeTeamPreviouslyChosen ? 0.1 : 1,
+                            },
+                          ]}
                         >
-                          <Text
-                            style={[
-                              styles(theme).teamName,
-                              {
-                                color:
-                                  selectedTeam?.code === homeTeamCode && selectedTeam?.index === index
-                                    ? theme.purple
-                                    : theme.text.primary,
-                              },
-                            ]}
-                          >
-                            {homeTeamName}
-                          </Text>
+                          <Text style={[styles(theme).teamName]}>{homeTeamName}</Text>
                           <View style={styles(theme).teamBadgeContainer}>
                             <FastImage style={styles(theme).teamBadge} source={Images[homeTeamCode]} />
                           </View>
@@ -89,24 +86,21 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                         activeOpacity={awayTeamPreviouslyChosen ? 1 : 0.7}
                       >
                         <View
-                          style={[styles(theme).matchContainerAway, { opacity: awayTeamPreviouslyChosen ? 0.1 : 1 }]}
+                          style={[
+                            styles(theme).matchContainerAway,
+                            {
+                              backgroundColor:
+                                selectedTeam?.code === awayTeamCode && selectedTeam?.index === index
+                                  ? '#fcebff'
+                                  : 'transparent',
+                              opacity: awayTeamPreviouslyChosen ? 0.1 : 1,
+                            },
+                          ]}
                         >
                           <View style={styles(theme).teamBadgeContainer}>
                             <FastImage style={styles(theme).teamBadge} source={Images[awayTeamCode]} />
                           </View>
-                          <Text
-                            style={[
-                              styles(theme).teamName,
-                              {
-                                color:
-                                  selectedTeam?.code === awayTeamCode && selectedTeam?.index === index
-                                    ? theme.purple
-                                    : theme.text.primary,
-                              },
-                            ]}
-                          >
-                            {awayTeamName}
-                          </Text>
+                          <Text style={[styles(theme).teamName]}>{awayTeamName}</Text>
                         </View>
                       </TouchableOpacity>
                     </View>

@@ -19,7 +19,7 @@ export const TeamSelectionModal = forwardRef((props, ref: Ref<Modalize>) => {
       disableScrollIfPossible
       ref={ref}
       scrollViewProps={{
-        contentContainerStyle: { backgroundColor: theme.background.primary, minHeight: '100%' },
+        contentContainerStyle: { backgroundColor: theme.background.primary },
       }}
       handlePosition={'inside'}
       modalStyle={{ backgroundColor: theme.background.primary }}

@@ -26,7 +26,7 @@
 		402712F111D243FAB0A3B3E9 /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 050ACCF2DD2B4F808746D573 /* Nunito-ExtraBold.ttf */; };
 		40D13B244E3F41DD96A9E0A2 /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B51FBAC4546C42CA8017B2E7 /* Nunito-SemiBold.ttf */; };
 		4AD26F86386249CF88289FCC /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96F78592B9BA4A1BB7652FC2 /* Nunito-Black.ttf */; };
-		5CAF3DFF25EB01B300D47DB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CAF3DFE25EB01B300D47DB2 /* GoogleService-Info.plist */; };
+		5C1BB37F25F77ED800DED4F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5C1BB37E25F77ECC00DED4F4 /* GoogleService-Info.plist */; };
 		65B65BA9B9EF4B9E9663F681 /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91D34E82F7EA48C3BACD0DF4 /* Nunito-Italic.ttf */; };
 		6E781861566C4FF08BDB3DB2 /* Nunito-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D9312CE65C043BFB6D379C7 /* Nunito-ExtraLight.ttf */; };
 		75BBFF5DB16A8398A58D35B0 /* libPods-LastPunditStanding-LastPunditStandingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 121112BBA8D7D438FE796EEF /* libPods-LastPunditStanding-LastPunditStandingTests.a */; };
@@ -98,7 +98,7 @@
 		4FA4A621AECC49DD9143DCEE /* SofiaPro-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SofiaPro-Medium.otf"; path = "../src/assets/fonts/SofiaPro-Medium.otf"; sourceTree = "<group>"; };
 		50A1154879E347638447E02A /* Nunito-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Regular.ttf"; path = "../src/assets/fonts/Nunito-Regular.ttf"; sourceTree = "<group>"; };
 		54D340A799CE15AC13C12EF6 /* Pods-LastPunditStanding-LastPunditStandingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LastPunditStanding-LastPunditStandingTests.release.xcconfig"; path = "Target Support Files/Pods-LastPunditStanding-LastPunditStandingTests/Pods-LastPunditStanding-LastPunditStandingTests.release.xcconfig"; sourceTree = "<group>"; };
-		5CAF3DFE25EB01B300D47DB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5C1BB37E25F77ECC00DED4F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5ED5C043C55A4B9AA092F958 /* Nunito-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-ExtraLightItalic.ttf"; path = "../src/assets/fonts/Nunito-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		60B67FCDEFBB4B38AB5C1964 /* Nunito-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-BoldItalic.ttf"; path = "../src/assets/fonts/Nunito-BoldItalic.ttf"; sourceTree = "<group>"; };
 		70DEEAE0AA434624B7631583 /* SofiaPro-Semi-Bold-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SofiaPro-Semi-Bold-Italic.otf"; path = "../src/assets/fonts/SofiaPro-Semi-Bold-Italic.otf"; sourceTree = "<group>"; };
@@ -203,7 +203,6 @@
 		13B07FAE1A68108700A75B9A /* LastPunditStanding */ = {
 			isa = PBXGroup;
 			children = (
-				5CAF3DFE25EB01B300D47DB2 /* GoogleService-Info.plist */,
 				E32E4600259F569D00EE4EC9 /* LastPunditStanding.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				E38BBDAD254B0CC100AE0AB8 /* AppCenter-Config.plist */,
@@ -213,6 +212,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				5C1BB37E25F77ECC00DED4F4 /* GoogleService-Info.plist */,
 			);
 			name = LastPunditStanding;
 			sourceTree = "<group>";
@@ -501,9 +501,9 @@
 				F243DA61F0B04EFC89318EB5 /* Nunito-Regular.ttf in Resources */,
 				40D13B244E3F41DD96A9E0A2 /* Nunito-SemiBold.ttf in Resources */,
 				F8489A57E3474A50AE9E2BD0 /* Nunito-SemiBoldItalic.ttf in Resources */,
+				5C1BB37F25F77ED800DED4F4 /* GoogleService-Info.plist in Resources */,
 				7FFA4F7B77B84016920A5B6F /* Hind-Bold.ttf in Resources */,
 				17D14D121E8B44A8994411D0 /* Hind-Light.ttf in Resources */,
-				5CAF3DFF25EB01B300D47DB2 /* GoogleService-Info.plist in Resources */,
 				898A0A5864A14AE4B10CFCC1 /* Hind-Medium.ttf in Resources */,
 				C915B6F9440245639612437E /* Hind-Regular.ttf in Resources */,
 				3E86F9B62C97427EB8FFCE25 /* Hind-SemiBold.ttf in Resources */,
@@ -905,7 +905,7 @@
 				INFOPLIST_FILE = LastPunditStanding/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.74;
+				MARKETING_VERSION = 1.0.87;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -934,7 +934,7 @@
 				INFOPLIST_FILE = LastPunditStanding/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.74;
+				MARKETING_VERSION = 1.0.87;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

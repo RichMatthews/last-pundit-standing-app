@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { StyleSheet, Text, Linking, TouchableOpacity, Platform, View } from 'react-native'
+import { StyleSheet, Text, Linking, TouchableOpacity, Platform, View, Alert } from 'react-native'
 import { useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -12,6 +12,7 @@ import { updateUserGamweekChoice } from './api'
 import { findOpponent } from './utils'
 import { SelectionModal } from './selection-modal'
 import { firebaseAuth, firebaseMessaging, firebaseDatabase } from '../../../../firebase'
+import { current } from 'immer'
 
 interface Props {
   currentRound: any
@@ -41,11 +42,12 @@ export const ChooseTeam = ({
   const [modalOpen, setModalOpen] = useState(false)
   const [opponent, setOpponent] = useState(null)
 
-  const submitChoice = async () => {
+  const submitChoice = () => {
     if (!selectedTeam) {
       return
     }
-    const { opponent: opponentData } = await findOpponent(selectedTeam)
+
+    const { opponent: opponentData } = findOpponent(selectedTeam, fixtures)
 
     setOpponent(opponentData)
     setModalOpen(true)
@@ -105,32 +107,27 @@ export const ChooseTeam = ({
   }, [])
 
   const getToken = useCallback(async () => {
-    let fcmToken = await AsyncStorage.getItem('fcmToken')
-    if (!fcmToken) {
-      fcmToken = await firebaseMessaging().getToken()
-      if (fcmToken) {
-        // user has a device token
-        await AsyncStorage.setItem('fcmToken', fcmToken)
-
-        if (currentUser) {
-          return await firebaseDatabase.ref(`users/${currentUser.uid}`).update({ token: fcmToken })
-        }
+    let fcmToken = await firebaseMessaging().getToken()
+    if (fcmToken) {
+      if (currentUser) {
+        await firebaseDatabase.ref(`users/${currentUser.id}`).update({ token: fcmToken })
       }
+    } else {
+      alert("We couldn't complete this action at this time. Please try again later")
     }
-    return await firebaseDatabase.ref(`users/${currentUser.uid}`).update({ token: fcmToken })
   }, [currentUser])
 
   const checkPermission = useCallback(async () => {
     const enabled = await firebaseMessaging().hasPermission()
-    console.log(enabled, 'en')
+    // 0 === denied
     if (enabled === 0) {
       Linking.openURL('app-settings:')
     }
+    // 1 === AUTHORIZED, 2 === PROVISIONAL
     if (enabled === 1 || enabled === 2) {
       getToken()
     } else {
       const requestPermissionGranted = await requestPermission()
-      console.log('granted?', requestPermissionGranted)
       if (requestPermissionGranted) {
         getToken()
       }
@@ -139,32 +136,35 @@ export const ChooseTeam = ({
 
   return (
     <View style={styles(theme).innerContainer}>
-      <Fixtures
-        playerHasMadeChoice={playerHasMadeChoice}
-        fixtures={fixtures}
-        selectedTeam={selectedTeam}
-        setSelectedTeam={setSelectedTeam}
-        chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
-        theme={theme}
-      />
-      {!playerHasMadeChoice && (
+      {modalOpen ? (
         <View style={styles(theme).button}>
+          {selectedTeam && opponent && (
+            <SelectionModal
+              selectedTeam={selectedTeam}
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              selectedTeamOpponent={opponent}
+              theme={theme}
+              updateUserGamweekChoiceHelper={updateUserGamweekChoiceHelper}
+            />
+          )}
+        </View>
+      ) : (
+        <>
+          <Fixtures
+            playerHasMadeChoice={playerHasMadeChoice}
+            fixtures={fixtures}
+            selectedTeam={selectedTeam}
+            setSelectedTeam={setSelectedTeam}
+            chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
+            theme={theme}
+          />
           <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
             <View style={styles(theme).buttonText}>
               <Text style={styles(theme).confirmSelectionText}>Confirm selection</Text>
-              {selectedTeam && opponent && (
-                <SelectionModal
-                  selectedTeam={selectedTeam}
-                  modalOpen={modalOpen}
-                  setModalOpen={setModalOpen}
-                  selectedTeamOpponent={opponent}
-                  theme={theme}
-                  updateUserGamweekChoiceHelper={updateUserGamweekChoiceHelper}
-                />
-              )}
             </View>
           </TouchableOpacity>
-        </View>
+        </>
       )}
     </View>
   )
