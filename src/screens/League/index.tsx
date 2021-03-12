@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Portal } from 'react-native-portalize'
@@ -30,6 +30,7 @@ export const League = ({ leagueId, theme }: string) => {
   const [showConfirmationScreen, setShowConfirmationScreen] = useState(false)
 
   const pullLatestLeagueData = useCallback(async () => {
+    console.log('pulling?')
     const leagueData: LeagueData = await pullLeagueData({ leagueId })
     let transformedData = {
       ...leagueData,
@@ -81,7 +82,7 @@ export const League = ({ leagueId, theme }: string) => {
     teamSelectionRef.current?.close()
   }
 
-  return (
+  return loaded ? (
     <>
       <SafeAreaView style={styles(theme).safeAreaView} />
 
@@ -157,6 +158,11 @@ export const League = ({ leagueId, theme }: string) => {
         </Portal>
       </View>
     </>
+  ) : (
+    <View style={{ flex: 1, backgroundColor: theme.background.primary, alignItems: 'center', marginTop: 100 }}>
+      <ActivityIndicator size="small" color={theme.spinner.primary} />
+      <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
+    </View>
   )
 }
 
@@ -202,6 +208,10 @@ const styles = (theme) =>
       fontSize: 15,
       fontWeight: '600',
       textAlign: 'center',
+    },
+    loadingText: {
+      color: theme.text.primary,
+      fontSize: 15,
     },
     image: {
       resizeMode: 'contain',

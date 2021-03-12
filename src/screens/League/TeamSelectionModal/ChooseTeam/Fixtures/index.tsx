@@ -32,13 +32,15 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                 const { code: awayTeamCode, name: awayTeamName } = match.away
                 const homeTeamPreviouslyChosen = chosenTeams.includes(homeTeamCode)
                 const awayTeamPreviouslyChosen = chosenTeams.includes(awayTeamCode)
+                const disableHomeSelecting = homeTeamPreviouslyChosen || playerHasMadeChoice
+                const disableAwaySelecting = awayTeamPreviouslyChosen || playerHasMadeChoice
 
                 return (
                   <View key={homeTeamCode}>
                     <View style={styles(theme).center}>
                       <TouchableOpacity
                         onPress={
-                          homeTeamPreviouslyChosen
+                          disableHomeSelecting
                             ? null
                             : () =>
                                 setSelectedTeam({
@@ -48,7 +50,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                   home: true,
                                 })
                         }
-                        activeOpacity={homeTeamPreviouslyChosen ? 1 : 0.7}
+                        activeOpacity={disableHomeSelecting ? 1 : 0.7}
                       >
                         <View
                           style={[
@@ -73,7 +75,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                       </View>
                       <TouchableOpacity
                         onPress={
-                          awayTeamPreviouslyChosen
+                          disableAwaySelecting
                             ? null
                             : () =>
                                 setSelectedTeam({
@@ -83,7 +85,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
                                   home: false,
                                 })
                         }
-                        activeOpacity={awayTeamPreviouslyChosen ? 1 : 0.7}
+                        activeOpacity={disableAwaySelecting ? 1 : 0.7}
                       >
                         <View
                           style={[

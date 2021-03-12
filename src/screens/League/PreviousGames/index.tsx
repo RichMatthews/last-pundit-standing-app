@@ -93,7 +93,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
     </View>
   ) : (
     <View style={styles(theme).container}>
-      <Text>Previous games will show here after they are complete</Text>
+      <Text style={{ textAlign: 'center' }}>Previous games will show here after they are complete</Text>
     </View>
   )
 }

@@ -18,7 +18,6 @@ export const TeamSelectionModal = forwardRef((props, ref: Ref<Modalize>) => {
 
   return (
     <Modalize
-      withReactModal
       disableScrollIfPossible
       ref={ref}
       scrollViewProps={{

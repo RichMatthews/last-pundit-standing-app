@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react'
-import { ActivityIndicator, StyleSheet, Text, ScrollView, TouchableOpacity, Platform, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, ScrollView, TouchableOpacity, Platform, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -33,7 +33,7 @@ export const CurrentGame = ({ loaded, theme, showTeamSelection }: any) => {
     }
   }
 
-  return loaded ? (
+  return (
     <View style={styles(theme).container}>
       <Text style={styles(theme).infoBanner}>Round closes: {currentGameweek.endsReadable}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -60,9 +60,9 @@ export const CurrentGame = ({ loaded, theme, showTeamSelection }: any) => {
                 />
                 <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
                   {listOfExpandedPrevious.includes(index) ? (
-                    <Entypo name="chevron-small-up" size={30} color={theme.icons.primary} />
+                    <Entypo name="chevron-small-up" size={20} color={theme.icons.primary} />
                   ) : (
-                    <Entypo name="chevron-small-down" size={30} color={theme.icons.primary} />
+                    <Entypo name="chevron-small-down" size={20} color={theme.icons.primary} />
                   )}
                 </TouchableOpacity>
               </View>
@@ -99,11 +99,6 @@ export const CurrentGame = ({ loaded, theme, showTeamSelection }: any) => {
         ))}
       </ScrollView>
     </View>
-  ) : (
-    <View style={styles(theme).loading}>
-      <ActivityIndicator size="large" color={theme.spinner.primary} />
-      <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
-    </View>
   )
 }
 
@@ -119,10 +114,7 @@ const styles = (theme) =>
       width: '100%',
       flex: 1,
     },
-    loadingText: {
-      color: theme.text.primary,
-      fontSize: 20,
-    },
+
     infoBanner: {
       textAlign: 'center',
       backgroundColor: theme.purple,
@@ -140,10 +132,12 @@ const styles = (theme) =>
       marginHorizontal: 20,
     },
     playerRow: {
+      alignItems: 'flex-end',
       borderBottomWidth: 1,
       borderBottomColor: '#eee',
       justifyContent: 'space-between',
       flexDirection: 'row',
+      paddingBottom: 5,
     },
     playerName: {
       fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',

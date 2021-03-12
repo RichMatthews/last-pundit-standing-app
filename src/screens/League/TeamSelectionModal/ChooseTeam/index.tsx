@@ -158,11 +158,13 @@ export const ChooseTeam = ({
             chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
             theme={theme}
           />
-          <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
-            <View style={styles(theme).buttonText}>
-              <Text style={styles(theme).confirmSelectionText}>Confirm selection</Text>
-            </View>
-          </TouchableOpacity>
+          {!playerHasMadeChoice && (
+            <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
+              <View style={styles(theme).buttonText}>
+                <Text style={styles(theme).confirmSelectionText}>Confirm selection</Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </>
       )}
     </View>

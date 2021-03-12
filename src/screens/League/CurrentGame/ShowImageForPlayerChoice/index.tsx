@@ -24,7 +24,7 @@ const playerStatus = {
   submitted: {
     bgColor: '#D4EDDA',
     color: '#155725',
-    text: ' Submitted',
+    text: 'Submitted',
   },
   currentPending: {
     bgColor: '#FFF3CD',
@@ -122,6 +122,6 @@ const gameStatusIndicatorStyles = (bgColor?: string, textColor?: string) =>
       fontSize: 10,
       padding: 5,
       color: textColor,
-      fontFamily: isIos ? 'Hind' : 'Hind-Bold',
+      fontFamily: isIos ? 'Hind' : 'Hind-Regular',
     },
   })
