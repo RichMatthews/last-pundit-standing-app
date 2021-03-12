@@ -2,9 +2,10 @@ import React, { useCallback, useState } from 'react'
 import { ActivityIndicator, StyleSheet, Text, ScrollView, TouchableOpacity, Platform, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
-import { PreviousRound } from 'src/components/previous-round'
-import { MemoizedShowImageForPlayerChoice } from '../ShowImageForPlayerChoice'
 import Entypo from 'react-native-vector-icons/Entypo'
+
+import { PreviousRound } from './PreviousRound'
+import { MemoizedShowImageForPlayerChoice } from './ShowImageForPlayerChoice'
 
 interface Props {
   id: string
@@ -13,6 +14,13 @@ interface Props {
 
 export const CurrentGame = ({ loaded, theme, showTeamSelection }: any) => {
   const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
+  let allRemainingPlayersHaveSelected
+  if (currentGame.players) {
+    allRemainingPlayersHaveSelected = currentGame.players
+      .filter((p) => !p.hasBeenEliminated)
+      .every((p) => p.rounds[p.rounds.length - 1].selection.complete)
+  }
+
   const user = useSelector((store: { user: any }) => store.user)
   const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
   const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
@@ -25,13 +33,11 @@ export const CurrentGame = ({ loaded, theme, showTeamSelection }: any) => {
     }
   }
 
-  console.log(currentGame, 'cg')
-
   return loaded ? (
     <View style={styles(theme).container}>
       <Text style={styles(theme).infoBanner}>Round closes: {currentGameweek.endsReadable}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {Object.values(currentGame.players).map((player: any, index: number) => (
+        {currentGame.players.map((player: any, index: number) => (
           <View key={player.information.id} style={styles(theme).playerContainer}>
             <View style={styles(theme).playerRow}>
               <Text
@@ -73,6 +79,7 @@ export const CurrentGame = ({ loaded, theme, showTeamSelection }: any) => {
                         const roundLost = round.selection.result === 'lost'
                         return (
                           <PreviousRound
+                            allRemainingPlayersHaveSelected={allRemainingPlayersHaveSelected}
                             choice={round.selection}
                             pendingGame={pendingGame}
                             roundLost={roundLost}

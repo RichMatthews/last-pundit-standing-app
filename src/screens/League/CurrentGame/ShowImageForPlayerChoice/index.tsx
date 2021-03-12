@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { Platform } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { useSelector } from 'react-redux'
 
-import * as Images from '../../../images'
+import * as Images from 'app/src/images'
 
 import { gameweekSelectionTimeEnded } from 'src/utils/gameweekSelectionTimeEnded'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const isIos = Platform.OS === 'ios'
 
@@ -59,25 +58,24 @@ export const MemoizedShowImageForPlayerChoice = ({
   const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
   const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
-  useEffect(() => {
-    checkIfTimeEnded()
-  }, [])
-
-  const checkIfTimeEnded = async () => {
+  const checkIfTimeEnded = useCallback(async () => {
     const timeHasEnded = await gameweekSelectionTimeEnded(currentGameweek.ends)
 
     if (timeHasEnded) {
       setGameSelectionTimeEnded(true)
     }
-  }
+  }, [currentGameweek.ends])
+
+  useEffect(() => {
+    checkIfTimeEnded()
+  }, [checkIfTimeEnded])
 
   const currentPlayerOutOfCurrentGame = currentPlayer.rounds.some((round: any) => round.selection.result === 'lost')
-  const currentGamePlayers = Object.values(currentGame.players)
   const currentGameRound = currentPlayer.rounds.length - 1
   const currentPlayerCurrentRound = currentPlayer.rounds[currentGameRound]
-  const currentGameRemainingPlayers: any = currentGamePlayers.filter((p: any) => !p.hasBeenEliminated)
+  const currentGameRemainingPlayers: any = currentGame.players.filter((p: any) => !p.hasBeenEliminated)
   const allCurrentGameRemainingPlayersHaveMadeSelection = currentGameRemainingPlayers.every(
-    (playa: any) => playa.rounds[currentGameRound].selection.complete,
+    (p: any) => p.rounds[currentGameRound].selection.complete,
   )
 
   if (
