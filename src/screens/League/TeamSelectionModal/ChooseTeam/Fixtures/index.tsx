@@ -148,7 +148,7 @@ const styles = (theme) =>
     },
     subHeading: {
       alignSelf: 'center',
-      color: theme.text.primary,
+      color: '#aaa',
       marginBottom: 10,
     },
     teamName: {

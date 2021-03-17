@@ -18,7 +18,7 @@ const playerStatus = {
   },
   pending: {
     bgColor: '#FFF3CD',
-    color: '#856404',
+    color: '#ba7918',
     text: 'Pending',
   },
   submitted: {
@@ -28,20 +28,15 @@ const playerStatus = {
   },
   currentPending: {
     bgColor: '#FFF3CD',
-    color: '#856404',
+    color: '#ba7918',
     text: 'Tap to make your prediction',
-  },
-  champion: {
-    bgColor: '#FFF3CD',
-    color: '#856404',
-    text: 'Champion',
   },
 }
 const GameStatusIndicatorComponent = (status: string, showTeamSelection = null) => (
-  <View style={gameStatusIndicatorStyles().gameStatusIndicator}>
+  <View>
     <View style={gameStatusIndicatorStyles(playerStatus[status].bgColor).labelWrapper}>
       <TouchableOpacity onPress={() => (showTeamSelection ? showTeamSelection() : null)} activeOpacity={1}>
-        <Text style={gameStatusIndicatorStyles(undefined, playerStatus[status].textColor).labelText}>
+        <Text style={gameStatusIndicatorStyles(undefined, playerStatus[status].color).labelText}>
           {playerStatus[status].text}
         </Text>
       </TouchableOpacity>
@@ -87,14 +82,14 @@ export const MemoizedShowImageForPlayerChoice = ({
   }
 
   if (isCurrentLoggedInPlayer) {
-    if (currentPlayerCurrentRound.selection.complete) {
+    if (currentPlayerCurrentRound.selection && currentPlayerCurrentRound.selection.complete) {
       return <FastImage style={styles.clubBadge} source={Images[currentPlayerCurrentRound.selection.code]} />
     } else {
       return GameStatusIndicatorComponent('currentPending', showTeamSelection)
     }
   }
 
-  if (currentPlayerCurrentRound.selection.complete) {
+  if (currentPlayerCurrentRound.selection && currentPlayerCurrentRound.selection.complete) {
     if (allCurrentGameRemainingPlayersHaveMadeSelection) {
       return <FastImage style={styles.clubBadge} source={Images[currentPlayerCurrentRound.selection.code]} />
     } else {
@@ -111,9 +106,6 @@ const styles = StyleSheet.create({
 
 const gameStatusIndicatorStyles = (bgColor?: string, textColor?: string) =>
   StyleSheet.create({
-    gameStatusIndicator: {
-      marginRight: 10,
-    },
     labelWrapper: {
       borderRadius: 5,
       backgroundColor: bgColor,

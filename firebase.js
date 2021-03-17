@@ -1,4 +1,4 @@
-import database, { firebase } from '@react-native-firebase/database'
+import { firebase } from '@react-native-firebase/database'
 import auth from '@react-native-firebase/auth'
 import messaging from '@react-native-firebase/messaging'
 import firebases from '@react-native-firebase/app'
@@ -14,11 +14,14 @@ const firebaseConfig = {
   measurementId: 'G-6NMKP6QLFC',
 }
 
+const PROD_DB = 'https://last-pundit-standing.firebaseio.com/'
+const DEV_DB = 'https://last-pundit-standing-dev.firebaseio.com/'
+
 let config
 if (process.env.NODE_ENV === 'production') {
-  config = firebase.app().database('https://last-pundit-standing-dev.firebaseio.com/')
+  config = firebase.app().database(PROD_DB)
 } else {
-  config = firebase.app().database('https://last-pundit-standing-dev.firebaseio.com/')
+  config = firebase.app().database(PROD_DB)
 }
 
 if (!firebase.apps.length) {

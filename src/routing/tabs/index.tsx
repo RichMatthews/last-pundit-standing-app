@@ -9,53 +9,53 @@ import { JoinLeague } from 'src/screens/JoinLeague'
 
 const Tab = createBottomTabNavigator()
 
-export const TabNavigation = ({ theme, user }: any) => (
-    <Tab.Navigator
-        screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, size }) => (
-                <RenderCorrectIcon focused={focused} route={route} size={size} theme={theme} />
-            ),
-        })}
-        tabBarOptions={{
-            activeTintColor: theme.purple,
-            inactiveTintColor: theme.text.primary,
-            labelStyle: { fontSize: theme.text.small, fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold' },
-            style: {
-                borderTopColor: 'transparent',
-                backgroundColor: theme.background.primary,
-            },
-        }}
+export const TabNavigation = ({ leagueId, theme, user }: any) => (
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, size }) => (
+        <RenderCorrectIcon focused={focused} route={route} size={size} theme={theme} />
+      ),
+    })}
+    tabBarOptions={{
+      activeTintColor: theme.purple,
+      inactiveTintColor: theme.text.primary,
+      labelStyle: { fontSize: theme.text.small, fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular' },
+      style: {
+        borderTopColor: 'transparent',
+        backgroundColor: theme.background.primary,
+      },
+    }}
+  >
+    <Tab.Screen name="Leagues">
+      {(props) => {
+        return <LeagueStack leagueId={leagueId} navigation={props.navigation} theme={theme} userId={user.id} />
+      }}
+    </Tab.Screen>
+
+    <Tab.Screen name="Create">
+      {() => {
+        return <CreateStack theme={theme} userId={user.id} />
+      }}
+    </Tab.Screen>
+
+    <Tab.Screen name="Join">
+      {(props: any) => {
+        return <JoinLeague currentUserId={user.id} navigation={props.navigation} theme={theme} />
+      }}
+    </Tab.Screen>
+
+    <Tab.Screen
+      name="My Account"
+      listeners={({ navigation }) => ({
+        tabPress: (event) => {
+          event.preventDefault()
+          navigation.navigate('Account')
+        },
+      })}
     >
-        <Tab.Screen name="Leagues">
-            {() => {
-                return <LeagueStack theme={theme} userId={user.id} />
-            }}
-        </Tab.Screen>
-
-        <Tab.Screen name="Create">
-            {() => {
-                return <CreateStack theme={theme} userId={user.id} />
-            }}
-        </Tab.Screen>
-
-        <Tab.Screen name="Join">
-            {(props: any) => {
-                return <JoinLeague currentUserId={user.id} navigation={props.navigation} theme={theme} />
-            }}
-        </Tab.Screen>
-
-        <Tab.Screen
-            name="My Account"
-            listeners={({ navigation }) => ({
-                tabPress: (event) => {
-                    event.preventDefault()
-                    navigation.navigate('Account')
-                },
-            })}
-        >
-            {() => {
-                return <Account />
-            }}
-        </Tab.Screen>
-    </Tab.Navigator>
+      {() => {
+        return <Account />
+      }}
+    </Tab.Screen>
+  </Tab.Navigator>
 )

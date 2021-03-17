@@ -4,7 +4,14 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 
 import * as Images from 'src/images'
 
-export const PreviousRound = ({ allRemainingPlayersHaveSelected, choice, pendingGame, roundLost, theme }: any) => {
+export const PreviousRound = ({
+  allRemainingPlayersHaveSelected,
+  choice,
+  currentPlayerView,
+  pendingGame,
+  roundLost,
+  theme,
+}: any) => {
   let { code: opponentTeamCode, name: opponentName } = choice.opponent
   let { code: userTeamCode, name: userTeamName } = choice
 
@@ -26,7 +33,7 @@ export const PreviousRound = ({ allRemainingPlayersHaveSelected, choice, pending
     [roundLost, theme],
   )
 
-  if (!allRemainingPlayersHaveSelected && pendingGame) {
+  if (!allRemainingPlayersHaveSelected && pendingGame && !currentPlayerView) {
     userTeamName = ''
     opponentName = ''
     choiceImage = <AntDesign name="questioncircleo" size={20} color={'grey'} />

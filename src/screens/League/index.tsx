@@ -88,8 +88,12 @@ export const League = ({ leagueId, theme }: string) => {
 
       <View style={styles(theme).outerContainer}>
         <Text style={styles(theme).mainheading}>{league.name}</Text>
-        <TouchableOpacity onPress={showTeamSelection} style={{ padding: 10 }} activeOpacity={0.7}>
-          <Text style={{ color: theme.text.primary }}>View fixtures</Text>
+        <TouchableOpacity
+          onPress={showTeamSelection}
+          style={{ padding: 5, borderBottomWidth: 1, borderColor: theme.borders.primary, borderRadius: 5 }}
+          activeOpacity={0.7}
+        >
+          <Text style={{ color: theme.text.primary, fontSize: 12 }}>View fixtures</Text>
         </TouchableOpacity>
       </View>
 
@@ -131,17 +135,23 @@ export const League = ({ leagueId, theme }: string) => {
           </TouchableOpacity>
         </View>
 
-        {showCurrent ? (
-          <CurrentGame
-            loaded={loaded}
-            theme={theme}
-            showCurrent={showCurrent}
-            setShowCurrent={setShowCurrent}
-            showTeamSelection={showTeamSelection}
-          />
+        <CurrentGame
+          display={showCurrent ? 'flex' : 'none'}
+          loaded={loaded}
+          theme={theme}
+          showCurrent={showCurrent}
+          setShowCurrent={setShowCurrent}
+          showTeamSelection={showTeamSelection}
+        />
+        <CachedPreviousGames
+          display={showCurrent ? 'none' : 'flex'}
+          games={Object.values(league.games).filter((game: any) => game.complete)}
+          theme={theme}
+        />
+
+        {/* {showCurrent ? (
         ) : (
-          <CachedPreviousGames games={Object.values(league.games).filter((game: any) => game.complete)} theme={theme} />
-        )}
+        )} */}
 
         <Portal>
           <TeamSelectionModal
@@ -159,7 +169,7 @@ export const League = ({ leagueId, theme }: string) => {
       </View>
     </>
   ) : (
-    <View style={{ flex: 1, backgroundColor: theme.background.primary, alignItems: 'center', marginTop: 100 }}>
+    <View style={{ flex: 1, backgroundColor: theme.background.primary, alignItems: 'center', paddingTop: 100 }}>
       <ActivityIndicator size="small" color={theme.spinner.primary} />
       <Text style={styles(theme).loadingText}>Retrieving League information...</Text>
     </View>
@@ -174,10 +184,9 @@ const styles = (theme) =>
     },
     outerContainer: {
       backgroundColor: theme.background.secondary,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingHorizontal: 20,
+      flexDirection: 'column',
       alignItems: 'center',
+      paddingBottom: 10,
     },
     container: {
       backgroundColor: theme.background.secondary,

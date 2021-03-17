@@ -22,7 +22,7 @@ interface Props {
   theme: {}
 }
 
-export const PreviousGames = ({ games, theme }: Props) => {
+export const PreviousGames = ({ display, games, theme }: Props) => {
   const [gameIdViewing, setGameIdViewing] = useState<string | null>(null)
 
   const setGameIdViewingHelper = useCallback(
@@ -37,7 +37,7 @@ export const PreviousGames = ({ games, theme }: Props) => {
   )
 
   return games.length ? (
-    <View style={styles(theme).container}>
+    <View style={styles(theme, display).container}>
       <ScrollView>
         {games
           .sort((a, b) => a.leagueRound - b.leagueRound)
@@ -100,9 +100,10 @@ export const PreviousGames = ({ games, theme }: Props) => {
 
 export const CachedPreviousGames = React.memo(PreviousGames)
 
-const styles = (theme: any) =>
+const styles = (theme: any, display = 'flex') =>
   StyleSheet.create({
     container: {
+      display,
       alignSelf: 'center',
       backgroundColor: theme.background.primary,
       borderRadius: 5,
@@ -125,13 +126,13 @@ const styles = (theme: any) =>
     },
     playerNameText: {
       color: theme.text.primary,
-      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
       fontWeight: '500',
       fontSize: theme.text.large,
     },
     previousGamesContainer: {
       borderBottomWidth: 0.5,
-      borderBottomColor: theme.borders.ƒrimary,
+      borderBottomColor: theme.borders.primary,
       borderRadius: 5,
       padding: 10,
       margin: 10,
@@ -154,7 +155,7 @@ const styles = (theme: any) =>
     },
     winnerText: {
       color: '#aaa',
-      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
     },
     userChoiceImage: {
       width: 20,

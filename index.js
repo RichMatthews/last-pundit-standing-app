@@ -5,7 +5,7 @@ import { name as appName } from './app.json'
 import { Provider } from 'react-redux'
 import store from 'src/redux/store'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import Toast, { BaseToast } from 'react-native-toast-message'
+import Toast from 'react-native-toast-message'
 import Icon from 'react-native-vector-icons/EvilIcons'
 
 import { firebaseMessaging } from './firebase'
@@ -35,12 +35,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 5,
     flexDirection: 'row',
-    width: '90%',
-    minHeight: 80,
+    width: '95%',
+    minHeight: 65,
     alignItems: 'center',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
-    shadowRadius: 6,
+    shadowRadius: 3,
     elevation: 2,
     paddingHorizontal: 5,
   },
@@ -51,8 +51,6 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     width: '100%',
-    // paddingVertical: 10,
-    // paddingRight: 10,
   },
   heading: {
     fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',

@@ -38,7 +38,7 @@ export const ChooseTeam = ({
     leagueTeams: PREMIER_LEAGUE_TEAMS,
   })
   const playerHasMadeChoice = currentPlayer.rounds[currentPlayer.rounds.length - 1].selection.complete
-  const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string; index: 0 }>()
+  const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string; index: 0; home: boolean }>()
   const [opponent, setOpponent] = useState(null)
 
   const submitChoice = () => {
@@ -60,6 +60,7 @@ export const ChooseTeam = ({
       name: selectedTeam?.name,
       opponent,
       result: 'pending',
+      teamPlayingAtHome: selectedTeam?.home,
     }
 
     closeTeamSelectionModal()
@@ -80,7 +81,7 @@ export const ChooseTeam = ({
       text2:
         pushNotifications.status === 1
           ? "We'll notify you when others have selected"
-          : "Click here if you'd like to be notified when others make their prediction",
+          : "Tap here if you'd like to be notified when others make their prediction",
       autoHide: false,
       topOffset: 50,
       props: { onPress: toastPressed, onHide: hideToast },
@@ -182,7 +183,7 @@ const styles = (theme) =>
     buttonText: {
       backgroundColor: theme.purple,
       borderRadius: 5,
-      padding: 10,
+      padding: 5,
     },
     confirmSelectionText: {
       color: theme.text.inverse,

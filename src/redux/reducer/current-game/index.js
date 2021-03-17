@@ -1,16 +1,14 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-
-import { getUserLeagues } from 'src/firebase-helpers'
+import { createSlice } from '@reduxjs/toolkit'
 
 const currentGameSlice = createSlice({
-    name: 'currentGame',
-    initialState: {},
-    reducers: {
-        getCurrentGame: (state, action) => {
-            return { ...state, ...action.payload.currentGame }
-        },
+  name: 'currentGame',
+  initialState: {},
+  reducers: {
+    getCurrentGame: (state, action) => {
+      return { ...state, ...action.payload.currentGame }
     },
-    extraReducers: {},
+  },
+  extraReducers: {},
 })
 
 const { actions, reducer } = currentGameSlice
