@@ -23,7 +23,7 @@ export const Results = ({ player, theme }) => (
         }
 
         return (
-          <View style={styles(theme).gameWithRoundNumber}>
+          <View key={round.round} style={styles(theme).gameWithRoundNumber}>
             <View style={styles(theme).roundNumberContainer}>
               <Text style={styles(theme).roundNumberText}>{index + 1}</Text>
             </View>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { StyleSheet, Text, ScrollView, TouchableOpacity, Platform, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
@@ -38,7 +38,6 @@ export const CurrentGame = ({ display, theme, showTeamSelection }: any) => {
     <View style={styles(theme, display).container}>
       <Text style={styles(theme).infoBanner}>Round closes: {currentGameweek.endsReadable}</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {console.log(currentGame.players, 'some stuff')}
         {[...currentGame.players]
           .sort((a, b) => a?.hasBeenEliminated - b?.hasBeenEliminated)
           .map((player: any, index: number) => (
@@ -87,6 +86,7 @@ export const CurrentGame = ({ display, theme, showTeamSelection }: any) => {
                           const roundLost = round.selection.result === 'lost'
                           return (
                             <PreviousRound
+                              key={round.id}
                               allRemainingPlayersHaveSelected={allRemainingPlayersHaveSelected}
                               currentPlayerView={currentPlayer.information.id === player.information.id}
                               choice={round.selection}

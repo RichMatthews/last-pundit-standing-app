@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
-import { ActivityIndicator, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, AppState, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Portal } from 'react-native-portalize'
@@ -23,14 +23,15 @@ export const League = ({ leagueId, theme }: string) => {
   const [gameweekFixtures, setGameweekFixtures] = useState([])
   const [showCurrent, setShowCurrent] = useState(true)
   const [loadingModalOpen, setLoadingModalOpen] = useState(false)
+  const [showConfirmationScreen, setShowConfirmationScreen] = useState(false)
+
   const dispatch = useDispatch()
   const currentUser = useSelector((store: { user: any }) => store.user)
   const league = useSelector((store: { league: any }) => store.league)
   const teamSelectionRef = useRef<Modalize>(null)
-  const [showConfirmationScreen, setShowConfirmationScreen] = useState(false)
+  const appState = useRef(AppState.currentState)
 
   const pullLatestLeagueData = useCallback(async () => {
-    console.log('pulling?')
     const leagueData: LeagueData = await pullLeagueData({ leagueId })
     let transformedData = {
       ...leagueData,
@@ -62,6 +63,25 @@ export const League = ({ leagueId, theme }: string) => {
     }
   }, [currentUser.id, dispatch, leagueId])
 
+  const appStateListener = useCallback(
+    (nextAppState) => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        pullLatestLeagueData()
+      }
+
+      appState.current = nextAppState
+    },
+    [pullLatestLeagueData],
+  )
+
+  useEffect(() => {
+    AppState.addEventListener('change', appStateListener)
+
+    return () => {
+      AppState.removeEventListener('change', appStateListener)
+    }
+  }, [appStateListener])
+
   useEffect(() => {
     async function fetchFixtures() {
       const fixtures: any = await getCurrentGameweekFixtures()
@@ -72,7 +92,7 @@ export const League = ({ leagueId, theme }: string) => {
 
   useEffect(() => {
     pullLatestLeagueData()
-  }, [])
+  }, [pullLatestLeagueData])
 
   const showTeamSelection = () => {
     teamSelectionRef.current?.open()
@@ -148,10 +168,6 @@ export const League = ({ leagueId, theme }: string) => {
           games={Object.values(league.games).filter((game: any) => game.complete)}
           theme={theme}
         />
-
-        {/* {showCurrent ? (
-        ) : (
-        )} */}
 
         <Portal>
           <TeamSelectionModal

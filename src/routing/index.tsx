@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { firebaseAuth, firebaseMessaging, firebaseDatabase } from '../../firebase'
+import { firebaseAuth, firebaseMessaging } from '../../firebase'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -35,13 +35,23 @@ export const Routing = () => {
   const theme = mode === 'dark' ? DARK_THEME : LIGHT_THEME
   const appState = useRef(AppState.currentState)
   const [leagueId, setLeagueId] = useState(null)
-  console.disableYellowBox = true
 
   useEffect(() => {
-    firebaseMessaging().onNotificationOpenedApp(() => {
-      setLeagueId('l72r12ezoku')
-      // alert('Make your pred now!')
+    // app in background
+    firebaseMessaging().onNotificationOpenedApp((remoteMessage) => {
+      if (remoteMessage?.data?.leagueId) {
+        setLeagueId(remoteMessage.data.leagueId)
+      }
     })
+
+    // app quit
+    firebaseMessaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage?.data?.leagueId) {
+          setLeagueId(remoteMessage.data.leagueId)
+        }
+      })
   }, [])
 
   const checkPermission = useCallback(async () => {

@@ -47,7 +47,7 @@ export const PreviousGames = ({ display, games, theme }: Props) => {
             )
 
             return (
-              <View style={styles(theme).previousGamesContainer}>
+              <View key={game.id} style={styles(theme).previousGamesContainer}>
                 <View style={styles(theme).topRow}>
                   <TouchableOpacity onPress={() => setGameIdViewingHelper(game.id)} activeOpacity={0.7}>
                     <View>
@@ -65,23 +65,21 @@ export const PreviousGames = ({ display, games, theme }: Props) => {
                   <View style={{ display: game.id === gameIdViewing ? 'flex' : 'none' }}>
                     {Object.values(game.players).map((player: Player) => {
                       return (
-                        <>
-                          <View style={styles(theme).individualPlayerRounds}>
-                            <Text
-                              style={{
-                                backgroundColor: theme.purple,
-                                color: theme.text.inverse,
-                                fontFamily: 'Hind',
-                                fontWeight: '700',
-                                paddingLeft: 5,
-                                marginBottom: 5,
-                              }}
-                            >
-                              {player.information.name}
-                            </Text>
-                            <CachedResults player={player} theme={theme} />
-                          </View>
-                        </>
+                        <View key={player.information.id} style={styles(theme).individualPlayerRounds}>
+                          <Text
+                            style={{
+                              backgroundColor: theme.purple,
+                              color: theme.text.inverse,
+                              fontFamily: 'Hind',
+                              fontWeight: '700',
+                              paddingLeft: 5,
+                              marginBottom: 5,
+                            }}
+                          >
+                            {player.information.name}
+                          </Text>
+                          <CachedResults player={player} theme={theme} />
+                        </View>
                       )
                     })}
                   </View>

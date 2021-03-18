@@ -79,7 +79,7 @@ export const ChooseTeam = ({
       type: 'success',
       text1: 'Prediction successfully submitted!',
       text2:
-        pushNotifications.status === 1
+        pushNotifications.status === 1 || Platform.OS === 'android'
           ? "We'll notify you when others have selected"
           : "Tap here if you'd like to be notified when others make their prediction",
       autoHide: false,

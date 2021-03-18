@@ -12,7 +12,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
         <Text style={styles(theme).subHeading}>Select your team then confirm at the bottom</Text>
       )}
       <View style={styles(theme).container}>
-        {fixtures.map((block: any, index: number) => (
+        {fixtures.map((block: any) => (
           <>
             <Text
               style={{
@@ -26,7 +26,7 @@ export const Fixtures = ({ chosenTeams, fixtures, playerHasMadeChoice, selectedT
             >
               {block.date}
             </Text>
-            <View>
+            <View key={block.block}>
               {block.matches.map((match, index: number) => {
                 const { code: homeTeamCode, name: homeTeamName } = match.home
                 const { code: awayTeamCode, name: awayTeamName } = match.away
