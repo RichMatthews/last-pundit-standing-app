@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, ScrollView, TouchableOpacity, Platform, View } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { useSelector } from 'react-redux'
@@ -7,20 +7,15 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import { PreviousRound } from './PreviousRound'
 import { MemoizedShowImageForPlayerChoice } from './ShowImageForPlayerChoice'
 
-interface Props {
-  id: string
-  name: string
+type Props = {
+  display: 'flex' | 'none' | undefined
+  showTeamSelection: any
+  theme: any
 }
 
-export const CurrentGame = ({ display, theme, showTeamSelection }: any) => {
+export const CurrentGame = ({ display, theme, showTeamSelection }: Props) => {
   const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
   const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
-  let allRemainingPlayersHaveSelected
-  if (currentGame.players) {
-    allRemainingPlayersHaveSelected = currentGame.players
-      .filter((p) => !p.hasBeenEliminated)
-      .every((p) => p.rounds[p.rounds.length - 1].selection.complete)
-  }
 
   const user = useSelector((store: { user: any }) => store.user)
   const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
@@ -42,38 +37,34 @@ export const CurrentGame = ({ display, theme, showTeamSelection }: any) => {
           .sort((a, b) => a?.hasBeenEliminated - b?.hasBeenEliminated)
           .map((player: any, index: number) => (
             <View key={player.information.id} style={styles(theme).playerContainer}>
-              <View style={styles(theme).playerRow}>
-                <Text
-                  style={[
-                    styles(theme).playerName,
-                    {
-                      color: theme.text.primary,
-                      opacity: player.hasBeenEliminated ? 0.2 : 1,
-                    },
-                  ]}
-                >
-                  {player.information.name}
-                </Text>
-                <View style={styles(theme).playerChosenImageAndDownArrow}>
-                  <MemoizedShowImageForPlayerChoice
-                    currentGame={currentGame}
-                    isCurrentLoggedInPlayer={player.information.id === user.id}
-                    player={player}
-                    showTeamSelection={showTeamSelection}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setListOfExpandedPreviousHelper(index)}
-                    activeOpacity={1}
-                    style={{ padding: 5, paddingRight: 0 }}
+              <TouchableOpacity onPress={() => setListOfExpandedPreviousHelper(index)} activeOpacity={1}>
+                <View style={styles(theme).playerRow}>
+                  <Text
+                    style={[
+                      styles(theme).playerName,
+                      {
+                        color: theme.text.primary,
+                        opacity: player.hasBeenEliminated ? 0.2 : 1,
+                      },
+                    ]}
                   >
+                    {player.information.name}
+                  </Text>
+                  <View style={styles(theme).playerChosenImageAndDownArrow}>
+                    <MemoizedShowImageForPlayerChoice
+                      currentGame={currentGame}
+                      isCurrentLoggedInPlayer={player.information.id === user.id}
+                      player={player}
+                      showTeamSelection={showTeamSelection}
+                    />
                     {listOfExpandedPrevious.includes(index) ? (
                       <Entypo name="chevron-small-up" size={20} color={theme.icons.primary} />
                     ) : (
                       <Entypo name="chevron-small-down" size={20} color={theme.icons.primary} />
                     )}
-                  </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
               <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
                 <View style={{ backgroundColor: theme.background.secondary }}>
@@ -87,9 +78,8 @@ export const CurrentGame = ({ display, theme, showTeamSelection }: any) => {
                           return (
                             <PreviousRound
                               key={round.id}
-                              allRemainingPlayersHaveSelected={allRemainingPlayersHaveSelected}
                               currentPlayerView={currentPlayer.information.id === player.information.id}
-                              choice={round.selection}
+                              selection={round.selection}
                               pendingGame={pendingGame}
                               roundLost={roundLost}
                               theme={theme}
@@ -149,6 +139,7 @@ const styles = (theme, display = 'flex') =>
       justifyContent: 'space-between',
       flexDirection: 'row',
       paddingBottom: 5,
+      marginBottom: 10,
     },
     playerName: {
       fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',

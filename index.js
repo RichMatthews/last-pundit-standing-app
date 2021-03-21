@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
     paddingHorizontal: 5,
+    paddingVertical: 5,
   },
   leftBorder: {
     borderLeftWidth: 10,
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   subText: {
-    color: '#aaa',
-    fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+    color: '#8f8f8f',
+    fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
     lineHeight: 18,
     paddingTop: 5,
   },

@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { StyleSheet, Text, Linking, TouchableOpacity, Platform, View, Alert } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, TouchableOpacity, Platform, View } from 'react-native'
 import { useSelector } from 'react-redux'
 import Toast from 'react-native-toast-message'
 
@@ -10,7 +10,7 @@ import { Fixtures } from './Fixtures'
 import { updateUserGamweekChoice } from './api'
 import { findOpponent } from './utils'
 import { ConfirmationScreen } from './ConfirmationScreen'
-import { firebaseMessaging, firebaseDatabase } from 'app/firebase'
+import { checkIfUserHasEnabledPNs } from 'src/utils/firebaseMessaging'
 
 interface Props {
   currentRound: any
@@ -32,9 +32,9 @@ export const ChooseTeam = ({
   const pushNotifications = useSelector((store: { pushNotifications: any }) => store.pushNotifications)
   const league = useSelector((store: { league: any }) => store.league)
   const user = useSelector((store: { user: any }) => store.user)
+  const [viewingUser, setViewingUser] = useState(currentPlayer)
   const teams = calculateTeamsAllowedToPickForCurrentRound({
-    currentGame,
-    currentPlayer,
+    currentPlayer: viewingUser,
     leagueTeams: PREMIER_LEAGUE_TEAMS,
   })
   const playerHasMadeChoice = currentPlayer.rounds[currentPlayer.rounds.length - 1].selection.complete
@@ -85,54 +85,21 @@ export const ChooseTeam = ({
       autoHide: false,
       topOffset: 50,
       props: { onPress: toastPressed, onHide: hideToast },
-      // position: 'top',
     })
+
+    if (Platform.OS === 'android') {
+      await checkIfUserHasEnabledPNs(currentUser)
+    }
   }
 
   const hideToast = () => {
     Toast.hide()
   }
 
-  const toastPressed = () => {
+  const toastPressed = async () => {
     Toast.hide()
-    checkPermission()
+    await checkIfUserHasEnabledPNs(currentUser)
   }
-
-  const requestPermission = useCallback(async () => {
-    const status = await firebaseMessaging().requestPermission()
-    return (
-      status === firebaseMessaging.AuthorizationStatus.AUTHORIZED ||
-      status === firebaseMessaging.AuthorizationStatus.PROVISIONAL
-    )
-  }, [])
-
-  const getToken = useCallback(async () => {
-    let fcmToken = await firebaseMessaging().getToken()
-    if (fcmToken) {
-      if (currentUser) {
-        await firebaseDatabase.ref(`users/${currentUser.id}`).update({ token: fcmToken })
-      }
-    } else {
-      alert("We couldn't complete this action at this time. Please try again later")
-    }
-  }, [currentUser])
-
-  const checkPermission = useCallback(async () => {
-    const enabled = await firebaseMessaging().hasPermission()
-    // 0 === denied
-    if (enabled === 0) {
-      Linking.openURL('app-settings:')
-    }
-    // 1 === AUTHORIZED, 2 === PROVISIONAL
-    if (enabled === 1 || enabled === 2) {
-      getToken()
-    } else {
-      const requestPermissionGranted = await requestPermission()
-      if (requestPermissionGranted) {
-        getToken()
-      }
-    }
-  }, [getToken, requestPermission])
 
   return (
     <View style={styles(theme).innerContainer}>
@@ -157,6 +124,8 @@ export const ChooseTeam = ({
             selectedTeam={selectedTeam}
             setSelectedTeam={setSelectedTeam}
             chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
+            setViewingUser={setViewingUser}
+            remaniningPlayers={currentGame.players.filter((p) => !p.hasBeenEliminated)}
             theme={theme}
           />
           {!playerHasMadeChoice && (

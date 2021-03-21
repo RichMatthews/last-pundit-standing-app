@@ -3,22 +3,25 @@ import { ActivityIndicator, AppState, StyleSheet, Platform, Text, TouchableOpaci
 import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Portal } from 'react-native-portalize'
+import { Modalize } from 'react-native-modalize'
 
 import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
 import { getCurrentGameWeekInfo } from 'src/redux/reducer/current-gameweek'
 import { setViewedLeague } from 'src/redux/reducer/league'
+import { Game, Player } from 'src/state/types'
 
 import { CachedPreviousGames } from './PreviousGames'
 import { pullLeagueData, getCurrentGameweekFixtures } from './api'
 import { CurrentGame } from './CurrentGame'
 import { TeamSelectionModal } from './TeamSelectionModal'
 
-interface LeagueData {
-  games: {}
+interface Props {
+  leagueId: string
+  theme: any
 }
 
-export const League = ({ leagueId, theme }: string) => {
+export const League = ({ leagueId, theme }: Props) => {
   const [loaded, setLoaded] = useState<string>('')
   const [gameweekFixtures, setGameweekFixtures] = useState([])
   const [showCurrent, setShowCurrent] = useState(true)
@@ -32,26 +35,27 @@ export const League = ({ leagueId, theme }: string) => {
   const appState = useRef(AppState.currentState)
 
   const pullLatestLeagueData = useCallback(async () => {
-    const leagueData: LeagueData = await pullLeagueData({ leagueId })
-    let transformedData = {
+    const leagueData = await pullLeagueData({ leagueId })
+    const transformedData = {
       ...leagueData,
-      games: Object.values(leagueData.games).map((game) => {
+      games: Object.values(leagueData.games).map((game: Game) => {
         return {
           ...game,
-          players: Object.values(game.players).map((player) => {
+          players: Object.values(game.players).map((player: Player) => {
             return { ...player, rounds: Object.values(player.rounds).sort((a, b) => a.round - b.round) }
           }),
         }
       }),
     }
 
-    const currentGame: any = transformedData.games.find((game: any) => !game.complete)
-    const players: Array<{ id: string }> = Object.values(currentGame.players)
-    const currentPlayer = players.find((player) => player.information.id === currentUser.id)
+    const currentGame: Game = transformedData.games.find((game: Game) => !game.complete)
+    const players: Player[] = Object.values(currentGame.players)
+    const currentPlayer: Player | undefined = players.find((player) => player.information.id === currentUser.id)
 
     dispatch(getCurrentGame({ currentGame }))
     dispatch(setViewedLeague(transformedData))
-    await dispatch(getCurrentGameWeekInfo())
+    dispatch(getCurrentGameWeekInfo())
+
     if (currentPlayer) {
       dispatch(setCurrentPlayer({ currentPlayer }))
     }
@@ -165,7 +169,7 @@ export const League = ({ leagueId, theme }: string) => {
         />
         <CachedPreviousGames
           display={showCurrent ? 'none' : 'flex'}
-          games={Object.values(league.games).filter((game: any) => game.complete)}
+          games={Object.values(league.games).filter((game: Game) => game.complete)}
           theme={theme}
         />
 

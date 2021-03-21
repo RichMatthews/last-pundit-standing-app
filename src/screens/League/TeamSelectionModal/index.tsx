@@ -4,7 +4,18 @@ import { Modalize } from 'react-native-modalize'
 
 import { ChooseTeam } from './ChooseTeam'
 
-export const TeamSelectionModal = forwardRef((props, ref: Ref<Modalize>) => {
+type Props = {
+  closeTeamSelectionModal: () => void
+  loadingModalOpen: boolean
+  gameweekFixtures: []
+  setLoadingModalOpen: (arg: boolean) => void
+  pullLatestLeagueData: () => void
+  theme: any
+  showConfirmationScreen: boolean
+  setShowConfirmationScreen: boolean
+}
+
+export const TeamSelectionModal = forwardRef((props: Props, ref: Ref<Modalize>) => {
   const {
     closeTeamSelectionModal,
     loadingModalOpen,
@@ -51,7 +62,7 @@ export const TeamSelectionModal = forwardRef((props, ref: Ref<Modalize>) => {
   )
 })
 
-const styles = (theme) =>
+const styles = (theme?: any) =>
   StyleSheet.create({
     fixturesWrapper: {
       flex: 1,

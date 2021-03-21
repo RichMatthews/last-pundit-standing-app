@@ -3,23 +3,12 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { CachedResults } from './results'
 
-type Player = {
-  hasBeenEliminated: boolean
-  name: string
-  id: string
-  rounds: []
-}
-
-type Game = {
-  complete: boolean
-  currentGameRound: number
-  id: string
-  players: any
-}
+import { Game, Player } from 'src/state/types'
 
 interface Props {
-  games: []
-  theme: {}
+  display: 'flex' | 'none' | undefined
+  games: Game[]
+  theme: any
 }
 
 export const PreviousGames = ({ display, games, theme }: Props) => {
@@ -42,22 +31,20 @@ export const PreviousGames = ({ display, games, theme }: Props) => {
         {games
           .sort((a, b) => a.leagueRound - b.leagueRound)
           .map((game: Game) => {
-            const player: Player | undefined = Object.values(game.players).find(
-              (player: Player) => !player.hasBeenEliminated,
-            )
+            const player: Player | undefined = Object.values(game.players).find((p: Player) => !p.hasBeenEliminated)
 
             return (
               <View key={game.id} style={styles(theme).previousGamesContainer}>
                 <View style={styles(theme).topRow}>
                   <TouchableOpacity onPress={() => setGameIdViewingHelper(game.id)} activeOpacity={0.7}>
                     <View>
-                      <Text style={styles(theme).playerNameText}>{player.information.name}</Text>
+                      <Text style={styles(theme).playerNameText}>{player?.information.name}</Text>
                       <Text style={styles(theme).winnerText}>Winner</Text>
                     </View>
                   </TouchableOpacity>
 
                   <View>
-                    <Text style={styles(theme).amountCorrectText}>{player.rounds.length}</Text>
+                    <Text style={styles(theme).amountCorrectText}>{player?.rounds.length}</Text>
                     <Text style={styles(theme).correctText}>Correct</Text>
                   </View>
                 </View>

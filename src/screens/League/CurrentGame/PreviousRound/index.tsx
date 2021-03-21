@@ -1,23 +1,28 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Image, Text, View, Platform, StyleSheet } from 'react-native'
+import { useSelector } from 'react-redux'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 
+import { Player, SelectionComplete } from 'src/state/types'
 import * as Images from 'src/images'
 
-export const PreviousRound = ({
-  allRemainingPlayersHaveSelected,
-  choice,
-  currentPlayerView,
-  pendingGame,
-  roundLost,
-  theme,
-}: any) => {
-  let { code: opponentTeamCode, name: opponentName } = choice.opponent
-  let { code: userTeamCode, name: userTeamName } = choice
+type Props = {
+  selection: SelectionComplete
+  currentPlayerView: any
+  pendingGame: boolean
+  roundLost: boolean
+  theme: any
+}
 
-  const choiceGoals = pendingGame ? '-' : choice.goals
-  const opponentGoals = pendingGame ? '-' : choice.opponent.goals
-  let choiceImage = <Image source={Images[userTeamCode]} style={styles(theme).teamBadge} />
+export const PreviousRound = ({ selection, currentPlayerView, pendingGame, roundLost, theme }: Props) => {
+  const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
+
+  let { code: opponentTeamCode, name: opponentName } = selection.opponent
+  let { code: userTeamCode, name: userTeamName } = selection
+
+  const selectionGoals = pendingGame ? '-' : selection.goals
+  const opponentGoals = pendingGame ? '-' : selection.opponent.goals
+  let selectionImage = <Image source={Images[userTeamCode]} style={styles(theme).teamBadge} />
   let opponentImage = <Image source={Images[opponentTeamCode]} style={styles(theme).teamBadge} />
 
   const containerStyles = useMemo(
@@ -33,21 +38,27 @@ export const PreviousRound = ({
     [roundLost, theme],
   )
 
-  if (!allRemainingPlayersHaveSelected && pendingGame && !currentPlayerView) {
+  const allRemainingPlayersHaveSelected = useCallback(() => {
+    return currentGame.players
+      .filter((p: Player) => !p.hasBeenEliminated)
+      .every((p: Player) => p.rounds[p.rounds.length - 1].selection.complete)
+  }, [currentGame.players])
+
+  if (!allRemainingPlayersHaveSelected() && pendingGame && !currentPlayerView) {
     userTeamName = ''
     opponentName = ''
-    choiceImage = <AntDesign name="questioncircleo" size={20} color={'grey'} />
+    selectionImage = <AntDesign name="questioncircleo" size={20} color={'grey'} />
     opponentImage = <AntDesign name="questioncircleo" size={20} color={'grey'} />
   }
 
-  return choice.teamPlayingAtHome ? (
+  return selection.teamPlayingAtHome ? (
     <View style={containerStyles}>
       <View style={styles(theme).homeTeam}>
         <Text style={[styles(theme).homeTeamName]}>{userTeamName}</Text>
-        {choiceImage}
+        {selectionImage}
       </View>
       <View style={styles(theme).centerGoals}>
-        <Text style={userGoalsStyle}>{choiceGoals}</Text>
+        <Text style={userGoalsStyle}>{selectionGoals}</Text>
         <Text style={styles(theme).centerText}>|</Text>
         <Text style={styles(theme).goals}>{opponentGoals}</Text>
       </View>
@@ -65,17 +76,17 @@ export const PreviousRound = ({
       <View style={styles(theme).centerGoals}>
         <Text style={styles(theme).goals}>{opponentGoals}</Text>
         <Text style={styles(theme).centerText}>|</Text>
-        <Text style={userGoalsStyle}>{choiceGoals}</Text>
+        <Text style={userGoalsStyle}>{selectionGoals}</Text>
       </View>
       <View style={styles(theme).awayTeam}>
-        {choiceImage}
+        {selectionImage}
         <Text style={[styles(theme).awayTeamName]}>{userTeamName}</Text>
       </View>
     </View>
   )
 }
 
-const styles = (theme) =>
+const styles = (theme: any) =>
   StyleSheet.create({
     container: {
       alignItems: 'center',

@@ -2,12 +2,19 @@ import React from 'react'
 import { ScrollView, Platform, View, Text, StyleSheet } from 'react-native'
 import FastImage from 'react-native-fast-image'
 
+import { Player, PlayerRound } from 'src/state/types'
+
 import * as Images from 'src/images'
 
-export const Results = ({ player, theme }) => (
+type Props = {
+  player: Player
+  theme: any
+}
+
+export const Results = ({ player, theme }: Props) => (
   <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
     <View style={styles(theme).playerResultsContainer}>
-      {player.rounds.map((round, index) => {
+      {player.rounds.map((round: PlayerRound, index) => {
         const { opponent: playerChoiceOpponent, code: playerChoice } = round.selection
         const playerChoicePlayingAtHome = round.selection.teamPlayingAtHome
         const playerChoiceOpponentImage = Images[playerChoiceOpponent.code]

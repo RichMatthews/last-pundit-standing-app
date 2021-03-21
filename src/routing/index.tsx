@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { firebaseAuth, firebaseMessaging } from '../../firebase'
+import { firebaseAuth, firebaseDatabase, firebaseMessaging } from '../../firebase'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -34,7 +34,21 @@ export const Routing = () => {
   const mode = useSelector((store: { theme: any }) => store.theme)
   const theme = mode === 'dark' ? DARK_THEME : LIGHT_THEME
   const appState = useRef(AppState.currentState)
-  const [leagueId, setLeagueId] = useState(null)
+  const [leagueId, setLeagueId] = useState('')
+
+  useEffect(() => {
+    firebaseDatabase
+      .ref(`users/${currentUser.uid}/token`)
+      .once('value')
+      .then((snapshot: any) => {
+        if (snapshot.val()) {
+          dispatch(pushNotificationsAccepted())
+        } else {
+          dispatch(pushNotificationsRejected())
+        }
+        return snapshot.val()
+      })
+  }, [currentUser.uid])
 
   useEffect(() => {
     // app in background
