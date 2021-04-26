@@ -66,7 +66,7 @@ export const CurrentGame = ({ display, theme, showTeamSelection }: Props) => {
                 </View>
               </TouchableOpacity>
 
-              <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
+              {/* <Collapsible collapsed={!listOfExpandedPrevious.includes(index)} duration={250}>
                 <View style={{ backgroundColor: theme.background.secondary }}>
                   {player.rounds.length > 0 ? (
                     <>
@@ -93,7 +93,7 @@ export const CurrentGame = ({ display, theme, showTeamSelection }: Props) => {
                     </View>
                   )}
                 </View>
-              </Collapsible>
+              </Collapsible> */}
             </View>
           ))}
       </ScrollView>
@@ -106,11 +106,6 @@ const styles = (theme, display = 'flex') =>
     container: {
       display,
       alignSelf: 'center',
-      backgroundColor: theme.background.primary,
-      borderRadius: 5,
-      borderTopLeftRadius: 30,
-      borderTopRightRadius: 30,
-      paddingTop: 10,
       width: '100%',
       flex: 1,
     },
@@ -120,7 +115,6 @@ const styles = (theme, display = 'flex') =>
       fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
       fontSize: 16,
       fontWeight: '700',
-      marginTop: 20,
       paddingVertical: 5,
       textAlign: 'center',
     },
@@ -129,8 +123,8 @@ const styles = (theme, display = 'flex') =>
       height: 10,
     },
     playerContainer: {
-      paddingVertical: 15,
-      marginHorizontal: 20,
+      // paddingVertical: 15,
+      // paddingHorizontal: 5,
     },
     playerRow: {
       alignItems: 'flex-end',
@@ -138,13 +132,15 @@ const styles = (theme, display = 'flex') =>
       borderBottomColor: '#eee',
       justifyContent: 'space-between',
       flexDirection: 'row',
-      paddingBottom: 5,
-      marginBottom: 10,
+      // backgroundColor: 'red',
+      paddingVertical: 25,
+      paddingHorizontal: 10,
     },
     playerName: {
-      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
-      fontWeight: '600',
-      fontSize: theme.text.medium,
+      color: theme.text.primary,
+      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
+      fontWeight: '500',
+      fontSize: theme.text.large,
     },
     playerChosenImageAndDownArrow: {
       borderRadius: 5,

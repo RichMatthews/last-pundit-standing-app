@@ -1,8 +1,18 @@
 import React from 'react'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
+import { SelectedTeam } from 'src/state/types'
+
 const fontFamily = Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular'
 const boldFontFamily = Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold'
+
+type Props = {
+  setShowConfirmationScreen: (show: boolean) => void
+  selectedTeam: SelectedTeam
+  selectedTeamOpponent: SelectedTeam
+  updateUserGamweekChoiceHelper: () => void
+  theme: any
+}
 
 export const ConfirmationScreen = ({
   setShowConfirmationScreen,
@@ -10,7 +20,7 @@ export const ConfirmationScreen = ({
   selectedTeamOpponent,
   updateUserGamweekChoiceHelper,
   theme,
-}) => {
+}: Props) => {
   return (
     <View style={styles(theme).container}>
       <Text style={styles(theme).confirmText}>Confirm selection</Text>
@@ -51,7 +61,7 @@ export const ConfirmationScreen = ({
   )
 }
 
-const styles = (theme) =>
+const styles = (theme: any) =>
   StyleSheet.create({
     button: {
       borderWidth: 1,
@@ -67,7 +77,6 @@ const styles = (theme) =>
     },
     container: {
       backgroundColor: theme.background.primary,
-      // backgroundColor: 'red',
       justifyContent: 'center',
       flex: 1,
       marginBottom: 50,

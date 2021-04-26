@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message'
 import { calculateTeamsAllowedToPickForCurrentRound } from 'src/utils/calculateTeamsAllowedToPickForCurrentRound'
 import { PREMIER_LEAGUE_TEAMS } from 'src/teams'
 
+import { PointsBasedFixtures } from './Fixtures/PointsSystemFixtures'
 import { Fixtures } from './Fixtures'
 import { updateUserGamweekChoice } from './api'
 import { findOpponent } from './utils'
@@ -39,7 +40,23 @@ export const ChooseTeam = ({
   })
   const playerHasMadeChoice = currentPlayer.rounds[currentPlayer.rounds.length - 1].selection.complete
   const [selectedTeam, setSelectedTeam] = useState<{ code: string; name: string; index: 0; home: boolean }>()
+  const [selectedTeams, setSelectedTeams] = useState([])
   const [opponent, setOpponent] = useState(null)
+  const pointsBased = true
+
+  const submitPointsBasedChoices = async () => {
+    await updateUserGamweekChoice({
+      selection: {
+        complete: true,
+        predictions: selectedTeams,
+      },
+      gameId: currentGame.id,
+      leagueId: league.id,
+      playerId: user.id,
+      roundId: currentPlayer.rounds[currentPlayer.rounds.length - 1].id,
+    })
+    closeTeamSelectionModal()
+  }
 
   const submitChoice = () => {
     if (!selectedTeam) {
@@ -118,18 +135,28 @@ export const ChooseTeam = ({
         </View>
       ) : (
         <>
-          <Fixtures
-            playerHasMadeChoice={playerHasMadeChoice}
-            fixtures={fixtures}
-            selectedTeam={selectedTeam}
-            setSelectedTeam={setSelectedTeam}
-            chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
-            setViewingUser={setViewingUser}
-            remaniningPlayers={currentGame.players.filter((p) => !p.hasBeenEliminated)}
-            theme={theme}
-          />
+          {pointsBased ? (
+            <PointsBasedFixtures
+              fixtures={fixtures}
+              setSelectedTeams={setSelectedTeams}
+              selectedTeams={selectedTeams}
+              theme={theme}
+            />
+          ) : (
+            <Fixtures
+              playerHasMadeChoice={playerHasMadeChoice}
+              fixtures={fixtures}
+              selectedTeam={selectedTeam}
+              setSelectedTeam={setSelectedTeam}
+              chosenTeams={teams.filter((team) => team.chosen).map((team) => team['code'])}
+              setViewingUser={setViewingUser}
+              remaniningPlayers={currentGame.players.filter((p) => !p.hasBeenEliminated)}
+              theme={theme}
+            />
+          )}
+
           {!playerHasMadeChoice && (
-            <TouchableOpacity disabled={selectedTeam === null} onPress={submitChoice} activeOpacity={0.8}>
+            <TouchableOpacity disabled={selectedTeam === null} onPress={submitPointsBasedChoices} activeOpacity={0.8}>
               <View style={styles(theme).buttonText}>
                 <Text style={styles(theme).confirmSelectionText}>Confirm selection</Text>
               </View>

@@ -73,3 +73,10 @@ export type Match = {
   result: string
   time: string
 }
+
+export type SelectedTeam = {
+  code: string
+  name: string
+  index: 0
+  home: boolean
+}

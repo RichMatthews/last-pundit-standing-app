@@ -27,7 +27,7 @@ export const PreviousGames = ({ display, games, theme }: Props) => {
 
   return games.length ? (
     <View style={styles(theme, display).container}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {games
           .sort((a, b) => a.leagueRound - b.leagueRound)
           .map((game: Game) => {
@@ -90,13 +90,8 @@ const styles = (theme: any, display = 'flex') =>
     container: {
       display,
       alignSelf: 'center',
-      backgroundColor: theme.background.primary,
-      borderRadius: 5,
-      borderTopLeftRadius: 30,
-      borderTopRightRadius: 30,
-      paddingTop: 10,
       width: '100%',
-      flexGrow: 1,
+      flex: 1,
     },
     amountCorrectText: {
       color: theme.text.primary,

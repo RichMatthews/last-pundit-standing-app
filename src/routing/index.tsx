@@ -37,18 +37,20 @@ export const Routing = () => {
   const [leagueId, setLeagueId] = useState('')
 
   useEffect(() => {
-    firebaseDatabase
-      .ref(`users/${currentUser.uid}/token`)
-      .once('value')
-      .then((snapshot: any) => {
-        if (snapshot.val()) {
-          dispatch(pushNotificationsAccepted())
-        } else {
-          dispatch(pushNotificationsRejected())
-        }
-        return snapshot.val()
-      })
-  }, [currentUser.uid])
+    if (currentUser) {
+      firebaseDatabase
+        .ref(`users/${currentUser.uid}/token`)
+        .once('value')
+        .then((snapshot: any) => {
+          if (snapshot.val()) {
+            dispatch(pushNotificationsAccepted())
+          } else {
+            dispatch(pushNotificationsRejected())
+          }
+          return snapshot.val()
+        })
+    }
+  }, [currentUser, dispatch])
 
   useEffect(() => {
     // app in background

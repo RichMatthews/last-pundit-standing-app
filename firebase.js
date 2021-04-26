@@ -21,7 +21,7 @@ let config
 if (process.env.NODE_ENV === 'production') {
   config = firebase.app().database(PROD_DB)
 } else {
-  config = firebase.app().database(DEV_DB)
+  config = firebase.app().database(PROD_DB)
 }
 
 if (!firebase.apps.length) {

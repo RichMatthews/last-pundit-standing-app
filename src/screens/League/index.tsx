@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Portal } from 'react-native-portalize'
 import { Modalize } from 'react-native-modalize'
+import LinearGradient from 'react-native-linear-gradient'
 
 import { getCurrentGame } from 'src/redux/reducer/current-game'
 import { setCurrentPlayer } from 'src/redux/reducer/current-player'
@@ -15,6 +16,8 @@ import { CachedPreviousGames } from './PreviousGames'
 import { pullLeagueData, getCurrentGameweekFixtures } from './api'
 import { CurrentGame } from './CurrentGame'
 import { TeamSelectionModal } from './TeamSelectionModal'
+import { PreviousRound } from './CurrentGame/PreviousRound'
+import { LeagueStats } from './Stats'
 
 interface Props {
   leagueId: string
@@ -24,7 +27,7 @@ interface Props {
 export const League = ({ leagueId, theme }: Props) => {
   const [loaded, setLoaded] = useState<string>('')
   const [gameweekFixtures, setGameweekFixtures] = useState([])
-  const [showCurrent, setShowCurrent] = useState(true)
+  const [subScreen, setShowSubScreen] = useState('current')
   const [loadingModalOpen, setLoadingModalOpen] = useState(false)
   const [showConfirmationScreen, setShowConfirmationScreen] = useState(false)
 
@@ -38,14 +41,16 @@ export const League = ({ leagueId, theme }: Props) => {
     const leagueData = await pullLeagueData({ leagueId })
     const transformedData = {
       ...leagueData,
-      games: Object.values(leagueData.games).map((game: Game) => {
-        return {
-          ...game,
-          players: Object.values(game.players).map((player: Player) => {
-            return { ...player, rounds: Object.values(player.rounds).sort((a, b) => a.round - b.round) }
-          }),
-        }
-      }),
+      games: Object.values(leagueData.games)
+        .sort((a, b) => a.leagueRound - b.leagueRound)
+        .map((game: Game) => {
+          return {
+            ...game,
+            players: Object.values(game.players).map((player: Player) => {
+              return { ...player, rounds: Object.values(player.rounds).sort((a, b) => a.round - b.round) }
+            }),
+          }
+        }),
     }
 
     const currentGame: Game = transformedData.games.find((game: Game) => !game.complete)
@@ -108,84 +113,97 @@ export const League = ({ leagueId, theme }: Props) => {
 
   return loaded ? (
     <>
-      <SafeAreaView style={styles(theme).safeAreaView} />
+      <View style={{ backgroundColor: theme.background.primary }} style={{ flex: 1 }}>
+        <SafeAreaView />
+        <View style={styles(theme).outerContainer}>
+          <Text style={styles(theme).mainheading}>{league.name}</Text>
+          <TouchableOpacity onPress={showTeamSelection} style={{ padding: 5 }} activeOpacity={0.7}>
+            <Text style={{ color: theme.text.primary, fontSize: 12 }}>View fixtures</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles(theme).outerContainer}>
-        <Text style={styles(theme).mainheading}>{league.name}</Text>
-        <TouchableOpacity
-          onPress={showTeamSelection}
-          style={{ padding: 5, borderBottomWidth: 1, borderColor: theme.borders.primary, borderRadius: 5 }}
-          activeOpacity={0.7}
-        >
-          <Text style={{ color: theme.text.primary, fontSize: 12 }}>View fixtures</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles(theme).container}>
-        <View style={styles(theme).gameContainer}>
-          <TouchableOpacity onPress={() => setShowCurrent(true)} activeOpacity={0.7}>
-            <View
-              style={[
-                styles(theme).currentRoundHeadingBackgroundStyles,
-                { backgroundColor: showCurrent ? theme.purple : theme.background.primary },
-              ]}
+        <View style={styles(theme).container}>
+          <View style={styles(theme).gameContainer}>
+            <TouchableOpacity
+              onPress={() => setShowSubScreen('current')}
+              activeOpacity={0.7}
+              style={{
+                borderBottomWidth: subScreen === 'current' ? 2 : 0,
+                borderBottomColor: theme.purple,
+                marginBottom: -2,
+              }}
             >
               <Text
                 style={[
                   styles(theme).currentRoundHeading,
-                  { color: showCurrent ? theme.text.inverse : theme.text.primary },
+                  {
+                    color: subScreen === 'current' ? theme.purple : '#ccc',
+                  },
                 ]}
               >
                 Current Game
               </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setShowCurrent(false)} activeOpacity={0.7}>
-            <View
-              style={[
-                styles(theme).currentRoundHeadingBackgroundStyles,
-                { backgroundColor: !showCurrent ? theme.purple : theme.background.primary },
-              ]}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setShowSubScreen('previous')}
+              activeOpacity={0.7}
+              style={{
+                borderBottomWidth: subScreen === 'previous' ? 2 : 0,
+                borderBottomColor: theme.purple,
+                marginBottom: -2,
+              }}
             >
               <Text
-                style={[
-                  styles(theme).currentRoundHeading,
-                  { color: !showCurrent ? theme.text.inverse : theme.text.primary },
-                ]}
+                style={[styles(theme).currentRoundHeading, { color: subScreen === 'previous' ? theme.purple : '#ccc' }]}
               >
                 Previous Games
               </Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setShowSubScreen('stats')}
+              activeOpacity={0.7}
+              style={{
+                borderBottomWidth: subScreen === 'stats' ? 2 : 0,
+                borderBottomColor: theme.purple,
+                marginBottom: -2,
+              }}
+            >
+              {/* <Text
+                style={[styles(theme).currentRoundHeading, { color: subScreen === 'stats' ? theme.purple : '#ccc' }]}
+              >
+                League Stats
+              </Text> */}
+            </TouchableOpacity>
+          </View>
 
-        <CurrentGame
-          display={showCurrent ? 'flex' : 'none'}
-          loaded={loaded}
-          theme={theme}
-          showCurrent={showCurrent}
-          setShowCurrent={setShowCurrent}
-          showTeamSelection={showTeamSelection}
-        />
-        <CachedPreviousGames
-          display={showCurrent ? 'none' : 'flex'}
-          games={Object.values(league.games).filter((game: Game) => game.complete)}
-          theme={theme}
-        />
-
-        <Portal>
-          <TeamSelectionModal
-            closeTeamSelectionModal={closeTeamSelectionModal}
-            showConfirmationScreen={showConfirmationScreen}
-            setShowConfirmationScreen={setShowConfirmationScreen}
-            loadingModalOpen={loadingModalOpen}
-            gameweekFixtures={gameweekFixtures}
-            setLoadingModalOpen={setLoadingModalOpen}
-            pullLatestLeagueData={pullLatestLeagueData}
+          <CurrentGame
+            display={subScreen === 'current' ? 'flex' : 'none'}
+            loaded={loaded}
             theme={theme}
-            ref={teamSelectionRef}
+            showTeamSelection={showTeamSelection}
           />
-        </Portal>
+          <CachedPreviousGames
+            display={subScreen === 'previous' ? 'flex' : 'none'}
+            games={Object.values(league.games).filter((game: Game) => game.complete)}
+            theme={theme}
+          />
+
+          <LeagueStats display={subScreen === 'stats' ? 'flex' : 'none'} theme={theme} />
+
+          <Portal>
+            <TeamSelectionModal
+              closeTeamSelectionModal={closeTeamSelectionModal}
+              showConfirmationScreen={showConfirmationScreen}
+              setShowConfirmationScreen={setShowConfirmationScreen}
+              loadingModalOpen={loadingModalOpen}
+              gameweekFixtures={gameweekFixtures}
+              setLoadingModalOpen={setLoadingModalOpen}
+              pullLatestLeagueData={pullLatestLeagueData}
+              theme={theme}
+              ref={teamSelectionRef}
+            />
+          </Portal>
+        </View>
       </View>
     </>
   ) : (
@@ -198,43 +216,32 @@ export const League = ({ leagueId, theme }: Props) => {
 
 const styles = (theme) =>
   StyleSheet.create({
-    safeAreaView: {
-      flex: 0,
-      backgroundColor: theme.background.secondary,
-    },
     outerContainer: {
-      backgroundColor: theme.background.secondary,
-      flexDirection: 'column',
       alignItems: 'center',
-      paddingBottom: 10,
+      backgroundColor: 'transparent',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginHorizontal: 10,
     },
     container: {
-      backgroundColor: theme.background.secondary,
+      backgroundColor: '#fff',
       flex: 1,
     },
-    currentRoundHeadingBackgroundStyles: {
-      borderRadius: 20,
-      padding: 10,
-      width: 150,
-    },
     gameContainer: {
-      backgroundColor: theme.background.primary,
+      borderBottomWidth: 2,
+      borderBottomColor: '#ccc',
       flexDirection: 'row',
       alignItems: 'center',
-      borderRadius: 20,
-      justifyContent: 'space-between',
+      justifyContent: 'flex-start',
       marginVertical: 10,
-      marginBottom: 20,
       alignSelf: 'center',
-      shadowOpacity: 1,
-      shadowRadius: 3,
-      shadowColor: theme.background.secondary,
-      shadowOffset: { height: 2, width: 0 },
+      width: '100%',
     },
     currentRoundHeading: {
       color: theme.text.primary,
       fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
       fontSize: 15,
+      marginHorizontal: 10,
       fontWeight: '600',
       textAlign: 'center',
     },
@@ -250,9 +257,9 @@ const styles = (theme) =>
     },
     mainheading: {
       color: theme.text.primary,
-      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
+      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Regular',
       fontSize: 30,
-      fontWeight: '700',
+      fontWeight: '600',
     },
     maintext: {
       fontSize: theme.text.large,

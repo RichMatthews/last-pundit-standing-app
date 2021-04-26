@@ -123,6 +123,7 @@ const styles = (theme) =>
       alignSelf: 'center',
       flexDirection: 'row',
       justifyContent: 'center',
+      margin: 10,
     },
     container: {
       alignSelf: 'center',
@@ -158,8 +159,8 @@ const styles = (theme) =>
       fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
     },
     teamBadge: {
-      width: 40,
-      height: 40,
+      width: 30,
+      height: 30,
     },
     teamBadgeContainer: {
       borderRadius: 5,
@@ -172,11 +173,13 @@ const styles = (theme) =>
       justifyContent: 'center',
       alignItems: 'center',
       borderWidth: 1,
-      padding: 10,
-      margin: 10,
+      padding: 5,
+      margin: 5,
     },
     vs: {
       color: theme.text.primary,
+      fontWeight: '600',
+      fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
       marginLeft: 10,
       marginRight: 10,
     },

@@ -27,6 +27,7 @@
 		40D13B244E3F41DD96A9E0A2 /* Nunito-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B51FBAC4546C42CA8017B2E7 /* Nunito-SemiBold.ttf */; };
 		4AD26F86386249CF88289FCC /* Nunito-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96F78592B9BA4A1BB7652FC2 /* Nunito-Black.ttf */; };
 		5C1BB37F25F77ED800DED4F4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5C1BB37E25F77ECC00DED4F4 /* GoogleService-Info.plist */; };
+		5C556012261729A500345250 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C556011261729A500345250 /* Media.xcassets */; };
 		65B65BA9B9EF4B9E9663F681 /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91D34E82F7EA48C3BACD0DF4 /* Nunito-Italic.ttf */; };
 		6E781861566C4FF08BDB3DB2 /* Nunito-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D9312CE65C043BFB6D379C7 /* Nunito-ExtraLight.ttf */; };
 		75BBFF5DB16A8398A58D35B0 /* libPods-LastPunditStanding-LastPunditStandingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 121112BBA8D7D438FE796EEF /* libPods-LastPunditStanding-LastPunditStandingTests.a */; };
@@ -75,7 +76,7 @@
 		13B07F961A680F5B00A75B9A /* LastPunditStanding.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LastPunditStanding.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = LastPunditStanding/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = LastPunditStanding/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LastPunditStanding/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LastPunditStanding/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = LastPunditStanding/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = LastPunditStanding/main.m; sourceTree = "<group>"; };
 		14AFC32D151A40D391EE7067 /* Hind-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Hind-Regular.ttf"; path = "../src/assets/fonts/Hind-Regular.ttf"; sourceTree = "<group>"; };
@@ -99,6 +100,7 @@
 		50A1154879E347638447E02A /* Nunito-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Regular.ttf"; path = "../src/assets/fonts/Nunito-Regular.ttf"; sourceTree = "<group>"; };
 		54D340A799CE15AC13C12EF6 /* Pods-LastPunditStanding-LastPunditStandingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LastPunditStanding-LastPunditStandingTests.release.xcconfig"; path = "Target Support Files/Pods-LastPunditStanding-LastPunditStandingTests/Pods-LastPunditStanding-LastPunditStandingTests.release.xcconfig"; sourceTree = "<group>"; };
 		5C1BB37E25F77ECC00DED4F4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5C556011261729A500345250 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		5ED5C043C55A4B9AA092F958 /* Nunito-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-ExtraLightItalic.ttf"; path = "../src/assets/fonts/Nunito-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		60B67FCDEFBB4B38AB5C1964 /* Nunito-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-BoldItalic.ttf"; path = "../src/assets/fonts/Nunito-BoldItalic.ttf"; sourceTree = "<group>"; };
 		70DEEAE0AA434624B7631583 /* SofiaPro-Semi-Bold-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SofiaPro-Semi-Bold-Italic.otf"; path = "../src/assets/fonts/SofiaPro-Semi-Bold-Italic.otf"; sourceTree = "<group>"; };
@@ -213,6 +215,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				5C1BB37E25F77ECC00DED4F4 /* GoogleService-Info.plist */,
+				5C556011261729A500345250 /* Media.xcassets */,
 			);
 			name = LastPunditStanding;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				402712F111D243FAB0A3B3E9 /* Nunito-ExtraBold.ttf in Resources */,
 				0C3F5EE6F8A04EE7AB42E6E3 /* Nunito-ExtraBoldItalic.ttf in Resources */,
 				6E781861566C4FF08BDB3DB2 /* Nunito-ExtraLight.ttf in Resources */,
+				5C556012261729A500345250 /* Media.xcassets in Resources */,
 				AB5FFB9C6EB4478EAF384B30 /* Nunito-ExtraLightItalic.ttf in Resources */,
 				65B65BA9B9EF4B9E9663F681 /* Nunito-Italic.ttf in Resources */,
 				85FA7928DED14106A30002E6 /* Nunito-Light.ttf in Resources */,
@@ -894,6 +898,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A99894AB88685D4330C61DD2 /* Pods-LastPunditStanding.debug.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LastPunditStanding/LastPunditStanding.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -905,7 +910,7 @@
 				INFOPLIST_FILE = LastPunditStanding/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.93;
+				MARKETING_VERSION = 1.0.95;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -925,6 +930,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 88E083C573835F430226D64A /* Pods-LastPunditStanding.release.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = LastPunditStanding/LastPunditStanding.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -934,7 +940,7 @@
 				INFOPLIST_FILE = LastPunditStanding/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.93;
+				MARKETING_VERSION = 1.0.95;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

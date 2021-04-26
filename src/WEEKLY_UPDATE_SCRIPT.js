@@ -8,7 +8,7 @@ require('firebase/storage')
 const PROD_CONFIG = {
   apiKey: 'AIzaSyDGstYWa2DI7Y9V6LIEjZ14l3Tvb3PdA2M',
   authDomain: 'last-pundit-standing.firebaseapp.com',
-  databaseURL: 'https://last-pundit-standing-dev.firebaseio.com/',
+  databaseURL: 'https://last-pundit-standing.firebaseio.com/',
   projectId: 'last-pundit-standing',
   storageBucket: 'last-pundit-standing.appspot.com',
   messagingSenderId: '571433706213',
@@ -20,14 +20,19 @@ const firebaseApp = firebase.initializeApp(PROD_CONFIG)
 const CURRENT_GAMEWEEK = {
   fixtures: [
     {
-      home: { code: 'BUR', name: 'Burnley', goals: 1 },
-      away: { code: 'ARS', name: 'Arsenal', goals: 1 },
-      result: 'draw',
+      home: { code: 'TOT', name: 'Spurs', goals: 2 },
+      away: { code: 'SOT', name: 'Southampton', goals: 1 },
+      result: 'TOT',
     },
     {
-      home: { code: 'BHA', name: 'Brighton', goals: 1 },
-      away: { code: 'LEI', name: 'Leicester', goals: 0 },
-      result: 'BHA',
+      home: { code: 'WOL', name: 'Wolves', goals: 1 },
+      away: { code: 'SHU', name: 'Sheffield United', goals: 0 },
+      result: 'WOL',
+    },
+    {
+      home: { code: 'NEW', name: 'Newcastle', goals: 3 },
+      away: { code: 'WHU', name: 'West Ham', goals: 2 },
+      result: 'NEW',
     },
   ],
 }
@@ -75,8 +80,8 @@ const updateAllLeagues = () => {
     .once('value')
     .then((snapshot) => {
       snapshot.forEach((childNodes) => {
-        // if (childNodes.val().id !== 'l72r12ezoku') {
-        //     return
+        // if (childNodes.val().id === '9hk0btr26u7') {
+        //   return
         // }
         let data = {}
         data['leagueId'] = childNodes.val().id
@@ -151,7 +156,7 @@ const updateCurrentGameStatus = ({ data }) => {
       })
 
       if (allPlayersEliminated) {
-        updateGameWithNoWinner()
+        updateGameWithWinner({ data, players: resetPlayers })
         return
       }
       if (gameHasWinner) {
@@ -162,7 +167,7 @@ const updateCurrentGameStatus = ({ data }) => {
         updateGameStillInProgress({
           data,
           remainingPlayers,
-          roundId: snapshot.val().currentGameRound + 1,
+          roundId: uid(32),
         })
         return
       }
@@ -210,16 +215,16 @@ const completeCurrentGame = ({ data }) => {
     })
 }
 
-const updateGameStillInProgress = ({ data, remainingPlayers }) => {
-  const { leagueId, gameId, roundId } = data
+const updateGameStillInProgress = ({ data, remainingPlayers, roundId }) => {
+  const { leagueId, gameId } = data
   return remainingPlayers.forEach((player) => {
+    const round = Object.values(player.rounds).length
     return firebaseApp
       .database()
       .ref(`leagues/${leagueId}/games/${gameId}/players/${player.information.id}/rounds/${roundId}`)
-      .update({ selection: { complete: false } }, (error) => {
+      .update({ id: roundId, round, selection: { complete: false } }, (error) => {
         if (error) {
           console.log('ERROR updating game in progress', error)
-        } else {
         }
       })
   })

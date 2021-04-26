@@ -16,7 +16,6 @@ type Props = {
 
 export const PreviousRound = ({ selection, currentPlayerView, pendingGame, roundLost, theme }: Props) => {
   const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
-
   let { code: opponentTeamCode, name: opponentName } = selection.opponent
   let { code: userTeamCode, name: userTeamName } = selection
 

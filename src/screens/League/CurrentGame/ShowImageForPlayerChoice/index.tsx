@@ -83,7 +83,8 @@ export const MemoizedShowImageForPlayerChoice = ({
 
   if (isCurrentLoggedInPlayer) {
     if (currentPlayerCurrentRound.selection && currentPlayerCurrentRound.selection.complete) {
-      return <FastImage style={styles.clubBadge} source={Images[currentPlayerCurrentRound.selection.code]} />
+      return GameStatusIndicatorComponent('submitted')
+      // return <FastImage style={styles.clubBadge} source={Images[currentPlayerCurrentRound.selection.code]} />
     } else {
       return GameStatusIndicatorComponent('currentPending', showTeamSelection)
     }
@@ -91,7 +92,8 @@ export const MemoizedShowImageForPlayerChoice = ({
 
   if (currentPlayerCurrentRound.selection && currentPlayerCurrentRound.selection.complete) {
     if (allCurrentGameRemainingPlayersHaveMadeSelection) {
-      return <FastImage style={styles.clubBadge} source={Images[currentPlayerCurrentRound.selection.code]} />
+      return GameStatusIndicatorComponent('submitted')
+      // return <FastImage style={styles.clubBadge} source={Images[currentPlayerCurrentRound.selection.code]} />
     } else {
       return GameStatusIndicatorComponent('submitted')
     }
