@@ -1,9 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Text, TouchableOpacity, Platform, StyleSheet, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { combineFixturesWithPredictions } from '../utils/combineFixturesWithPredictions'
+import { allPlayersHaveSubmittedPredictions } from '../utils/allPlayersHaveSubmittedPredictions'
 import * as Images from 'app/src/images'
+import { setViewedFixtures } from 'src/redux/reducer/current-gameweek'
 
 const ShowSelectionForEachTeam = ({ selections, justifyContent }) => {
   if (selections === undefined || selections.length === 0) {
@@ -14,8 +17,7 @@ const ShowSelectionForEachTeam = ({ selections, justifyContent }) => {
       {selections.map((selection) => (
         <View
           style={{
-            borderColor: 'red',
-            borderWidth: 1,
+            backgroundColor: '#BB86FC',
             borderRadius: 100,
             margin: 2,
             width: 25,
@@ -23,7 +25,7 @@ const ShowSelectionForEachTeam = ({ selections, justifyContent }) => {
             justifyContent: 'center',
           }}
         >
-          <Text style={{ textAlign: 'center', fontSize: 8 }}>{selection}</Text>
+          <Text style={{ color: '#fff', textAlign: 'center', fontSize: 10, fontWeight: '700' }}>{selection}</Text>
         </View>
       ))}
     </View>
@@ -32,54 +34,52 @@ const ShowSelectionForEachTeam = ({ selections, justifyContent }) => {
 
 export const PointsBasedFixtures = ({ fixtures, selectedTeams, setSelectedTeams, theme }) => {
   const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
-  const [fixturesWithPredictions, setFixturesWithPredictions] = useState([])
+  const currentGameweek = useSelector((store: { game: any }) => store.game.current)
+  const viewingGameweek = useSelector((store: { game: any }) => store.game.viewing)
+  const allGameweeks = useSelector((store: { game: any }) => store.game.all)
+  const previous = allGameweeks.filter((gw) => gw.week === viewingGameweek.week - 1)
+  const next = allGameweeks.filter((gw) => gw.week === viewingGameweek.week + 1)
+  const [fixturesWithPredictions, setFixturesWithPredictions] = useState(viewingGameweek.matches)
+  const [showPredictions, setShowPredictions] = useState(false)
+  const dispatch = useDispatch()
+  const futureGameweek = viewingGameweek.week > currentGameweek.week
+
+  const allPlayersSubmitted = allPlayersHaveSubmittedPredictions({
+    players: currentGame.players,
+    currentGameweek: currentGameweek.week,
+  })
+
   useEffect(() => {
-    setFixturesWithPredictions(calculateFixturesWithPredictions())
-  }, [calculateFixturesWithPredictions, currentGame])
-
-  const splitName = (name) => {
-    return name.split(' ')[0][0] + name.split(' ')[1][0]
-  }
-
-  const calculateFixturesWithPredictions = useCallback(() => {
-    return fixtures.map((block) => {
-      return {
-        ...block,
-        matches: block.matches.map((match) => {
-          currentGame.players.map((player) => {
-            const b = player.rounds.find((p) => p.round === player.rounds.length - 1).selection.predictions
-            const c = b.find((mch) => mch.id === match.id)
-            console.log('b:', b)
-            console.log('c:', c)
-            if (c.choice === 'draw') {
-              console.log('is a draw?')
-              match = {
-                ...match,
-                draw: {
-                  predictors: match.draw
-                    ? match.draw.predictors
-                      ? match.draw.predictors.concat(splitName(player.information.name))
-                      : [splitName(player.information.name)]
-                    : [splitName(player.information.name)],
-                },
-              }
-            } else {
-              match = {
-                ...match,
-                [c.choice]: {
-                  ...match[c.choice],
-                  predictors: match[c.choice].predictors
-                    ? match[c.choice].predictors.concat(splitName(player.information.name))
-                    : [splitName(player.information.name)],
-                },
-              }
-            }
-          })
-          return match
+    if (allPlayersSubmitted && !futureGameweek) {
+      setFixturesWithPredictions(
+        combineFixturesWithPredictions({
+          currentGame,
+          currentGameweek: viewingGameweek.week,
+          fixtures: viewingGameweek.matches,
         }),
-      }
-    })
-  }, [currentGame.players, fixtures])
+      )
+    } else {
+      setFixturesWithPredictions(viewingGameweek.matches)
+    }
+  }, [
+    allPlayersSubmitted,
+    currentGame,
+    viewingGameweek.matches,
+    viewingGameweek.week,
+    fixtures,
+    currentGameweek.week,
+    futureGameweek,
+  ])
+
+  const viewPreviousGameweek = useCallback(() => {
+    setShowPredictions(false)
+    dispatch(setViewedFixtures(previous[0]))
+  }, [dispatch, previous])
+
+  const viewNextGameweek = useCallback(() => {
+    setShowPredictions(false)
+    dispatch(setViewedFixtures(next[0]))
+  }, [dispatch, next])
 
   const selectedTeamsHelper = (code, id) => {
     const newArr = selectedTeams.filter((mch) => mch.id !== id)
@@ -89,7 +89,36 @@ export const PointsBasedFixtures = ({ fixtures, selectedTeams, setSelectedTeams,
 
   return (
     <View>
-      <Text style={styles(theme).heading}>Gameweek Fixtures</Text>
+      <Text style={styles(theme).heading}>Fixtures</Text>
+      <Text style={{ alignSelf: 'center' }}>Gameweek {viewingGameweek.week}</Text>
+      <View style={{ justifyContent: 'space-between', flexDirection: 'row', marginBottom: 10 }}>
+        {previous.length ? (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={viewPreviousGameweek}
+            style={{ borderWidth: 1, borderColor: '#ccc', padding: 5 }}
+          >
+            <Text>Previous</Text>
+          </TouchableOpacity>
+        ) : (
+          <View />
+        )}
+
+        {next.length ? (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={viewNextGameweek}
+            style={{ borderWidth: 1, borderColor: '#ccc', padding: 5, alignSelf: 'flex-end' }}
+          >
+            <Text>Next</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
+      {allPlayersSubmitted && !futureGameweek && (
+        <TouchableOpacity onPress={() => setShowPredictions(!showPredictions)} style={{ marginBottom: 10 }}>
+          <Text>Show predictions</Text>
+        </TouchableOpacity>
+      )}
       <Text style={styles(theme).subHeading}>
         From each fixture, select a home win, away win or draw. You will get a point for each correct result
       </Text>
@@ -182,17 +211,25 @@ export const PointsBasedFixtures = ({ fixtures, selectedTeams, setSelectedTeams,
                           </View>
                         </TouchableOpacity>
                       </View>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View style={[styles(theme).matchContainerHome, { borderWidth: 0 }]}>
-                          <ShowSelectionForEachTeam justifyContent="flex-start" selections={match.home.predictors} />
+                      {allPlayersSubmitted && showPredictions && (
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                          <View style={[styles(theme).matchContainerHome, { borderWidth: 0 }]}>
+                            <ShowSelectionForEachTeam
+                              justifyContent="flex-start"
+                              selections={match[homeTeamCode] ? match[homeTeamCode]['predictors'] : []}
+                            />
+                          </View>
+                          <View style={[styles(theme).vsContainer, { borderWidth: 0, justifyContent: 'flex-start' }]}>
+                            <ShowSelectionForEachTeam justifyContent="center" selections={match?.draw?.predictors} />
+                          </View>
+                          <View style={[styles(theme).matchContainerAway, { borderWidth: 0 }]}>
+                            <ShowSelectionForEachTeam
+                              justifyContent="flex-end"
+                              selections={match[awayTeamCode] ? match[awayTeamCode]['predictors'] : []}
+                            />
+                          </View>
                         </View>
-                        <View style={[styles(theme).vsContainer, { borderWidth: 0, justifyContent: 'flex-start' }]}>
-                          <ShowSelectionForEachTeam justifyContent="center" selections={match?.draw?.predictors} />
-                        </View>
-                        <View style={[styles(theme).matchContainerAway, { borderWidth: 0 }]}>
-                          <ShowSelectionForEachTeam justifyContent="flex-end" selections={match.away.predictors} />
-                        </View>
-                      </View>
+                      )}
                     </View>
                   )
                 })}
@@ -222,12 +259,11 @@ const styles = (theme) =>
       fontSize: 20,
       alignSelf: 'center',
       fontWeight: '600',
-      marginBottom: 10,
     },
     matchContainerAway: {
       height: 40,
       flexDirection: 'column',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       width: 130,
       borderColor: theme.borders.primary,
       borderWidth: 1,
@@ -236,20 +272,18 @@ const styles = (theme) =>
     matchContainerHome: {
       height: 40,
       flexDirection: 'column',
-      alignItems: 'flex-end',
+      alignItems: 'center',
       width: 130,
       borderColor: theme.borders.primary,
       borderWidth: 1,
       borderRadius: 5,
     },
     subHeading: {
-      alignSelf: 'center',
       color: '#aaa',
       marginBottom: 10,
     },
     teamName: {
       fontSize: theme.text.small,
-      marginRight: 5,
       fontWeight: '600',
       fontFamily: Platform.OS === 'ios' ? 'Hind' : 'Hind-Bold',
     },

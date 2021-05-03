@@ -13,8 +13,19 @@ export const pullLeagueData = ({ leagueId }) => {
 }
 
 export const getCurrentGameweekFixtures = () => {
+  // .ref('information/gameweeks')
   return firebaseDatabase
-    .ref('information/gameweek/current/matches')
+    .ref('/information/gameweek/current/matches')
+    .once('value')
+    .then((snapshot: any) => {
+      return snapshot.val()
+      // return Object.values(snapshot.val()).find((gw) => gw.current).matches
+    })
+}
+
+export const getFutureGameweekInformation = () => {
+  return firebaseDatabase
+    .ref('information/gameweek/future')
     .once('value')
     .then((snapshot: any) => {
       return snapshot.val()

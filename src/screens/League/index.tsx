@@ -13,7 +13,7 @@ import { setViewedLeague } from 'src/redux/reducer/league'
 import { Game, Player } from 'src/state/types'
 
 import { CachedPreviousGames } from './PreviousGames'
-import { pullLeagueData, getCurrentGameweekFixtures } from './api'
+import { pullLeagueData, getCurrentGameweekFixtures, getFutureGameweekInformation } from './api'
 import { CurrentGame } from './CurrentGame'
 import { TeamSelectionModal } from './TeamSelectionModal'
 import { PreviousRound } from './CurrentGame/PreviousRound'
@@ -94,7 +94,9 @@ export const League = ({ leagueId, theme }: Props) => {
   useEffect(() => {
     async function fetchFixtures() {
       const fixtures: any = await getCurrentGameweekFixtures()
+      console.log(fixtures, 'fx')
       setGameweekFixtures(fixtures)
+      // const future = await getFutureGameweekInformation()
     }
     fetchFixtures()
   }, [])

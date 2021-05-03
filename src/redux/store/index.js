@@ -10,16 +10,16 @@ import viewingLeagueReducer from '../reducer/league'
 import pushNotificationsReducer from '../reducer/push-notifications'
 
 const store = configureStore({
-    reducer: {
-        currentGame: currentGameReducer,
-        currentGameweek: currentGameweekReducer,
-        currentPlayer: currentPlayerReducer,
-        theme: themeReducer,
-        league: viewingLeagueReducer,
-        pushNotifications: pushNotificationsReducer,
-        user: userReducer,
-        userLeagues: userLeaguesReducer,
-    },
+  reducer: {
+    currentGame: currentGameReducer,
+    game: currentGameweekReducer,
+    currentPlayer: currentPlayerReducer,
+    theme: themeReducer,
+    league: viewingLeagueReducer,
+    pushNotifications: pushNotificationsReducer,
+    user: userReducer,
+    userLeagues: userLeaguesReducer,
+  },
 })
 
 export default store

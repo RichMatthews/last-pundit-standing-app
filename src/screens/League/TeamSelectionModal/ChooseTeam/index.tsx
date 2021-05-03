@@ -44,6 +44,8 @@ export const ChooseTeam = ({
   const [opponent, setOpponent] = useState(null)
   const pointsBased = true
 
+  const futureFixtures = fixtures
+
   const submitPointsBasedChoices = async () => {
     await updateUserGamweekChoice({
       selection: {
@@ -137,6 +139,7 @@ export const ChooseTeam = ({
         <>
           {pointsBased ? (
             <PointsBasedFixtures
+              futureFixtures={futureFixtures}
               fixtures={fixtures}
               setSelectedTeams={setSelectedTeams}
               selectedTeams={selectedTeams}

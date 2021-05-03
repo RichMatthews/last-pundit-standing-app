@@ -15,11 +15,10 @@ type Props = {
 
 export const CurrentGame = ({ display, theme, showTeamSelection }: Props) => {
   const currentGame = useSelector((store: { currentGame: any }) => store.currentGame)
-  const currentPlayer = useSelector((store: { currentPlayer: any }) => store.currentPlayer)
-
+  const currentGameweek = useSelector((store: { game: any }) => store.game.current)
   const user = useSelector((store: { user: any }) => store.user)
+
   const [listOfExpandedPrevious, setListOfExpandedPrevious] = useState<any>([])
-  const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
 
   const setListOfExpandedPreviousHelper = (index: number) => {
     if (listOfExpandedPrevious.includes(index)) {
@@ -57,11 +56,11 @@ export const CurrentGame = ({ display, theme, showTeamSelection }: Props) => {
                       player={player}
                       showTeamSelection={showTeamSelection}
                     />
-                    {listOfExpandedPrevious.includes(index) ? (
+                    {/* {listOfExpandedPrevious.includes(index) ? (
                       <Entypo name="chevron-small-up" size={20} color={theme.icons.primary} />
                     ) : (
                       <Entypo name="chevron-small-down" size={20} color={theme.icons.primary} />
-                    )}
+                    )} */}
                   </View>
                 </View>
               </TouchableOpacity>

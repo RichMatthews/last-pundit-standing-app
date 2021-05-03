@@ -51,7 +51,7 @@ export const MemoizedShowImageForPlayerChoice = ({
   showTeamSelection,
 }: any) => {
   const [gameSelectionTimeEnded, setGameSelectionTimeEnded] = useState(false)
-  const currentGameweek = useSelector((store: { currentGameweek: any }) => store.currentGameweek)
+  const currentGameweek = useSelector((store: { game: any }) => store.game.current)
 
   const checkIfTimeEnded = useCallback(async () => {
     const timeHasEnded = await gameweekSelectionTimeEnded(currentGameweek.ends)
